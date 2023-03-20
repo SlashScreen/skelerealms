@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://cnxd4p5knm2cb"]
+
+[ext_resource type="Script" path="res://addons/biznasty/scripts/game_info.gd" id="1_plhv0"]
+[ext_resource type="Script" path="res://addons/biznasty/scripts/entity_manager.gd" id="2_c2ju1"]
+[ext_resource type="Script" path="res://addons/biznasty/scripts/entity.gd" id="3_xqpqy"]
+[ext_resource type="Script" path="res://addons/biznasty/scripts/Components/item_component.gd" id="4_yp7fy"]
+[ext_resource type="Resource" path="res://test_item.tres" id="5_f75v7"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="GameInfo" type="Node3D" parent="."]
+script = ExtResource("1_plhv0")
+
+[node name="EntityManager" type="Node3D" parent="."]
+script = ExtResource("2_c2ju1")
+
+[node name="TestEntity" type="Node3D" parent="EntityManager"]
+script = ExtResource("3_xqpqy")
+
+[node name="ItemComponent" type="Node" parent="EntityManager/TestEntity"]
+script = ExtResource("4_yp7fy")
+data = ExtResource("5_f75v7")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.55968)

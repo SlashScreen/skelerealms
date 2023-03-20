@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="PackedScene" uid="uid://dyiifaitxl3gx" path="res://item_template.tscn" id="1_2rrbi"]
+[ext_resource type="Script" path="res://addons/biznasty/scripts/Data/item_data.gd" id="2_nsvnv"]
+
+[resource]
+script = ExtResource("2_nsvnv")
+prefab = ExtResource("1_2rrbi")
+id = "test_item"
