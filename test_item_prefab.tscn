@@ -1,15 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://bo040eyfr7xxj"]
+[gd_scene load_steps=4 format=3 uid="uid://cscgqaqhm5xiy"]
 
-[ext_resource type="PackedScene" uid="uid://dyiifaitxl3gx" path="res://addons/delirious_biznasty/scripts/item_template.tscn" id="1_ug74b"]
+[ext_resource type="PackedScene" uid="uid://dyiifaitxl3gx" path="res://addons/delirious_biznasty/item_template.tscn" id="1_k1v1r"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_samhh"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_juco5"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_lgnyj"]
+[sub_resource type="SphereMesh" id="SphereMesh_3ki6c"]
 
-[node name="Item" instance=ExtResource("1_ug74b")]
+[node name="Item" instance=ExtResource("1_k1v1r")]
 
-[node name="MeshInstance3D" parent="." index="0"]
-mesh = SubResource("SphereMesh_samhh")
+[node name="CollisionShape3D" parent="RigidBody3D" index="0"]
+shape = SubResource("SphereShape3D_juco5")
 
-[node name="CollisionShape3D" parent="MeshInstance3D/RigidBody3D" index="0"]
-shape = SubResource("SphereShape3D_lgnyj")
+[node name="MeshInstance3D" parent="RigidBody3D/CollisionShape3D" index="0"]
+mesh = SubResource("SphereMesh_3ki6c")

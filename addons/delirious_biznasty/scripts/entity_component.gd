@@ -1,4 +1,4 @@
-class_name EntityComponent extends Node
+class_name EntityComponent extends Node3D
 
 const entity_class = preload("entity.gd")
 var parent_entity:Entity
