@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://bo040eyfr7xxj"]
+
+[ext_resource type="PackedScene" uid="uid://dyiifaitxl3gx" path="res://addons/delirious_biznasty/scripts/item_template.tscn" id="1_ug74b"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_samhh"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lgnyj"]
+
+[node name="Item" instance=ExtResource("1_ug74b")]
+
+[node name="MeshInstance3D" parent="." index="0"]
+mesh = SubResource("SphereMesh_samhh")
+
+[node name="CollisionShape3D" parent="MeshInstance3D/RigidBody3D" index="0"]
+shape = SubResource("SphereShape3D_lgnyj")
