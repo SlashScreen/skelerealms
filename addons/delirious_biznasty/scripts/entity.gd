@@ -1,21 +1,29 @@
-class_name Entity extends Node
+class_name Entity 
+extends Node
+## An entity for the pseudo-ecs. Contains [EntityComponent]s.
+## These allow constructs such as NPCs and Items to persist even when not in the scene.
 
-const g_info = preload("game_info.gd")
-const e_mngr = preload("entity_manager.gd")
-
+## The world this entity is in.
 @export var world: String
-var in_scene: bool: set = _set_in_scene, get = _get_in_scene
-var game_info:Callable
+## Position within the world it's in.
 @export var position:Vector3
-@export_enum("item") var type
+## Whether this entity is in the scene or not.
+var in_scene: bool: 
+	get:
+		return in_scene
+	set(val):
+		if in_scene && !val: # if was in scene and now not
+			left_scene.emit()
+		if !in_scene && val: # if was not in scene and now is
+			entered_scene.emit()
+		in_scene = val
 
+## Emitted when an entity enters a scene.
 signal left_scene
+## Emitted when an entity leaves a scene.
 signal entered_scene
 
 # TODO: Handle destruction
-
-func _ready():
-	game_info = func(): return (get_parent() as EntityManager).game_info
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -33,7 +41,7 @@ func _get_in_scene() -> bool:
 
 func should_be_in_scene():
 	# if not in correct world
-	if game_info.call().world != world:
+	if %GameInfo.world != world:
 		in_scene = false
 		return
 	# if we are outside of actor fade distance

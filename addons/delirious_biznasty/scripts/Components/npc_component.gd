@@ -1,7 +1,9 @@
-class_name NPCComponent extends EntityComponent
+class_name NPCComponent 
+extends EntityComponent
+## The brain for an NPC.
 
-const entity = preload("../entity_component.gd")
 var puppet: NPCPuppet
+## Base data for this NPC.
 @export var data: NPCData
 
 #func _ready():
@@ -21,5 +23,6 @@ func _on_exit_scene():
 	puppet = null
 
 # TODO: Behaviour
+## Interact with this npc. See [InteractiveComponent].
 func interact(refID:String):
 	pass

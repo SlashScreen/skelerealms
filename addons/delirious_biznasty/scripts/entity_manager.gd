@@ -1,14 +1,10 @@
-class_name EntityManager extends Node
+class_name EntityManager 
+extends Node
+## Manages entities in the game.
 
-const g_info = preload("game_info.gd")
-const option = preload("option.gd")
-
-var game_info:GameInfo
 var entities:Dictionary
 
-func _ready():
-	game_info = $"../GameInfo" as GameInfo
-
+## Gets an entity in the game.
 func get_entity(id:String) -> Option:
 	# stage 1: attempt find in cache
 	if entities.has(id):
@@ -22,11 +18,11 @@ func get_entity(id:String) -> Option:
 	# Other than that, we've failed. Return None.
 	return Option.from(get_node_or_null(id))
 
-# add a new entity.
-func add_entity():
+## add a new entity.
+func add_entity(archetype:PackedScene):
 	pass
 
-# remove an entity from the game.
+## remove an entity from the game.
 func remove_entity(refID:String):
 	remove_child(get_node(refID))
 	entities.erase(refID)
