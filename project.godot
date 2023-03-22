@@ -18,6 +18,9 @@ config/icon="res://icon.svg"
 [biznasty]
 
 actor_fade_distance=100.0
+seconds_per_minute=2.0
+minutes_per_hour=31.0
+hours_per_day=15.0
 
 [dotnet]
 
@@ -74,6 +77,10 @@ sprint={
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194325,"key_label":0,"unicode":0,"echo":false,"script":null)
 ]
 }
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://locales/ui.de.translation", "res://locales/ui.en.translation")
 
 [player]
 

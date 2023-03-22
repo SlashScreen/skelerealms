@@ -6,7 +6,7 @@ extends EntityComponent
 @export var data: ItemData
 var puppet:Node
 ## What inventory this item is in.
-var contained_inventory: Option
+@onready var contained_inventory: Option = Option.none()
 ## Whether this item is in inventory or not.
 var in_inventory:bool: 
 	get:
@@ -21,7 +21,7 @@ func _on_enter_scene():
 
 
 func _spawn():
-	if not contained_inventory.some() : return
+	if contained_inventory.some() : return
 	
 	print("spawn")
 	var n = data.prefab.instantiate()
