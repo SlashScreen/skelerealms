@@ -1,4 +1,4 @@
-class_name EntityManager extends Node3D
+class_name EntityManager extends Node
 
 const g_info = preload("game_info.gd")
 const option = preload("option.gd")

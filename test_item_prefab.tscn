@@ -2,14 +2,14 @@
 
 [ext_resource type="PackedScene" uid="uid://dyiifaitxl3gx" path="res://addons/delirious_biznasty/item_template.tscn" id="1_k1v1r"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_juco5"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_7c4sf"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_3ki6c"]
+[sub_resource type="SphereMesh" id="SphereMesh_vho45"]
 
 [node name="Item" instance=ExtResource("1_k1v1r")]
 
-[node name="CollisionShape3D" parent="RigidBody3D" index="0"]
-shape = SubResource("SphereShape3D_juco5")
+[node name="CollisionShape3D" parent="." index="0"]
+shape = SubResource("SphereShape3D_7c4sf")
 
-[node name="MeshInstance3D" parent="RigidBody3D/CollisionShape3D" index="0"]
-mesh = SubResource("SphereMesh_3ki6c")
+[node name="MeshInstance3D" parent="CollisionShape3D" index="0"]
+mesh = SubResource("SphereMesh_vho45")

@@ -6,7 +6,9 @@ const entity = preload("../entity_component.gd")
 
 func _on_enter_scene():
 	print("spawn")
-	add_child(data.prefab.instantiate())
+	var n = data.prefab.instantiate()
+	(n as Node3D).set_position((get_parent() as Entity).position)
+	add_child(n)
 
 func _on_exit_scene():
 	print("despawn")

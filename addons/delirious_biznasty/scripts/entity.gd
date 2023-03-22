@@ -1,4 +1,4 @@
-class_name Entity extends Node3D
+class_name Entity extends Node
 
 const g_info = preload("game_info.gd")
 const e_mngr = preload("entity_manager.gd")
@@ -6,6 +6,7 @@ const e_mngr = preload("entity_manager.gd")
 @export var world: String
 var in_scene: bool: set = _set_in_scene, get = _get_in_scene
 var game_info:Callable
+@export var position:Vector3
 @export_enum("item") var type
 
 signal left_scene
@@ -40,3 +41,6 @@ func should_be_in_scene():
 		in_scene = false
 		return
 	in_scene = true
+
+func _on_set_position(p:Vector3):
+	position = p

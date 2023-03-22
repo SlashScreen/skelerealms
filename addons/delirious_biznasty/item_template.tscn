@@ -1,16 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://dyiifaitxl3gx"]
+[gd_scene load_steps=4 format=3 uid="uid://dyiifaitxl3gx"]
+
+[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/position_sync.gd" id="1_3h4y5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ivnhw"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qxh5q"]
 
-[node name="Item" type="Node3D"]
+[node name="Item" type="RigidBody3D"]
+script = ExtResource("1_3h4y5")
 
-[node name="RigidBody3D" type="RigidBody3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_ivnhw")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D/CollisionShape3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
 mesh = SubResource("BoxMesh_qxh5q")
 skeleton = NodePath("../../..")
