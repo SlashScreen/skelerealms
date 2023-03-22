@@ -44,3 +44,11 @@ func should_be_in_scene():
 
 func _on_set_position(p:Vector3):
 	position = p
+
+func get_component(type:String) -> Option:
+	var n = get_node_or_null(type)
+	return Option.from(n)
+
+func has_component(type:String) -> bool:
+	var x = get_component(type)
+	return x.some()

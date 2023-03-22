@@ -6,7 +6,12 @@ var inventory: PackedStringArray
 var snails: int
 
 func add_to_inventory(id:String):
-	inventory.append(id)
+	var e = (%EntityManager as EntityManager).get_entity(id)
+	if e.some():
+		var ic = (e.unwrap() as Entity).get_component("ItemComponent")
+		if ic.some():
+			(ic.unwrap() as ItemComponent).move_to_inventory(id)
+			inventory.append(id)
 	
 func remove_from_inventory(id:String):
 	inventory.remove_at(inventory.find(id))
