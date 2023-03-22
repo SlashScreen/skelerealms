@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NPCData" load_steps=3 format=3 uid="uid://cqtqwsfkqdt2t"]
+
+[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Data/npc_data.gd" id="1_7n5op"]
+[ext_resource type="PackedScene" uid="uid://h6i80uwc361m" path="res://test_npc_prefab.tscn" id="1_f44c6"]
+
+[resource]
+script = ExtResource("1_7n5op")
+prefab = ExtResource("1_f44c6")
+id = "test_npc"

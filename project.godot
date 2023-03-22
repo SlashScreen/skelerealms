@@ -15,6 +15,10 @@ run/main_scene="res://addons/delirious_biznasty/test.tscn"
 config/features=PackedStringArray("4.0", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[biznasty]
+
+actor_fade_distance=100.0
+
 [dotnet]
 
 project/assembly_name="DBiznasty"

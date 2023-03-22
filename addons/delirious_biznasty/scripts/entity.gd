@@ -37,7 +37,7 @@ func should_be_in_scene():
 		in_scene = false
 		return
 	# if we are outside of actor fade distance
-	if position.distance_squared_to(get_viewport().get_camera_3d().position) > game_info.call().actor_fade_distance ** 2: # does this work??
+	if position.distance_squared_to(get_viewport().get_camera_3d().position) > ProjectSettings.get_setting("biznasty/actor_fade_distance") ** 2: # does this work??
 		in_scene = false
 		return
 	in_scene = true
