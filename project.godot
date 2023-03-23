@@ -21,6 +21,7 @@ actor_fade_distance=100.0
 seconds_per_minute=2.0
 minutes_per_hour=31.0
 hours_per_day=15.0
+quests_directory="res://Quests"
 
 [display]
 
