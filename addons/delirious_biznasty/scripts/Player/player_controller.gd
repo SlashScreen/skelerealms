@@ -17,6 +17,8 @@ signal update_position(pos:Vector3)
 
 
 func _physics_process(delta):
+	if %GameInfo.paused:
+		return
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -37,9 +39,6 @@ func _physics_process(delta):
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 
 	move_and_slide()
-	
-	if Input.is_action_just_released("ui_cancel"):
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE else Input.MOUSE_MODE_VISIBLE # TODO: Toggle pause
 
 
 func _input(event):
