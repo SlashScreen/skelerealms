@@ -19,6 +19,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_t5doc")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
@@ -45,14 +47,16 @@ environment = SubResource("Environment_gl3vu")
 far = 10.0
 
 [node name="TabContainer" type="TabContainer" parent="."]
-layout_mode = 0
-offset_right = 1150.0
-offset_bottom = 653.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("2_iwgrb")
 theme_type_variation = &"brown"
 
 [node name="System" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("3_ig4wq")
 
@@ -87,6 +91,7 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="Inventory" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("5_g8rl4")
 

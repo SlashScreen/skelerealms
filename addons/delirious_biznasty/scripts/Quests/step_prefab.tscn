@@ -6,7 +6,6 @@
 offset_right = 268.0
 offset_bottom = 324.0
 mouse_filter = 1
-title = "Step"
 position_offset = Vector2(189, 207)
 slot/0/left_enabled = false
 slot/0/left_type = 0

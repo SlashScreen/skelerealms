@@ -9,21 +9,36 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="MenuBar" type="MenuBar" parent="."]
-layout_mode = 0
-offset_right = 1154.0
-offset_bottom = 40.0
-
-[node name="PopupMenu" type="PopupMenu" parent="MenuBar"]
-
-[node name="GraphEdit" type="GraphEdit" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-offset_top = 34.0
-offset_right = 1152.0
-offset_bottom = 646.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Step" parent="GraphEdit" instance=ExtResource("1_defa4")]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="MenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Save"
+item_count = 1
+popup/item_0/text = "Save?"
+popup/item_0/id = 0
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Add Node"
+
+[node name="GraphEdit" type="GraphEdit" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Step" parent="VBoxContainer/GraphEdit" instance=ExtResource("1_defa4")]
 layout_mode = 0
 offset_left = 189.0
 offset_top = 207.0

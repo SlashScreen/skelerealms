@@ -22,6 +22,10 @@ seconds_per_minute=2.0
 minutes_per_hour=31.0
 hours_per_day=15.0
 
+[display]
+
+mouse_cursor/custom_image="res://kenney_ui-pack-rpg-expansion/PNG/cursorHand_blue.png"
+
 [dotnet]
 
 project/assembly_name="DBiznasty"

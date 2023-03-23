@@ -26,6 +26,8 @@ func _ready():
 	$Timer.timeout.connect(_on_timer_complete.bind())
 	$Timer.one_shot = false
 	$Timer.start(ProjectSettings.get_setting("biznasty/seconds_per_minute"))
+	(%GameInfo as GameInfo).pause.connect(_on_pause.bind())
+	(%GameInfo as GameInfo).unpause.connect(_on_unpause.bind())
 	_set_timer_text()
 
 
@@ -68,7 +70,9 @@ func set_will(val:int):
 
 
 func _on_pause():
+	hide()
 	$Timer.paused = true
 
 func _on_unpause():
+	show()
 	$Timer.paused = false
