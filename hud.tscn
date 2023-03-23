@@ -41,15 +41,8 @@ layout_mode = 0
 offset_right = 226.0
 offset_bottom = 374.0
 
-[node name="Label" type="Label" parent="Notifications"]
+[node name="Notification" parent="Notifications" instance=ExtResource("2_uuehr")]
 layout_mode = 2
-text = "notification1
-"
-
-[node name="Label2" type="Label" parent="Notifications"]
-layout_mode = 2
-text = "notification1
-"
 
 [node name="BloodBar" type="ProgressBar" parent="."]
 layout_mode = 1

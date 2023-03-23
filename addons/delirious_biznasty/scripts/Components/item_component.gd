@@ -4,7 +4,6 @@ extends EntityComponent
 
 ## The data blob this item has.
 @export var data: ItemData
-var puppet:Node
 ## What inventory this item is in.
 @onready var contained_inventory: Option = Option.none()
 ## Whether this item is in inventory or not.
@@ -21,13 +20,7 @@ func _on_enter_scene():
 
 
 func _spawn():
-	if contained_inventory.some() : return
-	
-	print("spawn")
-	var n = data.prefab.instantiate()
-	(n as Node3D).set_position((get_parent() as Entity).position)
-	puppet = n
-	add_child(n)
+	$"../PuppetSpawnerComponent".spawn(data.prefab)
 
 
 func _on_exit_scene():
@@ -36,9 +29,7 @@ func _on_exit_scene():
 
 
 func _despawn():
-	for n in get_children():
-		remove_child(n)
-	puppet = null
+	$"../PuppetSpawnerComponent".despawn()
 
 
 func _process(delta):

@@ -2,13 +2,19 @@ extends CharacterBody3D
 class_name PlayerController
 ## Player controller.
 
+
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
+
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var look_sensitivity:float = ProjectSettings.get_setting("player/look_sensitivity")
 @onready var camera:Camera3D = $Camera3D
+
+
+signal update_position(pos:Vector3)
+
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -35,6 +41,7 @@ func _physics_process(delta):
 	if Input.is_action_just_released("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE else Input.MOUSE_MODE_VISIBLE # TODO: Toggle pause
 
+
 func _input(event):
 	if event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * look_sensitivity)
@@ -42,3 +49,5 @@ func _input(event):
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 
 
+func _process(delta):
+	update_position.emit(position)
