@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://dloiy3sn8le20"]
+
+[ext_resource type="PackedScene" uid="uid://boq25w8i6nsa3" path="res://addons/delirious_biznasty/scripts/Quests/step_prefab.tscn" id="1_defa4"]
+
+[node name="quest_editor_screen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuBar" type="MenuBar" parent="."]
+layout_mode = 0
+offset_right = 1154.0
+offset_bottom = 40.0
+
+[node name="PopupMenu" type="PopupMenu" parent="MenuBar"]
+
+[node name="GraphEdit" type="GraphEdit" parent="."]
+layout_mode = 1
+offset_top = 34.0
+offset_right = 1152.0
+offset_bottom = 646.0
+
+[node name="Step" parent="GraphEdit" instance=ExtResource("1_defa4")]
+layout_mode = 0
+offset_left = 189.0
+offset_top = 207.0
+offset_right = 457.0
+offset_bottom = 463.0
