@@ -1,0 +1,118 @@
+[gd_scene load_steps=9 format=3 uid="uid://dx6grfuxk8jg1"]
+
+[ext_resource type="Script" path="res://ui scripts/menu_control.gd" id="1_t5doc"]
+[ext_resource type="Theme" uid="uid://b3rcvlcx4caci" path="res://menu_theme.tres" id="2_iwgrb"]
+[ext_resource type="Script" path="res://ui scripts/system_menu.gd" id="3_ig4wq"]
+[ext_resource type="Script" path="res://ui scripts/journal_menu.gd" id="4_mmivr"]
+[ext_resource type="Script" path="res://ui scripts/inventory_menu.gd" id="5_g8rl4"]
+[ext_resource type="Texture2D" uid="uid://ccxi3gwpbc7tr" path="res://icon.svg" id="6_0gsw4"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_hnv4f"]
+
+[sub_resource type="Environment" id="Environment_gl3vu"]
+
+[node name="Menu" type="Control"]
+process_mode = 2
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t5doc")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 512.0
+offset_bottom = 511.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="Node3D" type="Node3D" parent="SubViewportContainer/SubViewport"]
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/Node3D"]
+visible = false
+mesh = SubResource("SphereMesh_hnv4f")
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.60241)
+visible = false
+environment = SubResource("Environment_gl3vu")
+far = 10.0
+
+[node name="TabContainer" type="TabContainer" parent="."]
+layout_mode = 0
+offset_right = 1150.0
+offset_bottom = 653.0
+theme = ExtResource("2_iwgrb")
+theme_type_variation = &"brown"
+
+[node name="System" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("3_ig4wq")
+
+[node name="QuitButton" type="Button" parent="TabContainer/System"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "Quit"
+
+[node name="Journal" type="Control" parent="TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("4_mmivr")
+
+[node name="Label" type="Label" parent="TabContainer/Journal"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "TODO"
+
+[node name="Tree" type="Tree" parent="TabContainer/Journal"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -535.0
+offset_top = -216.5
+offset_bottom = 216.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Inventory" type="Control" parent="TabContainer"]
+layout_mode = 2
+script = ExtResource("5_g8rl4")
+
+[node name="Label" type="Label" parent="TabContainer/Inventory"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "TODO"
+
+[node name="ItemList" type="ItemList" parent="TabContainer/Inventory"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -387.5
+offset_top = -203.5
+offset_right = 387.5
+offset_bottom = 203.5
+grow_horizontal = 2
+grow_vertical = 2
+item_count = 1
+max_columns = 3
+icon_mode = 0
+item_0/text = "inventory item"
+item_0/icon = ExtResource("6_0gsw4")
+
+[connection signal="button_up" from="TabContainer/System/QuitButton" to="TabContainer/System" method="_on_quit_button_button_up"]
