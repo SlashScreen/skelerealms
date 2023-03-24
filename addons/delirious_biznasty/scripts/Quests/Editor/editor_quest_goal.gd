@@ -1,4 +1,4 @@
-class_name QuestGoal
+class_name EditorQuestGoal
 extends Control
 
 var goal_key:String

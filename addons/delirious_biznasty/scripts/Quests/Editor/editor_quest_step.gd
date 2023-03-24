@@ -1,4 +1,4 @@
-class_name QuestStepNode
+class_name EditorQuestStep
 extends GraphNode
 
 var is_entry:bool
@@ -6,7 +6,8 @@ var is_exit:bool
 var step_name:String
 var node_position:Vector2
 var next_connections:Array[String]
-var step_type:StepType
+var step_type:QuestStep.StepType
+var optional:bool
 
 
 @export var step_name_field:LineEdit
@@ -27,8 +28,8 @@ func _update_is_exit(val:bool):
 	set_slot_enabled_right(0, not val)
 
 
-enum StepType {
-	ALL,
-	ANY,
-	BRANCH,
-}
+## Evaluate whether the quest is complete or not.
+func evaluate() -> bool:
+	return true
+
+

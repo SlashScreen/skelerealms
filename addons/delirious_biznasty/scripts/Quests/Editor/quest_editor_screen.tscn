@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dloiy3sn8le20"]
 
-[ext_resource type="PackedScene" uid="uid://boq25w8i6nsa3" path="res://addons/delirious_biznasty/scripts/Quests/step_prefab.tscn" id="1_defa4"]
+[ext_resource type="PackedScene" uid="uid://boq25w8i6nsa3" path="res://addons/delirious_biznasty/scripts/Quests/step_prefab.tscn" id="1_7w0a3"]
 
 [node name="quest_editor_screen" type="Control"]
 layout_mode = 3
@@ -38,7 +38,7 @@ text = "Add Node"
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Step" parent="VBoxContainer/GraphEdit" instance=ExtResource("1_defa4")]
+[node name="Step" parent="VBoxContainer/GraphEdit" instance=ExtResource("1_7w0a3")]
 layout_mode = 0
 offset_left = 189.0
 offset_top = 207.0

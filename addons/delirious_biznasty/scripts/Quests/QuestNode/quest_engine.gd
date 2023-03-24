@@ -2,6 +2,7 @@ class_name QuestEngine
 extends Node
 ## This keeps track of all of the quests.
 ## Quests will be instantiated as [QuestObject]s underneath this node.
+## Registering a quest event will update the trree downwards. What does this mean? I don't know, I'm tired.
 
 
 ## Array of IDs of all the quests that are currently active.
@@ -29,3 +30,23 @@ func is_quest_complete(qID:String) -> bool:
 ## Inverting this can check if the quest hasn't been started by the player.
 func is_quest_started(qID:String) -> bool:
 	return is_quest_active(qID) or is_quest_complete(qID)
+
+
+## Register a quest event. 
+## You can either pass in a path formatted like [Code]MyQuest/MyEvent[/code] to send an event to a specific quest,
+## or simply pass in the event key to send an event to all quests.
+func register_quest_event(path:String):
+	if path.contains("/"): # if the key is a path
+		var chunks = path.split("/")
+		var qnode = get_node_or_null(chunks[0]) as QuestNode
+		if qnode == null:
+			return
+		qnode.register_step_event(chunks[1])
+	else: # if jsut the key
+		for q in get_children().map(func(x): return x as QuestNode):
+			q.register_step_event(path)
+
+
+func _update_all_quests():
+	for q in get_children().map(func(x): return x as QuestNode):
+		q.update()

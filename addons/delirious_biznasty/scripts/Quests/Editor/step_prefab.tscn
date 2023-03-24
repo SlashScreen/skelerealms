@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://boq25w8i6nsa3"]
+[gd_scene load_steps=2 format=3 uid="uid://crokiukm4yryo"]
 
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/quest_step.gd" id="1_86m2w"]
+[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/Editor/quest_step.gd" id="1_nrlex"]
 
 [node name="Step" type="GraphNode" node_paths=PackedStringArray("step_name_field", "is_exit_button")]
 offset_right = 268.0
@@ -61,7 +61,7 @@ slot/5/right_type = 0
 slot/5/right_color = Color(1, 1, 1, 1)
 slot/5/right_icon = null
 slot/5/draw_stylebox = true
-script = ExtResource("1_86m2w")
+script = ExtResource("1_nrlex")
 step_name_field = NodePath("StepName")
 is_exit_button = NodePath("IsExitButton")
 

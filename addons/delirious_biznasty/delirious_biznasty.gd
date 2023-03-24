@@ -5,9 +5,8 @@ var dock:Control
 
 func _enter_tree():
 	# Initialization of the plugin goes here.
-	dock = preload("res://addons/delirious_biznasty/scripts/Quests/quest_editor_screen.tscn").instantiate()
+	dock = preload("res://addons/delirious_biznasty/scripts/Quests/Editor/quest_editor_screen.tscn").instantiate()
 	add_control_to_bottom_panel(dock, "Quest Editor")
-	
 
 
 func _exit_tree():
