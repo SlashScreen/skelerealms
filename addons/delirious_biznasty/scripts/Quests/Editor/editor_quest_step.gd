@@ -1,3 +1,5 @@
+@tool
+
 class_name EditorQuestStep
 extends GraphNode
 
@@ -15,6 +17,9 @@ var optional:bool
 
 
 func _ready():
+	print("Node getting ready...")
+	randomize()
+	set_name("%x" % randi())
 	step_name_field.text_submitted.connect(_update_step_name.bind())
 	is_exit_button.toggled.connect(_update_is_exit.bind())
 
@@ -24,6 +29,7 @@ func _update_step_name(val:String):
 
 
 func _update_is_exit(val:bool):
+	print("update is exit")
 	is_exit = val
 	set_slot_enabled_right(0, not val)
 
@@ -34,4 +40,5 @@ func evaluate() -> bool:
 
 
 func _on_delete_node_button_up():
+	print("Delete step")
 	queue_free()

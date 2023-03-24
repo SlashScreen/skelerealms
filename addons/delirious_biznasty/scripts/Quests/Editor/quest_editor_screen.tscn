@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ders1d0sqofy2" path="res://addons/delirious_biznasty/scripts/Quests/Editor/step_prefab.tscn" id="2_dvrvu"]
 
 [node name="quest_editor_screen" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,6 +36,7 @@ text = "Save"
 [node name="GraphEdit" type="GraphEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+right_disconnects = true
 script = ExtResource("1_1ktoh")
 node_prefab = ExtResource("2_dvrvu")
 
