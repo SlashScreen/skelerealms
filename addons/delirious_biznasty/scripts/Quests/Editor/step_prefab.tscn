@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://crokiukm4yryo"]
+[gd_scene load_steps=2 format=3 uid="uid://ders1d0sqofy2"]
 
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/Editor/quest_step.gd" id="1_nrlex"]
+[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/Editor/editor_quest_step.gd" id="1_kwd5h"]
 
 [node name="Step" type="GraphNode" node_paths=PackedStringArray("step_name_field", "is_exit_button")]
 offset_right = 268.0
@@ -61,9 +61,22 @@ slot/5/right_type = 0
 slot/5/right_color = Color(1, 1, 1, 1)
 slot/5/right_icon = null
 slot/5/draw_stylebox = true
-script = ExtResource("1_nrlex")
+slot/6/left_enabled = false
+slot/6/left_type = 0
+slot/6/left_color = Color(1, 1, 1, 1)
+slot/6/left_icon = null
+slot/6/right_enabled = false
+slot/6/right_type = 0
+slot/6/right_color = Color(1, 1, 1, 1)
+slot/6/right_icon = null
+slot/6/draw_stylebox = true
+script = ExtResource("1_kwd5h")
 step_name_field = NodePath("StepName")
 is_exit_button = NodePath("IsExitButton")
+
+[node name="DeleteNode" type="Button" parent="."]
+layout_mode = 2
+text = "Delete Node"
 
 [node name="StepName" type="LineEdit" parent="."]
 layout_mode = 2
@@ -104,3 +117,5 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "blahblah
 "
+
+[connection signal="button_up" from="DeleteNode" to="." method="_on_delete_node_button_up"]

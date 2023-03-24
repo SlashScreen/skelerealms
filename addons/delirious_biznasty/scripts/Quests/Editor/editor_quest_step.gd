@@ -33,3 +33,5 @@ func evaluate() -> bool:
 	return true
 
 
+func _on_delete_node_button_up():
+	queue_free()

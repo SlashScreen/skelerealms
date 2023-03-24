@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dloiy3sn8le20"]
+[gd_scene load_steps=3 format=3 uid="uid://dloiy3sn8le20"]
 
-[ext_resource type="PackedScene" uid="uid://boq25w8i6nsa3" path="res://addons/delirious_biznasty/scripts/Quests/step_prefab.tscn" id="1_7w0a3"]
+[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/Editor/quest_editor.gd" id="1_1ktoh"]
+[ext_resource type="PackedScene" uid="uid://ders1d0sqofy2" path="res://addons/delirious_biznasty/scripts/Quests/Editor/step_prefab.tscn" id="2_dvrvu"]
 
 [node name="quest_editor_screen" type="Control"]
 layout_mode = 3
@@ -23,24 +24,19 @@ grow_vertical = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="MenuButton" type="MenuButton" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "Save"
-item_count = 1
-popup/item_0/text = "Save?"
-popup/item_0/id = 0
-
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="Add_new" type="Button" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Add Node"
+
+[node name="Save" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Save"
 
 [node name="GraphEdit" type="GraphEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+script = ExtResource("1_1ktoh")
+node_prefab = ExtResource("2_dvrvu")
 
-[node name="Step" parent="VBoxContainer/GraphEdit" instance=ExtResource("1_7w0a3")]
-layout_mode = 0
-offset_left = 189.0
-offset_top = 207.0
-offset_right = 457.0
-offset_bottom = 463.0
+[connection signal="button_down" from="VBoxContainer/HBoxContainer/Add_new" to="VBoxContainer/GraphEdit" method="_on_add_new_button_down"]
+[connection signal="button_up" from="VBoxContainer/HBoxContainer/Save" to="VBoxContainer/GraphEdit" method="_on_save_button_up"]
