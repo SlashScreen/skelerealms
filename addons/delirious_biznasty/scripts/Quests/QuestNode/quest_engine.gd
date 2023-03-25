@@ -43,7 +43,7 @@ func is_quest_complete(qID:String) -> bool:
 func is_quest_started(qID:String) -> bool:
 	return is_quest_active(qID) or is_quest_complete(qID)
 
-
+# TODO: Use propogate_call instead.
 ## Register a quest event. 
 ## You can either pass in a path formatted like [Code]MyQuest/MyEvent[/code] to send an event to a specific quest,
 ## or simply pass in the event key to send an event to all quests.
