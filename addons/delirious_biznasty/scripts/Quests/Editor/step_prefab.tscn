@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://ders1d0sqofy2"]
 
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/Editor/editor_quest_step.gd" id="1_kwd5h"]
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/Editor/editor_quest_goal.gd" id="2_1y8u3"]
+[ext_resource type="PackedScene" uid="uid://cytp6gialq5vb" path="res://addons/delirious_biznasty/scripts/Quests/Editor/goal_prefab.tscn" id="2_cm17v"]
 
 [node name="step" type="GraphNode"]
 process_mode = 3
@@ -104,20 +104,20 @@ text = "Exit node"
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2
 
-[node name="GoalsContainer" type="ScrollContainer" parent="."]
+[node name="Scroll" type="ScrollContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
+follow_focus = true
+vertical_scroll_mode = 2
 
-[node name="Control" type="Control" parent="GoalsContainer"]
+[node name="GoalsContainer" type="VBoxContainer" parent="Scroll"]
 layout_mode = 2
-script = ExtResource("2_1y8u3")
 
-[node name="Label" type="Label" parent="GoalsContainer/Control"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "blahblah
-"
+[node name="Goal" parent="Scroll/GoalsContainer" instance=ExtResource("2_cm17v")]
+layout_mode = 2
+
+[node name="Goal2" parent="Scroll/GoalsContainer" instance=ExtResource("2_cm17v")]
+layout_mode = 2
 
 [connection signal="button_up" from="DeleteNode" to="." method="_on_delete_node_button_up"]
 [connection signal="toggled" from="IsExitButton" to="." method="_update_is_exit"]

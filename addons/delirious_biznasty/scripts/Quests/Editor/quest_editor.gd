@@ -59,6 +59,7 @@ func save():
 		
 		for g in (s as EditorQuestStep).get_goals(): # Load goals
 			var q_goal:QuestGoal = QuestGoal.new()
+			q_goal.name = (g as EditorQuestGoal).goal_key
 			print("Packing goal %s" % q_goal.name)
 			# TODO: Load info
 			q_step.add_child(q_goal)

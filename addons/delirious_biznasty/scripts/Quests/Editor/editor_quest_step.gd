@@ -46,4 +46,4 @@ func _on_delete_node_button_up():
 
 
 func get_goals() -> Array:
-	return $GoalsContainer.get_children().map(func(x): return x as EditorQuestGoal)
+	return $Scroll/GoalsContainer.get_children().map(func(x): return x as EditorQuestGoal)
