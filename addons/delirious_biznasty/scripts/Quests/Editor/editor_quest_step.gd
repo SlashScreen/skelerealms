@@ -3,29 +3,30 @@
 class_name EditorQuestStep
 extends GraphNode
 
+
 var is_entry:bool
 var is_exit:bool
-var step_name:String
+var step_name:String:
+	get: 
+		return ($StepName as LineEdit).text
 var node_position:Vector2
 var next_connections:Array[String]
-var step_type:QuestStep.StepType
+var step_type:QuestStep.StepType:
+	get:
+		match $StepType.get_item_text($StepType.get_selected_id()):
+			"All":
+				return QuestStep.StepType.ALL
+			"Any":
+				return QuestStep.StepType.ANY
+			"Branch":
+				return QuestStep.StepType.BRANCH
+			_:
+				return QuestStep.StepType.ALL
 var optional:bool
 
 
-@export var step_name_field:LineEdit
-@export var is_exit_button:CheckButton
-
-
-func _ready():
-	print("Node getting ready...")
-	randomize()
-	set_name("%x" % randi())
-	step_name_field.text_submitted.connect(_update_step_name.bind())
-	is_exit_button.toggled.connect(_update_is_exit.bind())
-
-
-func _update_step_name(val:String):
-	step_name = val
+var step_name_field:LineEdit
+var is_exit_button:CheckButton
 
 
 func _update_is_exit(val:bool):
@@ -41,4 +42,8 @@ func evaluate() -> bool:
 
 func _on_delete_node_button_up():
 	print("Delete step")
-	queue_free()
+	get_parent().delete_node(name)
+
+
+func get_goals() -> Array:
+	return $GoalsContainer.get_children().map(func(x): return x as EditorQuestGoal)

@@ -3,7 +3,7 @@ extends Node
 
 var type:StepType = StepType.ALL
 var is_final_step:bool = false
-@export var next_steps:Dictionary = {}
+@export var next_steps:Array[Node]#Dictionary = {}
 
 var next_step:QuestStep:
 	get:
@@ -11,7 +11,7 @@ var next_step:QuestStep:
 			return next_steps[0]
 		for g in get_children().map(func(x): x as QuestGoal):
 			if(g.evaluate(false)):
-				return next_steps[g.key]
+				return next_steps[0]#[g.key] TODO: Key
 		return null
 
 

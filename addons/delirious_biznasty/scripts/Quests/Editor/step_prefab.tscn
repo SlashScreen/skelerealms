@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ders1d0sqofy2"]
+[gd_scene load_steps=3 format=3 uid="uid://ders1d0sqofy2"]
 
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/Editor/editor_quest_step.gd" id="1_kwd5h"]
+[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/Editor/editor_quest_goal.gd" id="2_1y8u3"]
 
-[node name="2619099a" type="GraphNode" node_paths=PackedStringArray("step_name_field", "is_exit_button")]
+[node name="step" type="GraphNode"]
 process_mode = 3
 offset_right = 268.0
 offset_bottom = 324.0
@@ -72,8 +73,6 @@ slot/6/right_color = Color(1, 1, 1, 1)
 slot/6/right_icon = null
 slot/6/draw_stylebox = true
 script = ExtResource("1_kwd5h")
-step_name_field = NodePath("StepName")
-is_exit_button = NodePath("IsExitButton")
 
 [node name="DeleteNode" type="Button" parent="."]
 layout_mode = 2
@@ -105,14 +104,15 @@ text = "Exit node"
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="GoalsContainer" type="ScrollContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Control" type="Control" parent="ScrollContainer"]
+[node name="Control" type="Control" parent="GoalsContainer"]
 layout_mode = 2
+script = ExtResource("2_1y8u3")
 
-[node name="Label" type="Label" parent="ScrollContainer/Control"]
+[node name="Label" type="Label" parent="GoalsContainer/Control"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0

@@ -33,6 +33,11 @@ text = "Add Node"
 layout_mode = 2
 text = "Save"
 
+[node name="QName" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+placeholder_text = "Quest name"
+expand_to_text_length = true
+
 [node name="GraphEdit" type="GraphEdit" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
