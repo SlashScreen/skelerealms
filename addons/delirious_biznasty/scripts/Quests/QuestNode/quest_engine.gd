@@ -13,14 +13,19 @@ var complete_quests:Array[String]
 
 ## Loads all quests from the [code]biznasty/quests_directory[/code] project setting, and then instantiates them as child [QuestObject]s.
 func load_quest_objects():
-	var dir = DirAccess.open(ProjectSettings.get_setting("biznasty/quests_directory"))
+	_load_dir(ProjectSettings.get_setting("biznasty/quests_directory"))
+
+
+func _load_dir(path:String):
+	var dir = DirAccess.open(path)
 	dir.list_dir_begin()
 	var file_name = dir.get_next()
 	while file_name != "":
-		if !dir.current_is_dir():
+		if dir.current_is_dir():
+			_load_dir(file_name)
+		else:
 			add_quest_node(file_name)
 		file_name = dir.get_next()
-	pass
 
 
 func add_quest_node(path:String):
