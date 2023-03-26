@@ -15,7 +15,7 @@
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/teleport_component.gd" id="11_b46tl"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/world_loader.gd" id="13_wc36v"]
 [ext_resource type="PackedScene" uid="uid://dx6grfuxk8jg1" path="res://ui scripts/menu.tscn" id="14_ivpc4"]
-[ext_resource type="PackedScene" uid="uid://ddfwstygv4y1m" path="res://Worlds/test_world_1.tscn" id="14_t7217"]
+[ext_resource type="PackedScene" path="res://Worlds/test_world_1.tscn" id="14_t7217"]
 
 [node name="Game" type="Node3D"]
 
