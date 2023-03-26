@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b56xc2lavl48h"]
+[gd_scene load_steps=17 format=3 uid="uid://b56xc2lavl48h"]
 
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/game_info.gd" id="1_6dhbe"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/entity_manager.gd" id="2_k54cv"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/puppet_spawner_component.gd" id="7_6rhup"]
 [ext_resource type="Resource" uid="uid://cqtqwsfkqdt2t" path="res://test_npc.tres" id="7_bmxt5"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/player_component.gd" id="10_ewjpv"]
+[ext_resource type="PackedScene" uid="uid://cb36xhkpqr1j4" path="res://ui scripts/hud.tscn" id="10_vve1a"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/teleport_component.gd" id="11_b46tl"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/world_loader.gd" id="13_wc36v"]
 [ext_resource type="PackedScene" uid="uid://dx6grfuxk8jg1" path="res://ui scripts/menu.tscn" id="14_ivpc4"]
@@ -76,3 +77,6 @@ script = ExtResource("13_wc36v")
 [node name="test world 1" parent="WorldLoader" instance=ExtResource("14_t7217")]
 
 [node name="Menu" parent="." instance=ExtResource("14_ivpc4")]
+
+[node name="HUD" parent="." instance=ExtResource("10_vve1a")]
+unique_name_in_owner = true

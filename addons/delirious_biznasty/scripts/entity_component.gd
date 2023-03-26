@@ -18,3 +18,6 @@ func _on_enter_scene():
 ## Called when the parent entity exits a scene. See [signal Entity.left_scene].
 func _on_exit_scene():
 	pass
+
+func save() -> Dictionary:
+	return {}

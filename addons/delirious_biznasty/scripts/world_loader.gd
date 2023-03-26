@@ -17,7 +17,7 @@ signal world_loading_ready
 
 func _ready():
 	regex = RegEx.new()
-	regex.compile("\\/?\\/(.+).tscn")
+	regex.compile("([^\\/\n\\r]+).tscn") 
 	_cache_worlds(ProjectSettings.get_setting("biznasty/worlds_path"))
 
 
@@ -25,9 +25,10 @@ func _ready():
 func load_world(wid:String):
 	begin_world_loading.emit()
 	_unload_world()
+	print(world_paths)
 	
-	if world_paths.has(wid):
-		print("WORLD NOT FOUND: %s" % wid)
+	if not world_paths.has(wid):
+		print("World not found: %s" % wid)
 		return
 	
 	var w = load(world_paths[wid]) as PackedScene
@@ -45,20 +46,24 @@ func _unload_world():
 
 ## searches the worlds directory and caches filepaths, matching them to their name
 func _cache_worlds(path:String):
+	print("Caching world %s" % path)
 	var dir = DirAccess.open(path)
 	if dir:
+		print("Opened dir")
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
 			if dir.current_is_dir(): # if is directory, cache subdirectory
-				print("Found directory: " + file_name)
+				print("Found directory: %s/%s" % [path, file_name])
 				_cache_worlds(file_name)
 			else: # if filename, cache filename
 				var result = regex.search(file_name)
+				print("attempting to match on %s/%s" % [path, file_name])
 				if result:
-					world_paths[result.get_string(1)] = file_name
-					print("Found file: " + file_name)
-				
+					world_paths[result.get_string(1)] = "%s/%s" % [path, file_name]
+					print("Found file: " + "%s/%s" % [path, file_name])
 			file_name = dir.get_next()
+		dir.list_dir_end()
+	
 	else:
 		print("An error occurred when trying to access the path.")

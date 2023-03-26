@@ -1,16 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://b04h6k15qdccd"]
-
-[sub_resource type="NavigationMesh" id="NavigationMesh_yh1yj"]
-
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_m1jpk"]
-
-[sub_resource type="VoxelGIData" id="VoxelGIData_4u2va"]
+[gd_scene format=3 uid="uid://b04h6k15qdccd"]
 
 [node name="world_template" type="Node3D"]
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-navigation_mesh = SubResource("NavigationMesh_yh1yj")
 
 [node name="VoxelGI" type="VoxelGI" parent="."]
-camera_attributes = SubResource("CameraAttributesPractical_m1jpk")
-data = SubResource("VoxelGIData_4u2va")

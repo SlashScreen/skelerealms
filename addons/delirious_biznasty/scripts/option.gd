@@ -1,5 +1,6 @@
 class_name Option
 ## A crude implementation of an option/maybe type.
+## May get rid of this, because it adds complexity to replicate features that nullability kind of already does...
 
 var _data:Variant
 

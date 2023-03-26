@@ -33,7 +33,7 @@ signal update_will(new_value:float)
 func _ready():
 	($"../TeleportComponent" as TeleportComponent).teleporting.connect(teleport.bind())
 	var h = (%HUD as HudControl)
-	# Shouldn't set them here but im lazy
+	# Shouldn't connect them here but im lazy
 	update_health.connect(h.set_health.bind())
 	update_moxie.connect(h.set_stamina.bind())
 	update_will.connect(h.set_will.bind())
@@ -61,6 +61,7 @@ func _process(delta):
 
 ## Teleport the player.
 func teleport(world:String, pos:Vector3):
-	(%GameInfo as GameInfo).world = world
-	parent_entity.world = world
-	($"../PuppetSpawnerComponent" as PuppetSpawnerComponent).set_puppet_position(pos)
+	(%GameInfo as GameInfo).world = world # Set the game's world to destination world
+	parent_entity.world = world # Set this entity world to the destination
+	(%WorldLoader as WorldLoader).load_world(world) # Load world
+	($"../PuppetSpawnerComponent" as PuppetSpawnerComponent).set_puppet_position(pos) # Set player puppet position

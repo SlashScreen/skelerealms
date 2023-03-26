@@ -1,6 +1,7 @@
 class_name InteractiveObject
 extends Node3D
-## Objects in the world that don't need tracking, but can be interacted with, like a sign.
+## base class for objects in the world that don't need tracking, but can be interacted with, like a sign.
+## See [Door] for an example implementation.
 
 signal on_interact(id:String)
 

@@ -4,6 +4,9 @@ extends Node
 
 var entities:Dictionary
 
+func _ready():
+	BizGlobal.entity_manager = self
+
 ## Gets an entity in the game.
 func get_entity(id:String) -> Option:
 	# stage 1: attempt find in cache
