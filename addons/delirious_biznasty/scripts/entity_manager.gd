@@ -17,15 +17,25 @@ func get_entity(id:String) -> Option:
 	if possible_child != null:
 		entities[id] = possible_child # cache entity
 		return Option.from(possible_child)
+	# TODO: Check in save file
 	# TODO: Check in database
 	# Other than that, we've failed. Return None.
 	return Option.from(get_node_or_null(id))
+
 
 ## add a new entity.
 func add_entity(archetype:PackedScene):
 	pass
 
+
 ## remove an entity from the game.
 func remove_entity(refID:String):
 	remove_child(get_node(refID))
 	entities.erase(refID)
+
+
+func save() -> Dictionary:
+	var entity_save_data:Dictionary = {}
+	for n in get_children():
+		entity_save_data[n.name] = (n as EntityComponent).save()
+	return entity_save_data

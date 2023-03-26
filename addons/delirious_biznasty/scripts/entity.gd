@@ -60,3 +60,9 @@ func get_component(type:String) -> Option:
 func has_component(type:String) -> bool:
 	var x = get_component(type)
 	return x.some()
+
+func save() -> Dictionary:
+	var data:Dictionary = {}
+	for c in get_children():
+		data[c.get_class()] = ((c as EntityComponent).save())
+	return data
