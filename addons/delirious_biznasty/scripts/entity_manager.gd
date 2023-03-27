@@ -28,7 +28,7 @@ func get_entity(id:String) -> Option:
 	# stage 4: check on disk
 	if disk_assets.has(id):
 		add_entity(load(disk_assets[id]))
-		print_tree_pretty()
+		#print_tree_pretty()
 		return Option.from(entities[id]) # we added the entity in #add_entity
 		
 	# Other than that, we've failed. Attempt to find the entity in the child count as a failsave, then return none.
@@ -56,6 +56,7 @@ func _cache_entities(path:String):
 
 ## add a new entity.
 func add_entity(res:InstanceData):
+	print("Adding entity")
 	var new_nodes = res.get_archetype_components() # Get the entity components
 	
 	var new_entity = Entity.new() # make a new entity
@@ -66,6 +67,7 @@ func add_entity(res:InstanceData):
 	for n in new_nodes: # add all components to entity
 		new_entity.add_child(n)
 		n.owner = new_entity
+		n._ready()
 		
 	# add new entity to self, and the dictionary
 	entities[res.ref_id] = new_entity

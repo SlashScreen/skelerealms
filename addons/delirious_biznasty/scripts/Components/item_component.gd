@@ -16,6 +16,7 @@ var in_inventory:bool:
 #	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
 
 func _ready():
+	super._ready()
 	name = "EntityComponent"
 
 
