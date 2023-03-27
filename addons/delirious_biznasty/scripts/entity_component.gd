@@ -4,8 +4,10 @@ extends Node
 ## Extend these to add functionality to an entity.
 ## When inheriting, make sure to call super._ready() if overriding.
 
+
 ## Parent entity of this component.
 @onready var parent_entity:Entity = get_parent() as Entity
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -16,13 +18,16 @@ func _ready():
 		parent_entity.entered_scene.connect(_on_enter_scene.bind())
 	print("Initialized entity component")
 
+
 ## Called when the parent entity enters a scene. See [signal Entity.entered_scene].
 func _on_enter_scene():
 	pass
 
+
 ## Called when the parent entity exits a scene. See [signal Entity.left_scene].
 func _on_exit_scene():
 	pass
+
 
 func save() -> Dictionary:
 	return {}

@@ -44,7 +44,7 @@ func _unload_world():
 	remove_child(get_child(0))
 
 
-## searches the worlds directory and caches filepaths, matching them to their name
+## Searches the worlds directory and caches filepaths, matching them to their name
 func _cache_worlds(path:String):
 	var dir = DirAccess.open(path)
 	if dir:

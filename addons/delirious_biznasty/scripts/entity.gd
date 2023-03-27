@@ -9,6 +9,7 @@ extends Node
 ## Position within the world it's in.
 @export var position:Vector3
 
+
 ## Whether this entity is in the scene or not.
 var in_scene: bool: 
 	get:
@@ -23,6 +24,7 @@ var in_scene: bool:
 			print("%s entered scene" % name)
 			entered_scene.emit()
 		in_scene = val
+
 
 ## Emitted when an entity enters a scene.
 signal left_scene
@@ -68,8 +70,13 @@ func has_component(type:String) -> bool:
 	var x = get_component(type)
 	return x.some()
 
+
 func save() -> Dictionary:
 	var data:Dictionary = {}
 	for c in get_children():
-		data[c.get_class()] = ((c as EntityComponent).save())
+		data[c.name] = ((c as EntityComponent).save())
 	return data
+
+
+func load(data:Dictionary):
+	pass
