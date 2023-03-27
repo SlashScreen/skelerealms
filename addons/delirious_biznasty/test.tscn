@@ -15,20 +15,23 @@
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/teleport_component.gd" id="11_b46tl"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/world_loader.gd" id="13_wc36v"]
 [ext_resource type="PackedScene" uid="uid://dx6grfuxk8jg1" path="res://ui scripts/menu.tscn" id="14_ivpc4"]
-[ext_resource type="PackedScene" path="res://Worlds/test_world_1.tscn" id="14_t7217"]
+[ext_resource type="PackedScene" uid="uid://d3xvrivp3iwfb" path="res://Worlds/test_world_1.tscn" id="14_t7217"]
 
 [node name="Game" type="Node3D"]
 
 [node name="GameInfo" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_6dhbe")
+world = "test world 1"
 
 [node name="EntityManager" type="Node" parent="."]
 unique_name_in_owner = true
+process_priority = -1
 script = ExtResource("2_k54cv")
 
 [node name="TestEntity" type="Node" parent="EntityManager"]
 script = ExtResource("3_kxsl0")
+world = "test world 1"
 position = Vector3(0, 3, 0)
 
 [node name="ItemComponent" type="Node" parent="EntityManager/TestEntity"]
@@ -43,6 +46,7 @@ script = ExtResource("7_6rhup")
 
 [node name="TestNPC" type="Node" parent="EntityManager"]
 script = ExtResource("3_kxsl0")
+world = "test world 1"
 position = Vector3(1.5, 0, 0)
 
 [node name="NPCComponent" type="Node" parent="EntityManager/TestNPC"]
@@ -57,6 +61,7 @@ script = ExtResource("7_6rhup")
 
 [node name="Player" type="Node" parent="EntityManager"]
 script = ExtResource("3_kxsl0")
+world = "test world 1"
 
 [node name="PlayerComponent" type="Node" parent="EntityManager/Player"]
 script = ExtResource("10_ewjpv")

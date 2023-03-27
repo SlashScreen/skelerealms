@@ -14,9 +14,13 @@ var in_scene: bool:
 	get:
 		return in_scene
 	set(val):
+		if not val:
+			print("%s is not in scene, it's in world %s" % [name, world])
 		if in_scene && !val: # if was in scene and now not
+			print("%s left scene" % name)
 			left_scene.emit()
 		if !in_scene && val: # if was not in scene and now is
+			print("%s entered scene" % name)
 			entered_scene.emit()
 		in_scene = val
 
@@ -25,7 +29,10 @@ signal left_scene
 ## Emitted when an entity leaves a scene.
 signal entered_scene
 
-# TODO: Handle destruction
+
+func _ready():
+	print("Entity OnReady")
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -34,7 +41,7 @@ func _process(delta):
 
 func _should_be_in_scene():
 	# if not in correct world
-	if %GameInfo.world != world:
+	if BizGlobal.game_info.world != world:
 		in_scene = false
 		return
 	# if we are outside of actor fade distance

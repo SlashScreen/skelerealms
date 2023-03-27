@@ -16,6 +16,12 @@ static func none() -> Option:
 	op._data = null
 	return op
 
+static func wrap(data:Variant) -> Option:
+	if data:
+		return from(data)
+	else:
+		return none()
+
 ## Whether it has something in it.
 func some() -> bool:
 	return _data != null

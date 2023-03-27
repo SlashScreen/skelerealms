@@ -17,6 +17,7 @@ signal unpause
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	BizGlobal.game_info = self
 
 
 ## Puase the game.

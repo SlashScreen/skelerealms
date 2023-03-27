@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemInstance" load_steps=3 format=3 uid="uid://dbtw51rpbxsw1"]
+
+[ext_resource type="Resource" path="res://test_item.tres" id="1_y65su"]
+[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/item_instance.gd" id="2_up7h6"]
+
+[resource]
+script = ExtResource("2_up7h6")
+item_data = ExtResource("1_y65su")
+item_owner = ""
+contained_inventory = ""
+rotation = Quaternion(0, 0, 0, 1)
+ref_id = "test_item_instance"
+world = &"test world 1"
+position = Vector3(4.67772, 1.11064, 5.035)

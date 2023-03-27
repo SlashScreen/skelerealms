@@ -15,6 +15,10 @@ var in_inventory:bool:
 #func _ready():
 #	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
 
+func _ready():
+	name = "EntityComponent"
+
+
 func _on_enter_scene():
 	_spawn()
 

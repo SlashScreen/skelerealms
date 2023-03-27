@@ -28,6 +28,7 @@ hours_per_day=15.0
 quests_directory="res://Quests"
 granular_navigation_sim_distance=1000.0
 worlds_path="res://Worlds"
+entities_path="res://Entities"
 
 [display]
 

@@ -10,6 +10,9 @@ signal interacted(id:String)
 ## What tooltip to display when the cursor hovers over this.
 @export var interact_text:String
 
+func _ready():
+	name = "InteractiveComponent"
+
 ## Interact with this as the player.
 ## Shorthand for [codeblock] interact("Player") [/codeblock].
 func interact_by_player():

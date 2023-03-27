@@ -5,6 +5,11 @@ extends EntityComponent
 ## The puppet node.
 var puppet:Node 
 
+
+func _ready():
+	name = "PuppetSpawnerComponent"
+
+
 ## Spawn a new puppet.
 func spawn(data:PackedScene):
 	print("spawn")

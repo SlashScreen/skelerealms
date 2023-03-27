@@ -6,5 +6,6 @@ extends InteractiveObject
 @export var instance:ItemInstance
 
 func _ready():
-	BizGlobal.entity_manager.get_entity(instance.ref_id) # calling get_entity will cause the enity manager to start tracking this instance, if it isn't already.
+	print("Attempting to spawn %s" % instance.ref_id)
+	print("Can we spawn? %s" % BizGlobal.entity_manager.get_entity(instance.ref_id).some()) # calling get_entity will cause the enity manager to start tracking this instance, if it isn't already.
 	queue_free()

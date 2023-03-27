@@ -46,22 +46,17 @@ func _unload_world():
 
 ## searches the worlds directory and caches filepaths, matching them to their name
 func _cache_worlds(path:String):
-	print("Caching world %s" % path)
 	var dir = DirAccess.open(path)
 	if dir:
-		print("Opened dir")
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
 			if dir.current_is_dir(): # if is directory, cache subdirectory
-				print("Found directory: %s/%s" % [path, file_name])
 				_cache_worlds(file_name)
 			else: # if filename, cache filename
 				var result = regex.search(file_name)
-				print("attempting to match on %s/%s" % [path, file_name])
 				if result:
 					world_paths[result.get_string(1)] = "%s/%s" % [path, file_name]
-					print("Found file: " + "%s/%s" % [path, file_name])
 			file_name = dir.get_next()
 		dir.list_dir_end()
 	

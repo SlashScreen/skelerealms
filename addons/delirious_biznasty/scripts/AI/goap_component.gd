@@ -4,6 +4,7 @@ extends Node
 
 
 var beliefs:Dictionary = {}
+var goals:Dictionary = {}
 var action_queue:Array[GOAPAction] = []
 
 
