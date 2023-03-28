@@ -10,10 +10,12 @@ extends Node
 ## Whether this objective is actively being worked on
 var running:bool = false
 var parent_goap:GOAPComponent
+var entity:Entity
 
 
 func _ready():
 	parent_goap = get_parent() as GOAPComponent
+	entity = parent_goap.parent_entity
 
 
 func is_achievable_given(state:Dictionary) -> bool:
@@ -34,4 +36,3 @@ func target_reached() -> bool:
 
 func post_perform() -> bool:
 	return true
-

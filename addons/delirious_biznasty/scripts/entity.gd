@@ -33,7 +33,7 @@ signal entered_scene
 
 
 func _ready():
-	print("Entity OnReady")
+	add_to_group("savegame")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -72,6 +72,7 @@ func has_component(type:String) -> bool:
 
 
 func save() -> Dictionary:
+	print("Saving data for entity %s..." % name)
 	var data:Dictionary = {}
 	for c in get_children():
 		data[c.name] = ((c as EntityComponent).save())
