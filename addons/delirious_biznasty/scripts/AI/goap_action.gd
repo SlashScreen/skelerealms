@@ -7,6 +7,13 @@ extends Node
 @export var effects:Dictionary
 @export var cost:float
 @export var duration:float
+## Whether this objective is actively being worked on
+var running:bool = false
+var parent_goap:GOAPComponent
+
+
+func _ready():
+	parent_goap = get_parent() as GOAPComponent
 
 
 func is_achievable_given(state:Dictionary) -> bool:
@@ -27,3 +34,4 @@ func target_reached() -> bool:
 
 func post_perform() -> bool:
 	return true
+
