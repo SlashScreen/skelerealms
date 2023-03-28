@@ -5,19 +5,25 @@ extends Node
 
 @export var prerequisites:Dictionary
 @export var effects:Dictionary
+@export var cost:float
+@export var duration:float
 
 
-func is_achievable():
-	pass
+func is_achievable_given(state:Dictionary) -> bool:
+	return state.has_all(prerequisites.keys())
 
 
-func pre_perform():
-	pass
+func is_achievable() -> bool:
+	return true
 
 
-func target_reached():
-	pass
+func pre_perform() -> bool:
+	return true
 
 
-func post_perform():
-	pass
+func target_reached() -> bool:
+	return true
+
+
+func post_perform() -> bool:
+	return true
