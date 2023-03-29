@@ -14,6 +14,7 @@ var movement_target_position: Vector3 = Vector3(-3.0,0.0,2.0)
 func _ready():
 	call_deferred("_actor_setup")
 	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
+	# TODO: Snap to navmesh
 
 
 ## Set up navigation.
