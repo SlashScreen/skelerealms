@@ -5,3 +5,4 @@ class_name NPCData
 
 ## NPC's model. Expects the root to be a [NPCPuppet].
 @export var prefab: PackedScene
+@export var schedule:Array[ScheduleEvent]

@@ -19,7 +19,7 @@ signal update_position(pos:Vector3)
 
 
 func _physics_process(delta):
-	if %GameInfo.paused:
+	if GameInfo.paused:
 		return
 	# Add the gravity.
 	if not is_on_floor():

@@ -27,6 +27,28 @@ var world_time:Dictionary = {
 	"month" : 0,
 	"year" : 0,
 }
+## Continmuity flags are values that can be set that allow for dialogue and the world to match up with that the player has done.
+## for example, dialogue could set [code]met_alice:true[/code] if the Player meets the character Alice. Then, if the player meets Alice elsewhere, Alice can read this value and respond as though she as a character already knows the player.
+var continuity_flags:Dictionary = {}
+
+var minute:int:
+	get:
+		return world_time["minute"]
+var hour:int:
+	get:
+		return world_time["hour"]
+var day:int:
+	get:
+		return world_time["day"]
+var week:int:
+	get:
+		return world_time["week"]
+var month:int:
+	get:
+		return world_time["month"]
+var year:int:
+	get:
+		return world_time["year"]
 
 
 signal pause
@@ -88,31 +110,31 @@ func _on_timer_complete():
 	# Increment world time
 	world_time["world_time"] += 1
 	# Increment minute
-	if world_time["world_time"] % ProjectSettings.get_setting("biznasty/seconds_per_minute") == 0:
-		world_time["minutes"] += 1
+	if world_time["world_time"] % roundi(ProjectSettings.get_setting("biznasty/seconds_per_minute")) == 0:
+		world_time["minute"] += 1
 		minute_incremented.emit()
 	# Wrap minutes to hours
-	if world_time["minutes"] > ProjectSettings.get_setting("biznasty/minutes_per_hour"):
-		world_time["minutes"] = 0
-		world_time["hours"] += 1
+	if world_time["minute"] > roundi(ProjectSettings.get_setting("biznasty/minutes_per_hour")):
+		world_time["minute"] = 0
+		world_time["hour"] += 1
 		hour_incremented.emit()
 	# Wrap hours to days
-	if world_time["hours"] > ProjectSettings.get_setting("biznasty/hours_per_day"):
-		world_time["hours"] = 0
+	if world_time["hour"] > roundi(ProjectSettings.get_setting("biznasty/hours_per_day")):
+		world_time["hour"] = 0
 		world_time["day"] += 1
 		day_incremented.emit()
 	# Wrap days to weeks
-	if world_time["day"] > ProjectSettings.get_setting("biznasty/days_per_week"):
+	if world_time["day"] > roundi(ProjectSettings.get_setting("biznasty/days_per_week")):
 		world_time["day"] = 0
 		world_time["week"] += 1
 		week_incremented.emit()
 	# Wrap weeks to months
-	if world_time["week"] > ProjectSettings.get_setting("biznasty/weeks_per_month"):
+	if world_time["week"] > roundi(ProjectSettings.get_setting("biznasty/weeks_in_month")):
 		world_time["week"] = 0
 		world_time["month"] += 1
 		month_incremented.emit()
 	# Wrap months to years
-	if world_time["month"] > ProjectSettings.get_setting("biznasty/months_per_year"):
+	if world_time["month"] > roundi(ProjectSettings.get_setting("biznasty/months_in_year")):
 		world_time["month"] = 0
 		world_time["year"] += 1
 		year_incremented.emit()

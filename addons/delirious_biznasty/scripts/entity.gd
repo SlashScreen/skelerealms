@@ -92,7 +92,7 @@ func save() -> Dictionary:
 func load_data(data:Dictionary):
 	# loop through all saved components and call load
 	for d in data:
-		get_node(d).load(data[d])
+		(get_node(d) as EntityComponent).load_data(data[d])
 	pass
 
 

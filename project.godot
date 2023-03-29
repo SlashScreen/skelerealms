@@ -34,6 +34,10 @@ worlds_path="res://Worlds"
 entities_path="res://Entities"
 savegame_indents=true
 entity_cleanup_timer=300.0
+days_per_week=0
+weeks_in_month=0
+months_in_year=0
+covens_path="res://Covens"
 
 [display]
 
