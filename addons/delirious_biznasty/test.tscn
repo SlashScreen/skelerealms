@@ -1,6 +1,5 @@
-[gd_scene load_steps=17 format=3 uid="uid://b56xc2lavl48h"]
+[gd_scene load_steps=16 format=3 uid="uid://b56xc2lavl48h"]
 
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/game_info.gd" id="1_6dhbe"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/entity_manager.gd" id="2_k54cv"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/entity.gd" id="3_kxsl0"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/item_component.gd" id="4_vvxed"]
@@ -18,11 +17,6 @@
 [ext_resource type="PackedScene" uid="uid://d3xvrivp3iwfb" path="res://Worlds/test_world_1.tscn" id="14_t7217"]
 
 [node name="Game" type="Node3D"]
-
-[node name="GameInfo" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("1_6dhbe")
-world = "test world 1"
 
 [node name="EntityManager" type="Node" parent="."]
 unique_name_in_owner = true

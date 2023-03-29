@@ -51,7 +51,7 @@ func _process(delta):
 
 func _should_be_in_scene():
 	# if not in correct world
-	if BizGlobal.game_info.world != world:
+	if GameInfo.world != world:
 		in_scene = false
 		return
 	# if we are outside of actor fade distance

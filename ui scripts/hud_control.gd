@@ -17,34 +17,18 @@ class_name HudControl
 @export var timer_label:Label
 
 
-var _world_minutes:int = 0
-var _world_hours:int = 0
 const _time_string = "%s:  %02X:%02X"
 
 
 func _ready():
-	$Timer.timeout.connect(_on_timer_complete.bind())
-	$Timer.one_shot = false
-	$Timer.start(ProjectSettings.get_setting("biznasty/seconds_per_minute"))
-	(%GameInfo as GameInfo).pause.connect(_on_pause.bind())
-	(%GameInfo as GameInfo).unpause.connect(_on_unpause.bind())
+	GameInfo.pause.connect(_on_pause.bind())
+	GameInfo.unpause.connect(_on_unpause.bind())
+	GameInfo.minute_incremented.connect(_set_timer_text.bind())
 	_set_timer_text()
-
-
-func _on_timer_complete():
-	_world_minutes += 1
-	if _world_minutes > ProjectSettings.get_setting("biznasty/minutes_per_hour"):
-		_world_minutes = 0
-		_world_hours += 1
-	if _world_hours > ProjectSettings.get_setting("biznasty/hours_per_day"):
-		_world_hours = 0
-	
-	_set_timer_text()
-
 
 
 func _set_timer_text():
-	timer_label.text = _time_string % [tr("TIME"),_world_hours, _world_minutes]
+	timer_label.text = _time_string % [tr("TIME"),GameInfo.world_time["hour"], GameInfo.world_time["minute"]]
 
 
 ## Spawn a notification with a label.

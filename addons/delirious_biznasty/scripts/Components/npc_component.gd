@@ -17,6 +17,15 @@ var _interactive_component:InteractiveComponent
 var _goap_component:GOAPComponent
 
 
+signal entered_combat
+signal left_combat
+signal start_saw_player
+signal end_saw_player
+signal chitchat_started(dialogue_node:String)
+signal destination_reached
+signal dialogue_with_npc_started(dialogue_node:String)
+
+
 func _ready():
 	super._ready()
 	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
