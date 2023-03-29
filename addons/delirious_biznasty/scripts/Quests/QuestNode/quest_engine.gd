@@ -24,7 +24,7 @@ func _load_dir(path:String):
 		if dir.current_is_dir():
 			_load_dir(file_name)
 		else:
-			add_quest_node(file_name)
+			add_quest_node("%s/%s" % [path, file_name])
 		file_name = dir.get_next()
 
 

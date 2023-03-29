@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 BizGlobal="*res://addons/delirious_biznasty/scripts/biz_global.gd"
 SaveSystem="*res://addons/delirious_biznasty/scripts/save_system.gd"
+CovenSystem="*res://addons/delirious_biznasty/scripts/coven_system.gd"
 
 [biznasty]
 

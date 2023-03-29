@@ -6,7 +6,8 @@ extends EntityComponent
 
 
 ## IDs of covens this entity is a member of.
-var covens:Array[String]
+## This dictionary is of type StringName:Int, where key is the coven, and int is the rank of this member.
+var covens:Dictionary
 
 
 func _ready():
@@ -17,17 +18,22 @@ func _ready():
 
 
 ## Add this entity to a coven.
-func add_to_coven(coven:String):
-	covens.append(coven)
+func add_to_coven(coven:StringName, rank:int = 1):
+	covens[coven] = 1
 	parent_entity.add_to_group(coven)
 
 
 ## Remove this entity from the coven.
-func remove_from_coven(coven:String):
+func remove_from_coven(coven:StringName):
 	covens.erase(coven)
 	parent_entity.remove_from_group(coven)
 
 
 ## Whether the entity is in a coven or not.
-func is_in_coven(coven:String) -> bool:
+func is_in_coven(coven:StringName) -> bool:
 	return covens.has(coven)
+
+
+## Get this entity's rank in a coven. Returns 0 if they aren't in the coven.
+func get_coven_rank(coven:StringName) -> int:
+	return covens[coven] if covens.has(coven) else 0

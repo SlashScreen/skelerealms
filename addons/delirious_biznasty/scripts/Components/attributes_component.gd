@@ -6,10 +6,11 @@ extends EntityComponent
 ## The attributes of this Entity.
 ## It is in a dictionary so you can add, remove, and customize at will.
 var attributes:Dictionary = {
-	"perception" : 0,
-	"luck" : 0,
-	"amity" : 0,
-	"maxnomity" : 0,
-	"litheness" : 0,
+	&"perception" : 0,
+	&"luck" : 0,
+	&"amity" : 0,
+	&"maxnomity" : 0,
+	&"litheness" : 0,
 }
-# I yearn for Ruby's symbols.
+# I yearn for Ruby's symbols, but StingName is an adequate substitute.
+# I yearn for ruby just in general.

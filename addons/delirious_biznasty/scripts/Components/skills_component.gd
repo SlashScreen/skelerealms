@@ -7,7 +7,7 @@ extends EntityComponent
 ## The skills of this Entity.
 ## It is in a dictionary so you can add, remove, and customize at will.
 var skills:Dictionary = {
-	"short_blade" : 0,
-	"long_blade" : 0,
-	"blunt" : 0,
+	&"short_blade" : 0,
+	&"long_blade" : 0,
+	&"blunt" : 0,
 }
