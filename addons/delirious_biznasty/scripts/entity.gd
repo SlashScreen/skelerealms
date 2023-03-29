@@ -72,7 +72,6 @@ func has_component(type:String) -> bool:
 
 
 func save() -> Dictionary:
-	print("Saving data for entity %s..." % name)
 	var data:Dictionary = {}
 	for c in get_children():
 		data[c.name] = ((c as EntityComponent).save())
@@ -80,4 +79,7 @@ func save() -> Dictionary:
 
 
 func load(data:Dictionary):
+	# loop through all saved components and call load
+	for d in data:
+		get_node(d).load(data[d])
 	pass

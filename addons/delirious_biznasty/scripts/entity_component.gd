@@ -30,5 +30,8 @@ func _on_exit_scene():
 
 
 func save() -> Dictionary:
-	print("Saving data for entity component %s..." % name)
 	return {}
+
+
+func load(data:Dictionary):
+	pass

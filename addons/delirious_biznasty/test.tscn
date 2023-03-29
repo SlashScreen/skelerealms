@@ -29,7 +29,7 @@ unique_name_in_owner = true
 process_priority = -1
 script = ExtResource("2_k54cv")
 
-[node name="TestEntity" type="Node" parent="EntityManager" groups=["savegame"]]
+[node name="TestEntity" type="Node" parent="EntityManager" groups=["savegame_entity"]]
 script = ExtResource("3_kxsl0")
 world = "test world 1"
 position = Vector3(0, 3, 0)
@@ -44,7 +44,7 @@ script = ExtResource("6_ox50e")
 [node name="PuppetSpawnerComponent" type="Node" parent="EntityManager/TestEntity"]
 script = ExtResource("7_6rhup")
 
-[node name="TestNPC" type="Node" parent="EntityManager" groups=["savegame"]]
+[node name="TestNPC" type="Node" parent="EntityManager" groups=["savegame_entity"]]
 script = ExtResource("3_kxsl0")
 world = "test world 1"
 position = Vector3(1.5, 0, 0)
@@ -59,7 +59,7 @@ script = ExtResource("6_ox50e")
 [node name="PuppetSpawnerComponent" type="Node" parent="EntityManager/TestNPC"]
 script = ExtResource("7_6rhup")
 
-[node name="Player" type="Node" parent="EntityManager" groups=["savegame"]]
+[node name="Player" type="Node" parent="EntityManager" groups=["savegame_entity"]]
 script = ExtResource("3_kxsl0")
 world = "test world 1"
 

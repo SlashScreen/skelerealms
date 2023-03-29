@@ -9,3 +9,7 @@ func _on_quit_button_button_up():
 
 func _on_save_button_pressed():
 	SaveSystem.save()
+
+
+func _on_load_recent_button_pressed():
+	SaveSystem.load_most_recent()

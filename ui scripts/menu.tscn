@@ -74,6 +74,10 @@ layout_mode = 2
 text = "Save
 "
 
+[node name="LoadRecentButton" type="Button" parent="TabContainer/System/VBoxContainer"]
+layout_mode = 2
+text = "Load"
+
 [node name="Journal" type="Control" parent="TabContainer"]
 visible = false
 layout_mode = 2
@@ -130,3 +134,4 @@ item_0/icon = ExtResource("6_0gsw4")
 
 [connection signal="button_up" from="TabContainer/System/VBoxContainer/QuitButton" to="TabContainer/System" method="_on_quit_button_button_up"]
 [connection signal="pressed" from="TabContainer/System/VBoxContainer/SaveButton" to="TabContainer/System" method="_on_save_button_pressed"]
+[connection signal="pressed" from="TabContainer/System/VBoxContainer/LoadRecentButton" to="TabContainer/System" method="_on_load_recent_button_pressed"]
