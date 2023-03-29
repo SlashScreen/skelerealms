@@ -29,7 +29,7 @@ func get_entity(id:String) -> Option:
 	var potential_data = SaveSystem.entity_in_save(id) # chedk the save system
 	if potential_data.some(): # if found:
 		add_entity(load(disk_assets[id])) # load default from disk
-		entities[id].load(potential_data.unwrap()) # and then load using the data blob we got from the save file
+		entities[id].load_data(potential_data.unwrap()) # and then load using the data blob we got from the save file
 	# stage 4: check on disk
 	if disk_assets.has(id):
 		add_entity(load(disk_assets[id]))

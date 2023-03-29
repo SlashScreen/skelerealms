@@ -33,5 +33,5 @@ func save() -> Dictionary:
 	return {}
 
 
-func load(data:Dictionary):
+func load_data(data:Dictionary):
 	pass

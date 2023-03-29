@@ -80,14 +80,16 @@ func has_component(type:String) -> bool:
 	return x.some()
 
 
-func save() -> Dictionary:
+# TODO: Determine whether it should be saved (add "dirty" variable)
+# TODO: Don't participate if there's nothing to save
+func save() -> Dictionary: 
 	var data:Dictionary = {}
 	for c in get_children():
 		data[c.name] = ((c as EntityComponent).save())
 	return data
 
 
-func load(data:Dictionary):
+func load_data(data:Dictionary):
 	# loop through all saved components and call load
 	for d in data:
 		get_node(d).load(data[d])

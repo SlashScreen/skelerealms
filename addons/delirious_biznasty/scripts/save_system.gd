@@ -61,9 +61,10 @@ func load_game(path:String):
 	var file = FileAccess.open(path, FileAccess.READ) # open file
 	var data_blob:String = file.get_as_text() # read file
 	var save_data:Dictionary = _deserialize(data_blob) # parse data
-	# load entity data - loop through all data, get entity, call load
+	# load entity data - loop through all data, get entity (spawning it if it isn't there), call load
+	# FIXME: Reset to default state if it doesn't have a load?
 	for data in save_data["entity_data"]:
-		BizGlobal.entity_manager.get_entity(data).unwrap().load(save_data["entity_data"][data])
+		BizGlobal.entity_manager.get_entity(data).unwrap().load_data(save_data["entity_data"][data])
 
 
 ## Check if an entity is accounted for in the save system. Returns the save data blob if there is, else none.
