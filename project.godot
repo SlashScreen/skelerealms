@@ -31,6 +31,7 @@ granular_navigation_sim_distance=1000.0
 worlds_path="res://Worlds"
 entities_path="res://Entities"
 savegame_indents=true
+entity_cleanup_timer=300.0
 
 [display]
 

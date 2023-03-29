@@ -18,13 +18,18 @@ func _ready():
 func get_entity(id:String) -> Option:
 	# stage 1: attempt find in cache
 	if entities.has(id):
+		(entities[id] as Entity).reset_stale_timer() # FIXME: If another entity is carrying a reference to this entity, then we might break stuff by cleaning it up in this way?
 		return Option.from(entities[id])
 	# stage 2: attempt find in children
 	var possible_child = get_node_or_null(id)
 	if possible_child != null:
 		entities[id] = possible_child # cache entity
 		return Option.from(possible_child)
-	# TODO: Stage 3 - Check in save file
+	# stage 3 - Check in save file
+	var potential_data = SaveSystem.entity_in_save(id) # chedk the save system
+	if potential_data.some(): # if found:
+		add_entity(load(disk_assets[id])) # load default from disk
+		entities[id].load(potential_data.unwrap()) # and then load using the data blob we got from the save file
 	# stage 4: check on disk
 	if disk_assets.has(id):
 		add_entity(load(disk_assets[id]))
@@ -74,14 +79,15 @@ func add_entity(res:InstanceData):
 	add_child(new_entity)
 
 
-## remove an entity from the game.
+## Remove an entity from the game.
 func remove_entity(refID:String):
-	remove_child(get_node(refID))
+	remove_child(get_node(refID)) # FIXME: Has to loop through everything
 	entities.erase(refID)
 
 
-func save() -> Dictionary:
-	var entity_save_data:Dictionary = {}
-	for n in get_children():
-		entity_save_data[n.name] = (n as EntityComponent).save()
-	return entity_save_data
+# ONLY call after save
+func _cleanup_stale_entities():
+	# Get all children
+	for c in get_children():
+		if (c as Entity).stale_timer >= ProjectSettings.get_setting("biznasty/entity_cleanup_timer"): # If stale timer is beyond threshold
+			remove_entity(c.name) # remove

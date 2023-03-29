@@ -3,11 +3,14 @@ extends Node
 ## An entity for the pseudo-ecs. Contains [EntityComponent]s.
 ## These allow constructs such as NPCs and Items to persist even when not in the scene.
 
+
 ## The world this entity is in.
 @export var world: String
-
 ## Position within the world it's in.
 @export var position:Vector3
+## An internal timer of how long this entity has gone without being modified or referenced. 
+## One it's beyond a certain point, the [EntityManager] will mark it for cleanup after a save.
+var stale_timer:float
 
 
 ## Whether this entity is in the scene or not.
@@ -39,6 +42,11 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	_should_be_in_scene()
+	# If we aren't in the scene, start counting up. Otherwise, we are still in the scene with the player and shouldn't depsawn.
+	if not in_scene:
+		stale_timer += delta
+	else:
+		stale_timer = 0
 
 
 func _should_be_in_scene():
@@ -60,6 +68,7 @@ func _on_set_position(p:Vector3):
 ## Gets a component by the string name. 
 ## Example: [codeblock]
 ## (e.get_component("NPCComponent").unwrap() as NPCComponent).kill()
+## [/codeblock]
 func get_component(type:String) -> Option:
 	var n = get_node_or_null(type)
 	return Option.from(n)
@@ -83,3 +92,7 @@ func load(data:Dictionary):
 	for d in data:
 		get_node(d).load(data[d])
 	pass
+
+
+func reset_stale_timer():
+	stale_timer = 0
