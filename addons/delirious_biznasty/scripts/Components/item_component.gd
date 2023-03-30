@@ -12,12 +12,11 @@ var in_inventory:bool:
 		return contained_inventory.some()
 # TODO: Item functions
 
-#func _ready():
-#	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
 
 func _ready():
 	super._ready()
 	name = "EntityComponent"
+	#($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
 
 
 func _on_enter_scene():
@@ -25,6 +24,7 @@ func _on_enter_scene():
 
 
 func _spawn():
+	print("spawning %s" % parent_entity.name)
 	$"../PuppetSpawnerComponent".spawn(data.prefab)
 
 

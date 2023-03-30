@@ -30,6 +30,7 @@ func get_entity(id:String) -> Option:
 	if potential_data.some(): # if found:
 		add_entity(load(disk_assets[id])) # load default from disk
 		entities[id].load_data(potential_data.unwrap()) # and then load using the data blob we got from the save file
+		return Option.from(entities[id])
 	# stage 4: check on disk
 	if disk_assets.has(id):
 		add_entity(load(disk_assets[id]))

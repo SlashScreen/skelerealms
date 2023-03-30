@@ -18,13 +18,9 @@ var in_scene: bool:
 	get:
 		return in_scene
 	set(val):
-		if not val:
-			print("%s is not in scene, it's in world %s" % [name, world])
 		if in_scene && !val: # if was in scene and now not
-			print("%s left scene" % name)
 			left_scene.emit()
 		if !in_scene && val: # if was not in scene and now is
-			print("%s entered scene" % name)
 			entered_scene.emit()
 		in_scene = val
 

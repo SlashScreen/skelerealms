@@ -16,7 +16,6 @@ func _ready():
 		parent_entity.left_scene.connect(_on_exit_scene.bind())
 	if not parent_entity.entered_scene.is_connected(_on_enter_scene.bind()):
 		parent_entity.entered_scene.connect(_on_enter_scene.bind())
-	print("Initialized entity component")
 
 
 ## Called when the parent entity enters a scene. See [signal Entity.entered_scene].

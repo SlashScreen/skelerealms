@@ -12,7 +12,6 @@ func _ready():
 
 ## Spawn a new puppet.
 func spawn(data:PackedScene):
-	print("spawning for %s" % parent_entity.name)
 	var n = data.instantiate()
 	(n as Node3D).set_position(parent_entity.position)
 	puppet = n
