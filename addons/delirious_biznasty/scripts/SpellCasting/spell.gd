@@ -3,6 +3,7 @@ extends Resource
 ## This the base class for any spell that the player can cast.
 ## This essentially a blank slate, and as this is a GDScript file, a spell can do literally anything, sky is the limit.
 ## However, with great control comes great responsibility, my uncle once told me. This means you need to deal with basic stuff, like willpower drain, yourself.
+## Despite that, it includes a number of helper methods to do the simple stuff. See [method _find_spell_targets_in_range].
 
 
 ## Spell's ID for translation.
@@ -21,7 +22,7 @@ func on_spell_cast():
 	pass
 
 
-## As the spell is being held by the player; eg. as the button is being held to blast flames.
+## Called every frame as the spell is being held by the player; eg. as the button is being held to blast flames.
 ## You can use the delta to drain willpower, or whatever.
 func on_spell_held(delta):
 	pass
@@ -33,13 +34,44 @@ func on_spell_released():
 	pass
 
 
-## Find all spell targets ([SpellTargetComponent] and [SpellTargetProject]) in a range of a point.
+## Called when the spell needs to be reset to cast again, and also when it is loaded for the first time; so this is also like a _ready() function.
+## Only reset your own variables; the variables defined in this parent class will not be re-initialized.
+func reset():
+	pass
+
+
+## Find all nodes in a range of a point.
 ## You can use this for an AOE attack.
-func _find_spell_targets_in_range(pos:Vector3, range:float) -> Array:
-	# TODO: This
-	return []
+## using ignore_self assumes that the caster's origin defines the root of the actor casting it.
+## Only returns 32 results max.
+func _find_spell_targets_in_range(pos:Vector3, radius:float, ignore_self:bool = false) -> Array[Node]:
+	var space_state = _caster.get_world_3d().direct_space_state # get space state
+	# create query
+	var query = PhysicsShapeQueryParameters3D.new()
+	query.shape = SphereShape3D.new()
+	# create query position
+	var t = Transform3D()
+	t.origin = pos
+	t.scaled(Vector3(radius, radius, radius)) # scale to match radius
+	query.transform = t
+	# make query
+	var res = space_state.intersect_shape(query)
+	# if ignoring self, filter out all nodes part of this tree
+	if ignore_self:
+		res = res.filter(func(x:Dictionary):
+			return not (x["collider"] as Node).is_ancestor_of(_caster) and not (x["collider"] as Node).find_child(_caster.name)
+		)
+	# return results, where all colliders are selected from it.
+	return res.map(func(x:Dictionary): return x["collider"] as Node)
 
 
+## Apply a spell effect to an object.
+## Only works if target is of type [SpellTargetComponent] or [SpellTargetObject].
+func _apply_spell_effect_to(target, effect:SpellEffect):
+	# return early if invalid object
+	if not target is SpellTargetComponent or not target is SpellTargetObject:
+		return
+	target.apply_effect(effect)
 # TODO:
 # 	raycast
 # 	spawn particle, node
