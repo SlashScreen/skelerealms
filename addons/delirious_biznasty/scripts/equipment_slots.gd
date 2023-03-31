@@ -1,4 +1,6 @@
-enum {
+class_name EquipmentSlots
+
+enum Slots {
 	HEAD,
 	NECK,
 	CHEST_OUTER,

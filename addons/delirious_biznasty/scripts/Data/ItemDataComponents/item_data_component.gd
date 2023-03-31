@@ -5,3 +5,8 @@ extends Resource
 ## This may seem a bit weird and convoluted, and while it is, this allows for a much more extensible and flexible system.
 ## For example, you could give a shoe both the "Can equip to character" component, the "Holdable" component, and the "Throwable" component,
 ## and that would allow the character to wear the shoe, take it off, and huck it at somebody's head.
+
+
+## Used for getting the component type. Override for each new type.
+func get_type() -> String:
+	return ""

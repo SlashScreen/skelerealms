@@ -8,3 +8,7 @@ extends ItemDataComponent
 @export var prefab:PackedScene
 ## Material, if not using a model.
 @export var material:Material
+
+
+func get_type() -> String:
+	return "ApparelDataComponent"
