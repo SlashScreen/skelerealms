@@ -9,3 +9,4 @@ extends RefData
 @export var weight: float
 ## The base cost in snails.
 @export var worth: int
+@export var components:Array[ItemDataComponent]

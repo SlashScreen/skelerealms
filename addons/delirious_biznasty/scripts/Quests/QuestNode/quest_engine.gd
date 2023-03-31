@@ -11,6 +11,10 @@ var active_quests: Array[String]
 var complete_quests:Array[String]
 
 
+func _ready():
+	BizGlobal.quest_engine = self
+
+
 ## Loads all quests from the [code]biznasty/quests_directory[/code] project setting, and then instantiates them as child [QuestObject]s.
 func load_quest_objects():
 	_load_dir(ProjectSettings.get_setting("biznasty/quests_directory"))
@@ -48,6 +52,7 @@ func is_quest_complete(qID:String) -> bool:
 func is_quest_started(qID:String) -> bool:
 	return is_quest_active(qID) or is_quest_complete(qID)
 
+
 # TODO: Use propogate_call instead.
 ## Register a quest event. 
 ## You can either pass in a path formatted like [Code]MyQuest/MyEvent[/code] to send an event to a specific quest,
@@ -62,6 +67,22 @@ func register_quest_event(path:String):
 	else: # if jsut the key
 		for q in get_children().map(func(x): return x as QuestNode):
 			q.register_step_event(path)
+
+
+func is_step_complete(path:String) -> bool:
+	var chunks = path.split("/")
+	var qnode = get_node_or_null(chunks[0]) as QuestNode
+	if qnode == null:
+		return false
+	return qnode.is_step_complete(chunks[1])
+
+
+func is_step_in_progress(path:String) -> bool:
+	var chunks = path.split("/")
+	var qnode = get_node_or_null(chunks[0]) as QuestNode
+	if qnode == null:
+		return false
+	return qnode._active_step.name == chunks[1]
 
 
 func _update_all_quests():

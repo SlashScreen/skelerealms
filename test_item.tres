@@ -1,9 +1,12 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://c7enut17350pt"]
 
-[ext_resource type="PackedScene" uid="uid://cs8lbd7dtwrxa" path="res://test_item_prefab.tscn" id="1_p0fsu"]
+[ext_resource type="PackedScene" uid="uid://cscgqaqhm5xiy" path="res://test_item_prefab.tscn" id="1_p0fsu"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Data/item_data.gd" id="2_nsvnv"]
 
 [resource]
 script = ExtResource("2_nsvnv")
 prefab = ExtResource("1_p0fsu")
+weight = 0.0
+worth = 0
+components = Array[Resource("res://addons/delirious_biznasty/scripts/Data/ItemDataComponents/item_data_component.gd")]([])
 id = "test_item"

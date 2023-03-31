@@ -10,6 +10,8 @@ signal exhausted
 ## Called when the magica value reaches 0. See [member will].
 signal drained
 
+signal hurt
+
 
 ## Health value.
 var health:float

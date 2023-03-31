@@ -3,6 +3,7 @@ extends Node
 
 var type:StepType = StepType.ALL
 var is_final_step:bool = false
+var is_already_complete:bool
 @export var next_steps:Array[Node]#Dictionary = {}
 
 var next_step:QuestStep:
@@ -16,13 +17,21 @@ var next_step:QuestStep:
 
 
 func evaluate(is_active_step:bool) -> bool:
+	if is_already_complete:
+		return true
 	var results:Array[bool] = []
 	for g in get_children().map(func(x): x as QuestGoal):
 		results.append(g.evaluate() || g.optional) # if evaluate or optional
 	if type == StepType.ALL:
-		return results.all(func(x): x)
+		var check = results.all(func(x): x)
+		if check:
+			is_already_complete = true
+		return check
 	else:
-		return results.any(func(x): x)
+		var check = results.any(func(x): x)
+		if check:
+			is_already_complete = true
+		return check
 
 
 ## Register a goal event.

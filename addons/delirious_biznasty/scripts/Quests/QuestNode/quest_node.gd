@@ -13,6 +13,7 @@ var complete:bool = false
 signal quest_complete(qID:String)
 signal quest_updated(qID:String)
 
+
 # Might be useless
 ## Evaluate whether the quest is complete or not.
 func evaluate() -> bool:
@@ -23,6 +24,7 @@ func evaluate() -> bool:
 	for g in get_children().map(func(x): x as QuestStep):
 		results.append(g.evaluate(g == _active_step)) # pass in whether this is the active step, important for goals later on.
 	return results.all(func(x): x)
+
 
 func update():
 	if complete:
@@ -40,4 +42,10 @@ func register_step_event(key:String):
 		g.register_event(key)
 	update()
 
-# TODO: Have all steps as nodes that link to eachother, and build a tree that way?
+
+func is_step_complete(id:String):
+	var st = find_child(id) as QuestStep
+	if not st:
+		return false
+	return st.evaluate(false)
+	
