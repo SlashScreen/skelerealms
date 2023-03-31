@@ -25,6 +25,7 @@ It is still under construction, and should not yet be used.
 ## What does it *not* include?
 - Most game logic; it is not batteries-included
 - Terrain system (I am working on a plugin for this, though)
+- Open world straming (plugin also)
 - Console
 - Audio backend
 - Player controller
