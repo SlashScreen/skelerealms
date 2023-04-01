@@ -51,7 +51,7 @@ Not started :hole:
 | Skills/Attributes | :pencil2: |
 | NPC Perception | :hole: |
 | Spells and Spell effects | :construction: |
-| Audio events | :hole: |
+| Audio events | :pencil2: |
 | Factions | :warning: |
 | Crime | :hole: |
 | Editor tools | :construction: |
