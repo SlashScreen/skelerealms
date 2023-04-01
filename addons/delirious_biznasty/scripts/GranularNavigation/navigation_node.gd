@@ -10,8 +10,12 @@ extends Node3D
 ## [/Codeblock]
 var connections: Dictionary = {}
 var dimension:int
+var world:String
 var left_child:NavNode
 var right_child:NavNode
+var nav_point:NavPoint:
+	get:
+		return NavPoint.build(world, position)
 
 
 # TODO: Figure out connections
@@ -41,18 +45,15 @@ func add_nav_node(pos:Vector3):
 
 
 func get_closest_point(pos:Vector3) -> NavNode:
-	# forming an array so we can sort it
-	var check:Array[NavNode] = [self]
-	if left_child:
-		check.append(left_child)
-	if right_child:
-		check.append(right_child)
+	var is_left:bool = pos[dimension] < position[dimension]
 	
-	# sort by distance to target
-	check.sort_custom(func(a:NavPoint, b:NavPoint): return pos.distance_squared_to(a.position) > pos.distance_squared_to(b.position))
-	
-	var result:NavNode = check.pop_back() # sorts descending so we pop top to find closest
-	if result == self:
-		return self
+	if is_left:
+		if left_child: # if we have a left child, call it instead, 
+			return left_child.get_closest_point(pos)
+		else: # else it's this
+			return self
 	else:
-		return result.get_closest_point(pos) # else call child
+		if right_child:
+			return right_child.get_closest_point(pos)
+		else:
+			return self

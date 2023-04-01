@@ -20,12 +20,34 @@ func _load():
 	pass
 
 
-func nearest_point(pt:NavPoint) -> NavPoint:
-	# descend tree and bubble up answer
+## Find the nav node closest to a given point.
+func nearest_point(pt:NavPoint) -> NavNode:
 	if not worlds.has(pt.world):
 		return null
-	# TODO: check for possible nearer nodes with a sphere/range thing
-	return worlds[pt.world].get_closest_point(pt.position)
+		
+	# recursive descent to find closest leaf
+	var current_closest:NavNode = worlds[pt.world].get_closest_point(pt.position)
+	
+	var walking_node:NavNode = current_closest.get_parent() as NavNode
+	while walking_node.get_parent() is NavNode:
+		# step 1: compare distance with current closes t:
+		if current_closest.position.distance_squared_to(pt.position) > walking_node.position.distance_squared_to(pt.position): # if is further than closest
+			current_closest = walking_node # set
+			
+		# step 2: explore other branches 
+		# if the distance betweeen the walking node's splitting plane and the current closest's splitting plane,
+		# we want to check the opposite branch, too.
+		if abs(walking_node.position[walking_node.dimension] - pt.position[walking_node.dimension]) < \
+		abs(current_closest.position[current_closest.dimension] - pt.position[current_closest.dimension]):
+			if pt.position[walking_node.dimension] < walking_node.position[walking_node.dimension]: # "is left" check
+				walking_node = walking_node.right_child.get_closest_point(pt.position)
+			else:
+				walking_node = walking_node.left_child.get_closest_point(pt.position)
+		
+		# ascend up the tree.
+		walking_node = walking_node.get_parent() as NavNode
+	
+	return current_closest
 
 
 func construct_tree(points:Array[NavPoint]):
