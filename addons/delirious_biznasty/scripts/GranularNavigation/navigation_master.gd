@@ -9,13 +9,80 @@ extends Node
 ## When NPCs are offscreen, instead of using a navmesh, they will attempt to go to their destination by following these nodes.
 ## This is done to improve performance. However, be sure not to have [i]too[/i] many entities using this at once, otherwise performance may suffer. 
 ## See project setting [code]biznasty/granular_navigation_sim_distance[/code] to adjust how far away the actors have to be before they stop using this system and just stay idle.
+
+
+## Dictionary of references to the roots of KD trees.
 var worlds:Dictionary = {}
 
 
-func calculate_path(start:NavPoint, end:NavPoint):
-	pass
+func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
+	var start_node:NavNode = nearest_point(start)
+	var end_node:NavNode = nearest_point(end)
+	
+	var open_list:Array[NavNode] = [start_node]
+	var closed_list:Array[NavNode] = []
+	
+	var g_score:Dictionary = {start_node:0}
+	var f_score:Dictionary = {start_node:_heuristic(start_node, end_node)}
+	var came_from:Dictionary = {}
+	
+	while not open_list.is_empty():
+		# sort to find lowest f score descending, pushing the lowest score to the end of the list.
+		# sorting descending is an optimization: popping from the front of a large array is slower, since it has to reindex everything.
+		open_list.sort_custom(func(a:NavNode, b:NavNode): 
+			# Lazy add heuristics to f_score
+			if not f_score.has(a):
+				f_score[a] = _heuristic(a, end_node) + g_score[a]
+			if not f_score.has(b):
+				f_score[b] = _heuristic(b, end_node) + g_score[b]
+				
+			if f_score[a] == f_score[b]:
+				return g_score[a] > g_score[b]
+			else:
+				return f_score[a] > f_score[b]
+		)
+		var current:NavNode = open_list.pop_back() # pop from end of list to get lowest f value
+		
+		for c in current.connections:
+			# if connection already closed, skip
+			if closed_list.has(c):
+				continue
+			
+			# If connection is the end node, we found a path.
+			if c == end_node:
+				return _reconstruct_path(came_from, c)
+			
+			open_list.append(c) # add to current
+			came_from[c] = current # set path parent
+			# update G score from previosu to 
+			g_score[c] = g_score[current] + current.connections[c]
+		
+		closed_list.append(current)
+	
+	return []
 
 
+func _reconstruct_path(came_from:Dictionary, current:NavNode) -> Array[NavPoint]:
+	# potential optimization: Push back and then reverse?
+	var path:Array[NavPoint] = [current.nav_point]
+	while current in came_from:
+		path.push_front(came_from[current].nav_point)
+		current = came_from[current]
+	return path
+
+
+func _heuristic(a: NavNode, end:NavNode) -> float:
+	# doing the heuristic in this way turns the AStar into Dijkstra unless the nodes are in the same world.
+	# this is because, since the worlds are not really euclidean in relation to eachother, it's impossible to find accurate heuristic distances. So we just don't.
+	# if we find this too inaccurate, we could keep track of connections between worlds and calculate out heuristics by measuring from door to door. But that's hard.
+	if not a.world == end.world:
+		return 1000
+	else:
+		# use squared as a small optimization
+		return a.position.distance_squared_to(end.position)
+
+
+# TODO: load and apply connections
 func _load():
 	pass
 
@@ -24,7 +91,7 @@ func _load():
 func nearest_point(pt:NavPoint) -> NavNode:
 	if not worlds.has(pt.world):
 		return null
-		
+	
 	# recursive descent to find closest leaf
 	var current_closest:NavNode = worlds[pt.world].get_closest_point(pt.position)
 	
