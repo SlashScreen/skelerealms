@@ -30,7 +30,7 @@ It is still under construction, and should not yet be used.
 - Audio backend
 - Player controller
 - HUD
-- Dialogue system
+- Dialogue system  
 However, the system is designed to be able to hook into these. BYOB (Bring your own backend), though.
 
 ## Feature status
@@ -59,5 +59,5 @@ Not started :hole:
 | Save/Load system | :pencil2:/:warning: |
 | Items | :construction: |
 | NPCs | :construction: |
-| Chests | :hole: |
+| Chests | :construction: |
 | Merchants | :hole: |

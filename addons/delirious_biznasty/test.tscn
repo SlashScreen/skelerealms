@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/entity_manager.gd" id="2_k54cv"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/entity.gd" id="3_kxsl0"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/item_component.gd" id="4_vvxed"]
-[ext_resource type="Resource" path="res://test_item.tres" id="5_ojq6f"]
+[ext_resource type="Resource" uid="uid://c7enut17350pt" path="res://test_item.tres" id="5_ojq6f"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/interactive_component.gd" id="6_ox50e"]
 [ext_resource type="PackedScene" uid="uid://c1bwgrswdshee" path="res://player.tscn" id="6_ti5ed"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/npc_component.gd" id="6_yl66l"]

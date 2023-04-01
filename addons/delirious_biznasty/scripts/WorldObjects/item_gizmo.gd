@@ -12,7 +12,7 @@ func _has_gizmo(node):
 
 
 func _redraw(gizmo:EditorNode3DGizmo):
-	#TODO: THis runs every fame, that's not good
+	#TODO: This doe s not sync every frame
 	gizmo.clear()
 	
 	var item:WorldItem = gizmo.get_node_3d()

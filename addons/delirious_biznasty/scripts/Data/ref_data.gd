@@ -4,3 +4,7 @@ extends Resource
 
 ## ID of this blob.
 @export var id: String
+
+
+func build_new_instance() -> InstanceData:
+	return null

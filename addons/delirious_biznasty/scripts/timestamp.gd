@@ -56,3 +56,43 @@ func is_in_between(from:Timestamp, to:Timestamp) -> bool:
 		return false
 	
 	return true
+
+
+## If timestamp is less than or equal to
+func lte(to:Timestamp) -> bool:
+	# if we are using the minute and the minute is less than to.minute
+	# Ditto for all fields.
+	if use_minute and not (minute <= to.minute):
+		return false
+	if use_hour and not (hour <= to.hour):
+		return false
+	if use_day and not (day <= to.day):
+		return false
+	if use_week and not (week <= to.week):
+		return false
+	if use_month and not ( month <= to.month):
+		return false
+	if use_year and not (year <= to.year):
+		return false
+	
+	return true
+
+
+## If timestamp is greater than or equal to
+func gte(to:Timestamp) -> bool:
+	# if we are using the minute and the minute is less than to.minute
+	# Ditto for all fields.
+	if use_minute and not (minute >= to.minute):
+		return false
+	if use_hour and not (hour >= to.hour):
+		return false
+	if use_day and not (day >= to.day):
+		return false
+	if use_week and not (week >= to.week):
+		return false
+	if use_month and not ( month >= to.month):
+		return false
+	if use_year and not (year >= to.year):
+		return false
+	
+	return true

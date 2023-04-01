@@ -28,6 +28,6 @@ func play_event():
 		)
 	res.filter(func(x:Node): return x.is_in_group("audio_listener"))
 	# return results, where all colliders are selected from it.
-	for n in  res.map(func(x:Dictionary): return x["collider"] as Node):
-		if n.has_method("heard_audio"):
-			n.heard_audio(self)
+	for n in  res.map(func(x:Dictionary): return x["collider"] as Node)\
+			.filter(func(x:Node): return x.has_method("heard_audio")):
+		n.heard_audio(self)
