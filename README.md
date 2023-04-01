@@ -35,18 +35,18 @@ However, the system is designed to be able to hook into these. BYOB (Bring your 
 
 ## Feature status
 
-Working, stable :evergreen_tree:
-Probably working but untested :warning:
-In progress :construction:
-Sketched out :pencil2:
-Not started :hole:
+Working, stable :evergreen_tree:  
+Probably working but untested :warning:  
+In progress :construction:  
+Sketched out :pencil2:  
+Not started :hole:  
 
 | Feature | Status |
 |---------|--------:|
 | Scene persistence | :evergreen_tree:
 | GOAP AI | :warning: |
 | Schedules | :warning: |
-| Outside of scene AI navigation | :pencil2: |
+| Outside of scene AI navigation | :construction: |
 | World loading | :evergreen_tree: |
 | Skills/Attributes | :pencil2: |
 | NPC Perception | :hole: |
