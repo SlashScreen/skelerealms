@@ -1,9 +1,11 @@
 # Delirious Biznasty - An open world RPG framework for Godot 4
+
 Delirious Biznasty is a work-in-progress framework for creating open world RPGs, like The Elder Scrolls series.  
 It is made to be modular and extensible, and easy to hook into for actual gameplay.  
 It is still under construction, and should not yet be used.  
 
 ## What does it include?
+
 - Extensible, modular design
 - Persistence of objects/NPCs between scenes
 - Items
@@ -23,6 +25,7 @@ It is still under construction, and should not yet be used.
 - Factions
 
 ## What does it *not* include?
+
 - Most game logic; it is not batteries-included
 - Terrain system (I am working on a plugin for this, though)
 - Open world straming (plugin also)

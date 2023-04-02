@@ -10,7 +10,7 @@ var current_inventory:Array[String]
 
 func get_archetype_components() -> Array[EntityComponent]:
 	var inv:InventoryComponent = InventoryComponent.new()
-	inv.snails = loot_table.resolve_snails()
+	inv.snails = loot_table.resolve_snails() # generate snails
 	var instances = loot_table.resolve_table_to_instances()
 	for i in instances:
 		# item instances will automatically sync with this world and position
