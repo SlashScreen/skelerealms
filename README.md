@@ -56,7 +56,7 @@ Not started :hole:
 | Spells and Spell effects | :construction: |
 | Audio events | :pencil2: |
 | Factions | :warning: |
-| Crime | :hole: |
+| Crime | :pencil2: |
 | Editor tools | :construction: |
 | Quest system | :warning: |
 | Save/Load system | :pencil2:/:warning: |

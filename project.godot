@@ -47,6 +47,11 @@ mouse_cursor/custom_image="res://kenney_ui-pack-rpg-expansion/PNG/cursorHand_blu
 
 project/assembly_name="DBiznasty"
 
+[editor]
+
+version_control/plugin_name="GitPlugin"
+version_control/autoload_on_startup=true
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/delirious_biznasty/plugin.cfg")
