@@ -1,9 +1,9 @@
 class_name LightEstimation
 extends Node3D
 
-
-var svp: SubViewport
-var cam_parent:Node3D
+const interpolation_method:Image.Interpolation = Image.INTERPOLATE_BILINEAR
+var svpt: SubViewport
+var svpb: SubViewport
 #@export var render_target: ViewportTexture
 
 
@@ -12,21 +12,18 @@ func get_light_level_for_point(point:Vector3) -> float:
 	# Move the octahedron to point
 	position = point
 	# reset location
-	cam_parent.rotation = Vector3()
 	await RenderingServer.frame_post_draw
 	# camera render both sides
-	var img:Image = svp.get_texture().get_image()
+	var img:Image = svpt.get_texture().get_image()
 	# resize to 1x1
-	img.resize(1,1, Image.INTERPOLATE_TRILINEAR)
+	img.resize(1,1, interpolation_method)
 	# return luminance
 	var top = img.get_pixel(0,0).get_luminance()
 	print(top)
 	
 	# Do the other thing for the other side 
-	cam_parent.rotate_z(180) # flip camera 'round
-	await RenderingServer.frame_post_draw
-	img = svp.get_texture().get_image()
-	img.resize(1,1, Image.INTERPOLATE_TRILINEAR)
+	img = svpb.get_texture().get_image()
+	img.resize(1,1, interpolation_method)
 	var bottom = img.get_pixel(0,0).get_luminance()
 	print(bottom)
 	
@@ -34,6 +31,6 @@ func get_light_level_for_point(point:Vector3) -> float:
 
 
 func _ready() -> void:
-	svp = $RenderWindow
-	cam_parent = $RenderWindow/Node3D
+	svpt = $SViewportTop
+	svpb = $SViewportBottom
 	print(await get_light_level_for_point(Vector3()))
