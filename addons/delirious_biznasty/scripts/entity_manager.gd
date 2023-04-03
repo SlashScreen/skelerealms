@@ -2,9 +2,11 @@ class_name EntityManager
 extends Node
 ## Manages entities in the game.
 
+
 var entities:Dictionary = {}
 var disk_assets:Dictionary = {} # TODO: Figure out an alternative that isn't so memory heavy
 var regex:RegEx
+
 
 func _ready():
 	BizGlobal.entity_manager = self

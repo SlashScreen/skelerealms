@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://ck7cx3aut0p4y"]
+
+[ext_resource type="ArrayMesh" uid="uid://blag3iii8af8j" path="res://octa.obj" id="1_8asy3"]
+[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/AI/light_estimation_provider.gd" id="1_w2h3y"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fikaa"]
+
+[sub_resource type="Sky" id="Sky_6gdxn"]
+sky_material = SubResource("ProceduralSkyMaterial_fikaa")
+
+[sub_resource type="Environment" id="Environment_hboki"]
+background_mode = 2
+sky = SubResource("Sky_6gdxn")
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_51c16"]
+
+[node name="LightProbeTest" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.843082, 0.537785, 0, -0.537785, 0.843082, 0, 1.96516, -3.74161)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.922619, 0.385713, 0, -0.385713, 0.922619, 0, 2.23804, 7.15823)
+environment = SubResource("Environment_hboki")
+attributes = SubResource("CameraAttributesPractical_51c16")
+current = true
+
+[node name="Probe" type="Node3D" parent="."]
+script = ExtResource("1_w2h3y")
+
+[node name="RenderWindow" type="SubViewport" parent="Probe"]
+debug_draw = 2
+gui_disable_input = true
+size = Vector2i(32, 32)
+
+[node name="Node3D" type="Node3D" parent="Probe/RenderWindow"]
+
+[node name="Camera3D" type="Camera3D" parent="Probe/RenderWindow/Node3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.127643, 0)
+projection = 1
+current = true
+size = 0.1
+near = 0.001
+far = 1.0
+
+[node name="ProbeOct" type="MeshInstance3D" parent="Probe/RenderWindow"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+mesh = ExtResource("1_8asy3")
+skeleton = NodePath("../../..")
