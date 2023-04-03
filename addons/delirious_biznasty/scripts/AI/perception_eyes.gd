@@ -12,12 +12,20 @@ signal begin_perceiving(percieved:PerceptionData)
 signal end_perceiving(percieved:PerceptionData)
 
 
-func check_sees_collider(pt:CollisionShape3D):
+func check_sees_collider(pt:CollisionShape3D) -> bool :
 	# 1) See if target in range
+	if position.distance_to(pt.position) > view_distance:
+		return false
 	# 2) See if direction to target within fovs
-	# 3) Calculate light level
-	# 4) Calculate percent of coverage
-	pass
+	var direction_to = pt.position - position
+	var angle_to = direction_to.dot(transform.basis.z)
+	if angle_to < 1 - (fov_h / 2 / 180):
+		return false
+	# TODO: vertical fov using pitch, horizontal using yaw
+	# 3) Raycast check
+	# 4) Calculate light level
+	# 5) Calculate percent of coverage with AABBs
+	return true
 
 # no wait we need to keep updating on a thing? 
 class PerceptionData:
