@@ -64,7 +64,7 @@ func _cache_entities(path:String):
 
 ## add a new entity.
 func add_entity(res:InstanceData):
-	print("Adding entity")
+	print("Adding entity %s"  % res.ref_id)
 	var new_nodes = res.get_archetype_components() # Get the entity components
 	
 	var new_entity = Entity.new() # make a new entity
@@ -80,6 +80,7 @@ func add_entity(res:InstanceData):
 	# add new entity to self, and the dictionary
 	entities[res.ref_id] = new_entity
 	add_child(new_entity)
+	new_entity.instantiated.emit()
 
 
 ## Remove an entity from the game.

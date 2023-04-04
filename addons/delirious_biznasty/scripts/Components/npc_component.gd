@@ -32,7 +32,11 @@ signal schedule_updated(ev:ScheduleEvent)
 
 func _ready():
 	super._ready()
-	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
+	
+	await parent_entity.instantiated # wait for entity to be ready to instantiate
+	
+	if not ($"../InteractiveComponent" as InteractiveComponent).interacted.is_connected(interact.bind()):
+		($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
 	# create a schedule if ther isnt one
 	if not find_child("Schedule"):
 		var s:Schedule = Schedule.new()

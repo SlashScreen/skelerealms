@@ -29,6 +29,9 @@ var in_scene: bool:
 signal left_scene
 ## Emitted when an entity leaves a scene.
 signal entered_scene
+## This signal is emitted when all components have been added once [EntityManager.add_entity] is called.
+## Await this when you want to connect with other nodes.
+signal instantiated
 
 
 func _ready():
