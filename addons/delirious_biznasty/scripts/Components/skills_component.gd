@@ -11,3 +11,7 @@ var skills:Dictionary = {
 	&"long_blade" : 0,
 	&"blunt" : 0,
 }
+
+
+func _init() -> void:
+	name = "SkillsComponent"

@@ -12,3 +12,7 @@ func teleport(world:String, position:Vector3):
 	parent_entity.world = world
 	parent_entity.position = position
 	teleporting.emit(world, position)
+
+
+func _init() -> void:
+	name = "TeleportComponent"

@@ -15,13 +15,18 @@ var _timer:Timer
 var _rebuild_plan:bool
 
 
+func _init() -> void:
+	name = "GOAPComponent"
+
+
 func _ready():
 	# call the base class' ready because that's important
 	super._ready()
 	# add a timer if we have none
-	if $Timer == null:
-		add_child(Timer.new())
-		_timer = ($Timer as Timer)
+	if _timer == null:
+		var _timer = Timer.new()
+		_timer.name = "Timer"
+		add_child(_timer)
 
 
 func _process(delta):
@@ -50,6 +55,8 @@ func _process(delta):
 				_current_objective = o
 				break
 	
+	if _current_action == null:
+		return
 	# if we are done with the plan
 	if not _rebuild_plan and action_queue.is_empty():
 		# if we need to remove the objective, remove it

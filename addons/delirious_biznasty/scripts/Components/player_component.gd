@@ -30,6 +30,10 @@ signal update_moxie(new_value:float)
 signal update_will(new_value:float)
 
 
+func _init() -> void:
+	name = "PlayerComponent"
+
+
 func _ready():
 	($"../TeleportComponent" as TeleportComponent).teleporting.connect(teleport.bind())
 	var h = (%HUD as HudControl)

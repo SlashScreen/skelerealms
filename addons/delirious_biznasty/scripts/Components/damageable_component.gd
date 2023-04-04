@@ -5,3 +5,7 @@ extends EntityComponent
 
 func damage(info:DamageInfo):
 	pass
+
+
+func _init() -> void:
+	name = "DamageableComponent"

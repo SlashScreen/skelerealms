@@ -10,6 +10,10 @@ extends EntityComponent
 var covens:Dictionary
 
 
+func _init() -> void:
+	name = "CovensComponent"
+
+
 func _ready():
 	super._ready()
 	# Add corresponding covens.

@@ -81,6 +81,7 @@ func add_entity(res:InstanceData):
 	entities[res.ref_id] = new_entity
 	add_child(new_entity)
 	new_entity.instantiated.emit()
+	print_tree_pretty()
 
 
 ## Remove an entity from the game.

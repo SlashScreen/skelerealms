@@ -16,3 +16,7 @@ func hit():
 func apply_effect(eff:SpellEffect):
 	# TODO: Emit effect
 	active_effects.append(eff)
+
+
+func _init() -> void:
+	name = "SpellTargetComponent"

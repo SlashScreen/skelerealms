@@ -10,6 +10,11 @@ signal interacted(id:String)
 ## What tooltip to display when the cursor hovers over this.
 @export var interact_text:String
 
+
+func _init() -> void:
+	name = "InteractiveComponent"
+
+
 func _ready():
 	name = "InteractiveComponent"
 

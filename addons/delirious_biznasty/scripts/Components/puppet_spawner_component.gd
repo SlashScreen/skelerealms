@@ -17,10 +17,12 @@ func spawn(data:PackedScene):
 	(n as Node3D).set_position(parent_entity.position)
 	puppet = n
 	add_child(n)
+	print("spawned %s at %s" % [parent_entity.name, parent_entity.position])
 
 
 ## Despawn a puppet.
 func despawn():
+	print("despawned %s" % parent_entity.name)
 	for n in get_children():
 		remove_child(n)
 	puppet = null

@@ -13,10 +13,8 @@ var in_inventory:bool:
 # TODO: Item functions
 
 
-func _ready():
-	super._ready()
+func _init() -> void:
 	name = "EntityComponent"
-	#($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
 
 
 func _on_enter_scene():

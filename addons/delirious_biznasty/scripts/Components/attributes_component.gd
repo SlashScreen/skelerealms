@@ -14,3 +14,6 @@ var attributes:Dictionary = {
 }
 # I yearn for Ruby's symbols, but StingName is an adequate substitute.
 # I yearn for ruby just in general.
+
+func _init() -> void:
+	name = "AttributesComponent"

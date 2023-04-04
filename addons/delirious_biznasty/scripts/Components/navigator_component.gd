@@ -8,3 +8,7 @@ extends EntityComponent
 func calculate_path_to(pt:NavPoint) -> Array[NavPoint]:
 	# TODO: This
 	return []
+
+
+func _init() -> void:
+	name = "NavigatorComponent"

@@ -30,6 +30,10 @@ signal dialogue_with_npc_started(dialogue_node:String)
 signal schedule_updated(ev:ScheduleEvent)
 
 
+func _init() -> void:
+	name = "NPCComponent"
+
+
 func _ready():
 	super._ready()
 	

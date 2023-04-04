@@ -31,3 +31,7 @@ var is_dead:bool
 var is_exhausted:bool
 ## Whether this agent is drained.
 var is_drained:bool
+
+
+func _init() -> void:
+	name = "VitalsComponent"

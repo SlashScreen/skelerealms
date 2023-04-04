@@ -8,6 +8,10 @@ var inventory: PackedStringArray
 var snails: int
 
 
+func _init() -> void:
+	name = "InventoryComponent"
+
+
 ## Add an item to the inventory.
 func add_to_inventory(id:String):
 	var e = (%EntityManager as EntityManager).get_entity(id)
