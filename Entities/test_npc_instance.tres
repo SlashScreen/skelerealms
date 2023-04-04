@@ -7,5 +7,5 @@
 script = ExtResource("2_4m1xp")
 npc_data = ExtResource("1_gixig")
 ref_id = "test_npc_instance"
-world = ""
-position = Vector3(1.2958, 0, -4.69011)
+world = &"test world 1"
+position = Vector3(1.32303, 0, -4.62638)
