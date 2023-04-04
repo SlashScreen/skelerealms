@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="NPCInstance" load_steps=3 format=3 uid="uid://cqu8a5ou61xh1"]
+
+[ext_resource type="Resource" uid="uid://cqtqwsfkqdt2t" path="res://test_npc.tres" id="1_gixig"]
+[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/InstanceData/npc_instance.gd" id="2_4m1xp"]
+
+[resource]
+script = ExtResource("2_4m1xp")
+npc_data = ExtResource("1_gixig")
+ref_id = "test_npc_world1"
+world = &"test world 1"
+position = Vector3(1.2958, 0, -4.69011)

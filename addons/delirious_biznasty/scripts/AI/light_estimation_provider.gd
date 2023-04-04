@@ -8,6 +8,8 @@ var svpb: SubViewport
 
 
 ## Calculates a light level at a given point.
+## Output appears to be vaguely logarithmic, but has been scaled to have 1 be roughly
+## in direct sunlight.
 func get_light_level_for_point(point:Vector3) -> float:
 	# Move the octahedron to point
 	position = point
@@ -27,7 +29,7 @@ func get_light_level_for_point(point:Vector3) -> float:
 	var bottom = img.get_pixel(0,0).get_luminance()
 	print(bottom)
 	
-	return (top + bottom) / 2 # average top and bottom
+	return ((top + bottom) / 2) / 0.4 # average top and bottom
 
 
 func _ready() -> void:

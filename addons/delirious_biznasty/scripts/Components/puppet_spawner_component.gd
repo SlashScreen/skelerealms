@@ -7,6 +7,7 @@ var puppet:Node
 
 
 func _ready():
+	super._ready()
 	name = "PuppetSpawnerComponent"
 
 
@@ -16,6 +17,7 @@ func spawn(data:PackedScene):
 	(n as Node3D).set_position(parent_entity.position)
 	puppet = n
 	add_child(n)
+
 
 ## Despawn a puppet.
 func despawn():

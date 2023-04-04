@@ -1,4 +1,4 @@
-class_name NPCGizmo
+class_name WorldNPCGizmo
 extends EditorNode3DGizmoPlugin
 
 
@@ -19,10 +19,9 @@ func _redraw(gizmo:EditorNode3DGizmo):
 	var mesh:Mesh = SphereMesh.new()
 	if npc.instance:
 		npc.instance.position = npc.position
-		npc.instance.rotation = npc.quaternion.normalized()
 		npc.instance.world = npc.owner.name
 		#shit, how do I set the world?...
-		var prefab:Node = npc.instance.item_data.prefab.instantiate()
+		var prefab:Node = npc.instance.npc_data.prefab.instantiate()
 		if npc.get_child_count() > 0:
 			if not npc.get_child(0) == prefab:
 				npc.remove_child(npc.get_child(0))

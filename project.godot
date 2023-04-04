@@ -113,6 +113,11 @@ interact={
 
 locale/translations=PackedStringArray("res://locales/ui.de.translation", "res://locales/ui.en.translation")
 
+[physics]
+
+3d/run_on_separate_thread=true
+3d/physics_engine="GodotPhysics3D"
+
 [player]
 
 look_sensitivity=0.01

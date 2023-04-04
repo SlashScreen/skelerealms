@@ -1,9 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://b56xc2lavl48h"]
+[gd_scene load_steps=14 format=3 uid="uid://b56xc2lavl48h"]
 
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/entity_manager.gd" id="2_k54cv"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/entity.gd" id="3_kxsl0"]
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/item_component.gd" id="4_vvxed"]
-[ext_resource type="Resource" uid="uid://c7enut17350pt" path="res://test_item.tres" id="5_ojq6f"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/interactive_component.gd" id="6_ox50e"]
 [ext_resource type="PackedScene" uid="uid://c1bwgrswdshee" path="res://player.tscn" id="6_ti5ed"]
 [ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Components/npc_component.gd" id="6_yl66l"]
@@ -22,21 +20,6 @@
 unique_name_in_owner = true
 process_priority = -1
 script = ExtResource("2_k54cv")
-
-[node name="TestEntity" type="Node" parent="EntityManager" groups=["savegame_entity"]]
-script = ExtResource("3_kxsl0")
-world = "test world 1"
-position = Vector3(0, 3, 0)
-
-[node name="ItemComponent" type="Node" parent="EntityManager/TestEntity"]
-script = ExtResource("4_vvxed")
-data = ExtResource("5_ojq6f")
-
-[node name="InteractiveComponent" type="Node" parent="EntityManager/TestEntity"]
-script = ExtResource("6_ox50e")
-
-[node name="PuppetSpawnerComponent" type="Node" parent="EntityManager/TestEntity"]
-script = ExtResource("7_6rhup")
 
 [node name="TestNPC" type="Node" parent="EntityManager" groups=["savegame_entity"]]
 script = ExtResource("3_kxsl0")
