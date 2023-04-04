@@ -17,16 +17,10 @@ var _rebuild_plan:bool
 
 func _init() -> void:
 	name = "GOAPComponent"
-
-
-func _ready():
-	# call the base class' ready because that's important
-	super._ready()
-	# add a timer if we have none
-	if _timer == null:
-		var _timer = Timer.new()
-		_timer.name = "Timer"
-		add_child(_timer)
+	# add timer
+	var _timer = Timer.new()
+	_timer.name = "Timer"
+	add_child(_timer)
 
 
 func _process(delta):

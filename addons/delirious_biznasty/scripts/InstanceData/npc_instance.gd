@@ -8,12 +8,8 @@ extends InstanceData
 
 func get_archetype_components() -> Array[EntityComponent]:
 	var components:Array[EntityComponent] = []
-	# set up item component
-	var npc_component = NPCComponent.new()
-	npc_component.data = npc_data
-	npc_component.name = "NPCComponent" # be sure to name them
 	# Add new components
-	components.append(npc_component)
+	components.append(NPCComponent.new(npc_data))
 	components.append(InteractiveComponent.new())
 	components.append(PuppetSpawnerComponent.new())
 	components.append(TeleportComponent.new())

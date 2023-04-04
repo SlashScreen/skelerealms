@@ -30,8 +30,14 @@ signal dialogue_with_npc_started(dialogue_node:String)
 signal schedule_updated(ev:ScheduleEvent)
 
 
-func _init() -> void:
+func _init(d:NPCData) -> void:
+	data = d
 	name = "NPCComponent"
+	var s:Schedule = Schedule.new()
+	s.name = "Schedule"
+	s.events = data.schedule
+	add_child(s)
+	_schedule = s
 
 
 func _ready():
@@ -41,16 +47,6 @@ func _ready():
 	
 	if not ($"../InteractiveComponent" as InteractiveComponent).interacted.is_connected(interact.bind()):
 		($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
-	# create a schedule if ther isnt one
-	if not find_child("Schedule"):
-		var s:Schedule = Schedule.new()
-		s.name = "Schedule"
-		s.events = data.schedule
-		add_child(s)
-		_schedule = s
-	else:
-		_schedule = get_node("Schedule")
-		_schedule.events = data.schedule
 
 
 func _on_enter_scene():
