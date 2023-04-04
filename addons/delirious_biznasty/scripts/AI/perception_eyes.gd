@@ -3,6 +3,8 @@ extends Node3D
 ## This handles seeing, and it attached to the head of the character.
 
 
+const perception_interval:float = 0.25
+
 ## FOV is the field of view of the eyes, in degrees. The default value is 90 degrees.
 @export var fov_h:float = 90
 @export var fov_v:float = 90
@@ -10,11 +12,20 @@ extends Node3D
 @export var light_level_threshold:float = 0.1
 
 var light_probe:LightEstimation
-
-signal begin_perceiving(percieved:PerceptionData)
-signal end_perceiving(percieved:PerceptionData)
+var t:Timer
 
 
+signal perceived(percieved:PerceptionData)
+
+
+func _ready() -> void:
+	t = Timer.new()
+	t.start(perception_interval)
+	t.timeout.connect(try_perception.bind())
+	add_child(t)
+
+
+## Check if this can see a target
 func check_sees_collider(pt:CollisionObject3D) -> PerceptionData :
 	# 1) See if target in range
 	if position.distance_to(pt.position) > view_distance:
@@ -38,6 +49,18 @@ func check_sees_collider(pt:CollisionObject3D) -> PerceptionData :
 		return null
 	# 5) Calculate percent of coverage with AABBs <- TODO
 	return PerceptionData.new(pt, light_level)
+
+
+## Try looking att everything in range.
+func try_perception() -> void:
+	var perception_targets = get_tree()\
+									.get_nodes_in_group("perception_target")\
+									.filter(func(x:Node): return x is CollisionObject3D and (x as CollisionObject3D).position.distance_to(position) <= view_distance)
+	# Loop through targets and get check info.
+	for target in perception_targets:
+		var res = await check_sees_collider(target)
+		if res: # If we see it, emit signal
+			perceived.emit(res)
 
 
 # no wait we need to keep updating on a thing? 

@@ -52,7 +52,7 @@ Not started :hole:
 | Outside of scene AI navigation | :construction: |
 | World loading | :evergreen_tree: |
 | Skills/Attributes | :pencil2: |
-| NPC Perception | :hole: |
+| NPC Perception | :pencil2: |
 | Spells and Spell effects | :construction: |
 | Audio events | :pencil2: |
 | Factions | :warning: |
