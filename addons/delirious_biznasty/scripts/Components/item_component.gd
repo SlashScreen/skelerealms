@@ -56,3 +56,13 @@ func drop():
 ## Interact with this item. Called from [InteractiveComponent].
 func interact(refID):
 	move_to_inventory(refID)
+
+
+func save() -> Dictionary:
+	return {
+		"contained_inventory" = contained_inventory.unwrap() if contained_inventory.some() else ""
+	}
+
+
+func load_data(data:Dictionary):
+	contained_inventory =  Option.none() if data["contained_inventory"] == "" else Option.from(data["contained_inventory"])

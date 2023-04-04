@@ -7,7 +7,8 @@ extends Node
 
 ## Parent entity of this component.
 @onready var parent_entity:Entity = get_parent() as Entity
-
+## Whether this component should be saved.
+var dirty:bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

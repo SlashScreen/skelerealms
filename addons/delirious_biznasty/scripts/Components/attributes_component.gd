@@ -11,9 +11,24 @@ var attributes:Dictionary = {
 	&"amity" : 0,
 	&"maxnomity" : 0,
 	&"litheness" : 0,
-}
+}:
+	get:
+		return attributes
+	set(val):
+		attributes = val
+		dirty = true
 # I yearn for Ruby's symbols, but StingName is an adequate substitute.
 # I yearn for ruby just in general.
 
 func _init() -> void:
 	name = "AttributesComponent"
+
+
+func save() -> Dictionary:
+	dirty = false
+	return attributes
+
+
+func load_data(data:Dictionary):
+	attributes = data
+	dirty = false

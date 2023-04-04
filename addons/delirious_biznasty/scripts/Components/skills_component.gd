@@ -10,8 +10,23 @@ var skills:Dictionary = {
 	&"short_blade" : 0,
 	&"long_blade" : 0,
 	&"blunt" : 0,
-}
+}:
+	get:
+		return skills
+	set(val):
+		skills = val
+		dirty = true
 
 
 func _init() -> void:
 	name = "SkillsComponent"
+
+
+func save() -> Dictionary:
+	dirty = false
+	return skills
+
+
+func load_data(data:Dictionary):
+	skills = data
+	dirty = false

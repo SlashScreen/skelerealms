@@ -13,25 +13,45 @@ signal drained
 signal hurt
 
 
-## Health value.
-var health:float
-## Stamina value.
-var moxie:float
-## Magica value
-var will:float
-## The maximum health value.
-var max_health:float
-## The maximum stamina value.
-var max_moxie:float
-## The maximum magica value.
-var max_will:float
-## Whether this entity is dead.
-var is_dead:bool
+## Health, stamina, magica, and max of values.
+var vitals = {
+	"health" = 100,
+	"moxie" = 100,
+	"will" = 100,
+	"max_health" = 100,
+	"max_moxie" = 100,
+	"max_will" = 100,
+}:
+	get:
+		return vitals
+	set(val):
+		vitals = val
+		dirty = true
+
+
+## Whether this agent is dead.
+var is_dead:bool: 
+	get:
+		return vitals["health"] <= 0
 ## Whether this agent is exhausted.
-var is_exhausted:bool
+var is_exhausted:bool: 
+	get:
+		return vitals["moxie"] <= 0
 ## Whether this agent is drained.
-var is_drained:bool
+var is_drained:bool: 
+	get:
+		return vitals["will"] <= 0
 
 
 func _init() -> void:
 	name = "VitalsComponent"
+
+
+func save() -> Dictionary:
+	dirty = false
+	return vitals
+
+
+func load_data(data:Dictionary):
+	vitals = data
+	dirty = false

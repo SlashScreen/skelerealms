@@ -79,18 +79,24 @@ func has_component(type:String) -> bool:
 	return x.some()
 
 
-# TODO: Determine whether it should be saved (add "dirty" variable)
-# TODO: Don't participate if there's nothing to save
 func save() -> Dictionary: 
-	var data:Dictionary = {}
-	for c in get_children():
-		data[c.name] = ((c as EntityComponent).save())
+	var data:Dictionary = {
+		"entity_data": {
+			"world" = world,
+			"position" = position,
+		}
+	}
+	for c in get_children().filter(func(x:EntityComponent): return x.dirty): # filter to get dirty acomponents
+		data["components"][c.name] = ((c as EntityComponent).save())
 	return data
 
 
 func load_data(data:Dictionary):
+	world = data["entity_data"]["world"]
+	position = data["entity_data"]["position"]
+	
 	# loop through all saved components and call load
-	for d in data:
+	for d in data["components"]:
 		(get_node(d) as EntityComponent).load_data(data[d])
 	pass
 
