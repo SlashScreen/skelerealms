@@ -4,10 +4,16 @@ extends InteractiveObject
 ## Interacting with this teleports the interactor.
 
 
-# TODO: Door instead of position. Hm how though
-@export var dest_world:String
-@export var dest_pos:Vector3
+@export var instance:DoorInstance
+@export var destination_instance:DoorInstance
 @export var open_verb:String = "OPEN"
+
+var dest_world:String:
+	get:
+		return destination_instance.world
+var dest_pos:Vector3:
+	get:
+		return destination_instance.position
 
 
 func _ready():

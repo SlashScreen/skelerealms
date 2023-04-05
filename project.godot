@@ -38,6 +38,7 @@ days_per_week=0
 weeks_in_month=0
 months_in_year=0
 covens_path="res://Covens"
+doors_path="res://Doors"
 
 [display]
 
@@ -46,11 +47,6 @@ mouse_cursor/custom_image="res://kenney_ui-pack-rpg-expansion/PNG/cursorHand_blu
 [dotnet]
 
 project/assembly_name="DBiznasty"
-
-[editor]
-
-version_control/plugin_name="GitPlugin"
-version_control/autoload_on_startup=true
 
 [editor_plugins]
 

@@ -4,7 +4,8 @@ extends EditorPlugin
 var dock:Control
 var item_gizmo_plugin = WorldItemGizmo.new()
 var npc_gizmo_plugin = WorldNPCGizmo.new()
-var door_jump_plugin = DoorJumpPlugin.new()
+var door_jump_plugin = DoorJumpPlugin.new(self)
+
 
 func _enter_tree():
 	# Initialization of the plugin goes here.

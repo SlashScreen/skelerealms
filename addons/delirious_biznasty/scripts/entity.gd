@@ -103,3 +103,9 @@ func load_data(data:Dictionary):
 
 func reset_stale_timer():
 	stale_timer = 0
+
+
+func broadcast_message(msg:String) -> void:
+	for c in get_children():
+		if c.has_method(msg):
+			c.call(msg)
