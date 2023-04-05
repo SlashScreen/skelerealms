@@ -35,6 +35,7 @@ var _doors_in_path:Array[int] = []
 var _path_follow_end_distance:float = 1
 var _walk_speed:float = 1
 var _puppet:NPCPuppet
+var _perception_memory:Dictionary = {}
 
 
 signal entered_combat
@@ -60,13 +61,16 @@ func _init(d:NPCData) -> void:
 func _ready():
 	super._ready()
 	
-	await parent_entity.instantiated # wait for entity to be ready to instantiate
+	await parent_entity.instantiated # wait for entity to be ready to instantiate to ger siblings
 	
 	if not ($"../InteractiveComponent" as InteractiveComponent).interacted.is_connected(interact.bind()):
 		($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
 	
 	_nav_component = $"../NavigatorComponent" as NavigatorComponent
 	_puppet_component = $"../PuppetSpawnerComponent" as PuppetSpawnerComponent
+	_interactive_component = $"../InteractiveComponent" as InteractiveComponent
+	_goap_component = $"../GOAPComponent" as GOAPComponent
+	
 	# sync nav agent
 	_puppet_component.spawned_puppet.connect(func(x:Node): _puppet = x as NPCPuppet )
 	_puppet_component.despawned_puppet.connect(func(): _puppet = null )
@@ -174,7 +178,12 @@ func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float
 
 
 # TODO:
-func on_percieve(ref_id:String):
+func on_percieve_start(info:EyesPerception.PerceptionData):
+	pass
+
+
+# TODO:
+func on_percieve_end(info:EyesPerception.PerceptionData):
 	pass
 
 
@@ -209,3 +218,9 @@ enum SimulationLevel {
 	GRANULAR, # When the actor is outside of the scene. Will still follow a schedule and go from point to point, but will not walk around using the navmesh, interact with things in the world, or do anything that involves the puppet.
 	NONE, ## When the actor is outside of the simulation distance. It will not do anything.
 }
+
+
+class PerceptionMemoryObject:
+	var object:String
+	var timer:float
+	var in_sights:bool
