@@ -36,6 +36,9 @@ var _path_follow_end_distance:float = 1
 var _walk_speed:float = 1
 var _puppet:NPCPuppet
 var _perception_memory:Dictionary = {}
+var _perception_threshold:float = 1
+var _perception_speed:float = 1
+var _lose_interest_speed:float = 0.1
 
 
 signal entered_combat
@@ -97,6 +100,14 @@ func _process(delta):
 			_next_point() # get next point
 			parent_entity.world = _current_target_point.world # set world
 		parent_entity.position = parent_entity.position.move_toward(_current_target_point.position, delta * _walk_speed) # move towards position
+	### Section 2: Perception
+	# TODO: stages
+	for p in _perception_memory:
+		if _perception_memory[p].in_sights: # if in sight then count up timer
+			_perception_memory[p].timer = clamp(_perception_memory[p].timer + _perception_speed * _perception_memory[p].visibility * delta, 0, _perception_threshold)
+		else:
+			_perception_memory[p].timer = clamp(_perception_memory[p].timer - (_lose_interest_speed * delta), 0, _perception_threshold)
+		_perception_memory[p].percepived = _perception_memory[p].timer == _perception_threshold
 
 
 ## Interact with this npc. See [InteractiveComponent].
@@ -177,13 +188,32 @@ func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float
 	_goap_component.add_objective(goals, remove_after_satisfied, priority)
 
 
-# TODO:
 func on_percieve_start(info:EyesPerception.PerceptionData):
+	if _perception_memory[info.object]:
+		_perception_memory[info.object].in_sights = true
+		_perception_memory[info.object].visibily = info.visibility
+	else:
+		_perception_memory[info.object] = PerceptionMemoryObject.new()
+		_perception_memory[info.object].in_sights = true
+		_perception_memory[info.object].visibily = info.visibility
+
+
+func on_percieve_end(info:EyesPerception.PerceptionData):
+	if _perception_memory[info.object]:
+		_perception_memory[info.object].in_sights = false
+		_perception_memory[info.object].visibily = 0
+	else:
+		_perception_memory[info.object] = PerceptionMemoryObject.new()
+		_perception_memory[info.object].in_sights = false
+		_perception_memory[info.object].visibily = 0
+
+
+func _handle_perception_behavior(who, just_perceived:bool, new_perception:bool):
 	pass
 
 
 # TODO:
-func on_percieve_end(info:EyesPerception.PerceptionData):
+func on_hear_audio():
 	pass
 
 
@@ -224,3 +254,5 @@ class PerceptionMemoryObject:
 	var object:String
 	var timer:float
 	var in_sights:bool
+	var visibility:float
+	var perceived:bool
