@@ -6,7 +6,10 @@ extends CharacterBody3D
 signal change_position(Vector3)
 
 var movement_speed: float = 2.0
-var movement_target_position: Vector3 = Vector3(-3.0,0.0,2.0)
+var movement_target_position: Vector3 = position
+var target_reached:bool:
+	get:
+		return navigation_agent.is_navigation_finished()
 
 ## The navigation agent.
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D

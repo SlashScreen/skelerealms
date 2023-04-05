@@ -5,6 +5,8 @@ extends EntityComponent
 ## The puppet node.
 var puppet:Node 
 
+signal spawned_puppet(puppet:Node)
+signal despawned_puppet
 
 func _ready():
 	super._ready()
@@ -17,6 +19,7 @@ func spawn(data:PackedScene):
 	(n as Node3D).set_position(parent_entity.position)
 	puppet = n
 	add_child(n)
+	spawned_puppet.emit(puppet)
 	print("spawned %s at %s" % [parent_entity.name, parent_entity.position])
 
 
@@ -26,6 +29,7 @@ func despawn():
 	for n in get_children():
 		remove_child(n)
 	puppet = null
+	despawned_puppet.emit()
 
 
 ## Set the puppet's position.

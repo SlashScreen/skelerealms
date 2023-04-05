@@ -38,3 +38,6 @@ func _redraw(gizmo:EditorNode3DGizmo):
 	
 	#gizmo.add_mesh(mesh, get_material("main", gizmo))
 	#gizmo.add_collision_triangles(tri_mesh)
+
+func _get_gizmo_name() -> String:
+	return "NPC item"

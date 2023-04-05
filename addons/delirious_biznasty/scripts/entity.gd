@@ -48,6 +48,7 @@ func _process(delta):
 		stale_timer = 0
 
 
+## Determine that this entity should be in scene
 func _should_be_in_scene():
 	# if not in correct world
 	if GameInfo.world != world:
@@ -93,7 +94,7 @@ func save() -> Dictionary:
 
 func load_data(data:Dictionary):
 	world = data["entity_data"]["world"]
-	position = data["entity_data"]["position"]
+	position = JSON.parse_string(data["entity_data"]["position"])
 	
 	# loop through all saved components and call load
 	for d in data["components"]:
