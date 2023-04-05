@@ -16,7 +16,6 @@ var in_combat:bool:
 		elif not val and in_combat:
 			left_combat.emit()
 		in_combat = val
-
 var _path:Array[NavPoint]
 var _current_target_point:NavPoint: # TODO: make setting this update the nav agent
 	set(val):
@@ -136,7 +135,7 @@ func _next_point() -> void:
 			# skip all until door
 			# TODO: Interact with door?
 			for i in range(next_door): # this will make the target point the door
-				_current_target_point = _pop_path() # FIXME: WILL CUASE RECALCULATION A LOT
+				_current_target_point = _pop_path() # FIXME: WILL CAUSE RECALCULATION A LOT
 			return
 	else: # if we dont have doors (we can assume that the destination is in same world
 		if _path.back().position.distance_to(parent_entity.position) < ProjectSettings.get_setting("biznasty/actor_fade_distance"): 
@@ -148,14 +147,15 @@ func _next_point() -> void:
 			return
 
 
-## Gets the length of a slice of the path.
+## Gets the length of a slice of the path in meters. Doors are considered to be 0 distance, since they are different sides of the same object, at least theoretically.
 func _get_path_length(slice:Array[NavPoint]) -> float:
 	if slice.size() < 2: # if 0 or 1 length is 0
 		return 0
 	# else total everything
 	var accum:float = 0
 	for i in range(slice.size() - 1):
-		accum += slice[i].position.distance_to(slice[i + 1].position)
+		if slice[i].world == slice[i + 1].world:
+			accum += slice[i].position.distance_to(slice[i + 1].position)
 	# maybe square root everything after, and use distance_to_squared?
 	return accum
 
