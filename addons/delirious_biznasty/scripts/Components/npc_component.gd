@@ -24,6 +24,7 @@ var _current_target_point:NavPoint: # TODO: make setting this update the nav age
 			_puppet.set_movement_target(val.position)
 	get:
 		return _current_target_point
+var visibility_threshold:float = 0.3
 var _nav_component:NavigatorComponent
 var _puppet_component:PuppetSpawnerComponent
 var _interactive_component:InteractiveComponent

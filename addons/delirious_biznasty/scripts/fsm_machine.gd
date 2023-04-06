@@ -14,6 +14,7 @@ func setup(states:Array[FSMState]) -> void:
 	for s in states:
 		s.state_machine = self
 		add_child(s)
+	owner = get_parent()
 	# transition to initial states
 	transition(initial_state)
 
