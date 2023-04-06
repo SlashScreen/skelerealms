@@ -17,6 +17,7 @@ class_name NPCData
 @export var unique:bool = true
 ## Whether this NPC affects the stealth meter when it sees you.
 @export var affects_stealth_meter:bool = true
+@export var relationships:Array[Relationship]
 @export_category("Combat info")
 ## Will this actor initiate combat? [br]
 ## Peaceful: Will not initiate combat. [br]
@@ -34,4 +35,8 @@ class_name NPCData
 @export_enum("Coward", "Cautious", "Average", "Brave", "Foolhardy") var confidence:int = 2
 ## Response to witnessing combat.
 @export_enum("Helps nobody", "Helps allies", "Helps friends and allies") var assistance:int = 2
-# TODO: Warn behaviour
+## How NPCs behave whn hit by friends. [br]
+## Neutral: Aggro friends immediately when hit. [br]
+## Friend: During combat, won't attack player unless hit a number of times in an amount of time. Outside of combat, it will aggro the friendly immediately. [br]
+## Ally: During combat, will ignore all attacks from friend. Outside of combat, behaves in the same way is "Friend" in combat. [br]
+@export_enum("Neutral", "Friend", "Ally") var friendly_fire_behavior:int = 1

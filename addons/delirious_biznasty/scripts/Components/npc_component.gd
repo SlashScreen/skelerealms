@@ -25,6 +25,8 @@ var _current_target_point:NavPoint: # TODO: make setting this update the nav age
 	get:
 		return _current_target_point
 var visibility_threshold:float = 0.3
+## Stores data of interest for GOAP to access.
+var goap_memory:Dictionary = {}
 var _nav_component:NavigatorComponent
 var _puppet_component:PuppetSpawnerComponent
 var _interactive_component:InteractiveComponent
@@ -188,22 +190,47 @@ func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float
 #* ### PERCEPTION
 
 
-# TODO: 
+## Callback for when percpetion begins
 func on_percieve_start(info:EyesPerception.PerceptionData) -> void:
-	# add perpection node if needed
-	# update perception data
-	# determine threat level and response
-	pass
+	if _perception_memory.has(info.object):
+		# if we have it, then update the perception info
+		_perception_memory[info.object].visibility = info.visibility
+	else:
+		# if we don't, add new fsm
+		var fsm:PerceptionFSM_Machine = PerceptionFSM_Machine.new(info.object, info.visibility)
+		add_child(fsm)
+		fsm.transitioned.connect(func(x:String): handle_perception_transition(info.object, x))
+		fsm.setup([
+			PerceptionFSM_Aware_Invisible.new(),
+			PerceptionFSM_Aware_Visible.new(),
+			PerceptionFSM_Lost.new(),
+			PerceptionFSM_Unaware.new(),
+		])
 
 
-# TODO:
+## Change behavior based on how the perception level of an object changes.
+func handle_perception_transition(id:String, transition:String) -> void:
+	# TODO: determine threat level and response
+	match transition:
+		"AwareInvisible":
+			return
+		"AwareVisible":
+			return
+		"Lost":
+			return
+		"Unaware":
+			return
+
+
+## Callback for when something leaves perception
 func on_percieve_end(info:EyesPerception.PerceptionData) -> void:
-	# update perception data
-	pass
+	if _perception_memory.has(info.object):
+		# if we have it, set perception to 0 (hidden)
+		_perception_memory[info.object].visibility = 0
 
 
 # TODO:
-func on_hear_audio() -> void:
+func on_hear_audio(emitter:AudioEventEmitter) -> void:
 	# determine importance of sound
 	# Add point of interest to memory
 	# add task to investigate
@@ -212,7 +239,7 @@ func on_hear_audio() -> void:
 
 # TODO:
 func determine_threat_level(what:String) -> void:
-	# use covens, relationships to determine threat level of something
+	# use covens, relationships, etc to determine threat level of something
 	pass
 
 
@@ -259,6 +286,25 @@ func _calculate_new_schedule():
 		# Else we have no schewdule for this time period
 		_current_schedule_event = null
 		schedule_updated.emit(null)
+
+
+#* ### MISC
+
+
+## Get a relationship this NPC has of [RelationshipType]. Pass in the type's key. Returns the relationship if found, none if none found.
+func get_relationship_of_type(key:String) -> Option:
+	var res = data.relationships.filter(func(r:Relationship): return r.relationship_type and r.relationship_type.relationship_key == key)
+	if res.is_empty():
+		return Option.none()
+	return Option.from(res[0])
+
+
+## Gets this NPC's relationship with someone by ref id. Returns the relationship if found, none if none found.
+func get_relationship_with(ref_id:String) -> Option:
+	var res = data.relationships.filter(func(r:Relationship): return r.relationship_type and r.other_person == ref_id)
+	if res.is_empty():
+		return Option.none()
+	return Option.from(res[0])
 
 
 ## Current simulation level for an NPC.

@@ -6,4 +6,13 @@
 [resource]
 script = ExtResource("1_7n5op")
 prefab = ExtResource("1_f44c6")
+schedule = Array[Resource("res://addons/delirious_biznasty/scripts/Schedules/schedule_event.gd")]([])
+essential = true
+ghost = false
+invulnerable = false
+unique = true
+affects_stealth_meter = true
+aggression = 2
+confidence = 2
+assistance = 2
 id = "test_npc"

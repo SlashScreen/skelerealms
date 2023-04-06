@@ -48,7 +48,7 @@ func check_sees_collider(pt:CollisionObject3D) -> PerceptionData :
 	if light_level < light_level_threshold:
 		return null
 	# 5) Calculate percent of coverage with AABBs <- TODO
-	return PerceptionData.new(pt, light_level)
+	return PerceptionData.new(_find_ref_id(pt), light_level)
 
 
 ## Try looking att everything in range.
@@ -63,11 +63,20 @@ func try_perception() -> void:
 			perceived.emit(res)
 
 
+func _find_ref_id(n:Node) -> String:
+	var check:Node = n.get_parent()
+	while check.get_parent():
+		if check is Entity:
+			return (check as Entity).name
+		check = check.get_parent()
+	return ""
+
+
 # no wait we need to keep updating on a thing? 
 class PerceptionData:
-	var object:Node
+	var object:String
 	var visibility:float
 	
-	func _init(obj:Node, vis:float) -> void:
+	func _init(obj:String, vis:float) -> void:
 		object = obj
 		visibility = vis

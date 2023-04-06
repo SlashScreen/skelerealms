@@ -4,17 +4,30 @@ extends Resource
 
 # SO much repetitive code
 
-@export var use_minute:bool = false
+@export_flags("Minute:1", "Hour:2", "Day:4", "Week:8", "Month:16", "Year:32") var compare:int = 0b00010
+var use_minute:bool:
+	get:
+		return compare & 1 == 1
 @export var minute:int
-@export var use_hour:bool = true
+var use_hour:bool:
+	get:
+		return compare & 2 == 2
 @export var hour:int
-@export var use_day:bool = false
+var use_day:bool:
+	get:
+		return compare & 4 == 4
 @export var day:int
-@export var use_week:bool = false
+var use_week:bool:
+	get:
+		return compare & 8 == 8
 @export var week:int
-@export var use_month:bool = false
+var use_month:bool:
+	get:
+		return compare & 16 == 16
 @export var month:int
-@export var use_year:bool = false
+var use_year:bool:
+	get:
+		return compare & 32 == 32
 @export var year:int
 
 
