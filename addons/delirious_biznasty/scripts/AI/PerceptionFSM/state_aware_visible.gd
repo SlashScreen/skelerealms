@@ -11,7 +11,7 @@ func _get_state_name() -> String:
 	return "AwareVisible"
 
 
-func ready() -> void:
+func on_ready() -> void:
 	_npc = owner as NPCComponent
 
 

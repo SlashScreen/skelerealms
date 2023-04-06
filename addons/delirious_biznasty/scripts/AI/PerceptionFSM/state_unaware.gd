@@ -13,10 +13,11 @@ func _get_state_name() -> String:
 	return "Unaware"
 
 
-func ready() -> void:
+func on_ready() -> void:
 	_npc = owner as NPCComponent
 
 
+# TODO: Stealth mechanics.
 func update(delta:float) -> void:
 	detection_timer += detection_speed * (state_machine as PerceptionFSM_Machine).visibility * delta
 	if detection_timer >= detection_timer_max:

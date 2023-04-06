@@ -13,7 +13,7 @@ func _get_state_name() -> String:
 	return "AwareInvisible"
 
 
-func ready() -> void:
+func on_ready() -> void:
 	_npc = owner as NPCComponent
 
 
