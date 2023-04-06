@@ -17,3 +17,21 @@ class_name NPCData
 @export var unique:bool = true
 ## Whether this NPC affects the stealth meter when it sees you.
 @export var affects_stealth_meter:bool = true
+@export_category("Combat info")
+## Will this actor initiate combat? [br]
+## Peaceful: Will not initiate combat. [br]
+## Bluffing: Variant of peaceful, they will warn and try to act tough, but never attack. 
+## Aggressive: Will attack enemies on sight. [br]
+## Very agressive: Will attack enemies and neutrals. [br]
+## Frenzied: Will attack anything.
+@export_enum("Peaceful", "Bluffing", "Aggressive", "Very Aggressive", "Frenzied") var aggression:int = 2
+## Response to combat. [br]
+## Coward: Flees from combat. [br]
+## Cautious: Cautious: Will flee unless stronger than target. [br]
+## Average: Will fight unless outmatched. [br]
+## Brave: Will fight unless very outmatched. [br]
+## Foolhardy: Will never flee.
+@export_enum("Coward", "Cautious", "Average", "Brave", "Foolhardy") var confidence:int = 2
+## Response to witnessing combat.
+@export_enum("Helps nobody", "Helps allies", "Helps friends and allies") var assistance:int = 2
+# TODO: Warn behaviour
