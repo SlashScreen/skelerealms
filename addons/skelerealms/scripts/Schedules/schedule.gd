@@ -1,7 +1,7 @@
 class_name Schedule
 extends Node
 ## Keeps track of the schedule.
-## Schedules are roughly analagous to Creation Kit's "packages", although limited to time slots.
+## Schedules are roughly analagous to Creation Kit's "AI packages", although limited to time slots.
 ## It is made up of [ScheduleEvent]s.
 ## To adjust NPC behavior under circumastances outside of keeping a schedule, see [GOAPComponent] and [ScheduleCondition].
 
