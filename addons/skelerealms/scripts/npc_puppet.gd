@@ -7,7 +7,7 @@ extends CharacterBody3D
 signal change_position(Vector3)
 
 var movement_speed: float = 2.0
-var movement_target_position: Vector3 = position
+@onready var movement_target_position: Vector3 = position # No world because this agent only works in the scene.
 var target_reached:bool:
 	get:
 		return navigation_agent.is_navigation_finished()
