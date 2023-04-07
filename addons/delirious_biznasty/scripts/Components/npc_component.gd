@@ -200,6 +200,7 @@ func on_percieve_start(info:EyesPerception.PerceptionData) -> void:
 		var fsm:PerceptionFSM_Machine = PerceptionFSM_Machine.new(info.object, info.visibility)
 		add_child(fsm)
 		fsm.transitioned.connect(func(x:String): handle_perception_transition(info.object, x))
+		fsm.initial_state = "Unaware"
 		fsm.setup([
 			PerceptionFSM_Aware_Invisible.new(),
 			PerceptionFSM_Aware_Visible.new(),
@@ -234,6 +235,7 @@ func on_hear_audio(emitter:AudioEventEmitter) -> void:
 	# determine importance of sound
 	# Add point of interest to memory
 	# add task to investigate
+	# Figure out like, whether it's unexpected
 	pass
 
 
@@ -259,6 +261,17 @@ func perception_forget(who:String) -> void:
 	n.queue_free()
 
 
+## Get all items this entity remembers seeing.
+func get_remembered_items() -> Array[String]:
+	return _perception_memory.keys()\
+			.filter(func(p:String):
+				var e = BizGlobal.entity_manager.get_entity(p)
+				if e.some():
+					return not (e.unwrap as Entity).get_component("ItemComponent") == null
+				return false
+				)
+
+
 #* ### SCHEDULE
 
 
@@ -269,7 +282,7 @@ func follow_schedule() -> void:
 	pass
 
 
-func _calculate_new_schedule():
+func _calculate_new_schedule() -> void:
 	# Don't do this if we are not being simulated.
 	if _sim_level == SimulationLevel.NONE:
 		return
