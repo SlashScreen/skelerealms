@@ -20,14 +20,19 @@ var movement_paused:bool = false
 func _ready() -> void:
 	call_deferred("_actor_setup")
 	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
-	# TODO: Snap to navmesh
+
+
+## Finds the closest point to this puppet, and jumps to it. 
+## This is to avoid getting stuck in things that it may have phased into while navigating out-of-scene.
+func snap_to_navmesh() -> void:
+	position = NavigationServer3D.map_get_closest_point(NavigationServer3D.get_maps()[0], position)
 
 
 ## Set up navigation.
 func _actor_setup()  -> void:
 	# Wait for the first physics frame so the NavigationServer can sync.
 	await get_tree().physics_frame
-
+	snap_to_navmesh() # snap to mesh
 	# Now that the navigation map is no longer empty, set the movement target.
 	set_movement_target(movement_target_position)
 

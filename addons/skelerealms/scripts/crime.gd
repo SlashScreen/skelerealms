@@ -15,7 +15,7 @@ const crimes:Dictionary = {
 var crime_type:StringName
 var perpetrator:String
 var victim:String
-## Sevwerity of this crime
+## Severity of this crime
 var severity:int:
 	get:
 		return crimes[crime_type] if crimes.has(crime_type) else 0
