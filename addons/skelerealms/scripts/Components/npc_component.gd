@@ -78,7 +78,7 @@ signal dialogue_with_npc_started(dialogue_node:String)
 signal schedule_updated(ev:ScheduleEvent)
 signal start_dialogue(dialogue_node:String)
 signal warning(ref_id:String)
-signal flee(ref_di:String)
+signal flee(ref_id:String)
 
 
 #* ### OVERRIDES

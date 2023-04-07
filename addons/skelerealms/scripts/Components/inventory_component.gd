@@ -7,6 +7,9 @@ var inventory: PackedStringArray
 ## The amount of cash moneys.
 var snails: int
 
+signal added_to_inventory(id:String)
+signal removed_from_inventory(id:String)
+
 
 func _init() -> void:
 	name = "InventoryComponent"
@@ -20,11 +23,16 @@ func add_to_inventory(id:String):
 		if ic.some():
 			(ic.unwrap() as ItemComponent).move_to_inventory(id)
 			inventory.append(id)
+			added_to_inventory.emit(id)
 
 
 ## Remove an item from the inventory.
 func remove_from_inventory(id:String):
-	inventory.remove_at(inventory.find(id))
+	var index = inventory.find(id)
+	if index == -1: # catch if it doesnt have the item
+		return
+	inventory.remove_at(index)
+	remove_from_inventory(id)
 
 
 ## Add an amount of snails to the inventory.

@@ -17,13 +17,13 @@ func _ready():
 
 
 ## Gets an entity in the game.
-func get_entity(id:String) -> Option:
+func get_entity(id:StringName) -> Option:
 	# stage 1: attempt find in cache
 	if entities.has(id):
 		(entities[id] as Entity).reset_stale_timer() # FIXME: If another entity is carrying a reference to this entity, then we might break stuff by cleaning it up in this way?
 		return Option.from(entities[id])
 	# stage 2: attempt find in children
-	var possible_child = get_node_or_null(id)
+	var possible_child = get_node_or_null(id as String)
 	if possible_child != null:
 		entities[id] = possible_child # cache entity
 		return Option.from(possible_child)
@@ -40,7 +40,7 @@ func get_entity(id:String) -> Option:
 		return Option.from(entities[id]) # we added the entity in #add_entity
 		
 	# Other than that, we've failed. Attempt to find the entity in the child count as a failsave, then return none.
-	return Option.from(get_node_or_null(id))
+	return Option.from(get_node_or_null(id as String))
 
 
 func _cache_entities(path:String):
