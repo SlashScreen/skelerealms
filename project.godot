@@ -28,7 +28,7 @@ mouse_cursor/custom_image="res://kenney_ui-pack-rpg-expansion/PNG/cursorHand_blu
 
 [dotnet]
 
-project/assembly_name="DBiznasty"
+project/assembly_name="Skelerealms"
 
 [editor_plugins]
 
