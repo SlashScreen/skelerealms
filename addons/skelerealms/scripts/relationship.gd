@@ -15,9 +15,9 @@ enum RelationshipLevel {
 	ENEMY, ## Depending on combat settings, NPC may engage this level and below on sight.
 	FOE, ## Dislike eachother a lot.
 	RIVAL, ## Homestuck tells me these also smooch.
-	ACQUAINTANCE, ## No real relationship.
+	ACQUAINTANCE, ## No real relationship to speak of.
 	FRIEND, ## Friendly.
 	BFF, ## Closer friend.
 	ALLY, ## Depending on NPC behavior settings, may assist this level and above in combat.
-	LOVER, ## smooch smooch smooch
+	LOVER, ## smouch
 }

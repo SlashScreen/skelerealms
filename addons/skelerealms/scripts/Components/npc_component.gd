@@ -1,12 +1,13 @@
 class_name NPCComponent 
 extends EntityComponent
-## The brain for an NPC.
+## The brain for an NPC. Handles AI behavior, scheduling, combat, dialogue interactions.
 
-
+#* Export
 ## Base data for this NPC.
 @export var data: NPCData
-
+#* Public.
 var player_opinion:int
+#* Properties
 var in_combat:bool:
 	get:
 		return in_combat
@@ -25,20 +26,35 @@ var _current_target_point:NavPoint: # TODO: make setting this update the nav age
 	get:
 		return _current_target_point
 var visibility_threshold:float = 0.3
+#* Private
 ## Stores data of interest for GOAP to access.
 var goap_memory:Dictionary = {}
+## Navigator.
 var _nav_component:NavigatorComponent
+## Puppet manager component.
 var _puppet_component:PuppetSpawnerComponent
+## Interactive component.
 var _interactive_component:InteractiveComponent
+## Behavior planner.
 var _goap_component:GOAPComponent
+## The schedule event the NPC is following, if applicable.
 var _current_schedule_event:ScheduleEvent
+## Scheduler node.
 var _schedule:Schedule
+## Simulation level of the npc.
 var _sim_level:SimulationLevel = SimulationLevel.FULL
+## Indexes of the doors in the current path. THis is important to keeo track of due to the nature of doors going between worlds.
 var _doors_in_path:Array[int] = []
+## How close to a path marker the NPC must be to have reached it.
 var _path_follow_end_distance:float = 1
+## Off-world navigation walk speed.
 var _walk_speed:float = 1
+## Puppet root node.
 var _puppet:NPCPuppet
+## References to FSMs keeping track of entites it has seen. Pattern is refID:String : machine:[PerceptionFSM_Machine].
 var _perception_memory:Dictionary = {}
+## Target entity during combat.
+var _combat_target:String
 
 
 signal entered_combat
@@ -49,8 +65,9 @@ signal chitchat_started(dialogue_node:String)
 signal destination_reached
 signal dialogue_with_npc_started(dialogue_node:String)
 signal schedule_updated(ev:ScheduleEvent)
-signal start_dialogue
-signal warning
+signal start_dialogue(dialogue_node:String)
+signal warning(ref_id:String)
+signal flee(ref_di:String)
 
 
 #* ### OVERRIDES
@@ -116,6 +133,12 @@ func interact(refID:String):
 	pass
 
 
+## Ask this NPC to interact with something.
+func interact_with(refID:String):
+	goap_memory["interact_target"] = refID
+	# TODO: Add goal
+
+
 #* ### PATHFINDING
 
 
@@ -149,7 +172,7 @@ func _next_point() -> void:
 			# skip all until door
 			# TODO: Interact with door?
 			for i in range(next_door): # this will make the target point the door
-				_current_target_point = _pop_path() # FIXME: WILL CAUSE RECALCULATION A LOT
+				_current_target_point = _pop_path() 
 			return
 	else: # if we dont have doors (we can assume that the destination is in same world
 		if _path.back().position.distance_to(parent_entity.position) < ProjectSettings.get_setting("skelerealms/actor_fade_distance"): 
@@ -214,45 +237,62 @@ func handle_perception_transition(id:String, transition:String) -> void:
 	# TODO: determine threat level and response
 	match transition:
 		"AwareInvisible":
+			# if threat, seek last known position
 			return
 		"AwareVisible":
+			## if threat, wark, fight
 			return
 		"Lost":
+			# may be useless
 			return
 		"Unaware":
+			# if threat, do "huh?" behavior
 			return
 
 
-## Callback for when something leaves perception
+# TODO: Special behavior for going through doors, since the "last seen position" would be at the door.
+# Perhaps if on perception end and in different world, force it through?
+#! What happpens when the puppet is despawned?
+## Callback for when something leaves sightline.
 func on_percieve_end(info:EyesPerception.PerceptionData) -> void:
 	if _perception_memory.has(info.object):
 		# if we have it, set perception to 0 (hidden)
 		_perception_memory[info.object].visibility = 0
 
 
-# TODO:
+## Callback for when this npc hears a weird noise.
 func on_hear_audio(emitter:AudioEventEmitter) -> void:
 	# determine importance of sound
+	# Figure out like, whether it's unexpected. If source of noise is a threat?
 	# Add point of interest to memory
 	# add task to investigate
-	# Figure out like, whether it's unexpected
 	pass
 
 
-# TODO:
-func determine_threat_level(what:String) -> void:
-	# use covens, relationships, etc to determine threat level of something
-	pass
+## Determines the threat level of an entity, from 0 being harmless to 100 being like, Ganondorf.
+func determine_threat_level(what:String) -> float:
+	# use covens, relationships, proximity, etc to determine threat level of something
+	var e:Entity = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
+	var proximity:float = e.position.distance_to(parent_entity.position) # Proximity to this NPC
+	return 0
 
 
-# TODO:
-func determine_threat_response() -> void:
+## Determines what this NPC will do in response to a threat. [br]
+## 0: Do nothing. [br]
+## 1: Flee. [br]
+## 2: Warn. [br]
+## 3: Attack. [br]
+func determine_threat_response(what:String, threat:float) -> int:
+	var e:Entity = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
+	if not e.get_component("NPCComponent"): # if it's not an NPC, it's harmless.
+		# TODO: make it not tied to NPCComponent?
+		return 0
 	# using threat level and the npc's combat information, determine what it should do and add goals to reflect
 	# (flee, fight, etc)
-	pass
+	return 0
 
 
-## Forget something from the perception memory.
+## Forget an entity from the perception memory.
 func perception_forget(who:String) -> void:
 	if not _perception_memory.has(who):
 		return
@@ -276,12 +316,15 @@ func get_remembered_items() -> Array[String]:
 
 
 # TODO:
+## Force this NPC to follow its schedule.
 func follow_schedule() -> void:
 	# Resolve schedule
 	# Go to the schedule point
-	pass
+	_calculate_new_schedule()
+	# TODO: Find position to go.
 
 
+## Get the current schedule for this NPC.
 func _calculate_new_schedule() -> void:
 	# Don't do this if we are not being simulated.
 	if _sim_level == SimulationLevel.NONE:
