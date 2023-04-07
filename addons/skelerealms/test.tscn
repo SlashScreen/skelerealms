@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Components/puppet_spawner_component.gd" id="5_g8w2r"]
 [ext_resource type="PackedScene" uid="uid://c1bwgrswdshee" path="res://player.tscn" id="6_5ybbi"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/world_loader.gd" id="7_fy5hd"]
-[ext_resource type="PackedScene" path="res://Worlds/test world 1.tscn" id="8_7k0r4"]
+[ext_resource type="PackedScene" uid="uid://d3xvrivp3iwfb" path="res://Worlds/test world 1.tscn" id="8_7k0r4"]
 
 [node name="Game" type="Node3D"]
 
