@@ -17,6 +17,8 @@ class_name NPCData
 @export var unique:bool = true
 ## Whether this NPC affects the stealth meter when it sees you.
 @export var affects_stealth_meter:bool = true
+@export var start_dialogue_node:String
+@export var interactive:bool = true
 @export var relationships:Array[Relationship]
 @export_category("Combat info")
 ## Will this actor initiate combat? [br]

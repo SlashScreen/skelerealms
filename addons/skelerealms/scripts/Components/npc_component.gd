@@ -7,6 +7,9 @@ extends EntityComponent
 @export var data: NPCData
 #* Public.
 var player_opinion:int
+var visibility_threshold:float = 0.3
+## Stores data of interest for GOAP to access.
+var goap_memory:Dictionary = {}
 #* Properties
 var in_combat:bool:
 	get:
@@ -17,7 +20,6 @@ var in_combat:bool:
 		elif not val and in_combat:
 			left_combat.emit()
 		in_combat = val
-var _path:Array[NavPoint]
 var _current_target_point:NavPoint: # TODO: make setting this update the nav agent
 	set(val):
 		_current_target_point = val
@@ -25,10 +27,17 @@ var _current_target_point:NavPoint: # TODO: make setting this update the nav age
 			_puppet.set_movement_target(val.position)
 	get:
 		return _current_target_point
-var visibility_threshold:float = 0.3
+## Whether this character is in dialogue or a cutscene. Will stop/continue the puppet's pathfinding if applicable.
+var _busy:bool:
+		get:
+			return _busy
+		set(val):
+			if val and _puppet:
+				_puppet.stop_nav()
+			elif not val and _puppet:
+				_puppet.continue_nav()
+			_busy = val
 #* Private
-## Stores data of interest for GOAP to access.
-var goap_memory:Dictionary = {}
 ## Navigator.
 var _nav_component:NavigatorComponent
 ## Puppet manager component.
@@ -55,6 +64,8 @@ var _puppet:NPCPuppet
 var _perception_memory:Dictionary = {}
 ## Target entity during combat.
 var _combat_target:String
+## Navigation path.
+var _path:Array[NavPoint]
 
 
 signal entered_combat
@@ -99,6 +110,10 @@ func _ready():
 	# sync nav agent
 	_puppet_component.spawned_puppet.connect(func(x:Node): _puppet = x as NPCPuppet )
 	_puppet_component.despawned_puppet.connect(func(): _puppet = null )
+	
+	# misc setup
+
+	_interactive_component.interactible = data.interactive # TODO: Or instance override
 
 
 func _on_enter_scene():
@@ -127,23 +142,33 @@ func _process(delta):
 #* ### DIALOGUE AND INTERACTIVITY
 
 
-# TODO:
 ## Interact with this npc. See [InteractiveComponent].
-func interact(refID:String):
-	pass
+func interact(refID:String) -> void:
+	# TODO: Response based on relationship?
+	start_dialogue.emit(data.start_dialogue_node)
+	_busy = true
+
+
+## Make this NPC Leave dialogue.
+func leave_dialogue() -> void:
+	_busy = false
 
 
 ## Ask this NPC to interact with something.
-func interact_with(refID:String):
+func interact_with(refID:String) -> void:
 	goap_memory["interact_target"] = refID
-	# TODO: Add goal
+	add_objective ( # Add goal to interact with an object.
+		{"interacted" : true},
+		true,
+		2
+	)
 
 
 #* ### PATHFINDING
 
 
 ## Calculate this NPC's path to a [NavPoint].
-func set_destination(dest:NavPoint):
+func set_destination(dest:NavPoint) -> void:
 	# Recalculate path
 	_path = _nav_component.calculate_path_to(dest)
 	# detect any doors
