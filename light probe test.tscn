@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://ck7cx3aut0p4y"]
+[gd_scene load_steps=7 format=3 uid="uid://c8wnysukkbhkm"]
 
 [ext_resource type="ArrayMesh" uid="uid://blag3iii8af8j" path="res://octa.obj" id="1_8asy3"]
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/AI/light_estimation_provider.gd" id="1_w2h3y"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/light_estimation_provider.gd" id="1_drvsw"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fikaa"]
 
@@ -27,7 +27,7 @@ attributes = SubResource("CameraAttributesPractical_51c16")
 current = true
 
 [node name="Probe" type="Node3D" parent="."]
-script = ExtResource("1_w2h3y")
+script = ExtResource("1_drvsw")
 
 [node name="SViewportTop" type="SubViewport" parent="Probe"]
 debug_draw = 2

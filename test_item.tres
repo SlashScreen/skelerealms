@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://c7enut17350pt"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
 
 [ext_resource type="PackedScene" uid="uid://cscgqaqhm5xiy" path="res://test_item_prefab.tscn" id="1_p0fsu"]
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Data/item_data.gd" id="2_nsvnv"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/item_data.gd" id="2_nsvnv"]
 
 [resource]
 script = ExtResource("2_nsvnv")

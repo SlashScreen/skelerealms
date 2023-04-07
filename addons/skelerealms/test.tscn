@@ -1,0 +1,39 @@
+[gd_scene load_steps=9 format=3 uid="uid://c3awm22sfax5k"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/entity_manager.gd" id="1_dunvc"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/entity.gd" id="2_s5qqa"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Components/player_component.gd" id="3_73cda"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Components/teleport_component.gd" id="4_f65ms"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Components/puppet_spawner_component.gd" id="5_g8w2r"]
+[ext_resource type="PackedScene" uid="uid://c1bwgrswdshee" path="res://player.tscn" id="6_5ybbi"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/world_loader.gd" id="7_fy5hd"]
+[ext_resource type="PackedScene" path="res://Worlds/test world 1.tscn" id="8_7k0r4"]
+
+[node name="Game" type="Node3D"]
+
+[node name="EntityManager" type="Node" parent="."]
+unique_name_in_owner = true
+process_priority = -1
+script = ExtResource("1_dunvc")
+
+[node name="Player" type="Node" parent="EntityManager" groups=["savegame_entity"]]
+script = ExtResource("2_s5qqa")
+world = "test world 1"
+
+[node name="PlayerComponent" type="Node" parent="EntityManager/Player"]
+script = ExtResource("3_73cda")
+
+[node name="TeleportComponent" type="Node" parent="EntityManager/Player"]
+script = ExtResource("4_f65ms")
+
+[node name="PuppetSpawnerComponent" type="Node" parent="EntityManager/Player"]
+script = ExtResource("5_g8w2r")
+
+[node name="Player" parent="EntityManager/Player/PuppetSpawnerComponent" instance=ExtResource("6_5ybbi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.42557)
+
+[node name="WorldLoader" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("7_fy5hd")
+
+[node name="test world 1" parent="WorldLoader" instance=ExtResource("8_7k0r4")]

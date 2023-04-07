@@ -1,0 +1,17 @@
+class_name EquipmentSlots
+
+enum Slots {
+	HEAD,
+	NECK,
+	CHEST_OUTER,
+	CHEST_UNDER,
+	PANTS,
+	HAND_LEFT,
+	HAND_RIGHT,
+	SKIRT,
+	JACKET,
+	SOCK_LEFT,
+	SOCK_RIGHT,
+	SHOE_LEFT,
+	SHOE_RIGHT
+}

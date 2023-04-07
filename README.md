@@ -1,6 +1,6 @@
-# Delirious Biznasty - An open world RPG framework for Godot 4
+# Skelerealms - An open world RPG framework for Godot 4
 
-Delirious Biznasty is a work-in-progress framework for creating open world RPGs, like The Elder Scrolls series.  
+Skelerealms is a work-in-progress framework for creating open world RPGs, like The Elder Scrolls series.  
 It is made to be modular and extensible, and easy to hook into for actual gameplay.  
 It is still under construction, and should not yet be used.  
 

@@ -1,5 +1,5 @@
-[gd_scene load_steps=2 format=3 uid="uid://h6i80uwc361m"]
+[gd_scene load_steps=2 format=3]
 
-[ext_resource type="PackedScene" uid="uid://dapr2c05v52b5" path="res://addons/delirious_biznasty/npc_template.tscn" id="1_cgo6v"]
+[ext_resource type="PackedScene" path="res://addons/skelerealms/npc_template.tscn" id="1_cgo6v"]
 
 [node name="CharacterBody3D" instance=ExtResource("1_cgo6v")]

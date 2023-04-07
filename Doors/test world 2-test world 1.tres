@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="DoorInstance" load_steps=2 format=3 uid="uid://cocuub3m2shhl"]
-
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/InstanceData/door_instance.gd" id="1_aquth"]
-
-[resource]
-script = ExtResource("1_aquth")
-ref_id = "test world 2-test world 1"
-world = "test world 2"
-position = Vector3(0, 0, 0)

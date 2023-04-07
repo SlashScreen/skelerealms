@@ -10,35 +10,17 @@ config_version=5
 
 [application]
 
-config/name="DBiznasty"
-run/main_scene="res://addons/delirious_biznasty/test.tscn"
-config/features=PackedStringArray("4.0", "C#", "Forward Plus")
+config/name="Skelerealms"
+run/main_scene="res://addons/skelerealms/test.tscn"
+config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-BizGlobal="*res://addons/delirious_biznasty/scripts/biz_global.gd"
-SaveSystem="*res://addons/delirious_biznasty/scripts/save_system.gd"
-CovenSystem="*res://addons/delirious_biznasty/scripts/coven_system.gd"
-GameInfo="*res://addons/delirious_biznasty/scripts/game_info.gd"
-
-[biznasty]
-
-actor_fade_distance=100.0
-seconds_per_minute=2.0
-minutes_per_hour=31.0
-hours_per_day=15.0
-quests_directory="res://Quests"
-granular_navigation_sim_distance=1000.0
-worlds_path="res://Worlds"
-entities_path="res://Entities"
-savegame_indents=true
-entity_cleanup_timer=300.0
-days_per_week=0
-weeks_in_month=0
-months_in_year=0
-covens_path="res://Covens"
-doors_path="res://Doors"
+SaveSystem="*res://addons/skelerealms/scripts/save_system.gd"
+CovenSystem="*res://addons/skelerealms/scripts/coven_system.gd"
+GameInfo="*res://addons/skelerealms/scripts/game_info.gd"
+SkeleRealmsGlobal="*res://addons/skelerealms/scripts/sk_global.gd"
 
 [display]
 
@@ -50,7 +32,7 @@ project/assembly_name="DBiznasty"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/delirious_biznasty/plugin.cfg")
+enabled=PackedStringArray("res://addons/skelerealms/plugin.cfg")
 
 [input]
 
@@ -117,3 +99,21 @@ locale/translations=PackedStringArray("res://locales/ui.de.translation", "res://
 [player]
 
 look_sensitivity=0.01
+
+[skelerealms]
+
+actor_fade_distance=100.0
+seconds_per_minute=2.0
+minutes_per_hour=31.0
+hours_per_day=15.0
+granular_navigation_sim_distance=1000.0
+savegame_indents=true
+entity_cleanup_timer=300.0
+days_per_week=0
+weeks_in_month=0
+months_in_year=0
+quests_directory="res://Quests"
+worlds_path="res://Worlds"
+entities_path="res://Entities"
+covens_path="res://Covens"
+doors_path="res://Doors"

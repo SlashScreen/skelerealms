@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="Timestamp" load_steps=2 format=3 uid="uid://qh2y1k813qb6"]
+[gd_resource type="Resource" script_class="Timestamp" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/timestamp.gd" id="1_dptjh"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/timestamp.gd" id="1_dptjh"]
 
 [resource]
 script = ExtResource("1_dptjh")

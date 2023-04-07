@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cwdbr6ehik2mf"]
+[gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/Quests/QuestNode/quest_node.gd" id="1_pjg8k"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Quests/QuestNode/quest_node.gd" id="1_pjg8k"]
 
 [node name="fgjhk" type="Node"]
 script = ExtResource("1_pjg8k")

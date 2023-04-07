@@ -1,0 +1,123 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Quests/Editor/editor_quest_step.gd" id="1_kwd5h"]
+[ext_resource type="PackedScene" path="res://addons/skelerealms/scripts/Quests/Editor/goal_prefab.tscn" id="2_cm17v"]
+
+[node name="step" type="GraphNode"]
+process_mode = 3
+offset_right = 268.0
+offset_bottom = 324.0
+mouse_filter = 1
+position_offset = Vector2(189, 207)
+slot/0/left_enabled = false
+slot/0/left_type = 1
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 1
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = false
+slot/1/left_type = 1
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 1
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+slot/2/left_enabled = false
+slot/2/left_type = 1
+slot/2/left_color = Color(1, 1, 1, 1)
+slot/2/left_icon = null
+slot/2/right_enabled = false
+slot/2/right_type = 1
+slot/2/right_color = Color(1, 1, 1, 1)
+slot/2/right_icon = null
+slot/2/draw_stylebox = true
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color(1, 1, 1, 1)
+slot/3/left_icon = null
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color(1, 1, 1, 1)
+slot/3/right_icon = null
+slot/3/draw_stylebox = true
+slot/4/left_enabled = true
+slot/4/left_type = 1
+slot/4/left_color = Color(1, 1, 1, 1)
+slot/4/left_icon = null
+slot/4/right_enabled = false
+slot/4/right_type = 1
+slot/4/right_color = Color(1, 1, 1, 1)
+slot/4/right_icon = null
+slot/4/draw_stylebox = true
+slot/5/left_enabled = false
+slot/5/left_type = 0
+slot/5/left_color = Color(1, 1, 1, 1)
+slot/5/left_icon = null
+slot/5/right_enabled = false
+slot/5/right_type = 0
+slot/5/right_color = Color(1, 1, 1, 1)
+slot/5/right_icon = null
+slot/5/draw_stylebox = true
+slot/6/left_enabled = false
+slot/6/left_type = 0
+slot/6/left_color = Color(1, 1, 1, 1)
+slot/6/left_icon = null
+slot/6/right_enabled = false
+slot/6/right_type = 0
+slot/6/right_color = Color(1, 1, 1, 1)
+slot/6/right_icon = null
+slot/6/draw_stylebox = true
+script = ExtResource("1_kwd5h")
+
+[node name="DeleteNode" type="Button" parent="."]
+layout_mode = 2
+text = "Delete Node"
+
+[node name="StepName" type="LineEdit" parent="."]
+layout_mode = 2
+placeholder_text = "Step Name"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Step type:"
+
+[node name="StepType" type="OptionButton" parent="."]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "All"
+popup/item_0/id = 0
+popup/item_1/text = "Any"
+popup/item_1/id = 1
+popup/item_2/text = "Branch"
+popup/item_2/id = 2
+
+[node name="IsExitButton" type="CheckButton" parent="."]
+layout_mode = 2
+text = "Exit node"
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+vertical_scroll_mode = 2
+
+[node name="GoalsContainer" type="VBoxContainer" parent="Scroll"]
+layout_mode = 2
+
+[node name="Goal" parent="Scroll/GoalsContainer" instance=ExtResource("2_cm17v")]
+layout_mode = 2
+
+[node name="Goal2" parent="Scroll/GoalsContainer" instance=ExtResource("2_cm17v")]
+layout_mode = 2
+
+[connection signal="button_up" from="DeleteNode" to="." method="_on_delete_node_button_up"]
+[connection signal="toggled" from="IsExitButton" to="." method="_update_is_exit"]

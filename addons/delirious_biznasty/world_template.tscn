@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://b04h6k15qdccd"]
-
-[node name="world_template" type="Node3D"]
-
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-
-[node name="VoxelGI" type="VoxelGI" parent="."]

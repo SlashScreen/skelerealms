@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="ItemInstance" load_steps=3 format=3 uid="uid://b7lepnsheigmg"]
+[gd_resource type="Resource" script_class="ItemInstance" load_steps=3 format=3]
 
 [ext_resource type="Resource" uid="uid://c7enut17350pt" path="res://test_item.tres" id="1_y65su"]
-[ext_resource type="Script" path="res://addons/delirious_biznasty/scripts/InstanceData/item_instance.gd" id="2_x5fyv"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/InstanceData/item_instance.gd" id="2_x5fyv"]
 
 [resource]
 script = ExtResource("2_x5fyv")
