@@ -13,6 +13,10 @@ func _parse_begin(obj:Object):
 	go_to_button.text = "Jump to door location"
 	go_to_button.pressed.connect(func(): _jump_to_door_location(obj as Door))
 	add_custom_control(go_to_button)
+	var set_position_button:Button = Button.new()
+	set_position_button.text = "Set position data"
+	set_position_button.pressed.connect(func(): _set_position(obj as Door))
+	add_custom_control(set_position_button)
 
 
 func _jump_to_door_location(obj:Door):
@@ -23,6 +27,11 @@ func _jump_to_door_location(obj:Door):
 	print("TODO: Open scene without it crashing.")
 	#p.get_editor_interface().open_scene_from_path(res)
 	#p.get_editor_interface().edit_resource(load(res))
+
+
+func _set_position(obj:Door) -> void:
+	obj.instance.position = obj.position
+	obj.instance.world = obj.owner.name
 
 
 func _find_world(path:String, target:String) -> String:

@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_l7jft")
 ref_id = "test interior-test world 1"
-world = "test interior"
-position = Vector3(0, 0, 0)
+world = &"test interior"
+position = Vector3(6.41838, 0.0562903, -3.57941)
