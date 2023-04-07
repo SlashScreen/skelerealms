@@ -8,5 +8,5 @@ script = ExtResource("2_nsvnv")
 prefab = ExtResource("1_p0fsu")
 weight = 0.0
 worth = 0
-components = Array[Resource("res://addons/delirious_biznasty/scripts/Data/ItemDataComponents/item_data_component.gd")]([])
+components = Array[Resource("res://addons/skelerealms/scripts/Data/ItemDataComponents/item_data_component.gd")]([])
 id = "test_item"

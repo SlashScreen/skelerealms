@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_7n5op")
 prefab = ExtResource("1_f44c6")
-schedule = Array[Resource("res://addons/delirious_biznasty/scripts/Schedules/schedule_event.gd")]([])
+schedule = Array[Resource("res://addons/skelerealms/scripts/Schedules/schedule_event.gd")]([])
 essential = true
 ghost = false
 invulnerable = false
