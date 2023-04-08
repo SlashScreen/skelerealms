@@ -6,16 +6,16 @@ extends Node
 @export var world:String
 
 
-func add_point(pos:Vector3):
+func add_point(pos:Vector3) -> NavNode:
 	# if we have no childrenm, add one
 	if get_child_count() == 0:
 		var new_n = NavNode.new()
 		new_n.position = pos # set position
 		new_n.dimension = 0
 		add_child(new_n)
-		return
+		return new_n
 	#else, tell that child to add one
-	(get_child(0) as NavNode).add_nav_node(pos)
+	return (get_child(0) as NavNode).add_nav_node(pos)
 
 
 ## Gets closest point in world to a position.

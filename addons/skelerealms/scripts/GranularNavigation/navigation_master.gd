@@ -199,7 +199,7 @@ func construct_tree(points:Array[NavPoint]):
 
 
 ## Add a point to the tree
-func add_point(world:String, pos:Vector3):
+func add_point(world:String, pos:Vector3) -> NavNode:
 	var world_node: NavWorld = find_child(world)
 	# Add world if it doesnt already exist
 	if not world_node:
@@ -207,4 +207,29 @@ func add_point(world:String, pos:Vector3):
 		world_node.name = world
 		add_child(world_node)
 	
-	world_node.add_point(pos)
+	return world_node.add_point(pos)
+
+
+# TODO: Allow for cross-world conenctions
+## Build a series of KD Trees from [NavNetwork]s. Dictionary assumes the key is the world name, and the value is the network.
+func _load_from_networks(data:Dictionary):
+	# data = world : array[points]
+
+	var add_net_point:Callable # define as null out here so we can recurse it
+	var already_added:Array[NavNode] = [] # keep track of nodes we've already added so we don't keep adding the same nodes over and over again
+	# thank god we use RC instead of GC
+
+	add_net_point = func(world:String, pt:NavNetwork.NetPoint) -> NavNode:
+		var nav_node = add_point(world, pt.point) # add this point to the graph
+		already_added.push_back(nav_node) # push it here because as we recurse through the graph below it will ping pong back and forth
+		for c in pt.connections:
+			if already_added.has(c): # skip if already added node
+				continue
+			var conn_node = add_net_point.call(world, c) # recurse - add connecting node, which will add its connecting nodes, and so on
+			nav_node.connect_nodes(conn_node, pt.connections[c]) # Add connection
+		return nav_node # return this to complete the recursiveness
+
+	for world in data:
+		add_net_point.call(world, data[0]) # only call the first node for each, since it will automatically add all the others
+
+

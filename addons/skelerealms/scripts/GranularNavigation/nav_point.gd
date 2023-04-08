@@ -6,8 +6,7 @@ var position:Vector3
 var world:String
 
 
-static func build(w:String, pos:Vector3) -> NavPoint:
+func _init(w:String, pos:Vector3) -> void:
 	var np = NavPoint
 	np.world = w
 	np.position = pos
-	return np

@@ -9,6 +9,8 @@ var snails: int
 
 signal added_to_inventory(id:String)
 signal removed_from_inventory(id:String)
+signal added_snails(amount:int)
+signal removed_snails(amount:int)
 
 
 func _init() -> void:
@@ -17,7 +19,7 @@ func _init() -> void:
 
 ## Add an item to the inventory.
 func add_to_inventory(id:String):
-	var e = (%EntityManager as EntityManager).get_entity(id)
+	var e = SkeleRealmsGlobal.entity_manager.get_entity(id)
 	if e.some():
 		var ic = (e.unwrap() as Entity).get_component("ItemComponent")
 		if ic.some():
@@ -37,12 +39,14 @@ func remove_from_inventory(id:String):
 
 ## Add an amount of snails to the inventory.
 func add_snails(amount:int):
+	added_snails.emit(amount)
 	snails += amount
 	_clamp_snails()
 
 
 ## Remove some snails from the inventory.
 func remove_snails(amount:int):
+	removed_snails.emit(amount)
 	snails -= amount
 	_clamp_snails()
 
