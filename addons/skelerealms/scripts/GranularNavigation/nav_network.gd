@@ -38,6 +38,5 @@ class NetPortal: # no earthly idea how im going to make this intuitive
 var _points:Array[NetPoint] = []
 
 
-# TODO: Allow for cross-world conenctions. Add portal object?
 func add_point(pt:Vector3) -> void:
 	_points.push_back(NetPoint.new(pt))

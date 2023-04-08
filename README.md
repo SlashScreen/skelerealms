@@ -50,7 +50,7 @@ Not started :hole:
 | Scene persistence | :evergreen_tree:
 | GOAP AI | :warning: |
 | Schedules | :warning: |
-| Outside of scene AI navigation | :construction: |
+| Outside of scene AI navigation | :warning: |
 | World loading | :evergreen_tree: |
 | Skills/Attributes | :pencil2: |
 | NPC Perception | :construction: |

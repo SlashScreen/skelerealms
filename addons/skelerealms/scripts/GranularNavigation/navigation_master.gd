@@ -210,7 +210,6 @@ func add_point(world:String, pos:Vector3) -> NavNode:
 	return world_node.add_point(pos)
 
 
-# TODO: Allow for cross-world conenctions
 ## Build a series of KD Trees from [NavNetwork]s. Dictionary assumes the key is the world name, and the value is the network.
 func _load_from_networks(data:Dictionary):
 	# data = world : array[points]
@@ -233,5 +232,3 @@ func _load_from_networks(data:Dictionary):
 
 	for world in data:
 		add_net_point.call(world, data[0]) # only call the first node for each, since it will automatically add all the others
-
-

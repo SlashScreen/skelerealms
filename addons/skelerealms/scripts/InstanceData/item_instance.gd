@@ -2,11 +2,12 @@ class_name ItemInstance
 extends InstanceData
 ## A single instance of an [ItemData] in the world.
 
+
 @export var item_data:ItemData
 @export var item_owner:String
 @export var contained_inventory:String
 @export var rotation:Quaternion
-# TODO: Set rotation, position, world
+
 
 func get_archetype_components() -> Array[EntityComponent]:
 	var components:Array[EntityComponent] = []
@@ -19,5 +20,7 @@ func get_archetype_components() -> Array[EntityComponent]:
 	components.append(item_component)
 	components.append(InteractiveComponent.new())
 	components.append(PuppetSpawnerComponent.new())
+	if not _try_override_script(item_data.custom_script) == null:
+		components.append(ScriptComponent.new(item_data.custom_script))
 	
 	return components

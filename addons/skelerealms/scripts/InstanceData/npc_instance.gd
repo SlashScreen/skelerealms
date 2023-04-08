@@ -20,5 +20,7 @@ func get_archetype_components() -> Array[EntityComponent]:
 	components.append(CovensComponent.new())
 	components.append(DamageableComponent.new())
 	components.append(NavigatorComponent.new())
+	if not _try_override_script(npc_data.custom_script) == null:
+		components.append(ScriptComponent.new(npc_data.custom_script))
 	
 	return components

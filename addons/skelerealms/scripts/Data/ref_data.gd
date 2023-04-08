@@ -4,6 +4,8 @@ extends Resource
 
 ## ID of this blob.
 @export var id: String
+## Custom script to be applied to this entity, if any. See [ScriptComponent].
+@export var custom_script:Script
 
 
 func build_new_instance() -> InstanceData:
