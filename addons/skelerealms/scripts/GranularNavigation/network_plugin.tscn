@@ -36,6 +36,9 @@ layout_mode = 2
 text = "Merge"
 flat = true
 
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+
 [connection signal="toggled" from="HBoxContainer/Add" to="." method="_on_add_toggled"]
 [connection signal="toggled" from="HBoxContainer/Select" to="." method="_on_select_toggled"]
 [connection signal="pressed" from="HBoxContainer/Merge" to="." method="_on_merge_pressed"]

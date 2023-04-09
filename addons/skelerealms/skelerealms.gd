@@ -8,8 +8,8 @@ var dock:Control
 var item_gizmo_plugin = WorldItemGizmo.new()
 var npc_gizmo_plugin = WorldNPCGizmo.new()
 var door_jump_plugin = DoorJumpPlugin.new(self)
-var network_gizmo = NavNetworkGizmo.new()
-var network_menu_instance
+var network_gizmo = NavNetworkGizmo.new(self)
+var network_menu_instance:NavigationNetworkUtility
 
 
 func _enter_tree():
@@ -19,6 +19,7 @@ func _enter_tree():
 	# nav network
 	network_menu_instance = NetworkPanel.instantiate()
 	add_control_to_container(CONTAINER_SPATIAL_EDITOR_MENU, network_menu_instance)
+	get_editor_interface().get_selection().selection_changed.connect(_selection_changed.bind())
 
 	# gizmos
 	add_node_3d_gizmo_plugin(item_gizmo_plugin)
@@ -42,4 +43,19 @@ func _exit_tree():
 
 func _set_network_plugin_visible(state:bool):
 	if network_menu_instance:
-		network_menu_instance.visibility = state
+		if state:
+			network_menu_instance.show()
+		else:
+			network_menu_instance.hide()
+
+
+func _selection_changed() -> void:
+	var selection = get_editor_interface().get_selection().get_selected_nodes()
+	if selection.is_empty():
+		_set_network_plugin_visible(false)
+		return 
+	
+	if selection[0] is NavigationNetwork3D:
+		_set_network_plugin_visible(true)
+	else:
+		_set_network_plugin_visible(false)

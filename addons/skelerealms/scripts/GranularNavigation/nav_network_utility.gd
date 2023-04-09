@@ -4,6 +4,11 @@ extends Control
 
 
 var mode:ToolMode = ToolMode.NONE
+var target:NavigationNetwork3D
+
+
+func set_target(t:NavigationNetwork3D) -> void:
+	target = t
 
 
 func _on_merge_pressed() -> void:

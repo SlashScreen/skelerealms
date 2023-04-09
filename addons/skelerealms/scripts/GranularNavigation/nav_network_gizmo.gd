@@ -1,14 +1,21 @@
 class_name NavNetworkGizmo
 extends EditorNode3DGizmoPlugin
 
+
+# TODO: Allow undo redo
+# TODO: Add portals
+
 const RAY_LENGTH = 500
 
 var associations:Array[NetPoint] = []
+var _plugin
 
 
-func _init() -> void:
+
+func _init(plugin:EditorPlugin) -> void:
 	create_handle_material("handles")
 	create_material("gizmo_mat", Color(0, 0, 1, 1))
+	_plugin = plugin
 
 
 func _has_gizmo(for_node_3d: Node3D) -> bool:
@@ -62,7 +69,7 @@ func _set_handle(gizmo: EditorNode3DGizmo, handle_id: int, secondary: bool, came
 	#print(hits)
 	if hits:
 		pt.point = hits["position"] as Vector3
-		_redraw(gizmo)
+		_redraw(gizmo) # TODO: Don't update the whole thing (?)
 
 
 func _get_gizmo_name() -> String:
