@@ -14,8 +14,8 @@ script = ExtResource("1_66fdk")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 159.0
+offset_bottom = 31.0
 
 [node name="Add" type="Button" parent="HBoxContainer"]
 layout_mode = 2

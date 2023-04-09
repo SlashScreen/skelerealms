@@ -219,14 +219,14 @@ func _load_from_networks(data:Dictionary):
 	# dictionary because I think an array lookup is O(n) and this is roughly O(1) 
 	# thank god we use RC instead of GC
 
-	add_net_point = func(world:String, pt:NavNetwork.NetPoint) -> NavNode:
+	add_net_point = func(world:String, pt:NetPoint) -> NavNode:
 		var nav_node = add_point(world, pt.point) # add this point to the graph
 		already_added[nav_node] = true # push it here because as we recurse through the graph below it will ping pong back and forth
 		for c in pt.connections:
 			if already_added.has(c): # skip if already added node
 				continue
 			#! May have problems connecting to other meshes depending on how local resources work 
-			var conn_node = add_net_point.call((c as NavNetwork.NetPortal).other_side.world if c is NavNetwork.NetPortal else world, c) # recurse - add connecting node, which will add its connecting nodes, and so on. Will auto bridge portals. 
+			var conn_node = add_net_point.call((c as NetPortal).other_side.world if c is NetPortal else world, c) # recurse - add connecting node, which will add its connecting nodes, and so on. Will auto bridge portals. 
 			nav_node.connect_nodes(conn_node, pt.connections[c]) # Add connection
 		return nav_node # return this to complete the recursiveness
 
