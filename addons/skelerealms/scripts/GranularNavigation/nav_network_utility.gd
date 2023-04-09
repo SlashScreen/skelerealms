@@ -24,10 +24,12 @@ func reset() -> void:
 	mode = ToolMode.NONE
 	
 
-func _on_merge_pressed() -> void:
-	pass # Replace with function body.
+func _on_link_pressed() -> void:
+	if plugin.network_gizmo.penultimate_modified_node:
+		print(plugin.network_gizmo.last_modified_node.has_method("connect_point"))
+		(plugin.network_gizmo.last_modified_node as NetPoint).connect_point(plugin.network_gizmo.penultimate_modified_node, 1)
 
-
+	
 func _on_select_toggled(button_pressed:bool) -> void:
 	if button_pressed:
 		mode = ToolMode.SELECT
@@ -41,8 +43,7 @@ func _on_add_toggled(button_pressed:bool) -> void:
 func get_input(camera: Camera3D, event: InputEvent) -> void:
 	if not ((event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT && (event as InputEventMouseButton).pressed):
 		return
-	
-	print("Got input!")
+		
 	var screen_pos:Vector2 = (event as InputEventMouseButton).position
 	# Get raycast point
 	var from = camera.project_ray_origin(screen_pos)
@@ -61,7 +62,6 @@ func get_input(camera: Camera3D, event: InputEvent) -> void:
 		plugin.network_gizmo.last_modified_node = new_point
 		plugin.network_gizmo._redraw(target.get_gizmos().filter(func(x:Node3DGizmo): return x.get_plugin() is NavNetworkGizmo)[0]) # IDK if this will work lol
 	
-
 
 enum ToolMode {
 	NONE,

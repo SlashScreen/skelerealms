@@ -31,9 +31,9 @@ button_group = ExtResource("2_wsyj7")
 text = "Select"
 flat = true
 
-[node name="Merge" type="Button" parent="HBoxContainer"]
+[node name="Link" type="Button" parent="HBoxContainer"]
 layout_mode = 2
-text = "Merge"
+text = "Link"
 flat = true
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
@@ -41,4 +41,4 @@ layout_mode = 2
 
 [connection signal="toggled" from="HBoxContainer/Add" to="." method="_on_add_toggled"]
 [connection signal="toggled" from="HBoxContainer/Select" to="." method="_on_select_toggled"]
-[connection signal="pressed" from="HBoxContainer/Merge" to="." method="_on_merge_pressed"]
+[connection signal="pressed" from="HBoxContainer/Link" to="." method="_on_link_pressed"]

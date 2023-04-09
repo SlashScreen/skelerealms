@@ -9,13 +9,23 @@ const RAY_LENGTH = 500
 
 var associations:Array[NetPoint] = []
 var _plugin
-var last_modified_node:NetPoint
+var last_modified_node:NetPoint:
+	get:
+		return last_modified_node
+	set(val):
+		if last_modified_node == val:
+			return
+		print("setting last and penultimate")
+		penultimate_modified_node = last_modified_node # we push any value here to penultimate modified node, so that we have a short chain
+		last_modified_node = val
+var penultimate_modified_node:NetPoint
 
 
 func _init(plugin:EditorPlugin) -> void:
 	create_handle_material("handles")
 	create_material("gizmo_mat", Color(0, 0, 1, 1))
 	create_material("selected_mat", Color(1, 0, 0, 1))
+	create_material("penultimate_mat", Color(1, 1, 0, 1))
 	_plugin = plugin
 
 
@@ -46,12 +56,22 @@ func _redraw(gizmo: EditorNode3DGizmo) -> void:
 		t.origin = pt.point
 		t.basis = t.basis.scaled(Vector3(0.3, 0.3, 0.3))
 		var mesh = SphereMesh.new()
-		gizmo.add_mesh(mesh, get_material("selected_mat", gizmo) if last_modified_node == pt else get_material("gizmo_mat", gizmo), t)
+		# determine material for mesh
+		var mat
+		if last_modified_node == pt:
+			mat = get_material("selected_mat", gizmo)
+		elif penultimate_modified_node == pt:
+			mat = get_material("penultimate_mat", gizmo)
+		else:
+			mat = get_material("gizmo_mat", gizmo)
+		
+		gizmo.add_mesh(mesh, mat, t)
 		gizmo.add_collision_triangles(mesh)
 		# draw lines between all connections
 		associations[i] = pt
 		handle_idx.append(i)
 		# TODO: Recurse
+		# TODO: Faster if we aggregate all lines. I think.
 		for c in pt.connections:
 			var pts = PackedVector3Array()
 			pts.append(pt.point)
