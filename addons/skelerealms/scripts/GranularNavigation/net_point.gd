@@ -9,8 +9,9 @@ extends Resource
 
 func connect_point(other:NetPoint, cost:float = 1) -> void:
 	connections[other] = cost
-	other.connections[self] = cost
-	
+	if not connections.has(other):
+		other.connect_point(self, cost)
+
 
 func _init(pt:Vector3) -> void:
 	point = pt

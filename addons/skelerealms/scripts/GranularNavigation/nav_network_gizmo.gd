@@ -9,12 +9,13 @@ const RAY_LENGTH = 500
 
 var associations:Array[NetPoint] = []
 var _plugin
-
+var last_modified_node:NetPoint
 
 
 func _init(plugin:EditorPlugin) -> void:
 	create_handle_material("handles")
 	create_material("gizmo_mat", Color(0, 0, 1, 1))
+	create_material("selected_mat", Color(1, 0, 0, 1))
 	_plugin = plugin
 
 
@@ -24,12 +25,16 @@ func _has_gizmo(for_node_3d: Node3D) -> bool:
 
 func _redraw(gizmo: EditorNode3DGizmo) -> void:
 	gizmo.clear()
+	
+
+	var net = gizmo.get_node_3d() as NavigationNetwork3D
+	if net.network._points.is_empty(): # Return early if no points
+		return
+	
 	associations.clear()
 
 	var handle_points = PackedVector3Array()
 	var i = 0
-
-	var net = gizmo.get_node_3d() as NavigationNetwork3D
 	associations.resize(net.network._points.size())
 	var handle_idx:Array = [] # styupid but it should work now
 
@@ -41,7 +46,7 @@ func _redraw(gizmo: EditorNode3DGizmo) -> void:
 		t.origin = pt.point
 		t.basis = t.basis.scaled(Vector3(0.3, 0.3, 0.3))
 		var mesh = SphereMesh.new()
-		gizmo.add_mesh(mesh, get_material("gizmo_mat", gizmo), t)
+		gizmo.add_mesh(mesh, get_material("selected_mat", gizmo) if last_modified_node == pt else get_material("gizmo_mat", gizmo), t)
 		gizmo.add_collision_triangles(mesh)
 		# draw lines between all connections
 		associations[i] = pt
@@ -69,6 +74,7 @@ func _set_handle(gizmo: EditorNode3DGizmo, handle_id: int, secondary: bool, came
 	#print(hits)
 	if hits:
 		pt.point = hits["position"] as Vector3
+		last_modified_node = pt
 		_redraw(gizmo) # TODO: Don't update the whole thing (?)
 
 

@@ -3,6 +3,8 @@ class_name NavigationNetworkUtility
 extends Control
 
 
+const RAY_LENGTH = 500
+
 var mode:ToolMode = ToolMode.NONE
 var target:NavigationNetwork3D
 var plugin:EditorPlugin
@@ -36,13 +38,29 @@ func _on_add_toggled(button_pressed:bool) -> void:
 		mode = ToolMode.ADD
 
 
-func get_input(viewport_camera: Camera3D, event: InputEvent) -> void:
+func get_input(camera: Camera3D, event: InputEvent) -> void:
+	if not ((event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT && (event as InputEventMouseButton).pressed):
+		return
+	
 	print("Got input!")
-	#TODO: Add new nodes. im too tired to do this today
+	var screen_pos:Vector2 = (event as InputEventMouseButton).position
 	# Get raycast point
+	var from = camera.project_ray_origin(screen_pos)
+	var to = from + (camera.project_ray_normal(screen_pos) * RAY_LENGTH)
+	var ray = PhysicsRayQueryParameters3D.create(from, to)
+	await target.get_tree().physics_frame
+	var hits = target.get_world_3d().direct_space_state.intersect_ray(ray)
 	# Create new netpoint 
-	# connect to old one
-	# add to network
+	if hits:
+		var new_point:NetPoint = NetPoint.new(hits["position"])
+		if plugin.network_gizmo.last_modified_node:
+			# connect to old one
+			new_point.connect_point(plugin.network_gizmo.last_modified_node, 1) # TODO: Allow adjustable costs
+		# add to network
+		target.network._points.append(new_point)
+		plugin.network_gizmo.last_modified_node = new_point
+		plugin.network_gizmo._redraw(target.get_gizmos().filter(func(x:Node3DGizmo): return x.get_plugin() is NavNetworkGizmo)[0]) # IDK if this will work lol
+	
 
 
 enum ToolMode {
