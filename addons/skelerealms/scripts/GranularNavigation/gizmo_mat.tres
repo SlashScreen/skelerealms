@@ -1,6 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://drvl8bgcy80dk"]
-
-[resource]
-no_depth_test = true
-shading_mode = 0
-albedo_color = Color(0, 1, 0.815686, 0.396078)
