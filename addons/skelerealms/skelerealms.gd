@@ -18,6 +18,7 @@ func _enter_tree():
 	add_control_to_bottom_panel(dock, "Quest Editor")
 	# nav network
 	network_menu_instance = NetworkPanel.instantiate()
+	network_menu_instance.plugin = self
 	add_control_to_container(CONTAINER_SPATIAL_EDITOR_MENU, network_menu_instance)
 	get_editor_interface().get_selection().selection_changed.connect(_selection_changed.bind())
 
@@ -47,6 +48,7 @@ func _set_network_plugin_visible(state:bool):
 			network_menu_instance.show()
 		else:
 			network_menu_instance.hide()
+			network_menu_instance.reset()
 
 
 func _selection_changed() -> void:
@@ -57,5 +59,21 @@ func _selection_changed() -> void:
 	
 	if selection[0] is NavigationNetwork3D:
 		_set_network_plugin_visible(true)
+		network_menu_instance.set_target(selection[0])
 	else:
 		_set_network_plugin_visible(false)
+
+
+func _forward_3d_gui_input(viewport_camera: Camera3D, event: InputEvent) -> int:
+	if not network_menu_instance:
+		return EditorPlugin.AFTER_GUI_INPUT_PASS
+	if not event is InputEventMouseButton:
+		return EditorPlugin.AFTER_GUI_INPUT_PASS
+	if network_menu_instance.mode == NavigationNetworkUtility.ToolMode.ADD:
+		network_menu_instance.get_input(viewport_camera, event)
+		return EditorPlugin.AFTER_GUI_INPUT_STOP
+	return EditorPlugin.AFTER_GUI_INPUT_PASS
+
+
+func _handles(object: Object) -> bool:
+	return object is NavigationNetwork3D
