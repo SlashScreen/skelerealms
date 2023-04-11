@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://itfouqmshnrx"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/light_estimation_provider.gd" id="1_q2rje"]
+[ext_resource type="ArrayMesh" uid="uid://blag3iii8af8j" path="res://addons/skelerealms/octa.obj" id="2_8iqk2"]
+
+[node name="Probe" type="Node3D"]
+script = ExtResource("1_q2rje")
+
+[node name="SViewportTop" type="SubViewport" parent="."]
+debug_draw = 2
+gui_disable_input = true
+size = Vector2i(32, 32)
+render_target_update_mode = 4
+
+[node name="ProbeOct" type="MeshInstance3D" parent="SViewportTop"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+layers = 512
+cast_shadow = 0
+mesh = ExtResource("2_8iqk2")
+skeleton = NodePath("../../..")
+
+[node name="Camera3D" type="Camera3D" parent="SViewportTop"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.127643, 0)
+cull_mask = 1048064
+projection = 1
+current = true
+size = 0.1
+near = 0.001
+far = 1.0
+
+[node name="SViewportBottom" type="SubViewport" parent="."]
+debug_draw = 2
+gui_disable_input = true
+size = Vector2i(32, 32)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SViewportBottom"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.128, 0)
+cull_mask = 1048064
+projection = 1
+current = true
+size = 0.1
+near = 0.001
+far = 1.0
