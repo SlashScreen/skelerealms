@@ -26,10 +26,12 @@ func reset() -> void:
 
 func _on_link_pressed() -> void:
 	if plugin.network_gizmo.penultimate_modified_node:
-		print(plugin.network_gizmo.last_modified_node.has_method("connect_point"))
-		(plugin.network_gizmo.last_modified_node as NetPoint).connect_point(plugin.network_gizmo.penultimate_modified_node, 1)
+		if plugin.network_gizmo.last_modified_node.has_method("connect_point"):
+			plugin.network_gizmo.last_modified_node.connect_point(plugin.network_gizmo.penultimate_modified_node, 1.0)
+		else:
+			print("oops")
 
-	
+
 func _on_select_toggled(button_pressed:bool) -> void:
 	if button_pressed:
 		mode = ToolMode.SELECT
