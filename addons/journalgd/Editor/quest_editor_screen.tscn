@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://cpim3fonsxtr4"]
 
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/Quests/Editor/quest_editor.gd" id="1_1ktoh"]
-[ext_resource type="PackedScene" uid="uid://ders1d0sqofy2" path="res://addons/skelerealms/scripts/Quests/Editor/step_prefab.tscn" id="2_dvrvu"]
+[ext_resource type="Script" path="res://addons/journalgd/Editor/quest_editor.gd" id="1_1ktoh"]
+[ext_resource type="PackedScene" path="res://addons/journalgd/Editor/step_prefab.tscn" id="2_dvrvu"]
 
 [node name="quest_editor_screen" type="Control"]
 process_mode = 3

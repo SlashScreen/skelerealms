@@ -1,5 +1,6 @@
 @tool
 
+class_name QuestEditor
 extends GraphEdit
 
 @export var node_prefab:PackedScene

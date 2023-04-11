@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/Quests/Editor/editor_quest_step.gd" id="1_kwd5h"]
-[ext_resource type="PackedScene" path="res://addons/skelerealms/scripts/Quests/Editor/goal_prefab.tscn" id="2_cm17v"]
+[ext_resource type="Script" path="res://addons/journalgd/Editor/editor_quest_step.gd" id="1_kwd5h"]
+[ext_resource type="PackedScene" path="res://addons/journalgd/Editor/goal_prefab.tscn" id="2_cm17v"]
 
 [node name="step" type="GraphNode"]
 process_mode = 3

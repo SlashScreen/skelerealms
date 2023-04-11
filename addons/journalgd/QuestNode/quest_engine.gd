@@ -11,10 +11,6 @@ var active_quests: Array[String]
 var complete_quests:Array[String]
 
 
-func _ready():
-	SkeleRealmsGlobal.quest_engine = self
-
-
 ## Loads all quests from the [code]biznasty/quests_directory[/code] project setting, and then instantiates them as child [QuestObject]s.
 func load_quest_objects():
 	_load_dir(ProjectSettings.get_setting("skelerealms/quests_directory"))
