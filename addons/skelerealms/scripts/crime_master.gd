@@ -11,18 +11,28 @@ const bounty_amount:Dictionary = {
 }
 
 
-# TODO: keep track of crimes against covens
 ## Region: String : Crimes: Array[Crime] 
 var crimes:Dictionary = {}
+## Coven: StringName : Crimes: Array[Crime]
+var coven_crimes:Dictionary = {}
 
 
-## Wipe the records for a region. Used when the player has served time.
+## Wipe the records for a region. Used when the player has served time. Will not clear crimes against [Coven]s.
 func wipe_record(region:String):
 	crimes[region] = []
 
 
 ## Add a crime to the record
 func add_crime(region:String, crime:Crime):
+	# add crime to covens
+	var cc = SkeleRealmsGlobal.entity_manager.get_entity(crime.victim).unwrap().get_component("CovensComponent")
+	if cc.some():
+		for coven in (cc.unwrap() as CovensComponent).covens:
+			if coven_crimes.has(coven):
+				coven_crimes[coven].append(crime)
+			else:
+				coven_crimes[coven] = [crime]
+	# add crime to tracker
 	if crimes.has(region):
 		crimes[region].append(crime)
 	else:
