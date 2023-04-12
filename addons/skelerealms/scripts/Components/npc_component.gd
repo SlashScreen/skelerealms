@@ -79,6 +79,8 @@ signal schedule_updated(ev:ScheduleEvent)
 signal start_dialogue(dialogue_node:String)
 signal warning(ref_id:String)
 signal flee(ref_id:String)
+signal heard_something(emitter:AudioEventEmitter)
+signal perception_transition(what:StringName, transitioned_to:String)
 
 
 #* ### OVERRIDES
