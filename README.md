@@ -52,10 +52,10 @@ Not started :hole:
 | Schedules | :warning: |
 | Outside of scene AI navigation | :warning: |
 | World loading | :evergreen_tree: |
-| Skills/Attributes | :pencil2: |
+| Skills/Attributes | :construction: |
 | NPC Perception | :construction: |
-| Spells and Spell effects | :construction: |
-| Audio events | :pencil2: |
+| Spells and Spell effects | :warning: |
+| Audio events | :warning: |
 | Factions | :warning: |
 | Crime | :pencil2: |
 | Editor tools | :construction: |
@@ -64,4 +64,4 @@ Not started :hole:
 | Items | :construction: |
 | NPCs | :construction: |
 | Chests | :construction: |
-| Merchants | :pencil2: |
+| Merchants | :constructions: |

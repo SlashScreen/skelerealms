@@ -8,6 +8,7 @@ var active_effects:Array[SpellEffect] = []
 
 signal hit_with_spell(spell:Spell)
 signal added_effect(effect:SpellEffect)
+signal removed_effect(effect:SpellEffect)
 
 
 ## Hit this entity with a spell. Doesn't actually do anything apart from emit [signal hit_with_spell]. To apply effects, you can do that on the [Spell] side.

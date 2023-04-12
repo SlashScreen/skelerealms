@@ -11,6 +11,7 @@ const bounty_amount:Dictionary = {
 }
 
 
+# TODO: keep track of crimes against covens
 ## Region: String : Crimes: Array[Crime] 
 var crimes:Dictionary = {}
 

@@ -37,12 +37,27 @@ func _despawn():
 
 func _process(delta):
 	if in_inventory:
-		parent_entity.position = ((%EntityManager as EntityManager).get_entity(contained_inventory.unwrap() as String).unwrap() as Entity).position
+		parent_entity.position = (SkeleRealmsGlobal.entity_manager.get_entity(contained_inventory.unwrap() as String).unwrap() as Entity).position
 
 
-## Move this to another inventory.
+## Move this to another inventory. Adds and removes the item from the inventories.
 func move_to_inventory(refID:String):
+	# remove from inventory if we are in one
+	if contained_inventory.some():
+		SkeleRealmsGlobal.entity_manager\
+			.get_entity(contained_inventory.unwrap())\
+			.unwrap()\
+			.get_component("InventoryComponent")\
+			.unwrap()\
+			.remove_from_inventory(parent_entity.name)
 	contained_inventory = Option.from(refID)
+	# add to new inventory
+	SkeleRealmsGlobal.entity_manager\
+		.get_entity(contained_inventory.unwrap())\
+		.unwrap()\
+		.get_component("InventoryComponent")\
+		.unwrap()\
+		.add_to_inventory(parent_entity.name)
 	if not in_inventory:
 		_despawn()
 
