@@ -94,6 +94,10 @@ func _init(d:NPCData) -> void:
 	s.events = data.schedule
 	add_child(s)
 	_schedule = s
+	# Initialize all AI Modules
+	for module in data.modules:
+		module.link(self)
+		module._initialize()
 
 
 func _ready():
@@ -249,7 +253,7 @@ func on_percieve_start(info:EyesPerception.PerceptionData) -> void:
 		# if we don't, add new fsm
 		var fsm:PerceptionFSM_Machine = PerceptionFSM_Machine.new(info.object, info.visibility)
 		add_child(fsm)
-		fsm.transitioned.connect(func(x:String): handle_perception_transition(info.object, x))
+		fsm.transitioned.connect(func(x:String): perception_transition.emit(info.object, x))
 		fsm.initial_state = "Unaware"
 		fsm.setup([
 			PerceptionFSM_Aware_Invisible.new(),
@@ -257,24 +261,6 @@ func on_percieve_start(info:EyesPerception.PerceptionData) -> void:
 			PerceptionFSM_Lost.new(),
 			PerceptionFSM_Unaware.new(),
 		])
-
-
-## Change behavior based on how the perception level of an object changes.
-func handle_perception_transition(id:String, transition:String) -> void:
-	# TODO: determine threat level and response
-	match transition:
-		"AwareInvisible":
-			# if threat, seek last known position
-			return
-		"AwareVisible":
-			## if threat, wark, fight
-			return
-		"Lost":
-			# may be useless
-			return
-		"Unaware":
-			# if threat, do "huh?" behavior
-			return
 
 
 # TODO: Special behavior for going through doors, since the "last seen position" would be at the door.
