@@ -64,4 +64,4 @@ Not started :hole:
 | Items | :construction: |
 | NPCs | :construction: |
 | Chests | :construction: |
-| Merchants | :constructions: |
+| Merchants | :construction: |
