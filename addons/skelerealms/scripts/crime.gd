@@ -1,14 +1,16 @@
 class_name Crime
+extends Resource
 ## Crime is a resource used to track crimes.
 
 
 ## Possible crime types and their severity.
 ## Edit to customize the types of crimes that can be committed.
+## I guess I could do this in a config file (YAML?) but I dont want to do that right now.
 const crimes:Dictionary = {
-	"assault": 2, # Beating someone up
-	"theft": 1, # Stealing, pickpocketing
-	"murder": 5, # Killing someone
-	"tomfoolery":1 # Mischeif
+	&"assault": 2, # Beating someone up
+	&"theft": 1, # Stealing, pickpocketing
+	&"murder": 5, # Killing someone
+	&"tomfoolery":1 # Mischeif
 }
 
 ## Type of crime. See [member crimes].

@@ -21,7 +21,8 @@ var coven_crimes:Dictionary = {}
 func wipe_record(region:String):
 	crimes[region] = []
 
-
+# TODO: Check if coven tracks crime
+# TODO: Witnesses
 ## Add a crime to the record
 func add_crime(region:String, crime:Crime):
 	# add crime to covens

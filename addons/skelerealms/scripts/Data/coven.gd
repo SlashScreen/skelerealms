@@ -7,7 +7,6 @@ extends Resource
 ## To give them a default response to the player, create a "Player" coven, and give them a default reactio nto that.
 
 
-# TODO: Crime
 @export_category("Information")
 ## ID for this coven. Also used as a key in translations. See [member coven_name].
 @export var coven_id:StringName
