@@ -81,6 +81,7 @@ signal warning(ref_id:String)
 signal flee(ref_id:String)
 signal heard_something(emitter:AudioEventEmitter)
 signal perception_transition(what:StringName, transitioned_to:String)
+signal interacted(refID:String)
 
 
 #* ### OVERRIDES
@@ -105,8 +106,8 @@ func _ready():
 	
 	await parent_entity.instantiated # wait for entity to be ready to instantiate to ger siblings
 	
-	if not ($"../InteractiveComponent" as InteractiveComponent).interacted.is_connected(interact.bind()):
-		($"../InteractiveComponent" as InteractiveComponent).interacted.connect(interact.bind())
+	if not ($"../InteractiveComponent" as InteractiveComponent).interacted.is_connected(func(x:String): interacted.emit(x)):
+		($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
 	
 	_nav_component = $"../NavigatorComponent" as NavigatorComponent
 	_puppet_component = $"../PuppetSpawnerComponent" as PuppetSpawnerComponent
@@ -146,13 +147,6 @@ func _process(delta):
 
 
 #* ### DIALOGUE AND INTERACTIVITY
-
-
-## Interact with this npc. See [InteractiveComponent].
-func interact(refID:String) -> void:
-	# TODO: Response based on relationship?
-	start_dialogue.emit(data.start_dialogue_node)
-	_busy = true
 
 
 ## Make this NPC Leave dialogue.
@@ -275,11 +269,7 @@ func on_percieve_end(info:EyesPerception.PerceptionData) -> void:
 
 ## Callback for when this npc hears a weird noise.
 func on_hear_audio(emitter:AudioEventEmitter) -> void:
-	# determine importance of sound
-	# Figure out like, whether it's unexpected. If source of noise is a threat?
-	# Add point of interest to memory
-	# add task to investigate
-	pass
+	heard_something.emit(emitter)
 
 
 ## Determines the threat level of an entity, from 0 being harmless to 100 being like, Ganondorf.

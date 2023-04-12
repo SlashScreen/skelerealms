@@ -43,9 +43,8 @@ class_name NPCData
 ## Ally: During combat, will ignore all attacks from friend. Outside of combat, behaves in the same way is "Friend" in combat. [br]
 @export_enum("Neutral", "Friend", "Ally") var friendly_fire_behavior:int = 1
 @export_category("AI Modules")
-@export var threat_response_module:AIModule = DefaultThreatResponseModule.new()
-
-## Get all the modules instead of having to refer to them one by one.
-var modules:Array[AIModule]:
-	get:
-		return [threat_response_module]
+## AI Modules.
+@export var modules:Array[AIModule] = [
+		DefaultThreatResponseModule.new(),
+		DefaultInteractResponseModule.new()
+	]

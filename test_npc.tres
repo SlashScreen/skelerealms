@@ -1,7 +1,17 @@
-[gd_resource type="Resource" script_class="NPCData" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="NPCData" load_steps=7 format=3 uid="uid://c22pmjmgemhq0"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/npc_data.gd" id="1_7n5op"]
-[ext_resource type="PackedScene" uid="uid://h6i80uwc361m" path="res://test_npc_prefab.tscn" id="1_f44c6"]
+[ext_resource type="PackedScene" path="res://test_npc_prefab.tscn" id="1_f44c6"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_threat_response.gd" id="1_rddtv"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_interact_response.gd" id="2_dlkhq"]
+
+[sub_resource type="Resource" id="Resource_j5814"]
+script = ExtResource("1_rddtv")
+warn_radius = 20.0
+attack_radius = 8.0
+
+[sub_resource type="Resource" id="Resource_metpx"]
+script = ExtResource("2_dlkhq")
 
 [resource]
 script = ExtResource("1_7n5op")
@@ -12,7 +22,12 @@ ghost = false
 invulnerable = false
 unique = true
 affects_stealth_meter = true
+start_dialogue_node = ""
+interactive = true
+relationships = Array[Resource("res://addons/skelerealms/scripts/relationship.gd")]([])
 aggression = 2
 confidence = 2
 assistance = 2
+friendly_fire_behavior = 1
+modules = Array[Object]([SubResource("Resource_j5814"), SubResource("Resource_metpx")])
 id = "test_npc"
