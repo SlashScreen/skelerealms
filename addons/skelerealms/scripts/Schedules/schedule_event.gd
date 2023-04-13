@@ -14,3 +14,6 @@ extends Resource
 ## Get the location this event is at
 func get_event_location() -> NavPoint:
 	return null
+
+func satisfied_at_location(e:Entity) -> bool:
+	return true

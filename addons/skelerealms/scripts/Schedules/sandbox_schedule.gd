@@ -23,3 +23,17 @@ extends ScheduleEvent
 func get_event_location() -> NavPoint:
 	# Idle points found from goap action 
 	return NavPoint.new(location_world, location_position)
+
+
+func satisfied_at_location(e:Entity) -> bool:
+	# if we dont need to be at location, return true by default
+	if not be_at_location:
+		return true
+	# if world not the same
+	if not e.world == location_world:
+		return false	
+	# if too far away
+	if e.position.distance_to(location_position) > target_radius:
+		return false
+	# else, we passed
+	return true

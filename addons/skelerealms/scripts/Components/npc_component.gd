@@ -299,6 +299,11 @@ func get_remembered_items() -> Array[String]:
 func go_to_schedule_point() -> void:
 	# Resolve schedule
 	_calculate_new_schedule()
+
+	# Don't recalculate if we are already at point
+	if _current_schedule_event.satisfied_at_location(parent_entity):
+		return
+	
 	# Go to the schedule point
 	var loc = _current_schedule_event.get_event_location()
 	if loc:
