@@ -9,3 +9,8 @@ extends Resource
 @export var to:Timestamp
 @export var condition:ScheduleCondition
 @export var priority:float
+
+
+## Get the location this event is at
+func get_event_location() -> NavPoint:
+	return null

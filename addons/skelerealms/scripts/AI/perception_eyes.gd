@@ -38,7 +38,7 @@ func check_sees_collider(pt:CollisionObject3D) -> PerceptionData :
 	# TODO: vertical fov using pitch, horizontal using yaw
 	# 3) Raycast check
 	var state = get_world_3d().direct_space_state
-	var q = PhysicsRayQueryParameters3D.create(position, pt.position) # TODO: exclude all under owner
+	var q = PhysicsRayQueryParameters3D.create(position, pt.position)
 	var c = state.intersect_ray(q)
 	if c: # if collider hit
 		if c == pt or (c as Node).is_ancestor_of(pt): # if collider hit is this or ancestor

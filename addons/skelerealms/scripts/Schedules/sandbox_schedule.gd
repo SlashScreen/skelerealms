@@ -18,3 +18,8 @@ extends ScheduleEvent
 @export var location_position:Vector3
 @export var location_world:String
 @export var target_radius:float = 25
+
+
+func get_event_location() -> NavPoint:
+	# Idle points found from goap action 
+	return NavPoint.new(location_world, location_position)

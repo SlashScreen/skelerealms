@@ -20,7 +20,7 @@ var in_combat:bool:
 		elif not val and in_combat:
 			left_combat.emit()
 		in_combat = val
-var _current_target_point:NavPoint: # TODO: make setting this update the nav agent
+var _current_target_point:NavPoint:
 	set(val):
 		_current_target_point = val
 		if _puppet:
@@ -295,13 +295,14 @@ func get_remembered_items() -> Array[String]:
 #* ### SCHEDULE
 
 
-# TODO:
-## Force this NPC to follow its schedule.
-func follow_schedule() -> void:
+## Ask this NPC to go to its schedule point.
+func go_to_schedule_point() -> void:
 	# Resolve schedule
-	# Go to the schedule point
 	_calculate_new_schedule()
-	# TODO: Find position to go.
+	# Go to the schedule point
+	var loc = _current_schedule_event.get_event_location()
+	if loc:
+		_current_target_point = loc
 
 
 ## Get the current schedule for this NPC.
