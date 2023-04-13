@@ -272,29 +272,6 @@ func on_hear_audio(emitter:AudioEventEmitter) -> void:
 	heard_something.emit(emitter)
 
 
-## Determines the threat level of an entity, from 0 being harmless to 100 being like, Ganondorf.
-func determine_threat_level(what:String) -> float:
-	# use covens, relationships, proximity, etc to determine threat level of something
-	var e:Entity = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
-	var proximity:float = e.position.distance_to(parent_entity.position) # Proximity to this NPC
-	return 0
-
-
-## Determines what this NPC will do in response to a threat. [br]
-## 0: Do nothing. [br]
-## 1: Flee. [br]
-## 2: Warn. [br]
-## 3: Attack. [br]
-func determine_threat_response(what:String, threat:float) -> int:
-	var e:Entity = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
-	if not e.get_component("NPCComponent"): # if it's not an NPC, it's harmless.
-		# TODO: make it not tied to NPCComponent?
-		return 0
-	# using threat level and the npc's combat information, determine what it should do and add goals to reflect
-	# (flee, fight, etc)
-	return 0
-
-
 ## Forget an entity from the perception memory.
 func perception_forget(who:String) -> void:
 	if not _perception_memory.has(who):
