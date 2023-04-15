@@ -1,8 +1,9 @@
 extends Node
-## OBEY THE CRIME MASTER
-# TODO: Integrate better with Coven system
+## OBEY THE CRIME MASTER[br]
+## This keeps track of any crimes committed against various [Coven]s. 
 
 
+## Bounty amounts for various crime severity levels.
 const bounty_amount:Dictionary = {
 	0 : 0,
 	1 : 500,
@@ -11,44 +12,58 @@ const bounty_amount:Dictionary = {
 }
 
 
-## Region: String : Crimes: Array[Crime] 
+## Tracked crimes.
+## [codeblock]
+## {
+##	coven: {
+##		"punished" : []
+##		"unpunished": []
+##	}
+##}
+##[/codeblock]
 var crimes:Dictionary = {}
-## Coven: StringName : Crimes: Array[Crime]
-var coven_crimes:Dictionary = {}
 
 
-## Wipe the records for a region. Used when the player has served time. Will not clear crimes against [Coven]s.
-func wipe_record(region:String):
-	crimes[region] = []
+## Move all unpunished crimes to punished crimes.
+func punish_crimes(coven:StringName):
+	crimes[coven]["punished"].append(crimes[coven]["unpunished"])
+	crimes[coven]["unpunished"].clear
 
-# TODO: Check if coven tracks crime
-# TODO: Witnesses
+
+# TODO: Track crimes against others?
 ## Add a crime to the record
-func add_crime(region:String, crime:Crime):
+func add_crime(crime:Crime):
 	# add crime to covens
 	var cc = SkeleRealmsGlobal.entity_manager.get_entity(crime.victim).unwrap().get_component("CovensComponent")
 	if cc.some():
 		for coven in (cc.unwrap() as CovensComponent).covens:
-			if coven_crimes.has(coven):
-				coven_crimes[coven].append(crime)
-			else:
-				coven_crimes[coven] = [crime]
-	# add crime to tracker
-	if crimes.has(region):
-		crimes[region].append(crime)
-	else:
-		crimes[region] = [crime]
+			## Skip if doesn't track crime
+			if not CovenSystem.get_coven(coven).track_crime:
+				continue
+			
+			if crimes.has(coven):
+				crimes[coven]["unpunished"].append(crime)
+			else: # if coven doesnt have crimes against it, initialize table
+				crimes[coven] = {
+					"punished" : [],
+					"unpunished" : [crime]
+				}
+
 
 
 ## Returns the max wanted level for crimes in a region.
-func max_crime_severity(region:String) -> int:
-	if not crimes.has(region):
+func max_crime_severity(id:StringName, coven:StringName) -> int:
+	if not crimes.has(coven):
 		return 0
-	return max(crimes[region].map(func(x:Crime): return x.severity))
+	return max(crimes[coven]["unpunished"]\
+		.filter(func(x:Crime): return x.perpetrator == id)\
+		.map(func(x:Crime): return x.severity))
 
 
 ## Calculate the bounty for a region.
-func bounty_for_region(region:String) -> int:
-	if not crimes.has(region):
+func bounty_for_region(id:StringName, coven:StringName) -> int:
+	if not crimes.has(coven):
 		return 0
-	return crimes[region].reduce(func(sum:int, x:Crime): return sum + bounty_amount[x.severity], 0)
+	return crimes[coven]["unpunished"]\
+		.filter(func(x:Crime): return x.perpetrator == id)\
+		.reduce(func(sum:int, x:Crime): return sum + bounty_amount[x.severity], 0)
