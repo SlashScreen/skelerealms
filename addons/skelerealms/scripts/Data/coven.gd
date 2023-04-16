@@ -3,8 +3,8 @@ extends Resource
 ## Analagous to a Faction in creation kit games, where a Coven is a group of Entities that behave a certain way.
 ## Entities must have a [CovensComponent] to be a part of a coven.
 ## Entities are automatically added to a group with the coven's ID when they are a part of a coven, so to get all entities part of a coven, you can get all of group.
-## Unlike Creation Kit, Entties are assigned to a coven on the Entity side- the Coven jsut holds information.
-## To give them a default response to the player, create a "Player" coven, and give them a default reactio nto that.
+## Unlike Creation Kit, Entties are assigned to a coven on the Entity side- the Coven just holds information.
+## To give them a default response to the player, create a "Player" coven, and give them a default reaction to that.
 
 
 @export_category("Information")

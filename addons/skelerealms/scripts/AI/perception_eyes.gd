@@ -20,28 +20,30 @@ signal perceived(percieved:PerceptionData)
 
 func _ready() -> void:
 	t = Timer.new()
+	add_child(t)
 	t.start(perception_interval)
 	t.timeout.connect(try_perception.bind())
-	add_child(t)
+	light_probe = $Probe
 
 
 ## Check if this can see a target
-func check_sees_collider(pt:CollisionObject3D) -> PerceptionData :
+func check_sees_collider(pt:CollisionShape3D) -> PerceptionData :
 	# 1) See if target in range
 	if position.distance_to(pt.position) > view_distance:
 		return null
 	# 2) See if direction to target within fovs
-	var direction_to = pt.position - position
+	var direction_to = pt.global_position - global_position
 	var angle_to = direction_to.dot(transform.basis.z)
 	if angle_to < 1 - (fov_h / 2 / 180):
 		return null
 	# TODO: vertical fov using pitch, horizontal using yaw
 	# 3) Raycast check
+	await get_tree().physics_frame
 	var state = get_world_3d().direct_space_state
-	var q = PhysicsRayQueryParameters3D.create(position, pt.position)
+	var q = PhysicsRayQueryParameters3D.create(global_position, pt.global_position)
 	var c = state.intersect_ray(q)
 	if c: # if collider hit
-		if c == pt or (c as Node).is_ancestor_of(pt): # if collider hit is this or ancestor
+		if not (c["collider"] == pt or (c["collider"] as Node).is_ancestor_of(pt)): # if collider hit is this or ancestor
 			return null
 	# 4) Calculate light level
 	var light_level = await light_probe.get_light_level_for_point(pt.position)
@@ -51,16 +53,17 @@ func check_sees_collider(pt:CollisionObject3D) -> PerceptionData :
 	return PerceptionData.new(_find_ref_id(pt), light_level)
 
 
-## Try looking att everything in range.
+## Try looking at everything in range.
 func try_perception() -> void:
 	var perception_targets = get_tree()\
 									.get_nodes_in_group("perception_target")\
-									.filter(func(x:Node): return x is CollisionObject3D and (x as CollisionObject3D).position.distance_to(position) <= view_distance)
+									.filter(func(x:Node): return x is CollisionShape3D and (x as CollisionShape3D).position.distance_to(position) <= view_distance)
 	# Loop through targets and get check info.
 	for target in perception_targets:
 		var res = await check_sees_collider(target)
 		if res: # If we see it, emit signal
 			perceived.emit(res)
+			# print("percieved %s" % res)
 
 
 func _find_ref_id(n:Node) -> String:

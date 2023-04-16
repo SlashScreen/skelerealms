@@ -21,13 +21,11 @@ func get_light_level_for_point(point:Vector3) -> float:
 	img.resize(1,1, interpolation_method)
 	# return luminance
 	var top = img.get_pixel(0,0).get_luminance()
-	print(top)
 	
 	# Do the other thing for the other side 
 	img = svpb.get_texture().get_image()
 	img.resize(1,1, interpolation_method)
 	var bottom = img.get_pixel(0,0).get_luminance()
-	print(bottom)
 	
 	return ((top + bottom) / 2) / 0.4 # average top and bottom
 
@@ -35,4 +33,3 @@ func get_light_level_for_point(point:Vector3) -> float:
 func _ready() -> void:
 	svpt = $SViewportTop
 	svpb = $SViewportBottom
-	print(await get_light_level_for_point(Vector3()))

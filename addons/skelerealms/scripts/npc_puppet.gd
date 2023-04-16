@@ -3,6 +3,9 @@ extends CharacterBody3D
 ## Puppet "brain" for an NPC.
 
 
+var eyes:EyesPerception
+
+
 ## Called every frame to update the entity's position.
 signal change_position(Vector3)
 
@@ -20,6 +23,7 @@ var movement_paused:bool = false
 func _ready() -> void:
 	call_deferred("_actor_setup")
 	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
+	eyes = $EyesPerception
 
 
 ## Finds the closest point to this puppet, and jumps to it. 
@@ -51,6 +55,8 @@ func continue_nav() -> void:
 
 
 func _physics_process(delta) -> void:
+	eyes.try_perception()
+
 	if navigation_agent.is_navigation_finished():
 		return
 	

@@ -15,12 +15,12 @@ const bounty_amount:Dictionary = {
 ## Tracked crimes.
 ## [codeblock]
 ## {
-##	coven: {
-##		"punished" : []
-##		"unpunished": []
-##	}
-##}
-##[/codeblock]
+##		coven: {
+##			"punished" : []
+##			"unpunished": []
+##		}
+## }
+## [/codeblock]
 var crimes:Dictionary = {}
 
 
@@ -50,8 +50,7 @@ func add_crime(crime:Crime):
 				}
 
 
-
-## Returns the max wanted level for crimes in a region.
+## Returns the max wanted level for crimes for a Coven.
 func max_crime_severity(id:StringName, coven:StringName) -> int:
 	if not crimes.has(coven):
 		return 0
@@ -60,7 +59,7 @@ func max_crime_severity(id:StringName, coven:StringName) -> int:
 		.map(func(x:Crime): return x.severity))
 
 
-## Calculate the bounty for a region.
+## Calculate the bounty a Coven has for an entity.
 func bounty_for_region(id:StringName, coven:StringName) -> int:
 	if not crimes.has(coven):
 		return 0

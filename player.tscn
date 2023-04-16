@@ -9,7 +9,7 @@
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_ocea3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["perception_target"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_vwj7h")
 
@@ -19,6 +19,7 @@ mesh = SubResource("CapsuleMesh_5p5to")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+cull_mask = 1048063
 
 [node name="InteractionRay" type="RayCast3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.430912)
