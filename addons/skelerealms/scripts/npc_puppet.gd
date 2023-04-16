@@ -4,6 +4,7 @@ extends CharacterBody3D
 
 
 var eyes:EyesPerception
+var npc_component:NPCComponent
 
 
 ## Called every frame to update the entity's position.
@@ -24,6 +25,13 @@ func _ready() -> void:
 	call_deferred("_actor_setup")
 	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
 	eyes = $EyesPerception
+	npc_component = $"../../".get_component("NPCComponent").unwrap()
+	if npc_component:
+		print("Connecting percieved event")
+		eyes.perceived.connect(npc_component.on_percieve_start.bind())
+		eyes.not_perceived.connect(npc_component.on_percieve_end.bind())
+	else:
+		push_warning("NPC Puppet not a child of an entity with an NPCComponent. Perception turned off.")
 
 
 ## Finds the closest point to this puppet, and jumps to it. 
@@ -55,7 +63,8 @@ func continue_nav() -> void:
 
 
 func _physics_process(delta) -> void:
-	eyes.try_perception()
+	if npc_component:
+		eyes.try_perception()
 
 	if navigation_agent.is_navigation_finished():
 		return
@@ -72,6 +81,7 @@ func _physics_process(delta) -> void:
 
 	set_velocity(new_velocity)
 	move_and_slide()
-	
+
+
 func _process(delta) -> void:
 	change_position.emit(position)

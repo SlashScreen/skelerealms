@@ -36,7 +36,8 @@ func transition(state_name:String, msg:Dictionary = {}) -> void:
 	if not has_node(state_name):
 		return
 	
-	state.exit()
+	if state:
+		state.exit()
 	
 	state = get_node(state_name)
 	state.enter(msg)
