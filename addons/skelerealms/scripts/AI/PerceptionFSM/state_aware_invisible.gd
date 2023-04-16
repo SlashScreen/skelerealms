@@ -24,4 +24,6 @@ func enter(msg:Dictionary = {}) -> void:
 func update(delta:float) -> void:
 	lose_timer -= delta # decrease timer
 	if lose_timer <= 0:
-		state_machine.transition("lost")
+		state_machine.transition("Lost")
+	if not (state_machine as PerceptionFSM_Machine).visibility == 0:
+		state_machine.transition("AwareVisible")

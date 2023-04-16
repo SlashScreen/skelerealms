@@ -20,6 +20,8 @@ var movement_paused:bool = false
 
 ## The navigation agent.
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	call_deferred("_actor_setup")

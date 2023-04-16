@@ -255,6 +255,7 @@ func on_percieve_start(info:EyesPerception.PerceptionData) -> void:
 			PerceptionFSM_Lost.new(),
 			PerceptionFSM_Unaware.new(),
 		])
+		_perception_memory[info.object] = fsm
 
 
 # TODO: Special behavior for going through doors, since the "last seen position" would be at the door.

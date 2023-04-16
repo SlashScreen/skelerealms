@@ -33,6 +33,7 @@ func _process(delta: float) -> void:
 
 ## Transition to a new state by state name. DOes nothing if no state with name found.
 func transition(state_name:String, msg:Dictionary = {}) -> void:
+	print("transitioning from %s state to %s" % [state.name if state else "None", state_name])
 	if not has_node(state_name):
 		return
 	
