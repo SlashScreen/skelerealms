@@ -78,10 +78,10 @@ func _find_ref_id(n:Node) -> String:
 	return ""
 
 
-# no wait we need to keep updating on a thing? 
 class PerceptionData:
 	var object:String
 	var visibility:float
+	
 	
 	func _init(obj:String, vis:float) -> void:
 		object = obj

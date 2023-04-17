@@ -16,7 +16,13 @@ func _ready():
 	print("Cached entities")
 
 
-## Gets an entity in the game.
+## Gets an entity in the game. [br]
+## This system follows a cascading pattern, and attempts to get entities by following the following steps. It will execute each step, and if it fails to get an entity, it will move onto the next one. [br]
+## 1. Tries to get the entity from its internal hash table of entities. [br]
+## 2. Scans its children entities to see if it missed any (this step may be removed in the future) [br]
+## 3. Checks to find the entity's data in the most recent save file. [br]
+## 4. Attempts to load the netitiy from disk. [br]
+## Failing all of these, it will return [code]none[/code].
 func get_entity(id:StringName) -> Option:
 	# stage 1: attempt find in cache
 	if entities.has(id):

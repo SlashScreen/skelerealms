@@ -10,8 +10,12 @@ extends EntityComponent
 var covens:Dictionary
 
 
-func _init() -> void:
+func _init(coven_list:Array[CovenRankData]) -> void:
 	name = "CovensComponent"
+	# Load rank info
+	for crd in coven_list:
+		print("Adding to coven %s" % crd.coven.coven_id)
+		covens[crd.coven.coven_id] = crd.rank
 
 
 func _ready():

@@ -18,11 +18,11 @@ extends Resource
 @export var ranks:Dictionary
 @export_category("Crime")
 ## Whether members of this coven ignore crimes perpetrated to other members.
-@export var ignore_crimes_against_others:bool
+@export var ignore_crimes_against_others:bool = false
 ## Whether members care abourt crimes done against their own members.
-@export var ignore_crimes_against_members:bool
+@export var ignore_crimes_against_members:bool = false
 ## Whether this coven remembers crimes done against it.
-@export var track_crime:bool
+@export var track_crime:bool = true
 
 
 ## Translated coven name.

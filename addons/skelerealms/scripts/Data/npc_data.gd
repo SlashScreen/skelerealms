@@ -6,6 +6,7 @@ class_name NPCData
 ## NPC's model. Expects the root to be a [NPCPuppet].
 @export var prefab: PackedScene
 @export var schedule:Array[ScheduleEvent]
+@export var covens:Array[CovenRankData] = []
 @export_category("Flags")
 ## Whether this NPC is essential to the story, and them dying would screw things up.
 @export var essential:bool = true
@@ -48,3 +49,5 @@ class_name NPCData
 		DefaultThreatResponseModule.new(),
 		DefaultInteractResponseModule.new()
 	]
+
+
