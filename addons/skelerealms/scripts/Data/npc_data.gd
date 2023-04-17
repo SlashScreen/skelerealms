@@ -7,6 +7,7 @@ class_name NPCData
 @export var prefab: PackedScene
 @export var schedule:Array[ScheduleEvent]
 @export var covens:Array[CovenRankData] = []
+@export var default_player_opinion:int = 0
 @export_category("Flags")
 ## Whether this NPC is essential to the story, and them dying would screw things up.
 @export var essential:bool = true
