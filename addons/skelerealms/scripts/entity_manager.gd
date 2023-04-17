@@ -20,25 +20,25 @@ func _ready():
 ## This system follows a cascading pattern, and attempts to get entities by following the following steps. It will execute each step, and if it fails to get an entity, it will move onto the next one. [br]
 ## 1. Tries to get the entity from its internal hash table of entities. [br]
 ## 2. Scans its children entities to see if it missed any (this step may be removed in the future) [br]
-## 3. Checks to find the entity's data in the most recent save file. [br]
-## 4. Attempts to load the netitiy from disk. [br]
+## 3. Attempts to load the entity from disk. [br]
 ## Failing all of these, it will return [code]none[/code].
 func get_entity(id:StringName) -> Option:
 	# stage 1: attempt find in cache
 	if entities.has(id):
 		(entities[id] as Entity).reset_stale_timer() # FIXME: If another entity is carrying a reference to this entity, then we might break stuff by cleaning it up in this way?
 		return Option.from(entities[id])
-	# stage 2: attempt find in children
-	var possible_child = get_node_or_null(id as String)
-	if possible_child != null:
-		entities[id] = possible_child # cache entity
-		return Option.from(possible_child)
-	# stage 3 - Check in save file
+	# stage 2: Check in save file
 	var potential_data = SaveSystem.entity_in_save(id) # chedk the save system
 	if potential_data.some(): # if found:
 		add_entity(load(disk_assets[id])) # load default from disk
 		entities[id].load_data(potential_data.unwrap()) # and then load using the data blob we got from the save file
 		return Option.from(entities[id])
+# 3. Checks to find the entity's data in the most recent save file. [br]
+	# stage 3: attempt find in children 
+	#var possible_child = get_node_or_null(id as String)
+	#if possible_child != null:
+	#	entities[id] = possible_child # cache entity
+	#	return Option.from(possible_child)
 	# stage 4: check on disk
 	if disk_assets.has(id):
 		add_entity(load(disk_assets[id]))

@@ -33,6 +33,9 @@ func determine_threat_level(what:String) -> int:
 	if not e.get_component("NPCComponent").some(): # if it's not an NPC, it's harmless.
 		# TODO: make it not tied to NPCComponent?
 		return 0
+	
+	#var cc = e.get_component("CovensComponent")
+	
 	# using threat level and the npc's combat information, determine what it should do and add goals to reflect
 	# (flee, fight, etc)
 	return 0

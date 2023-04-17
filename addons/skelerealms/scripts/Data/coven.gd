@@ -34,3 +34,16 @@ var coven_name:String:
 ## Get the translated name of a rank.
 func rank_name(rank:int) -> String:
 	return tr(ranks[rank]) if ranks.has(rank) else ""
+
+
+## Returns a list of the opinions it has of a list of covens.
+func get_coven_opinions(covens:Array[StringName]) -> Array[int]:
+	var opinion_list:Array[int] = []
+	
+	for coven in covens:
+		if other_coven_opinions.has(coven):
+			opinion_list.append(other_coven_opinions[coven])
+		else:
+			opinion_list.append(0)
+	
+	return opinion_list
