@@ -96,7 +96,7 @@ func _begin_attack(e:Entity) -> void:
 		0: # Peaceful
 			return
 		1: # Bluffing
-			_flee()
+			_flee(e)
 		2, 3:
 			# Add to goap memory
 			if _npc.goap_memory.has("enemies"):
@@ -123,9 +123,10 @@ func _enter_vigilant_stance() -> void:
 	return
 
 
-func _flee() -> void:
+func _flee(e:Entity) -> void:
 	# tell GOAP to flee from enemies
 	_npc.add_objective({"flee_from_enemies" : true}, true, 10)
+	_npc.flee.emit(e.name)
 
 
 ## Response to being hit.
@@ -135,28 +136,28 @@ func _aggress(e:Entity) -> void:
 	var threat = _determine_threat(e)
 	match _npc.data.confidence:
 		0: # Coward - flee
-			_flee()
+			_flee(e)
 			return
 		1: # Cautious - only attack if target weaker
 			if threat == -1:
 				_begin_attack(e)
 				return
 			else:
-				_flee()
+				_flee(e)
 				return
 		2: # Average - attack if evenly matched or stronger
 			if threat <= 0:
 				_begin_attack(e)
 				return
 			else:
-				_flee()
+				_flee(e)
 				return
 		3: # Brave - Fight unless significantly outmatched
 			if threat <= 1:
 				_begin_attack(e)
 				return
 			else:
-				_flee()
+				_flee(e)
 				return
 		4: # Foolhardy - always attack, no matter the threat
 			_begin_attack(e)
@@ -193,4 +194,5 @@ func _determine_threat(e:Entity) -> int:
 
 
 func _clean_up() -> void:
-	vigilant_thread.wait_to_finish()
+	if vigilant_thread:
+		vigilant_thread.wait_to_finish()

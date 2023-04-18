@@ -91,6 +91,9 @@ signal flee(ref_id:String)
 signal heard_something(emitter:AudioEventEmitter)
 signal perception_transition(what:StringName, transitioned_to:String, fsm:PerceptionFSM_Machine)
 signal interacted(refID:String)
+signal friendly_fire_response
+signal draw_weapons
+signal put_away_weapons
 
 
 #* ### OVERRIDES
