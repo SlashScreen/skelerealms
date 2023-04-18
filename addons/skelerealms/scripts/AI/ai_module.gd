@@ -17,3 +17,7 @@ func link(npc:NPCComponent) -> void:
 ## Override this as a "_ready()" analogue.
 func _initialize() -> void:
 	pass
+
+
+func _clean_up() -> void:
+	return

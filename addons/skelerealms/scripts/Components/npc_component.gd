@@ -89,7 +89,7 @@ signal start_dialogue(dialogue_node:String)
 signal warning(ref_id:String)
 signal flee(ref_id:String)
 signal heard_something(emitter:AudioEventEmitter)
-signal perception_transition(what:StringName, transitioned_to:String)
+signal perception_transition(what:StringName, transitioned_to:String, fsm:PerceptionFSM_Machine)
 signal interacted(refID:String)
 
 
@@ -155,6 +155,11 @@ func _process(delta):
 			_next_point() # get next point
 			parent_entity.world = _current_target_point.world # set world
 		parent_entity.position = parent_entity.position.move_toward(_current_target_point.position, delta * _walk_speed) # move towards position
+
+
+func _exit_tree() -> void:
+	for m in data.modules:
+		m._clean_up()
 
 
 #* ### DIALOGUE AND INTERACTIVITY
@@ -258,7 +263,7 @@ func on_percieve_start(info:EyesPerception.PerceptionData) -> void:
 		# if we don't, add new fsm
 		var fsm:PerceptionFSM_Machine = PerceptionFSM_Machine.new(info.object, info.visibility)
 		add_child(fsm)
-		fsm.transitioned.connect(func(x:String): perception_transition.emit(info.object, x))
+		fsm.transitioned.connect(func(x:String): perception_transition.emit(info.object, x, fsm))
 		fsm.initial_state = "Unaware"
 		fsm.setup([
 			PerceptionFSM_Aware_Invisible.new(),
