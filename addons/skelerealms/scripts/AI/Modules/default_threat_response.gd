@@ -2,6 +2,13 @@ class_name DefaultThreatResponseModule # oh god this is getting java like
 extends AIModule
 
 
+# How many levels weaker something needs to be to be considered "weaker".
+const THREAT_LEVEL_WEAKER_INTERVAL = 1
+# How many levels greater to be considered "stronger".
+const THREAT_LEVEL_GREATER_INTERVAL = 1
+# How many levels greater to be considered "significantly stronger".
+const THREAT_LEVEL_MUCH_GREATER_INTERVAL = 5
+
 @export var warn_radius:float = 20
 @export var attack_radius:float = 8
 
@@ -156,12 +163,32 @@ func _aggress(e:Entity) -> void:
 			return
 
 
-## Determines the threat level of another entity. Returns: [br]
-## -1: weaker [br]
-## 0: about the same [br]
-## 1: stronger [br]
-## 2: significantly stronger
+## Determines the threat level of another entity by conparing levels in a [SkillsComponent]. Returns: [br]
+## -1: Weaker [br]
+## 0: About the same or no skills component [br]
+## 1: Stronger [br]
+## 2: Significantly stronger [br]
+## See [constant THREAT_LEVEL_WEAKER_INTERVAL], [constant THREAT_LEVEL_GREATER_INTERVAL], [constant THREAT_LEVEL_MUCH_GREATER_INTERVAL]
 func _determine_threat(e:Entity) -> int:
+	var e_sc = e.get_component("SkillsComponent")
+	# if no skills component associated with the entity, default is 0
+	if not e_sc.some():
+		return 0
+	
+	var npc_level = _npc.parent_entity.get_component("SkillsComponent").unwrap().level
+	var e_level = e_sc.unwrap().level
+	var difference = e_level - npc_level # negative is weaker
+	
+	# Check if it's a bit weaker
+	if difference < -THREAT_LEVEL_WEAKER_INTERVAL:
+		return -1
+	# Check for much greater
+	if difference > THREAT_LEVEL_MUCH_GREATER_INTERVAL:
+		return 2
+	# Then check for a bit greater
+	if difference > THREAT_LEVEL_GREATER_INTERVAL:
+		return 1
+	# Else about the same
 	return 0
 
 
