@@ -5,6 +5,7 @@ extends CharacterBody3D
 
 var eyes:EyesPerception
 var npc_component:NPCComponent
+var puppeteer:PuppetSpawnerComponent
 
 
 ## Called every frame to update the entity's position.
@@ -27,6 +28,7 @@ func _ready() -> void:
 	call_deferred("_actor_setup")
 	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
 	eyes = $EyesPerception
+	puppeteer = $"../../".get_component("PuppetSpawnerComponent").unwrap()
 	npc_component = $"../../".get_component("NPCComponent").unwrap()
 	if npc_component:
 		print("Connecting percieved event")
@@ -34,6 +36,10 @@ func _ready() -> void:
 		eyes.not_perceived.connect(npc_component.on_percieve_end.bind())
 	else:
 		push_warning("NPC Puppet not a child of an entity with an NPCComponent. Perception turned off.")
+
+
+func get_puppeteer() -> PuppetSpawnerComponent:
+	return puppeteer
 
 
 ## Finds the closest point to this puppet, and jumps to it. 

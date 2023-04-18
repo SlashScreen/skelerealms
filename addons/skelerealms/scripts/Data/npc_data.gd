@@ -2,7 +2,6 @@ extends RefData
 class_name NPCData
 ## Base data for an NPC.
 ## Not an instance of this NPC, just contains stuff like covens, and behavior for the NPC.
-## The combat settings assume that [DefaultThreatResponseModule] is applied to this NPC.
 
 
 ## NPC's model. Expects the root to be a [NPCPuppet].
@@ -33,34 +32,6 @@ class_name NPCData
 @export var interactive:bool = true
 ## NPC relationships.
 @export var relationships:Array[Relationship]
-
-@export_category("Combat info")
-## Will this actor initiate combat? [br]
-## Peaceful: Will not initiate combat. [br]
-## Bluffing: Variant of peaceful, they will warn and try to act tough, but never attack. [br
-## Aggressive: Will attack anything below the [member attack_threshold] on sight. [br]
-## Frenzied: Will attack anything, ignoring opinion.
-@export_enum("Peaceful", "Bluffing", "Aggressive", "Frenzied") var aggression:int = 2
-## Agressive NPCs will attack any entity with an opinion below this threshold.  
-@export_range(-100, 100) var attack_threshold:int = -50
-## Response to combat. [br]
-## Coward: Flees from combat. [br]
-## Cautious: Cautious: Will flee unless stronger than target. [br]
-## Average: Will fight unless outmatched. [br]
-## Brave: Will fight unless very outmatched. [br]
-## Foolhardy: Will never flee.
-@export_enum("Coward", "Cautious", "Average", "Brave", "Foolhardy") var confidence:int = 2
-## Response to witnessing combat. [br]
-## Helps Nobody: Does not help anybody. [br]
-## Helps people: Helps people above [member assistance_threshold].
-@export_enum("Helps nobody", "Helps people") var assistance:int = 1
-## If [member assistance] is "Helps people", it will assist entities with an opinion above this threshold.
-@export_range(-100, 100) var assistance_threshold:int = 0
-## How NPCs behave when hit by friends. [br]
-## Neutral: Aggro friends immediately when hit. [br]
-## Friend: During combat, won't attack player unless hit a number of times in an amount of time. Outside of combat, it will aggro the friendly immediately. [br]
-## Ally: During combat, will ignore all attacks from friend. Outside of combat, behaves in the same way is "Friend" in combat. [br]
-@export_enum("Neutral", "Friend", "Ally") var friendly_fire_behavior:int = 1
 
 @export_category("AI Modules")
 ## AI Modules.

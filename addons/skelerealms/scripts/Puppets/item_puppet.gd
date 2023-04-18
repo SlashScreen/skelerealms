@@ -1,14 +1,20 @@
+class_name ItemPuppet
 extends Node3D
 
+
+var puppeteer:PuppetSpawnerComponent
 
 signal change_position(Vector3)
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
+	puppeteer = $"../../".get_component("PuppetSpawnerComponent").unwrap()
 	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	change_position.emit(position)
+
+
+func get_puppeteer() -> PuppetSpawnerComponent:
+	return puppeteer

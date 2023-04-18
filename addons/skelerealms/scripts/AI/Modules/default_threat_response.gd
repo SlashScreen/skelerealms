@@ -9,6 +9,34 @@ const THREAT_LEVEL_GREATER_INTERVAL = 1
 # How many levels greater to be considered "significantly stronger".
 const THREAT_LEVEL_MUCH_GREATER_INTERVAL = 5
 
+@export_category("Combat info")
+## Will this actor initiate combat? [br]
+## Peaceful: Will not initiate combat. [br]
+## Bluffing: Variant of peaceful, they will warn and try to act tough, but never attack. [br
+## Aggressive: Will attack anything below the [member attack_threshold] on sight. [br]
+## Frenzied: Will attack anything, ignoring opinion.
+@export_enum("Peaceful", "Bluffing", "Aggressive", "Frenzied") var aggression:int = 2
+## Agressive NPCs will attack any entity with an opinion below this threshold.  
+@export_range(-100, 100) var attack_threshold:int = -50
+## Response to combat. [br]
+## Coward: Flees from combat. [br]
+## Cautious: Cautious: Will flee unless stronger than target. [br]
+## Average: Will fight unless outmatched. [br]
+## Brave: Will fight unless very outmatched. [br]
+## Foolhardy: Will never flee.
+@export_enum("Coward", "Cautious", "Average", "Brave", "Foolhardy") var confidence:int = 2
+## Response to witnessing combat. [br]
+## Helps Nobody: Does not help anybody. [br]
+## Helps people: Helps people above [member assistance_threshold].
+@export_enum("Helps nobody", "Helps people") var assistance:int = 1
+## If [member assistance] is "Helps people", it will assist entities with an opinion above this threshold.
+@export_range(-100, 100) var assistance_threshold:int = 0
+## How NPCs behave when hit by friends. [br]
+## Neutral: Aggro friends immediately when hit. [br]
+## Friend: During combat, won't attack player unless hit a number of times in an amount of time. Outside of combat, it will aggro the friendly immediately. [br]
+## Ally: During combat, will ignore all attacks from friend. Outside of combat, behaves in the same way is "Friend" in combat. [br]
+@export_enum("Neutral", "Friend", "Ally") var friendly_fire_behavior:int = 1
+
 @export var warn_radius:float = 20
 @export var attack_radius:float = 8
 
@@ -25,7 +53,7 @@ func _initialize() -> void:
 func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionFSM_Machine) -> void:
 	var opinion = _npc.determine_opinion_of(what)
 	print("Opinion on %s: %s" % [what, opinion])
-	var below_attack_threshold = opinion <= _npc.data.attack_threshold
+	var below_attack_threshold = opinion <= attack_threshold
 	
 	match transition:
 		"AwareInvisible":
@@ -75,7 +103,7 @@ func _stay_vigilant(e:Entity) -> void:
 			_enter_normal_state()
 			return
 		# if frenzied and within ring attack immediately
-		if distance_to_e <= warn_radius ** 2 and _npc.data.aggression == 3:
+		if distance_to_e <= warn_radius ** 2 and aggression == 3:
 			_begin_attack(e)
 			return
 		# if within warn ring
@@ -92,7 +120,7 @@ func _stay_vigilant(e:Entity) -> void:
 
 func _begin_attack(e:Entity) -> void:
 	# figure out response to confrontation
-	match _npc.data.aggression:
+	match aggression:
 		0: # Peaceful
 			return
 		1: # Bluffing
@@ -134,7 +162,7 @@ func _aggress(e:Entity) -> void:
 	# "Coward", "Cautious", "Average", "Brave", "Foolhardy"
 	# TODO: Friendly fire
 	var threat = _determine_threat(e)
-	match _npc.data.confidence:
+	match confidence:
 		0: # Coward - flee
 			_flee(e)
 			return

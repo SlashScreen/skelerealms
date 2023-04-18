@@ -74,10 +74,7 @@ func _process(_delta):
 			check_node = check_node.get_parent()
 		# Section 2: Entity
 		print("Section 2")
-		if collider.find_parent("PuppetSpawnerComponent") == null: # Attempt to get a puppet component
-			return
 		# Attempt to get an interactive component form the entity
-		var ic = collider.find_parent("PuppetSpawnerComponent").get_parent().get_node("InteractiveComponent") as InteractiveComponent 
-		if ic == null:
-			return
-		ic.interact("Player")
+		var ic = SkeleRealmsGlobal.get_entity_in_tree(collider).get_component("InteractiveComponent")
+		if ic.some():
+			ic.unwrap().interact("Player")
