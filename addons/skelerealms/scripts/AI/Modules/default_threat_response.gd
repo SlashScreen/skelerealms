@@ -11,7 +11,8 @@ func _initialize() -> void:
 
 
 func _handle_perception_info(what:StringName, transition:String) -> void:
-	var threat = determine_threat_level(what)
+	var opinion = _npc.determine_opinion_of(what)
+	
 	match transition:
 		"AwareInvisible":
 			# if threat, seek last known position
@@ -25,17 +26,3 @@ func _handle_perception_info(what:StringName, transition:String) -> void:
 		"Unaware":
 			# if threat, do "huh?" behavior
 			return
-
-
-## Determines the threat level of an entity, from 0 being harmless to 100 being like, Ganondorf.
-func determine_threat_level(what:String) -> int:
-	var e:Entity = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
-	if not e.get_component("NPCComponent").some(): # if it's not an NPC, it's harmless.
-		# TODO: make it not tied to NPCComponent?
-		return 0
-	
-	#var cc = e.get_component("CovensComponent")
-	
-	# using threat level and the npc's combat information, determine what it should do and add goals to reflect
-	# (flee, fight, etc)
-	return 0

@@ -372,12 +372,9 @@ func determine_opinion_of(id:StringName) -> float:
 	var opinions = []
 	var opinion_total = 0
 	
-	var values_covens = false
-	var values_self = false
-	
 	# calculate modifiers
-	var covens_modifier = 2 if values_covens else 1
-	var self_modifier = 2 if values_self else 1
+	var covens_modifier = 2 if data.loyalty == 1 else 1 # if values covens, increase modifier
+	var self_modifier = 2 if data.loyalty == 2 else 1 # ditto
 	
 	# if has other covens, compare against ours
 	if e_cc.some():
