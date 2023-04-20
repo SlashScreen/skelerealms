@@ -1,0 +1,3 @@
+[submodule "gdsync"]
+	path = gdsync
+	url = https://github.com/SlashScreen/gdsync
