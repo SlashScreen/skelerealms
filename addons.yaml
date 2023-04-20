@@ -1,0 +1,10 @@
+godot-network-graph:
+  repo: git@github.com:SlashScreen/godot-network-graph.git
+  src_folder: addons/network_utility
+  dest_folder: addons
+ 
+ journalgd-godot:
+  repo: git@github.com:SlashScreen/journalgd-godot.git
+  src_folder: addons/journalgd
+  dest_folder: addons
+ 
