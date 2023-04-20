@@ -14,6 +14,12 @@ rank = 0
 
 [sub_resource type="Resource" id="Resource_j5814"]
 script = ExtResource("1_rddtv")
+aggression = 2
+attack_threshold = -50
+confidence = 2
+assistance = 1
+assistance_threshold = 0
+friendly_fire_behavior = 1
 warn_radius = 20.0
 attack_radius = 8.0
 
@@ -35,11 +41,5 @@ affects_stealth_meter = true
 start_dialogue_node = ""
 interactive = true
 relationships = Array[Resource("res://addons/skelerealms/scripts/relationship.gd")]([])
-aggression = 2
-attack_threshold = -50
-confidence = 2
-assistance = 1
-assistance_threshold = 0
-friendly_fire_behavior = 1
 modules = Array[Object]([SubResource("Resource_j5814"), SubResource("Resource_metpx")])
 id = "test_npc"

@@ -12,9 +12,18 @@ func _enter_tree():
 	add_node_3d_gizmo_plugin(item_gizmo_plugin)
 	add_node_3d_gizmo_plugin(npc_gizmo_plugin)
 	add_inspector_plugin(door_jump_plugin)
+	# autoload
+	add_autoload_singleton("SkeleRealmsGlobal", "res://addons/skelerealms/scripts/sk_global.gd")
+	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/coven_system.gd")
+	add_autoload_singleton("GameInfo", "res://addons/skelerealms/scripts/game_info.gd")
+	add_autoload_singleton("SaveSystem", "res://addons/skelerealms/scripts/save_system.gd")
 
 
 func _exit_tree():
 	remove_node_3d_gizmo_plugin(item_gizmo_plugin)
 	remove_node_3d_gizmo_plugin(npc_gizmo_plugin)
 	remove_inspector_plugin(door_jump_plugin)
+	remove_autoload_singleton("SkeleRealmsGlobal")
+	remove_autoload_singleton("CovenSystem")
+	remove_autoload_singleton("GameInfo")
+	remove_autoload_singleton("SaveSystem")
