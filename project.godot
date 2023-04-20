@@ -17,10 +17,11 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-SaveSystem="*res://addons/skelerealms/scripts/save_system.gd"
-CovenSystem="*res://addons/skelerealms/scripts/coven_system.gd"
-GameInfo="*res://addons/skelerealms/scripts/game_info.gd"
+SaveSystem="*res://addons/skelerealms/scripts/System/save_system.gd"
+CovenSystem="*res://addons/skelerealms/scripts/Covens/coven_system.gd"
+GameInfo="*res://addons/skelerealms/scripts/System/game_info.gd"
 SkeleRealmsGlobal="*res://addons/skelerealms/scripts/sk_global.gd"
+CrimeMaster="*res://addons/skelerealms/scripts/Crime/crime_master.gd"
 
 [display]
 
@@ -32,7 +33,7 @@ project/assembly_name="Skelerealms"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/journalgd/plugin.cfg", "res://addons/skelerealms/plugin.cfg")
+enabled=PackedStringArray("res://addons/skelerealms/plugin.cfg")
 
 [input]
 

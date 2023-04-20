@@ -14,9 +14,10 @@ func _enter_tree():
 	add_inspector_plugin(door_jump_plugin)
 	# autoload
 	add_autoload_singleton("SkeleRealmsGlobal", "res://addons/skelerealms/scripts/sk_global.gd")
-	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/coven_system.gd")
-	add_autoload_singleton("GameInfo", "res://addons/skelerealms/scripts/game_info.gd")
-	add_autoload_singleton("SaveSystem", "res://addons/skelerealms/scripts/save_system.gd")
+	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/Covens/coven_system.gd")
+	add_autoload_singleton("GameInfo", "res://addons/skelerealms/scripts/System/game_info.gd")
+	add_autoload_singleton("SaveSystem", "res://addons/skelerealms/scripts/System/save_system.gd")
+	add_autoload_singleton("CrimeMaster", "res://addons/skelerealms/scripts/Crime/crime_master.gd")
 
 
 func _exit_tree():
@@ -27,3 +28,4 @@ func _exit_tree():
 	remove_autoload_singleton("CovenSystem")
 	remove_autoload_singleton("GameInfo")
 	remove_autoload_singleton("SaveSystem")
+	remove_autoload_singleton("CrimeMaster")

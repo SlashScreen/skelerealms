@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="NPCInstance" load_steps=3 format=3 uid="uid://b55fvsmvsd6tw"]
 
-[ext_resource type="Resource" uid="uid://c22pmjmgemhq0" path="res://test_npc.tres" id="1_gixig"]
+[ext_resource type="Resource" uid="uid://db1vnxskukay" path="res://test_npc.tres" id="1_gixig"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/InstanceData/npc_instance.gd" id="2_4m1xp"]
 
 [resource]

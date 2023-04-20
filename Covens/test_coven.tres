@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="Coven" load_steps=2 format=3 uid="uid://clote8kfhdsg5"]
+[gd_resource type="Resource" script_class="Coven" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/coven.gd" id="1_t7iha"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Covens/coven.gd" id="1_t7iha"]
 
 [resource]
 script = ExtResource("1_t7iha")

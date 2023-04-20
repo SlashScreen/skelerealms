@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="NPCData" load_steps=10 format=3 uid="uid://c22pmjmgemhq0"]
+[gd_resource type="Resource" script_class="NPCData" load_steps=10 format=3 uid="uid://db1vnxskukay"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/npc_data.gd" id="1_7n5op"]
 [ext_resource type="PackedScene" uid="uid://24i73ycvxysf" path="res://test_npc_prefab.tscn" id="1_f44c6"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_threat_response.gd" id="1_rddtv"]
-[ext_resource type="Resource" uid="uid://clote8kfhdsg5" path="res://Covens/test_coven.tres" id="1_yvvqr"]
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/coven_rank_data.gd" id="2_caaic"]
+[ext_resource type="Resource" path="res://Covens/test_coven.tres" id="1_yvvqr"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Covens/coven_rank_data.gd" id="2_caaic"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_interact_response.gd" id="2_dlkhq"]
 
 [sub_resource type="Resource" id="Resource_603ox"]
@@ -40,6 +40,6 @@ unique = true
 affects_stealth_meter = true
 start_dialogue_node = ""
 interactive = true
-relationships = Array[Resource("res://addons/skelerealms/scripts/relationship.gd")]([])
+relationships = Array[Resource("res://addons/skelerealms/scripts/Relationships/relationship.gd")]([])
 modules = Array[Object]([SubResource("Resource_j5814"), SubResource("Resource_metpx")])
 id = "test_npc"

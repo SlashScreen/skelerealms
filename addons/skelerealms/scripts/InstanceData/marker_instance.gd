@@ -6,6 +6,4 @@ extends InstanceData
 
 
 func get_archetype_components() -> Array[EntityComponent]:
-	return [
-		MarkerComponent.new(rotation)
-	]
+	return [MarkerComponent.new(rotation)]
