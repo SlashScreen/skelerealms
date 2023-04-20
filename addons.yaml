@@ -3,7 +3,7 @@ godot-network-graph:
   src_folder: addons/network_utility
   dest_folder: addons
  
- journalgd-godot:
+journalgd-godot:
   repo: git@github.com:SlashScreen/journalgd-godot.git
   src_folder: addons/journalgd
   dest_folder: addons
