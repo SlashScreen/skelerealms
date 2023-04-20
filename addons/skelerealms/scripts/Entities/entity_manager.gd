@@ -82,7 +82,7 @@ func add_entity(res:InstanceData):
 		new_entity.add_child(n)
 		n.owner = new_entity
 		n._ready()
-		
+	
 	# add new entity to self, and the dictionary
 	entities[res.ref_id] = new_entity
 	add_child(new_entity)
