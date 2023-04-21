@@ -1,3 +1,1 @@
-cd gdsync
-ruby sync.rb ../
-
+ruby gdsync/sync.rb
