@@ -73,15 +73,19 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 			if below_attack_threshold or aggression == 3: # if attack threshold or frenzied
 				
 				# TODO: frenzied attacks immediately
-				print("start vigilance")
-				var e = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
-				_enter_vigilant_stance()
-				
-				if vigilant_thread:
-					pull_out_of_thread = true
-					vigilant_thread.wait_to_finish()
-				vigilant_thread = Thread.new()
-				vigilant_thread.start(_stay_vigilant.bind(e))
+				# TODO: only vigilant if not in combat, otherwise attack immediately
+				if not _npc.in_combat:
+					print("start vigilance")
+					var e = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
+					_enter_vigilant_stance()
+					
+					if vigilant_thread:
+						pull_out_of_thread = true
+						vigilant_thread.wait_to_finish()
+					vigilant_thread = Thread.new()
+					vigilant_thread.start(_stay_vigilant.bind(e))
+				else:
+					print("needs to attack")
 		"Lost":
 			# may be useless
 			return
