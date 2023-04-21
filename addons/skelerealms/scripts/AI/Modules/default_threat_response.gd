@@ -52,6 +52,8 @@ func _initialize() -> void:
 
 func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionFSM_Machine) -> void:
 	var opinion = _npc.determine_opinion_of(what)
+	print("----------")
+	print("handling perception info")
 	print("Opinion on %s: %s" % [what, opinion])
 	var below_attack_threshold = opinion <= attack_threshold
 	
@@ -71,7 +73,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 			if below_attack_threshold or aggression == 3: # if attack threshold or frenzied
 				
 				# TODO: frenzied attacks immediately
-				print("start warning")
+				print("start vigilance")
 				var e = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
 				_enter_vigilant_stance()
 				
@@ -116,16 +118,19 @@ func _stay_vigilant(e:Entity) -> void:
 			return
 		# if frenzied and within ring attack immediately
 		if distance_to_e <= warn_radius ** 2 and aggression == 3:
+			print("frenzied immediate attack")
 			_begin_attack(e)
 			return
 		# if within warn ring
 		if distance_to_e <= warn_radius ** 2 and distance_to_e > attack_radius ** 2:
 			# if not already warned, warn and set warned
 			if not warned:
+				print("become warned")
 				_warn(e)
 				warned = true
 		# if in attack distance, attack
 		if distance_to_e <= attack_radius ** 2:
+			print("in attack distance")
 			_begin_attack(e)
 			return
 
