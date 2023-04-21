@@ -7,6 +7,5 @@ var world:String
 
 
 func _init(w:String, pos:Vector3) -> void:
-	var np = NavPoint
-	np.world = w
-	np.position = pos
+	world = w
+	position = pos

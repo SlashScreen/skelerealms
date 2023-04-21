@@ -57,20 +57,27 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 	
 	match transition:
 		"AwareInvisible":
-			if _npc.data.aggression == 0: # if peaceful
+			if aggression == 0: # if peaceful
 				return
 			# if threat, seek last known position
 			if below_attack_threshold:
+				print("seek last known position")
 				_npc.goap_memory["last_seen_position"] = NavPoint.new(fsm.last_seen_world, fsm.last_seen_position) # commit to memory
 				_npc.add_objective({"enemy_sought" = true}, true, 10) # add goal to seek position
 		"AwareVisible":
-			if _npc.data.aggression == 0: # if peaceful
+			if aggression == 0: # if peaceful
 				return
 			
-			if below_attack_threshold or _npc.data.aggression == 3: # if attack threshold or frenzied
-				# TODO: Only if not already in a combat state
+			if below_attack_threshold or aggression == 3: # if attack threshold or frenzied
+				
+				# TODO: frenzied attacks immediately
+				print("start warning")
 				var e = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
 				_enter_vigilant_stance()
+				
+				if vigilant_thread:
+					pull_out_of_thread = true
+					vigilant_thread.wait_to_finish()
 				vigilant_thread = Thread.new()
 				vigilant_thread.start(_stay_vigilant.bind(e))
 		"Lost":
@@ -79,12 +86,17 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 		"Unaware":
 			# if threat, do "huh?" behavior
 			if below_attack_threshold:
+				print("needs to investigate")
 				# TODO: Stop, investigate
 				return
 
 
 ## Will keep watch until the entity is out of range. TODO: Visibility?
 func _stay_vigilant(e:Entity) -> void: 
+	if _npc.in_combat: # don't react if already in combat
+		# TODO: Add enemy but don't warn
+		return
+	
 	var warned:bool = false
 	
 	while true:
@@ -120,13 +132,17 @@ func _stay_vigilant(e:Entity) -> void:
 
 func _begin_attack(e:Entity) -> void:
 	# figure out response to confrontation
+	print("beginning attack")
 	match aggression:
 		0: # Peaceful
+			print("peaceful response")
 			return
 		1: # Bluffing
+			print("bluffing response")
 			_flee(e)
 		2, 3:
 			# Add to goap memory
+			print("aggressive/frenzied response")
 			if _npc.goap_memory.has("enemies"):
 				# but only if not already in memory
 				if not _npc.goap_memory["enemies"].has(e.name):
@@ -138,21 +154,24 @@ func _begin_attack(e:Entity) -> void:
 
 func _warn(e:Entity) -> void:
 	# Issue warning to entity
+	print("warning!")
 	_npc.warning.emit(e.name)
 
 
 func _enter_normal_state() -> void:
 	# undo vigilant stance
+	print("exit vigilant stance")
 	return
 
 
 func _enter_vigilant_stance() -> void:
-	# draaw weapons, turn towards threat
-	return
+	# draw weapons, turn towards threat
+	print("enter vigilant stance")
 
 
 func _flee(e:Entity) -> void:
 	# tell GOAP to flee from enemies
+	print("flee")
 	_npc.add_objective({"flee_from_enemies" : true}, true, 10)
 	_npc.flee.emit(e.name)
 
