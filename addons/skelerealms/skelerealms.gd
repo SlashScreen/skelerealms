@@ -24,6 +24,7 @@ func _exit_tree():
 	remove_node_3d_gizmo_plugin(item_gizmo_plugin)
 	remove_node_3d_gizmo_plugin(npc_gizmo_plugin)
 	remove_inspector_plugin(door_jump_plugin)
+	
 	remove_autoload_singleton("SkeleRealmsGlobal")
 	remove_autoload_singleton("CovenSystem")
 	remove_autoload_singleton("GameInfo")

@@ -210,25 +210,26 @@ func add_point(world:String, pos:Vector3) -> NavNode:
 	return world_node.add_point(pos)
 
 
-## Build a series of KD Trees from [NavNetwork]s. Dictionary assumes the key is the world name, and the value is the network.
+func connect_nodes(a:NavNode, b:NavNode, cost:float) -> void:
+	a.connect_nodes(b, cost)
+	b.connect_nodes(a, cost)
+
+
+## Build a series of KD Trees from [Netowrk]s. Dictionary assumes the key is the world name, and the value is the network.
 func _load_from_networks(data:Dictionary):
-	# data = world : array[points]
-
-	var add_net_point:Callable # define as null out here so we can recurse it
-	var already_added:Dictionary = {} # keep track of nodes we've already added so we don't keep adding the same nodes over and over again 
-	# dictionary because I think an array lookup is O(n) and this is roughly O(1) 
-	# thank god we use RC instead of GC
-
-	add_net_point = func(world:String, pt:NetPoint) -> NavNode:
-		var nav_node = add_point(world, pt.point) # add this point to the graph
-		already_added[nav_node] = true # push it here because as we recurse through the graph below it will ping pong back and forth
-		for c in pt.connections:
-			if already_added.has(c): # skip if already added node
-				continue
-			#! May have problems connecting to other meshes depending on how local resources work 
-			var conn_node = add_net_point.call((c as NetPortal).other_side.world if c is NetPortal else world, c) # recurse - add connecting node, which will add its connecting nodes, and so on. Will auto bridge portals. 
-			nav_node.connect_nodes(conn_node, pt.connections[c]) # Add connection
-		return nav_node # return this to complete the recursiveness
-
+	# thank god we use RC instead of GC but this is still memory heavy
+	# use dictionary to hold the point and the new node it contains, to avoid duplicates and to have lookups later
+	var added_nodes = {}
+	var edges = []
+	var portals = []
+	# add each point from each network
 	for world in data:
-		add_net_point.call(world, data[0]) # only call the first node for each, since it will automatically add all the others
+		edges.append_array(data[world].edges)
+		portals.append_array(data[world].portals)
+		for point in data[world].points:
+			added_nodes[point] = add_point(world, point.position)
+	# then go back and connect edges and portals, using the dictionary as a lookup
+	for edge in edges:
+		connect_nodes(added_nodes[edge.point_a], added_nodes[edge.point_b], edge.cost)
+	for portal in portals:
+		connect_nodes(added_nodes[portal], added_nodes[portal.destination_point], 0)
