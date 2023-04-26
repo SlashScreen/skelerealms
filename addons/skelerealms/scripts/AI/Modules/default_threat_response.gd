@@ -55,7 +55,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 	print("----------")
 	print("handling perception info")
 	print("Opinion on %s: %s" % [what, opinion])
-	var below_attack_threshold = opinion <= attack_threshold
+	var below_attack_threshold = (opinion <= attack_threshold) or aggression == 3 # will be below attack threshold by default if frenzied
 	
 	match transition:
 		"AwareInvisible":
@@ -70,15 +70,17 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 			if aggression == 0: # if peaceful
 				return
 			
-			if below_attack_threshold or aggression == 3: # if attack threshold or frenzied
-				
-				# TODO: frenzied attacks immediately
-				# TODO: only vigilant if not in combat, otherwise attack immediately
+			if below_attack_threshold: # if attack threshold or frenzied
 				if not _npc.in_combat:
 					print("start vigilance")
 					var e = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
-					_enter_vigilant_stance()
 					
+					# attack immediately if frenzied
+					if aggression == 3:
+						_begin_attack(e)
+						return
+					
+					_enter_vigilant_stance()
 					if vigilant_thread:
 						pull_out_of_thread = true
 						vigilant_thread.wait_to_finish()
@@ -90,6 +92,9 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 			# may be useless
 			return
 		"Unaware":
+			if aggression == 0: # if peaceful
+				return
+			
 			# if threat, do "huh?" behavior
 			if below_attack_threshold:
 				print("needs to investigate")
@@ -98,9 +103,10 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 
 
 ## Will keep watch until the entity is out of range. TODO: Visibility?
-func _stay_vigilant(e:Entity) -> void: 
+func _stay_vigilant(e:Entity) -> void:
+	# may need to change the order of this, im not sure where to put it yet
 	if _npc.in_combat: # don't react if already in combat
-		# TODO: Add enemy but don't warn
+		_add_enemy(e)
 		return
 	
 	var warned:bool = false
@@ -119,6 +125,11 @@ func _stay_vigilant(e:Entity) -> void:
 		# check if out of range
 		if distance_to_e > warn_radius ** 2:
 			_enter_normal_state()
+			return
+		# if within ring and not player, attack
+		if distance_to_e <= attack_radius ** 2 and not e.get_component("PlayerComponent").some():
+			print("frenzied immediate attack")
+			_begin_attack(e)
 			return
 		# if frenzied and within ring attack immediately
 		if distance_to_e <= warn_radius ** 2 and aggression == 3:
@@ -153,13 +164,16 @@ func _begin_attack(e:Entity) -> void:
 			# Add to goap memory
 			print("aggressive/frenzied response")
 			_npc.in_combat = true
-			if _npc.goap_memory.has("enemies"):
-				# but only if not already in memory
-				if not _npc.goap_memory["enemies"].has(e.name):
-					_npc.goap_memory["enemies"].append(e)
-			else:
-				_npc.goap_memory["enemies"] = [e.name]
+			_add_enemy(e)
 			# This will begin combat, because NPCs have a recurring goal where all enemies must be dead
+
+
+func _add_enemy(e:Entity) -> void:
+	if _npc.goap_memory.has("enemies"):
+		if not _npc.goap_memory["enemies"].has(e.name):
+			_npc.goap_memory["enemies"].append(e)
+		else:
+			_npc.goap_memory["enemies"] = [e.name]
 
 
 func _warn(e:Entity) -> void:

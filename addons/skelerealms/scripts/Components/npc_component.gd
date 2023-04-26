@@ -36,10 +36,10 @@ var _current_target_point:NavPoint:
 			_puppet.set_movement_target(val.position)
 	get:
 		return _current_target_point
-## Whether this character is in dialogue or a cutscene. Will stop/continue the puppet's pathfinding if applicable.
+## Whether this character is in dialogue or a cutscene or in combat. Will stop/continue the puppet's pathfinding if applicable (not in combat).
 var _busy:bool:
 		get:
-			return _busy
+			return _busy or in_combat # is also busy if in combat
 		set(val):
 			if val and _puppet:
 				_puppet.stop_nav()
