@@ -56,16 +56,21 @@ Not started :hole:
 | Schedules | :warning: |
 | Outside of scene AI navigation | :warning: |
 | World loading | :evergreen_tree: |
-| Skills/Attributes | :construction: |
-| NPC Perception | :construction: |
+| Skills/Attributes | :warning: |
+| NPC Perception | :warning: |
 | Spells and Spell effects | :warning: |
 | Audio events | :warning: |
 | Factions | :warning: |
-| Crime | :construction: |
+| Crime | :warning: |
 | Editor tools | :construction: |
 | Quest system | :warning: |
 | Save/Load system | :warning: |
-| Items | :construction: |
-| NPCs | :construction: |
-| Chests | :construction: |
-| Merchants | :construction: |
+| Items | :warning: |
+| NPCs | :warning: |
+| Chests | :warning: |
+| Merchants | :warning: |
+
+## Upcoming Plugins
+
+- A compatability layer with [Gloot](https://github.com/peter-kish/gloot) to work with the in-house inventory system
+- A location-based asset streamer, allowing you to load in chunks of objects based on proximity to the player.
