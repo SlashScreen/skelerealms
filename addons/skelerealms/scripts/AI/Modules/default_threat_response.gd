@@ -152,6 +152,7 @@ func _begin_attack(e:Entity) -> void:
 		2, 3:
 			# Add to goap memory
 			print("aggressive/frenzied response")
+			_npc.in_combat = true
 			if _npc.goap_memory.has("enemies"):
 				# but only if not already in memory
 				if not _npc.goap_memory["enemies"].has(e.name):

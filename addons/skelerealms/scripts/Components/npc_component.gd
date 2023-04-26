@@ -23,8 +23,10 @@ var in_combat:bool:
 		return in_combat
 	set(val):
 		if val and not in_combat: # these checks prevent spamming
+			print("entering combat")
 			entered_combat.emit()
 		elif not val and in_combat:
+			print("leaving combat")
 			left_combat.emit()
 		in_combat = val
 var _current_target_point:NavPoint:
