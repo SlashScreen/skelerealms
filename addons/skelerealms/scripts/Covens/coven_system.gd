@@ -35,3 +35,11 @@ func _cache_covens(path:String):
 	
 	else:
 		print("An error occurred when trying to access the path.")
+
+
+func add_coven(c:Coven) -> void:
+	covens[c.coven_id] = c
+
+
+func remove_coven(id:StringName) -> void:
+	covens.erase(id)
