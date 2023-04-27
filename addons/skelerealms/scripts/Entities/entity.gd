@@ -55,7 +55,7 @@ func _should_be_in_scene():
 		in_scene = false
 		return
 	# if we are outside of actor fade distance
-	if position.distance_squared_to(get_viewport().get_camera_3d().position) > ProjectSettings.get_setting("skelerealms/actor_fade_distance") ** 2: 
+	if position.distance_squared_to(GameInfo.active_camera.position) > ProjectSettings.get_setting("skelerealms/actor_fade_distance") ** 2: 
 		in_scene = false
 		return
 	in_scene = true

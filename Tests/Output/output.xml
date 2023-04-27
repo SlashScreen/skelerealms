@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="GutTests" failures="0" tests="4" >
+  <testsuite name="res://Tests/test_core.gd" tests="4" failures="0" skipped="0" >
+      <testcase name="test_in_world" assertions="1" status="pass" classname="res://Tests/test_core.gd" >
+      </testcase>
+      <testcase name="test_out_world" assertions="1" status="pass" classname="res://Tests/test_core.gd" >
+      </testcase>
+      <testcase name="test_out_of_range" assertions="1" status="pass" classname="res://Tests/test_core.gd" >
+      </testcase>
+      <testcase name="test_out_of_world_and_range" assertions="1" status="pass" classname="res://Tests/test_core.gd" >
+      </testcase>
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd" tests="0" failures="0" skipped="0" >
+      </testsuite>
+  </testsuites>

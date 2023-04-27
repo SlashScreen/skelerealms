@@ -7,6 +7,7 @@ extends Node
 
 
 var paused:bool = false
+var active_camera:Camera3D
 var game_running:bool = true :
 	get:
 		return game_running
@@ -74,6 +75,8 @@ func _ready():
 	$Timer.one_shot = false
 	$Timer.start(1)
 	$Timer.paused = not game_running
+	
+	active_camera = get_viewport().get_camera_3d()
 
 
 ## Puase the game.
