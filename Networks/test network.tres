@@ -1,0 +1,92 @@
+[gd_resource type="Resource" script_class="Network" load_steps=17 format=3 uid="uid://7y7d105ogcnf"]
+
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/network_point.gd" id="1_8vph5"]
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/network_edge.gd" id="2_f5r5f"]
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/network.gd" id="3_vlvdb"]
+
+[sub_resource type="Resource" id="Resource_35r43"]
+script = ExtResource("1_8vph5")
+position = Vector3(-2.80927, 0, 1.4936)
+
+[sub_resource type="Resource" id="Resource_6tpuf"]
+script = ExtResource("1_8vph5")
+position = Vector3(-6.11424, 0, -2.78155)
+
+[sub_resource type="Resource" id="Resource_lp1hl"]
+script = ExtResource("2_f5r5f")
+point_a = SubResource("Resource_6tpuf")
+point_b = SubResource("Resource_35r43")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_tji6t"]
+script = ExtResource("1_8vph5")
+position = Vector3(-3.66404, 0, 4.74649)
+
+[sub_resource type="Resource" id="Resource_0vmae"]
+script = ExtResource("2_f5r5f")
+point_a = SubResource("Resource_35r43")
+point_b = SubResource("Resource_tji6t")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_v8tc7"]
+script = ExtResource("1_8vph5")
+position = Vector3(5.32233, 4.76837e-07, -1.21011)
+
+[sub_resource type="Resource" id="Resource_dnxoe"]
+script = ExtResource("2_f5r5f")
+point_a = SubResource("Resource_v8tc7")
+point_b = SubResource("Resource_35r43")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_kn34i"]
+script = ExtResource("1_8vph5")
+position = Vector3(-2.56035, 0, -6.14333)
+
+[sub_resource type="Resource" id="Resource_yf30n"]
+script = ExtResource("2_f5r5f")
+point_a = SubResource("Resource_kn34i")
+point_b = SubResource("Resource_6tpuf")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_db82r"]
+script = ExtResource("2_f5r5f")
+point_a = SubResource("Resource_v8tc7")
+point_b = SubResource("Resource_kn34i")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_jo586"]
+script = ExtResource("1_8vph5")
+position = Vector3(2.73691, 0, 5.42508)
+
+[sub_resource type="Resource" id="Resource_mwx71"]
+script = ExtResource("2_f5r5f")
+point_a = SubResource("Resource_jo586")
+point_b = SubResource("Resource_v8tc7")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_nx3rg"]
+script = ExtResource("2_f5r5f")
+point_a = SubResource("Resource_tji6t")
+point_b = SubResource("Resource_jo586")
+cost = 1.0
+bidirectional = true
+
+[resource]
+script = ExtResource("3_vlvdb")
+points = Array[ExtResource("1_8vph5")]([SubResource("Resource_35r43"), SubResource("Resource_6tpuf"), SubResource("Resource_kn34i"), SubResource("Resource_v8tc7"), SubResource("Resource_jo586"), SubResource("Resource_tji6t")])
+edges = Array[ExtResource("2_f5r5f")]([SubResource("Resource_lp1hl"), SubResource("Resource_yf30n"), SubResource("Resource_db82r"), SubResource("Resource_mwx71"), SubResource("Resource_nx3rg"), SubResource("Resource_0vmae"), SubResource("Resource_dnxoe")])
+edge_map = {
+SubResource("Resource_35r43"): [SubResource("Resource_lp1hl"), SubResource("Resource_0vmae"), SubResource("Resource_dnxoe")],
+SubResource("Resource_6tpuf"): [SubResource("Resource_lp1hl"), SubResource("Resource_yf30n")],
+SubResource("Resource_kn34i"): [SubResource("Resource_yf30n"), SubResource("Resource_db82r")],
+SubResource("Resource_v8tc7"): [SubResource("Resource_db82r"), SubResource("Resource_mwx71"), SubResource("Resource_dnxoe")],
+SubResource("Resource_jo586"): [SubResource("Resource_mwx71"), SubResource("Resource_nx3rg")],
+SubResource("Resource_tji6t"): [SubResource("Resource_nx3rg"), SubResource("Resource_0vmae")]
+}
+portals = Array[Resource("res://addons/network_utility/Scripts/network_portal.gd")]([])

@@ -15,6 +15,11 @@ extends Node
 var worlds:Dictionary = {}
 
 
+func _ready() -> void:
+	if not Engine.is_editor_hint():
+		load_all_networks()
+
+
 func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
 	var start_node:NavNode = nearest_point(start)
 	var end_node:NavNode = nearest_point(end)
@@ -233,3 +238,31 @@ func _load_from_networks(data:Dictionary):
 		connect_nodes(added_nodes[edge.point_a], added_nodes[edge.point_b], edge.cost)
 	for portal in portals:
 		connect_nodes(added_nodes[portal], added_nodes[portal.destination_point], 0)
+
+
+func _load_from_disk(path:String, networks:Dictionary, regex:RegEx) -> void:
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if dir.current_is_dir(): # if is directory, cache subdirectory
+				_load_from_disk(file_name, networks, regex)
+			else: # if filename, cache filename
+				var result = regex.search(file_name)
+				if result:
+					networks[result.get_string(1) as StringName] = "%s/%s" % [path, file_name]
+			file_name = dir.get_next()
+		dir.list_dir_end()
+
+
+func load_all_networks() -> void:
+	var networks = {}
+	var path = ProjectSettings.get_setting("skelerealms/networks_path")
+	var regex = RegEx.new()
+	regex.compile("([^\\/\n\\r]+).tres")
+	
+	_load_from_disk(path, networks, regex)
+	_load_from_networks(networks)
+	
+	print_tree_pretty()
