@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://bua7kr46ab5p5"]
+[gd_scene load_steps=10 format=3 uid="uid://bua7kr46ab5p5"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Entities/entity_manager.gd" id="1_cpofd"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/GranularNavigation/navigation_master.gd" id="1_s2mcn"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Entities/entity.gd" id="2_e8w23"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Components/player_component.gd" id="3_73cda"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Components/teleport_component.gd" id="4_f65ms"]
@@ -10,6 +11,9 @@
 [ext_resource type="PackedScene" uid="uid://d3xvrivp3iwfb" path="res://Worlds/test world 1.tscn" id="8_7k0r4"]
 
 [node name="Game" type="Node3D"]
+
+[node name="NavMaster" type="Node" parent="."]
+script = ExtResource("1_s2mcn")
 
 [node name="EntityManager" type="Node" parent="."]
 unique_name_in_owner = true

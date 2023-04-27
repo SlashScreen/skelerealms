@@ -16,8 +16,7 @@ var worlds:Dictionary = {}
 
 
 func _ready() -> void:
-	if not Engine.is_editor_hint():
-		load_all_networks()
+	load_all_networks()
 
 
 func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
@@ -131,7 +130,7 @@ func construct_tree(points:Array[NavPoint]):
 		# if point world not already created:
 		if not sorted_points.has(n.world):
 			# create sort array
-			sorted_points[n.world] = Array[NavPoint].new()
+			sorted_points[n.world] = []
 		sorted_points[n.world].append(n) # then append
 		
 	# 2) for each world, select median point from random selection of nodes and add to tree.
@@ -205,6 +204,7 @@ func construct_tree(points:Array[NavPoint]):
 
 ## Add a point to the tree
 func add_point(world:String, pos:Vector3) -> NavNode:
+	print("Adding a point at %s in world %s" % [pos, world])
 	var world_node: NavWorld = find_child(world)
 	# Add world if it doesnt already exist
 	if not world_node:
@@ -229,6 +229,7 @@ func _load_from_networks(data:Dictionary):
 	var portals = []
 	# add each point from each network
 	for world in data:
+		print("processing %s" % world)
 		edges.append_array(data[world].edges)
 		portals.append_array(data[world].portals)
 		for point in data[world].points:
@@ -251,18 +252,22 @@ func _load_from_disk(path:String, networks:Dictionary, regex:RegEx) -> void:
 			else: # if filename, cache filename
 				var result = regex.search(file_name)
 				if result:
-					networks[result.get_string(1) as StringName] = "%s/%s" % [path, file_name]
+					print("%s/%s" % [path, file_name])
+					networks[result.get_string(1) as StringName] = load("%s/%s" % [path, file_name])
 			file_name = dir.get_next()
 		dir.list_dir_end()
 
 
 func load_all_networks() -> void:
+	print("Loading all networks...")
 	var networks = {}
 	var path = ProjectSettings.get_setting("skelerealms/networks_path")
 	var regex = RegEx.new()
 	regex.compile("([^\\/\n\\r]+).tres")
 	
+	print("Loading from disk...")
 	_load_from_disk(path, networks, regex)
+	print("Compiling networks...")
 	_load_from_networks(networks)
 	
 	print_tree_pretty()
