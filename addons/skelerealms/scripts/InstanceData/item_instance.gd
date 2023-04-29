@@ -7,6 +7,7 @@ extends InstanceData
 @export var item_owner:String
 @export var contained_inventory:String
 @export var rotation:Quaternion
+@export var quest_item:bool = false
 
 
 func get_archetype_components() -> Array[EntityComponent]:
@@ -16,6 +17,7 @@ func get_archetype_components() -> Array[EntityComponent]:
 	item_component.data = item_data
 	item_component.contained_inventory = Option.wrap(contained_inventory)
 	item_component.name = "ItemComponent" # be sure to name them
+	item_component.quest_item = quest_item
 	# Add new components
 	components.append(item_component)
 	components.append(InteractiveComponent.new())

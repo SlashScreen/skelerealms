@@ -10,6 +10,7 @@ extends EntityComponent
 var in_inventory:bool: 
 	get:
 		return contained_inventory.some()
+var quest_item:bool
 # TODO: Item functions
 
 
@@ -58,6 +59,11 @@ func move_to_inventory(refID:String):
 			.get_component("InventoryComponent")\
 			.unwrap()\
 			.remove_from_inventory(parent_entity.name)
+	
+	# drop if moved to inventory is empty
+	if refID == "":
+		drop()
+		return
 	
 	# add to new inventory
 	SkeleRealmsGlobal.entity_manager\
