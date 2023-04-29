@@ -19,13 +19,12 @@ func _init() -> void:
 
 ## Add an item to the inventory.
 func add_to_inventory(id:String):
-	#var e = SkeleRealmsGlobal.entity_manager.get_entity(id)
-	#if e.some():
-	#	var ic = (e.unwrap() as Entity).get_component("ItemComponent")
-		#if ic.some():
-			#(ic.unwrap() as ItemComponent).move_to_inventory(id)
-	inventory.append(id)
-			#added_to_inventory.emit(id)
+	var e = SkeleRealmsGlobal.entity_manager.get_entity(id)
+	if e.some():
+		var ic = (e.unwrap() as Entity).get_component("ItemComponent")
+		if ic.some():
+			inventory.append(id)
+			added_to_inventory.emit(id)
 
 
 ## Remove an item from the inventory.

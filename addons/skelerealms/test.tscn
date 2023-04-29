@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bua7kr46ab5p5"]
+[gd_scene load_steps=12 format=3 uid="uid://bua7kr46ab5p5"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Entities/entity_manager.gd" id="1_cpofd"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Entities/entity.gd" id="2_e8w23"]
@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://c1bwgrswdshee" path="res://player.tscn" id="6_5ybbi"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/System/world_loader.gd" id="7_wp4t3"]
 [ext_resource type="PackedScene" uid="uid://d3xvrivp3iwfb" path="res://Worlds/test world 1.tscn" id="8_7k0r4"]
+[ext_resource type="PackedScene" uid="uid://cb36xhkpqr1j4" path="res://ui scripts/hud.tscn" id="10_r80ts"]
+[ext_resource type="PackedScene" uid="uid://dl8vo4jn7mx63" path="res://ui scripts/menu.tscn" id="11_f8v2q"]
 
 [node name="Game" type="Node3D"]
 
@@ -41,3 +43,7 @@ unique_name_in_owner = true
 script = ExtResource("7_wp4t3")
 
 [node name="test world 1" parent="WorldLoader" instance=ExtResource("8_7k0r4")]
+
+[node name="HUD" parent="." instance=ExtResource("10_r80ts")]
+
+[node name="Menu" parent="." instance=ExtResource("11_f8v2q")]
