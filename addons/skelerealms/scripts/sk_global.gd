@@ -11,7 +11,7 @@ var world_states:Dictionary
 
 
 ## Attempts to find an entity in the tree above a node. Returns null if none found. Automatically takes account of reparented puppets.
-static func get_entity_in_tree(child:Node) -> Entity:
+func get_entity_in_tree(child:Node) -> Entity:
 	var checking = child
 	while not checking.get_parent() == null:
 		if checking is Entity:
