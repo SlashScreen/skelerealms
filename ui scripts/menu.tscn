@@ -1,9 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://dl8vo4jn7mx63"]
+[gd_scene load_steps=9 format=3 uid="uid://dl8vo4jn7mx63"]
 
 [ext_resource type="Script" path="res://ui scripts/menu_control.gd" id="1_t5doc"]
 [ext_resource type="Theme" uid="uid://b3rcvlcx4caci" path="res://addons/skelerealms/menu_theme.tres" id="2_iwgrb"]
 [ext_resource type="Script" path="res://ui scripts/system_menu.gd" id="3_ig4wq"]
-[ext_resource type="Script" path="res://ui scripts/tab_container.gd" id="3_xqt2s"]
 [ext_resource type="Script" path="res://ui scripts/journal_menu.gd" id="4_mmivr"]
 [ext_resource type="Script" path="res://ui scripts/inventory_menu.gd" id="5_g8rl4"]
 [ext_resource type="Texture2D" uid="uid://ccxi3gwpbc7tr" path="res://icon.svg" id="6_0gsw4"]
@@ -56,9 +55,9 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_iwgrb")
 theme_type_variation = &"brown"
-script = ExtResource("3_xqt2s")
 
 [node name="System" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("3_ig4wq")
 
@@ -105,15 +104,28 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="Inventory" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("5_g8rl4")
 
-[node name="Label" type="Label" parent="TabContainer/Inventory"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-text = "TODO"
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Inventory"]
+layout_mode = 1
+offset_right = 85.0
+offset_bottom = 409.0
+
+[node name="item_name" type="RichTextLabel" parent="TabContainer/Inventory/VBoxContainer"]
+layout_mode = 2
+text = "NAME"
+fit_content = true
+
+[node name="item_desc" type="RichTextLabel" parent="TabContainer/Inventory/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "description"
+fit_content = true
+
+[node name="drop_button" type="Button" parent="TabContainer/Inventory/VBoxContainer"]
+layout_mode = 2
+text = "Drop"
 
 [node name="ItemList" type="ItemList" parent="TabContainer/Inventory"]
 layout_mode = 1

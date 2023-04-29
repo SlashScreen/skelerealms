@@ -12,13 +12,18 @@ func _ready() -> void:
 		.unwrap()\
 		.get_component("InventoryComponent")\
 		.unwrap()
-	$"..".tab_changed.connect(_on_tab_changed.bind())
 	GameInfo.pause.connect(_refresh_inventory.bind())
+	pinventory.inventory_changed.connect(func(): # we refresh the inventory if it's changed, but only if it's paused
+		# TODO: make it only add or remove the item we care about
+		if GameInfo.paused:
+			_refresh_inventory()
+	)
 
 
-func _on_tab_changed(what:int) -> void:
-	if what == 2: # TODO: Not hardcoded
-		_refresh_inventory()
+func _process(delta: float) -> void:
+	if GameInfo.paused:
+		# change button state
+		$VBoxContainer/drop_button.disabled = not $ItemList.is_anything_selected()
 
 
 ## Clear the inventory list and re-fill it with items.
@@ -26,3 +31,8 @@ func _refresh_inventory() -> void:
 	$ItemList.clear()
 	for item in pinventory.inventory:
 		$ItemList.add_item(item, load("res://icon.svg"))
+
+
+func _drop_item(id:String) -> bool:
+	pinventory.remove_from_inventory(id)
+	return true

@@ -9,12 +9,18 @@ var snails: int
 
 signal added_to_inventory(id:String)
 signal removed_from_inventory(id:String)
+signal inventory_changed
 signal added_snails(amount:int)
 signal removed_snails(amount:int)
 
 
 func _init() -> void:
 	name = "InventoryComponent"
+
+
+func _ready() -> void:
+	added_to_inventory.connect(func(x): inventory_changed.emit())
+	removed_from_inventory.connect(func(x): inventory_changed.emit())
 
 
 ## Add an item to the inventory.
