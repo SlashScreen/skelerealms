@@ -11,11 +11,17 @@ const PARENT_TREE_CLIMB = 10
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var look_sensitivity:float = ProjectSettings.get_setting("player/look_sensitivity")
+var puppeteer:PuppetSpawnerComponent
 @onready var camera:Camera3D = $Camera3D
 
 
 ## Called to update the entity
 signal update_position(pos:Vector3)
+
+
+func _ready():
+	puppeteer = $"../../".get_component("PuppetSpawnerComponent").unwrap()
+	update_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
 
 
 func _physics_process(delta):
@@ -78,3 +84,7 @@ func _process(_delta):
 		var ic = SkeleRealmsGlobal.get_entity_in_tree(collider).get_component("InteractiveComponent")
 		if ic.some():
 			ic.unwrap().interact("Player")
+
+
+func get_puppeteer() -> PuppetSpawnerComponent:
+	return puppeteer

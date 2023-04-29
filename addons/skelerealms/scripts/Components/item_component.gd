@@ -44,7 +44,8 @@ func _despawn():
 
 func _process(delta):
 	if in_inventory:
-		parent_entity.position = (SkeleRealmsGlobal.entity_manager.get_entity(contained_inventory.unwrap() as String).unwrap() as Entity).position
+		parent_entity.position = (SkeleRealmsGlobal.entity_manager.get_entity(contained_inventory.unwrap()).unwrap() as Entity).position
+		parent_entity.world = (SkeleRealmsGlobal.entity_manager.get_entity(contained_inventory.unwrap()).unwrap() as Entity).world
 
 
 ## Move this to another inventory. Adds and removes the item from the inventories.
