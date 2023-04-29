@@ -17,6 +17,13 @@ func _init() -> void:
 	name = "EntityComponent"
 
 
+func _ready() -> void:
+	super._ready()
+	await parent_entity.instantiated
+	if not $"../InteractiveComponent".interacted.is_connected(interact.bind()):
+		$"../InteractiveComponent".interacted.connect(interact.bind())
+
+
 func _on_enter_scene():
 	_spawn()
 
@@ -50,15 +57,18 @@ func move_to_inventory(refID:String):
 			.get_component("InventoryComponent")\
 			.unwrap()\
 			.remove_from_inventory(parent_entity.name)
-	contained_inventory = Option.from(refID)
+	
 	# add to new inventory
 	SkeleRealmsGlobal.entity_manager\
-		.get_entity(contained_inventory.unwrap())\
+		.get_entity(refID)\
 		.unwrap()\
 		.get_component("InventoryComponent")\
 		.unwrap()\
 		.add_to_inventory(parent_entity.name)
-	if not in_inventory:
+	
+	contained_inventory = Option.from(refID)
+	
+	if in_inventory:
 		_despawn()
 
 
@@ -69,8 +79,8 @@ func drop():
 
 
 ## Interact with this item. Called from [InteractiveComponent].
-func interact(refID):
-	move_to_inventory(refID)
+func interact(interacted_refID):
+	move_to_inventory(interacted_refID)
 
 
 func save() -> Dictionary:

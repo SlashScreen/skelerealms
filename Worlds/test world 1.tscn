@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://d3xvrivp3iwfb"]
+[gd_scene load_steps=20 format=3 uid="uid://d3xvrivp3iwfb"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/WorldObjects/door.gd" id="1_kyxr1"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/WorldObjects/world_item.gd" id="2_045t8"]
@@ -7,8 +7,6 @@
 [ext_resource type="Resource" uid="uid://dslcodrk4llsq" path="res://Entities/test_item_instance.tres" id="3_svi1k"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/WorldObjects/world_npc.gd" id="4_hohrk"]
 [ext_resource type="Resource" uid="uid://b55fvsmvsd6tw" path="res://Entities/test_npc_instance.tres" id="5_7tm42"]
-[ext_resource type="Script" path="res://addons/network_utility/Scripts/network_instance.gd" id="8_sigq5"]
-[ext_resource type="Resource" uid="uid://7y7d105ogcnf" path="res://Networks/test network.tres" id="9_8v723"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_3ukhe"]
 vertices = PackedVector3Array(7.5, 0.0915144, -4.25, 7, 0.0915144, -4.25, 5.75, 0.0915144, -3.75, 7.5, 0.0915144, 7.5, 4.5, 0.0915144, -5.5, 4.75, 0.0915144, -7, 4.75, 0.0915144, -7.5, -1.5, 0.0915144, -7.5, -7.5, 0.0915144, 0, -7.5, 0.0915144, 7.5, 0, 0.0915144, 7.5, 5.25, 0.0915144, -4.25, 4.5, 0.0915144, -5.5, -1.5, 0.0915144, -7.5, 5.75, 0.0915144, -3.75, 5.25, 0.0915144, -4.25, -1.5, 0.0915144, -7.5, -1.5, 0.0915144, -7.5, -7.5, 0.0915144, -7.5, -7.5, 0.0915144, 0, 0, 0.0915144, 7.5, 7.5, 0.0915144, 7.5, 5.75, 0.0915144, -3.75, 4.75, 0.0915144, -7.5, 4.75, 0.0915144, -7, 6.25, 0.0915144, -6.5, 7.5, 0.0915144, -7.5, 6.25, 0.0915144, -6.5, 7, 0.0915144, -4.25, 7.5, 0.0915144, -4.25, 7.5, 0.0915144, -7.5)
@@ -115,7 +113,3 @@ instance = ExtResource("3_svi1k")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32303, 0, -4.62638)
 script = ExtResource("4_hohrk")
 instance = ExtResource("5_7tm42")
-
-[node name="NetworkInstance" type="Node3D" parent="."]
-script = ExtResource("8_sigq5")
-network = ExtResource("9_8v723")
