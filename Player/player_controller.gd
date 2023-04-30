@@ -17,11 +17,13 @@ var puppeteer:PuppetSpawnerComponent
 
 ## Called to update the entity
 signal update_position(pos:Vector3)
+signal update_rotation(rot:Quaternion)
 
 
 func _ready():
 	puppeteer = $"../../".get_component("PuppetSpawnerComponent").unwrap()
 	update_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
+	update_rotation.connect((get_parent().get_parent() as Entity)._on_set_rotation.bind())
 
 
 func _physics_process(delta):
@@ -58,6 +60,7 @@ func _input(event):
 
 func _process(_delta):
 	update_position.emit(position)
+	update_rotation.emit(camera.quaternion)
 	# Example implementation of using interaction.
 	# If interact key pressed 
 	if Input.is_action_just_released("interact"):

@@ -24,5 +24,16 @@ func get_entity_in_tree(child:Node) -> Entity:
 				continue
 		
 		checking = checking.owner
-
+	
 	return null
+
+
+func get_child_rids(child:Node) -> Array:
+	var output = []
+	
+	for c in child.get_children():
+		if c is CollisionObject3D:
+			output.append(c.get_rid())
+		output.append_array(get_child_rids(c))
+	
+	return output

@@ -8,6 +8,8 @@ extends Node
 @export var world: String
 ## Position within the world it's in.
 @export var position:Vector3
+## Rotation of this Enitiy.
+@export var rotation:Quaternion
 ## An internal timer of how long this entity has gone without being modified or referenced. 
 ## One it's beyond a certain point, the [EntityManager] will mark it for cleanup after a save.
 var stale_timer:float
@@ -63,6 +65,10 @@ func _should_be_in_scene():
 
 func _on_set_position(p:Vector3):
 	position = p
+
+
+func _on_set_rotation(q:Quaternion) -> void:
+	rotation = q
 
 
 ## Gets a component by the string name. 
