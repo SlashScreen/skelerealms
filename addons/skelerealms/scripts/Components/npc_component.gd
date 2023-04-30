@@ -398,7 +398,7 @@ func determine_opinion_of(id:StringName) -> float:
 		for coven in covens:
 			var c = CovenSystem.get_coven(coven)
 			# get the other coven opinions
-			coven_opinions_unfiltered.append_array(c.get_coven_opinions(e_covens_component.covens.keys)) # FIXME: Get this coven opinions on other 
+			coven_opinions_unfiltered.append_array(c.get_coven_opinions(e_covens_component.covens.keys())) # FIXME: Get this coven opinions on other 
 		
 		opinions.append_array(coven_opinions_unfiltered.filter(func(x:int): return not x == 0)) # filter out zeroes
 		opinion_total += opinions.size() * covens_modifier # calculate total

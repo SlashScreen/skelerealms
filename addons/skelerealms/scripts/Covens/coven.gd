@@ -37,7 +37,7 @@ func rank_name(rank:int) -> String:
 
 
 ## Returns a list of the opinions it has of a list of covens.
-func get_coven_opinions(covens:Array[StringName]) -> Array[int]:
+func get_coven_opinions(covens:Array) -> Array[int]:
 	var opinion_list:Array[int] = []
 	
 	for coven in covens:
