@@ -374,6 +374,7 @@ func get_relationship_with(ref_id:String) -> Option:
 ## Determines the opinion of some entity. See the tutorial in the class docs for a more in-depth look at NPC opinions.
 func determine_opinion_of(id:StringName) -> float:
 	var e:Entity = SkeleRealmsGlobal.entity_manager.get_entity(id).unwrap()
+	print(e)
 	
 	if not THREATENING_ENTITY_TYPES.any(func(x:String): return e.get_component(x).some()): # if it doesn't have any components that are marked as threatening, return neutral.
 		return 0
@@ -390,12 +391,14 @@ func determine_opinion_of(id:StringName) -> float:
 	if e_cc.some():
 		var covens = parent_entity.get_component("CovensComponent").unwrap().covens
 		var coven_opinions_unfiltered = []
+		var e_covens_component = e_cc.unwrap()
+		print(e_covens_component.get_parent())
 		
 		# get all opinions
 		for coven in covens:
 			var c = CovenSystem.get_coven(coven)
 			# get the other coven opinions
-			coven_opinions_unfiltered.append_array(c.get_coven_opinions(e_cc.unwrap().covens.keys))
+			coven_opinions_unfiltered.append_array(c.get_coven_opinions(e_covens_component.covens.keys)) # FIXME: Get this coven opinions on other 
 		
 		opinions.append_array(coven_opinions_unfiltered.filter(func(x:int): return not x == 0)) # filter out zeroes
 		opinion_total += opinions.size() * covens_modifier # calculate total

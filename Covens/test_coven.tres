@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="Coven" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="Coven" load_steps=2 format=3 uid="uid://d2vtiq86n13d4"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Covens/coven.gd" id="1_t7iha"]
 
 [resource]
 script = ExtResource("1_t7iha")
 coven_id = &"test_coven"
-other_coven_opinions = {}
+other_coven_opinions = {
+"PlayerCoven": 5
+}
 hidden_from_player = false
 ranks = {}
 ignore_crimes_against_others = false

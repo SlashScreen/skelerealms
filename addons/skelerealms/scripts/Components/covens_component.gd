@@ -7,7 +7,7 @@ extends EntityComponent
 
 ## IDs of covens this entity is a member of.
 ## This dictionary is of type StringName:Int, where key is the coven, and int is the rank of this member.
-var covens:Dictionary
+@export var covens:Dictionary
 
 
 func _init(coven_list:Array[CovenRankData]) -> void:

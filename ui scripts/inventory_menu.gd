@@ -24,7 +24,7 @@ func _ready() -> void:
 	$VBoxContainer/drop_button.pressed.connect(func():
 		_drop_item(inv_map[$ItemList.get_selected_items()[0]])
 	)
-	$ItemList.item_selected.connect(func(x):
+	$ItemList.item_selected.connect(func(_x):
 		var ic = SkeleRealmsGlobal.entity_manager.get_entity(inv_map[$ItemList.get_selected_items()[0]]).unwrap().get_component("ItemComponent").unwrap() as ItemComponent # unsafe but we are assuming that if it is in the inventory it is an item because it can't be added otherwise
 		$VBoxContainer/drop_button.disabled = ic.quest_item # check to not drop quest items
 	)

@@ -57,7 +57,6 @@ theme = ExtResource("2_iwgrb")
 theme_type_variation = &"brown"
 
 [node name="System" type="Control" parent="TabContainer"]
-visible = false
 layout_mode = 2
 script = ExtResource("3_ig4wq")
 
@@ -104,6 +103,7 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="Inventory" type="Control" parent="TabContainer"]
+visible = false
 layout_mode = 2
 script = ExtResource("5_g8rl4")
 

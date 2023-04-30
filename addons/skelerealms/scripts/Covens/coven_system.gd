@@ -29,7 +29,7 @@ func _cache_covens(path:String):
 			else: # if filename, cache filename
 				var result = regex.search(file_name)
 				if result:
-					covens[result.get_string(1) as StringName] = "%s/%s" % [path, file_name]
+					covens[result.get_string(1) as StringName] = load("%s/%s" % [path, file_name])
 			file_name = dir.get_next()
 		dir.list_dir_end()
 	

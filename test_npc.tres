@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/npc_data.gd" id="1_7n5op"]
 [ext_resource type="PackedScene" uid="uid://24i73ycvxysf" path="res://test_npc_prefab.tscn" id="1_f44c6"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_threat_response.gd" id="1_rddtv"]
-[ext_resource type="Resource" path="res://Covens/test_coven.tres" id="1_yvvqr"]
+[ext_resource type="Resource" uid="uid://d2vtiq86n13d4" path="res://Covens/test_coven.tres" id="1_yvvqr"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Covens/coven_rank_data.gd" id="2_caaic"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_interact_response.gd" id="2_dlkhq"]
 

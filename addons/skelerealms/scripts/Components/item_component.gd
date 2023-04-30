@@ -101,7 +101,7 @@ func drop():
 			var query = PhysicsRayQueryParameters3D.create(from, to, 0xFFFFFFFF, SkeleRealmsGlobal.get_child_rids(psc.unwrap().puppet))
 			await get_tree().physics_frame
 			var space = (psc.unwrap().puppet as Node3D).get_world_3d().direct_space_state
-			
+			# FIXME: Direction is weird
 			var res = space.intersect_ray(query)
 			if res.is_empty():
 				# else spawn in front
