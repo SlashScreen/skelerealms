@@ -33,12 +33,12 @@ func process_damage(info:DamageInfo) -> void:
 	var accumulated_damage = 0
 	for effect in info.damage_effects:
 		var effect_amount = info.damage_effects[effect]
-		
+		# if you have many more than these, some sort of dictionary may be in order.
 		match effect:
 			# Physical
 			&"sharp":
 				accumulated_damage = effect_amount * sharp_modifier
-			&"pierce":
+			&"piercing":
 				accumulated_damage = effect_amount * piercing_modifier
 			&"blunt":
 				accumulated_damage = effect_amount * blunt_modifier
@@ -54,10 +54,12 @@ func process_damage(info:DamageInfo) -> void:
 			&"plant":
 				accumulated_damage = effect_amount * plant_modifier * magic_modifier
 			# Attribute
-			&"stamina":
+			&"moxie":
 				vitals_component["moxie"] -= effect_amount * stamina_modifier
 			&"will":
 				vitals_component["will"] -= effect_amount * will_modifier
+		
+		_npc.damaged_with_effect(effect)
 	
 	# Apply damage
 	vitals_component["health"] -= accumulated_damage
@@ -67,6 +69,6 @@ func process_damage(info:DamageInfo) -> void:
 		spell_component.add_effect(eff)
 	
 	# Send damaging signal if we are hit by an entity
-	# Could also add behavior somewhere to avoid areas that cause damage.
+	# Could also add behavior somewhere to avoid areas that cause damage. Looking at you, Lydia Skyrim.
 	if not info.offender == "":
 		_npc.hit_by.emit(info.offender)

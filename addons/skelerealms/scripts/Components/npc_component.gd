@@ -97,6 +97,7 @@ signal friendly_fire_response
 signal draw_weapons
 signal put_away_weapons
 signal hit_by(who:String)
+signal damaged_with_effect(effect:StringName)
 
 
 #* ### OVERRIDES
