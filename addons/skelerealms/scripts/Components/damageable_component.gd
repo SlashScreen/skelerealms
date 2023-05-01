@@ -3,8 +3,11 @@ extends EntityComponent
 ## Allows an entity to be damaged.
 
 
+signal damaged(info:DamageInfo)
+
+
 func damage(info:DamageInfo):
-	pass
+	damaged.emit(info)
 
 
 func _init() -> void:

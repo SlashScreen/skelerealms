@@ -43,7 +43,7 @@ However, the system is designed to be able to hook into these. BYOB (Bring your 
 
 ## Feature status
 
-Working, stable :evergreen_tree:  
+Working, tested :evergreen_tree:  
 Probably working but untested :warning:  
 In progress :construction:  
 Sketched out :pencil2:  
@@ -60,12 +60,12 @@ Not started :hole:
 | NPC Perception | :warning: |
 | Spells and Spell effects | :warning: |
 | Audio events | :warning: |
-| Factions | :warning: |
+| Factions | :evergreen_tree: |
 | Crime | :warning: |
 | Editor tools | :construction: |
 | Quest system | :warning: |
 | Save/Load system | :warning: |
-| Items | :warning: |
+| Items | :evergreen_tree: |
 | NPCs | :warning: |
 | Chests | :warning: |
 | Merchants | :warning: |

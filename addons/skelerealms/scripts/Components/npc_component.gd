@@ -96,6 +96,7 @@ signal interacted(refID:String)
 signal friendly_fire_response
 signal draw_weapons
 signal put_away_weapons
+signal hit_by(who:String)
 
 
 #* ### OVERRIDES
