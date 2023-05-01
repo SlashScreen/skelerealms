@@ -26,20 +26,21 @@ func _cache_covens(path:String):
 		while file_name != "":
 			if dir.current_is_dir(): # if is directory, cache subdirectory
 				_cache_covens(file_name)
-			else: # if filename, cache filename
+			else: # if filename, cache
 				var result = regex.search(file_name)
 				if result:
 					covens[result.get_string(1) as StringName] = load("%s/%s" % [path, file_name])
 			file_name = dir.get_next()
 		dir.list_dir_end()
-	
 	else:
 		print("An error occurred when trying to access the path.")
 
 
+## Add coven to system.
 func add_coven(c:Coven) -> void:
 	covens[c.coven_id] = c
 
 
+## Remove coven from system.
 func remove_coven(id:StringName) -> void:
 	covens.erase(id)
