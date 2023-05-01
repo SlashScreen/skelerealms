@@ -37,5 +37,6 @@ class_name NPCData
 ## AI Modules.
 @export var modules:Array[AIModule] = [
 		DefaultThreatResponseModule.new(),
-		DefaultInteractResponseModule.new()
+		DefaultInteractResponseModule.new(),
+		DefaultDamageModule.new()
 	]

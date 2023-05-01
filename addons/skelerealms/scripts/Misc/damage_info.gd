@@ -15,8 +15,8 @@ var spell_effects:Array[SpellEffect] = []
 var info:Dictionary = {}
 
 
-func _init(who:String, what:Dictionary, spells:Array[SpellEffect] = [], data:Dictionary = {}) -> void:
-	offender = who
-	damage_effects = what
-	spell_effects = spells
-	info = data
+func _init(offender:String, damage_effects:Dictionary, spell_effects:Array[SpellEffect] = [], info:Dictionary = {}) -> void:
+	self.offender = offender
+	self.damage_effects = damage_effects
+	self.spell_effects = spell_effects
+	self.info = info

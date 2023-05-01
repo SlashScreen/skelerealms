@@ -48,6 +48,7 @@ var pull_out_of_thread = false
 
 func _initialize() -> void:
 	_npc.perception_transition.connect(_handle_perception_info.bind())
+	_npc.hit_by.connect(func(who): _aggress(SkeleRealmsGlobal.entity_manager.get_entity(who).unwrap()))
 
 
 func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionFSM_Machine) -> void:
