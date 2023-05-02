@@ -25,6 +25,7 @@ var vitals = {
 	get:
 		return vitals
 	set(val):
+		print(val)
 		vitals = val
 		dirty = true
 

@@ -81,7 +81,7 @@ func add_entity(res:InstanceData):
 	for n in new_nodes: # add all components to entity
 		new_entity.add_child(n)
 		n.owner = new_entity
-		n._ready()
+		#n._ready()
 	
 	# add new entity to self, and the dictionary
 	entities[res.ref_id] = new_entity
