@@ -86,6 +86,9 @@ func entity_in_save(ref_id:String) -> Option:
 
 ## Gets the filepath for the most recent savegame. It is sorted by file modification time.
 func _get_most_recent_savegame() -> Option:
+	if not DirAccess.dir_exists_absolute("user://saves/"):
+		return Option.none()
+	
 	var dir_files:Array[String] = []
 	dir_files.append_array(DirAccess.get_files_at("user://saves/"))
 	# if no saves, we got none 
