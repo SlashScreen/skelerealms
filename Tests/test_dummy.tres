@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="NPCData" load_steps=9 format=3 uid="uid://dnxrsrs4jlcxu"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/npc_data.gd" id="1_5mc0v"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_damage_module.gd" id="1_i4yub"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_interact_response.gd" id="2_ts27d"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_threat_response.gd" id="3_gqrf7"]
+[ext_resource type="PackedScene" uid="uid://24i73ycvxysf" path="res://test_npc_prefab.tscn" id="4_eio35"]
+
+[sub_resource type="Resource" id="Resource_g8o8h"]
+script = ExtResource("1_i4yub")
+sharp_modifier = 1.0
+piercing_modifier = 1.0
+blunt_modifier = 1.0
+poison_modifier = 1.0
+magic_modifier = 1.0
+light_modifier = 1.0
+frost_modifier = 1.0
+flame_modifier = 1.0
+plant_modifier = 1.0
+stamina_modifier = 1.0
+will_modifier = 1.0
+
+[sub_resource type="Resource" id="Resource_hr8l8"]
+script = ExtResource("2_ts27d")
+
+[sub_resource type="Resource" id="Resource_o8fm3"]
+script = ExtResource("3_gqrf7")
+aggression = 2
+attack_threshold = -50
+confidence = 2
+assistance = 1
+assistance_threshold = 0
+friendly_fire_behavior = 1
+warn_radius = 20.0
+attack_radius = 8.0
+
+[resource]
+script = ExtResource("1_5mc0v")
+prefab = ExtResource("4_eio35")
+schedule = Array[Resource("res://addons/skelerealms/scripts/Schedules/schedule_event.gd")]([])
+covens = Array[Resource("res://addons/skelerealms/scripts/Covens/coven_rank_data.gd")]([])
+default_player_opinion = 0
+loyalty = 0
+essential = true
+ghost = false
+invulnerable = false
+unique = true
+affects_stealth_meter = true
+start_dialogue_node = ""
+interactive = true
+relationships = Array[Resource("res://addons/skelerealms/scripts/Relationships/relationship.gd")]([])
+modules = Array[Object]([SubResource("Resource_g8o8h"), SubResource("Resource_hr8l8"), SubResource("Resource_o8fm3")])
+id = "test_dummy"

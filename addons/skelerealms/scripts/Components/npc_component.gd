@@ -111,10 +111,7 @@ func _init(d:NPCData) -> void:
 	s.events = data.schedule
 	add_child(s)
 	_schedule = s
-	# Initialize all AI Modules
-	for module in data.modules:
-		module.link(self)
-		module._initialize()
+	
 	# Set default player opinion
 	_opinions[&"Player"] = d.default_player_opinion
 
@@ -136,8 +133,12 @@ func _ready():
 	_puppet_component.spawned_puppet.connect(func(x:Node): _puppet = x as NPCPuppet )
 	_puppet_component.despawned_puppet.connect(func(): _puppet = null )
 	
+	# Initialize all AI Modules
+	for module in data.modules:
+		module.link(self)
+		module._initialize()
+	
 	# misc setup
-
 	_interactive_component.interactible = data.interactive # TODO: Or instance override
 
 

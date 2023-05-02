@@ -4,6 +4,4 @@
       <testcase name="test_in_scene" assertions="4" status="pass" classname="res://Tests/test_core.gd" >
       </testcase>
       </testsuite>
-  <testsuite name="res://Tests/test_npc.gd" tests="0" failures="0" skipped="0" >
-      </testsuite>
   </testsuites>

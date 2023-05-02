@@ -21,17 +21,26 @@ extends AIModule
 var spell_component:SpellTargetComponent
 var vitals_component:VitalsComponent
 
+signal damage_received
+
 
 func _initialize() -> void:
-	(_npc.parent_entity.get_component("DamageableComponent").unwrap() as DamageableComponent).damaged.connect(process_damage.bind())
+	print("damage module initialized.")
+	await _npc.parent_entity.instantiated
+	(_npc.parent_entity.get_component("DamageableComponent").unwrap() as DamageableComponent).damaged.connect(func(info):
+		print("received info.")
+		process_damage(info)
+	)
 	spell_component = _npc.parent_entity.get_component("SpellTargetComponent").unwrap()
 	vitals_component = _npc.parent_entity.get_component("VitalsComponent").unwrap()
 
 
 func process_damage(info:DamageInfo) -> void:
 	# Damage effects
+	print("processing damage")
 	var accumulated_damage = 0
 	for effect in info.damage_effects:
+		print("Effect is %s" % effect)
 		var effect_amount = info.damage_effects[effect]
 		# if you have many more than these, some sort of dictionary may be in order.
 		match effect:
@@ -59,9 +68,10 @@ func process_damage(info:DamageInfo) -> void:
 			&"will":
 				vitals_component["will"] -= effect_amount * will_modifier
 		
-		_npc.damaged_with_effect(effect)
+		_npc.damaged_with_effect.emit(effect)
 	
 	# Apply damage
+	print("Accumulated damage: %s" % accumulated_damage)
 	vitals_component["health"] -= accumulated_damage
 	
 	# Add magic effects
@@ -72,3 +82,5 @@ func process_damage(info:DamageInfo) -> void:
 	# Could also add behavior somewhere to avoid areas that cause damage. Looking at you, Lydia Skyrim.
 	if not info.offender == "":
 		_npc.hit_by.emit(info.offender)
+	
+	damage_received.emit()

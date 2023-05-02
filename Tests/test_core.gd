@@ -22,22 +22,22 @@ func test_in_scene() -> void:
 	GameInfo.world = &"test_world"
 	test_cam.position = Vector3(0, 0, 0)
 	gut.simulate(entity, 1, 0.1) # advance a frame
-	assert_eq(entity.in_scene, true, "Should pass- entity should be in scene here - in world, in range.")
+	assert_true(entity.in_scene, "Should pass- entity should be in scene here - in world, in range.")
 	
 	# Test out of world
 	GameInfo.world = &"another_test_world"
 	test_cam.position = Vector3(0, 0, 0)
 	gut.simulate(entity, 1, 0.1) # advance a frame
-	assert_eq(entity.in_scene, false, "Should fail- entity should not be in scene here - not in world, in range.")
+	assert_false(entity.in_scene, "Should fail- entity should not be in scene here - not in world, in range.")
 	
 	# Test in world, out of range
 	GameInfo.world = &"test_world"
 	test_cam.position = Vector3(1000, 0, 0)
 	gut.simulate(entity, 1, 0.1) # advance a frame
-	assert_eq(entity.in_scene, false, "Should fail- entity should not be in scene here - in world, not in range.")
+	assert_false(entity.in_scene, "Should fail- entity should not be in scene here - in world, not in range.")
 	
 	# Test out of world, out of range
 	GameInfo.world = &"another_test_world"
 	test_cam.position = Vector3(0, 0, 0)
 	gut.simulate(entity, 1, 0.1) # advance a frame
-	assert_eq(entity.in_scene, false, "Should fail- entity should not be in scene here - not in world, not in range.")
+	assert_false(entity.in_scene, "Should fail- entity should not be in scene here - not in world, not in range.")
