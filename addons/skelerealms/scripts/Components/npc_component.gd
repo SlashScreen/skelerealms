@@ -1,6 +1,9 @@
 class_name NPCComponent 
 extends EntityComponent
 ## The brain for an NPC. Handles AI behavior, scheduling, combat, dialogue interactions.
+## The component itself is a blank slate, being comprised largely of state trackers and utility functions, and will likely do nothing without an [AIModule] to determine its behavior.
+## It also has aobut a million signals that AI modules, the GOAP system, animation controllers, dialogue systems, etc. can hook into. Think of them as an API.
+## @tutorial(In-depth look at the NPC system): https://github.com/SlashScreen/skelerealms/wiki/NPCs
 ## @tutorial(In-depth view of opinion system): https://github.com/SlashScreen/skelerealms/wiki/NPCs#opinions-and-how-the-npc-determines-its-opinions
 
 
@@ -79,24 +82,39 @@ var _path:Array[NavPoint]
 var _opinions = {}
 
 
+## Signal emitted when this NPC enters combat.
 signal entered_combat
+## Signal emitted when this NPC leaved combat.
 signal left_combat
+## Signal emitted when it starts to see the player.
 signal start_saw_player
+## Signal emitted when it stops seeing the player.
 signal end_saw_player
-signal chitchat_started(dialogue_node:String)
+## Signal emitted when it reaches its target destination.
 signal destination_reached
-signal dialogue_with_npc_started(dialogue_node:String)
+## Signal emitted when its schedule has been updated.
 signal schedule_updated(ev:ScheduleEvent)
+## Signal emitted when this NPC enters dialogue.
 signal start_dialogue()
+## Signal emitted when it warns an entity. Passes ref id of who it is warning. 
 signal warning(ref_id:String)
+## Signal emitted when it wants to flee from an entity. Passes ref id of who it is warning. 
 signal flee(ref_id:String)
+## Signal emitted when it hears an audio event.
 signal heard_something(emitter:AudioEventEmitter)
+## Signal emitted when a perception state changes.
 signal perception_transition(what:StringName, transitioned_to:String, fsm:PerceptionFSM_Machine)
+## Signal emitted when this NPC is interacted with.
 signal interacted(refID:String)
+## Signal emitted when this NPC reacts to being hit by a friendly entity.
 signal friendly_fire_response
+## Signal emitted when the NPC wants to draw weapons.
 signal draw_weapons
+## Signal emitted when the NPC wants to put away its weapons.
 signal put_away_weapons
+## Signal emitted when the NPC is hit by somebody.
 signal hit_by(who:String)
+## Signal emitted when the NPC is hit with a particular damage effect - blunt, piercing, magic, etc. 
 signal damaged_with_effect(effect:StringName)
 
 

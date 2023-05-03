@@ -31,7 +31,9 @@ signal dialogue_stopped
 signal dialogue_paused
 ## Signal emitted when [member last_dialogue_node] is updated.
 signal last_node_updated
+## Signal emitted when a participant is added.
 signal participant_added(who:StringName)
+## Signal emitted when a participant is removed.
 signal participant_removed(who:StringName)
 
 
@@ -51,12 +53,15 @@ func pause_dialogue() -> void:
 	dialogue_paused.emit()
 
 
+## Add a participant to the conversation.
 func add_participant(who:StringName) -> void:
 	last_dialogue_node[&"participants"].append(who)
 	last_node_updated.emit()
 	participant_added.emit(who)
 
 
+## Remove a participant from the conversation. 
+## Returns true if removed, does nothing and returns false if no participant has been removed (when the participant wasn't in the conversation already).
 func remove_participant(who:StringName) -> bool:
 	if last_dialogue_node[&"participants"].has(who):
 		last_dialogue_node[&"participants"].erase(who)
