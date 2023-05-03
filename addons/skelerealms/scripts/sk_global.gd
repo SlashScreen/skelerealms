@@ -24,7 +24,7 @@ func get_entity_in_tree(child:Node) -> Entity:
 				checking = checking.get_puppeteer()
 				continue
 		
-		checking = checking.owner
+		checking = checking.get_parent()
 	
 	return null
 
@@ -43,77 +43,33 @@ func get_child_rids(child:Node) -> Array:
 
 ## Get any damageable node in parent chain or children 1 layer deep; either [DamageableObject] or [DamageableComponent]. Null if none found.
 func get_damageable_node(n:Node) -> Node:
-	# Check children
-	for c in n.get_children():
-		if c is DamageableObject:
-			return c
-	
-	# Check for world object in parents
-	var checking = n
-	while not checking.get_parent() == null:
-		if checking is DamageableObject:
-			return checking
-		
-		# Check if puppet and getting puppeteer
-		if checking.has_method("get_puppeteer"):
-			if checking.get_puppeteer():
-				checking = checking.get_puppeteer()
-				continue
-		
-		checking = checking.owner
-	
-	# Check for entity component
-	var e = get_entity_in_tree(n)
-	if e:
-		var dc = e.get_component("DamageableComponent")
-		if dc.some():
-			return dc.unwrap()
-	
-	return null
+	return _walk_for_component(n, "DamageableCOmponent", func(x:Node): return n is DamageableObject)
 
 
 ## Get any interactible node in parent chain or children 1 layer deep; either [InteractiveObject] or [InteractiveComponent]. Null if none found.
 func get_interactive_node(n:Node) -> Node:
-	# Check children
-	for c in n.get_children():
-		if c is InteractiveObject:
-			return c
-	
-	# Check for world object in parents
-	var checking = n
-	while not checking.get_parent() == null:
-		if checking is InteractiveObject:
-			return checking
-		
-		# Check if puppet and getting puppeteer
-		if checking.has_method("get_puppeteer"):
-			if checking.get_puppeteer():
-				checking = checking.get_puppeteer()
-				continue
-		
-		checking = checking.owner
-	
-	# Check for entity component
-	var e = get_entity_in_tree(n)
-	if e:
-		var dc = e.get_component("InteractiveComponent")
-		if dc.some():
-			return dc.unwrap()
-	
-	return null
+	return _walk_for_component(n, "InteractiveComponent", func(x:Node): return n is InteractiveObject)
 
 
 ## Get any spell target node in parent chain or children 1 layer deep; either [SpellTargetObject] or [SpellTargetComponent]. Null if none found.
 func get_spell_target_component(n:Node) -> Node:
+	return _walk_for_component(n, "SpellTargetComponent", func(x:Node): return n is SpellTargetObject)
+
+
+## Walks the tree in parent chain above or 1 layer of children below for a node that satisfies one of the following condition:
+## - Is an entity with a component of type component_type, returning the component
+## - Makes callable wo_check return true
+## See [method get_damageable_node] for a use case.
+func _walk_for_component(n:Node, component_type:String, wo_check:Callable) -> Node:
 	# Check children
 	for c in n.get_children():
-		if c is SpellTargetObject:
+		if wo_check.call(c):
 			return c
 	
 	# Check for world object in parents
 	var checking = n
 	while not checking.get_parent() == null:
-		if checking is SpellTargetObject:
+		if wo_check.call(checking):
 			return checking
 		
 		# Check if puppet and getting puppeteer
@@ -122,12 +78,12 @@ func get_spell_target_component(n:Node) -> Node:
 				checking = checking.get_puppeteer()
 				continue
 		
-		checking = checking.owner
+		checking = checking.get_parent()
 	
 	# Check for entity component
 	var e = get_entity_in_tree(n)
 	if e:
-		var dc = e.get_component("SpellTargetComponent")
+		var dc = e.get_component(component_type)
 		if dc.some():
 			return dc.unwrap()
 	

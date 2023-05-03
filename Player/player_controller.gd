@@ -68,25 +68,10 @@ func _process(_delta):
 		var collider = ($Camera3D/InteractionRay as RayCast3D).get_collider() as Node # Attempt raycast
 		if collider == null: # if we didn't hit anything, return early
 			return
-		print("Collider not null")
-		# Section 1: Check for InteractiveObject
-		print("Section 1")
-		var check_node:Node = collider
-		for i in PARENT_TREE_CLIMB: # Try climbing tree to attempt to find the InteractiveObject
-			# If the parent was null, break early
-			if check_node == null:
-				break
-			print(check_node.name)
-			if check_node is InteractiveObject: # Interact if interactive object
-				(check_node as InteractiveObject).interact("Player")
-				break
-			check_node = check_node.get_parent()
-		# Section 2: Entity
-		print("Section 2")
-		# Attempt to get an interactive component form the entity
-		var ic = SkeleRealmsGlobal.get_entity_in_tree(collider).get_component("InteractiveComponent")
-		if ic.some():
-			ic.unwrap().interact("Player")
+		print(collider)
+		var interactive = SkeleRealmsGlobal.get_interactive_node(collider)
+		if interactive:
+			interactive.interact(&"Player")
 
 
 func get_puppeteer() -> PuppetSpawnerComponent:
