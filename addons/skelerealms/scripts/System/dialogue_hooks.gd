@@ -38,6 +38,7 @@ signal participant_removed(who:StringName)
 
 
 func _ready() -> void:
+	# bind the npc adding and removing methods to this signal as well. 
 	participant_added.connect(func(who:StringName):
 		SkeleRealmsGlobal.entity_manager.get_entity(who)\
 		.bind(func(e:Entity): return e.get_component("NPCComponent"))\
@@ -54,16 +55,22 @@ func _ready() -> void:
 func start_dialogue(dialogue_node:String, participants:Array[StringName] = [], data:Dictionary = {}) -> void:
 	dialogue_started.emit(dialogue_node, participants, data)
 	update_dialogue_cache(dialogue_node, participants, data)
+	for p in last_dialogue_node[&"participants"]:
+		participant_added.emit(p)
 
 
 ## Stop dialogue.
 func stop_dialogue() -> void:
 	dialogue_stopped.emit()
+	for p in last_dialogue_node[&"participants"]:
+		participant_removed.emit(p)
 
 
 ## Pause dialogue.
 func pause_dialogue() -> void:
 	dialogue_paused.emit()
+	for p in last_dialogue_node[&"participants"]:
+		participant_removed.emit(p)
 
 
 ## Add a participant to the conversation.
