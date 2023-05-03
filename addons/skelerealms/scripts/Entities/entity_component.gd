@@ -29,6 +29,10 @@ func _on_exit_scene():
 	pass
 
 
+func _try_dialogue_command(command:String, args:Array) -> void:
+	pass
+
+
 func save() -> Dictionary:
 	return {}
 

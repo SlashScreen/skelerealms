@@ -116,3 +116,8 @@ func broadcast_message(msg:String) -> void:
 	for c in get_children():
 		if c.has_method(msg):
 			c.call(msg)
+
+
+func dialogue_command(command:String, args:Array) -> void:
+	for c in get_children():
+		c._try_dialogue_command(command, args)

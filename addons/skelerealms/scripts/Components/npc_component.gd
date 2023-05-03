@@ -87,7 +87,7 @@ signal chitchat_started(dialogue_node:String)
 signal destination_reached
 signal dialogue_with_npc_started(dialogue_node:String)
 signal schedule_updated(ev:ScheduleEvent)
-signal start_dialogue(dialogue_node:String)
+signal start_dialogue()
 signal warning(ref_id:String)
 signal flee(ref_id:String)
 signal heard_something(emitter:AudioEventEmitter)

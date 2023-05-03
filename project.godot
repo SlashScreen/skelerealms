@@ -22,6 +22,7 @@ CovenSystem="*res://addons/skelerealms/scripts/Covens/coven_system.gd"
 GameInfo="*res://addons/skelerealms/scripts/System/game_info.gd"
 SkeleRealmsGlobal="*res://addons/skelerealms/scripts/sk_global.gd"
 CrimeMaster="*res://addons/skelerealms/scripts/Crime/crime_master.gd"
+DialogueHooks="*res://addons/skelerealms/scripts/System/dialogue_hooks.gd"
 
 [display]
 
