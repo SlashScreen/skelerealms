@@ -24,12 +24,34 @@ func test_damage() -> void:
 	var em:EntityManager = root.get_child(0)
 	var npc:Entity = em.get_entity("test_dummy").unwrap()
 	var damage_module:DefaultDamageModule = (npc.get_component("NPCComponent").unwrap() as NPCComponent).data.modules.filter(func(x:AIModule): return x is DefaultDamageModule).front()
-	var npc_component:NPCComponent = (npc.get_component("NPCComponent").unwrap() as NPCComponent)
+	#var npc_component:NPCComponent = (npc.get_component("NPCComponent").unwrap() as NPCComponent)
 	var damage_component:DamageableComponent = (npc.get_component("DamageableComponent").unwrap() as DamageableComponent)
 	var vitals_component:VitalsComponent = (npc.get_component("VitalsComponent").unwrap() as VitalsComponent)
 	
-	vitals_component.vitals["health"] = 100
 	# Test blunt damage
+	vitals_component.vitals["health"] = 100
 	damage_component.damage(DamageInfo.new("", {&"blunt":10}))
-	#await wait_for_signal(damage_module.damage_received, 5, "optional message")
 	assert_eq(vitals_component.vitals["health"], 90, "Should pass - Took 10 blunt damage without modifiers.")
+	
+	# Test resistance
+	vitals_component.vitals["health"] = 100
+	damage_module.piercing_modifier = 0.5
+	damage_component.damage(DamageInfo.new("", {&"piercing":10}))
+	assert_eq(vitals_component.vitals["health"], 95, "Should pass - Took 10 piercing damage with a 0.5 modifier.")
+	
+	# Test stacked magic resistance
+	vitals_component.vitals["health"] = 100
+	damage_module.light_modifier = 0.5
+	damage_module.magic_modifier = 0.5
+	damage_component.damage(DamageInfo.new("", {&"light":10}))
+	assert_eq(vitals_component.vitals["health"], 97.5, "Should pass - Took 10 light damage with a 0.5 light modifier and a 0.5 magic modifier.")
+	
+	# Test stamina damage
+	vitals_component.vitals["moxie"] = 100
+	damage_component.damage(DamageInfo.new("", {&"moxie":10}))
+	assert_eq(vitals_component.vitals["moxie"], 90, "Should pass - Took 10 stamina damage without modifiers.")
+	
+	# Test will damage
+	vitals_component.vitals["will"] = 100
+	damage_component.damage(DamageInfo.new("", {&"will":10}))
+	assert_eq(vitals_component.vitals["will"], 90, "Should pass - Took 10 will damage without modifiers.")

@@ -30,12 +30,10 @@ func _initialize() -> void:
 	)
 	spell_component = _npc.parent_entity.get_component("SpellTargetComponent").unwrap()
 	vitals_component = _npc.parent_entity.get_component("VitalsComponent").unwrap()
-	print("damage module initialized")
 
 
 func process_damage(info:DamageInfo) -> void:
 	# Damage effects
-	print("processing damage")
 	var accumulated_damage = 0
 	for effect in info.damage_effects:
 		var effect_amount = info.damage_effects[effect]

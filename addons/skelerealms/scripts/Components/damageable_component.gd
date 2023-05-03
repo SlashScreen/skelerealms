@@ -7,7 +7,6 @@ signal damaged(info:DamageInfo)
 
 
 func damage(info:DamageInfo):
-	print("Damaging")
 	damaged.emit(info)
 
 
