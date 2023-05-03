@@ -138,7 +138,6 @@ func _ready():
 	_puppet_component.spawned_puppet.connect(func(x:Node): _puppet = x as NPCPuppet )
 	_puppet_component.despawned_puppet.connect(func(): _puppet = null )
 	
-	
 	# misc setup
 	_interactive_component.interactible = data.interactive # TODO: Or instance override
 
