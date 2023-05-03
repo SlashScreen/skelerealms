@@ -31,6 +31,8 @@ signal dialogue_stopped
 signal dialogue_paused
 ## Signal emitted when [member last_dialogue_node] is updated.
 signal last_node_updated
+signal participant_added(who:StringName)
+signal participant_removed(who:StringName)
 
 
 ## Start a dialogue node. Optionally pass in RefIDs for participants, and a dictionary of arbitrary data.
@@ -49,6 +51,21 @@ func pause_dialogue() -> void:
 	dialogue_paused.emit()
 
 
+func add_participant(who:StringName) -> void:
+	last_dialogue_node[&"participants"].append(who)
+	last_node_updated.emit()
+	participant_added.emit(who)
+
+
+func remove_participant(who:StringName) -> bool:
+	if last_dialogue_node[&"participants"].has(who):
+		last_dialogue_node[&"participants"].erase(who)
+		participant_removed.emit(who)
+		last_node_updated.emit()
+		return true
+	return false
+
+
 ## Continues dialogue state stored in [member last_dialogue_node]. Does nothing if there is no last dialogue stored.
 func continue_dialogue() -> void:
 	if last_dialogue_node.is_empty():
@@ -58,15 +75,15 @@ func continue_dialogue() -> void:
 
 
 ## Update [member last_dialogue_node]. Keep track of what dialogue is currently playing so you can interrupt it and keep it playing later.
-func update_dialogue_cache(dialogue_node:String, participants:Array[StringName], data:Dictionary) -> void:
+func update_dialogue_cache(dialogue_node:String = "", participants:Array[StringName] = [], data:Dictionary = {}) -> void:
 	last_dialogue_node = {
-		&"node" : dialogue_node,
-		&"participants" : participants,
-		&"data" : data
+		&"node" : dialogue_node if not dialogue_node == "" else last_dialogue_node[&"node"],
+		&"participants" : participants if not participants.is_empty() else last_dialogue_node[&"participants"],
+		&"data" : data if not data.is_empty() else last_dialogue_node[&"data"]
 	}
 
 
-## Send a command to an entity.
+## Send a command to an entity without having to do monkey business trying to find it.
 func send_command_to_entity(ref_id:StringName, command:String, args:Array) -> void:
 	var e = SkeleRealmsGlobal.entity_manager.get_entity(ref_id)
 	if e.some():
