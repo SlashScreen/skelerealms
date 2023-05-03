@@ -36,3 +36,11 @@ func some() -> bool:
 ## Get the data from within. May be null.
 func unwrap() -> Variant:
 	return _data
+
+
+## Call a function on this option if it contains a value. The argument is the unwrapped contents. 
+func bind(fn:Callable) -> Variant:
+	if some():
+		return fn.call(unwrap())
+	else:
+		return null

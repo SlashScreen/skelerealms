@@ -37,6 +37,19 @@ signal participant_added(who:StringName)
 signal participant_removed(who:StringName)
 
 
+func _ready() -> void:
+	participant_added.connect(func(who:StringName):
+		SkeleRealmsGlobal.entity_manager.get_entity(who)\
+		.bind(func(e:Entity): return e.get_component("NPCComponent"))\
+		.bind(func(npc:NPCComponent): npc.add_to_conversation())
+	)
+	participant_removed.connect(func(who:StringName):
+		SkeleRealmsGlobal.entity_manager.get_entity(who)\
+		.bind(func(e:Entity): return e.get_component("NPCComponent"))\
+		.bind(func(npc:NPCComponent): npc.remove_from_conversation())
+	)
+
+
 ## Start a dialogue node. Optionally pass in RefIDs for participants, and a dictionary of arbitrary data.
 func start_dialogue(dialogue_node:String, participants:Array[StringName] = [], data:Dictionary = {}) -> void:
 	dialogue_started.emit(dialogue_node, participants, data)

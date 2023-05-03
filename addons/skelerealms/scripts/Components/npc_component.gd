@@ -95,7 +95,7 @@ signal destination_reached
 ## Signal emitted when its schedule has been updated.
 signal schedule_updated(ev:ScheduleEvent)
 ## Signal emitted when this NPC enters dialogue.
-signal start_dialogue()
+signal start_dialogue
 ## Signal emitted when it warns an entity. Passes ref id of who it is warning. 
 signal warning(ref_id:String)
 ## Signal emitted when it wants to flee from an entity. Passes ref id of who it is warning. 
@@ -116,6 +116,10 @@ signal put_away_weapons
 signal hit_by(who:String)
 ## Signal emitted when the NPC is hit with a particular damage effect - blunt, piercing, magic, etc. 
 signal damaged_with_effect(effect:StringName)
+## Signal emitted when the NPC is added to a conversation.
+signal added_to_conversation
+## Singaal emitted when the NPC is removed from a conversation.
+signal removed_from_conversation
 
 
 #* ### OVERRIDES
@@ -205,6 +209,14 @@ func interact_with(refID:String) -> void:
 		true,
 		2
 	)
+
+
+func add_to_conversation() -> void:
+	added_to_conversation.emit()
+
+
+func remove_from_conversation() -> void:
+	removed_from_conversation.emit()
 
 
 #* ### PATHFINDING
