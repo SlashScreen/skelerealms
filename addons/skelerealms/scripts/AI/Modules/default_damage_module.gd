@@ -25,14 +25,12 @@ signal damage_received
 
 
 func _initialize() -> void:
-	print("damage module initialized.")
-	await _npc.parent_entity.instantiated
-	(_npc.parent_entity.get_component("DamageableComponent").unwrap() as DamageableComponent).damaged.connect(func(info):
-		print("received info.")
+	_npc.parent_entity.get_component("DamageableComponent").unwrap().damaged.connect(func(info):
 		process_damage(info)
 	)
 	spell_component = _npc.parent_entity.get_component("SpellTargetComponent").unwrap()
 	vitals_component = _npc.parent_entity.get_component("VitalsComponent").unwrap()
+	print("damage module initialized")
 
 
 func process_damage(info:DamageInfo) -> void:
@@ -40,7 +38,6 @@ func process_damage(info:DamageInfo) -> void:
 	print("processing damage")
 	var accumulated_damage = 0
 	for effect in info.damage_effects:
-		print("Effect is %s" % effect)
 		var effect_amount = info.damage_effects[effect]
 		# if you have many more than these, some sort of dictionary may be in order.
 		match effect:
@@ -64,15 +61,14 @@ func process_damage(info:DamageInfo) -> void:
 				accumulated_damage = effect_amount * plant_modifier * magic_modifier
 			# Attribute
 			&"moxie":
-				vitals_component["moxie"] -= effect_amount * stamina_modifier
+				vitals_component.vitals["moxie"] -= effect_amount * stamina_modifier
 			&"will":
-				vitals_component["will"] -= effect_amount * will_modifier
+				vitals_component.vitals["will"] -= effect_amount * will_modifier
 		
 		_npc.damaged_with_effect.emit(effect)
 	
 	# Apply damage
-	print("Accumulated damage: %s" % accumulated_damage)
-	vitals_component["health"] -= accumulated_damage
+	vitals_component.vitals["health"] -= accumulated_damage
 	
 	# Add magic effects
 	for eff in info.spell_effects:

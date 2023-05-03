@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites name="GutTests" failures="0" tests="1" >
-  <testsuite name="res://Tests/test_core.gd" tests="1" failures="0" skipped="0" >
-      <testcase name="test_in_scene" assertions="4" status="pass" classname="res://Tests/test_core.gd" >
+  <testsuite name="res://Tests/test_npc.gd" tests="1" failures="0" skipped="0" >
+      <testcase name="test_damage" assertions="1" status="pass" classname="res://Tests/test_npc.gd" >
       </testcase>
       </testsuite>
   </testsuites>

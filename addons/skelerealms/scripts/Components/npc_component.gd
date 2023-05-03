@@ -119,6 +119,11 @@ func _init(d:NPCData) -> void:
 func _ready():
 	super._ready()
 	
+	# Initialize all AI Modules
+	for module in data.modules:
+		module.link(self)
+		module._initialize()
+	
 	await parent_entity.instantiated # wait for entity to be ready to instantiate to ger siblings
 	
 	if not ($"../InteractiveComponent" as InteractiveComponent).interacted.is_connected(func(x:String): interacted.emit(x)):
@@ -133,10 +138,6 @@ func _ready():
 	_puppet_component.spawned_puppet.connect(func(x:Node): _puppet = x as NPCPuppet )
 	_puppet_component.despawned_puppet.connect(func(): _puppet = null )
 	
-	# Initialize all AI Modules
-	for module in data.modules:
-		module.link(self)
-		module._initialize()
 	
 	# misc setup
 	_interactive_component.interactible = data.interactive # TODO: Or instance override
@@ -155,14 +156,15 @@ func _on_exit_scene():
 func _process(delta):
 	#* Section 1: Path following
 	# If in scene, use navmesh agent.
-	if parent_entity.in_scene:
-		if _puppet.target_reached: # If puppet reached target
-			_next_point()
-	else: # If not in scene, move between points.
-		if parent_entity.position.distance_to(_current_target_point.position) < _path_follow_end_distance: # if reached point
-			_next_point() # get next point
-			parent_entity.world = _current_target_point.world # set world
-		parent_entity.position = parent_entity.position.move_toward(_current_target_point.position, delta * _walk_speed) # move towards position
+	if _current_target_point:
+		if parent_entity.in_scene:
+			if _puppet.target_reached: # If puppet reached target
+				_next_point()
+		else: # If not in scene, move between points.
+			if parent_entity.position.distance_to(_current_target_point.position) < _path_follow_end_distance: # if reached point
+				_next_point() # get next point
+				parent_entity.world = _current_target_point.world # set world
+			parent_entity.position = parent_entity.position.move_toward(_current_target_point.position, delta * _walk_speed) # move towards position
 
 
 func _exit_tree() -> void:

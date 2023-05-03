@@ -20,6 +20,7 @@ func setup_npc() -> Node:
 
 func test_damage() -> void:
 	var root = setup_npc()
+	add_child(root)
 	var em:EntityManager = root.get_child(0)
 	var npc:Entity = em.get_entity("test_dummy").unwrap()
 	var damage_module:DefaultDamageModule = (npc.get_component("NPCComponent").unwrap() as NPCComponent).data.modules.filter(func(x:AIModule): return x is DefaultDamageModule).front()
@@ -30,4 +31,5 @@ func test_damage() -> void:
 	vitals_component.vitals["health"] = 100
 	# Test blunt damage
 	damage_component.damage(DamageInfo.new("", {&"blunt":10}))
+	#await wait_for_signal(damage_module.damage_received, 5, "optional message")
 	assert_eq(vitals_component.vitals["health"], 90, "Should pass - Took 10 blunt damage without modifiers.")

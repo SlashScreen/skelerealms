@@ -86,6 +86,7 @@ func add_entity(res:InstanceData):
 	# add new entity to self, and the dictionary
 	entities[res.ref_id] = new_entity
 	add_child(new_entity)
+	print("instantiated")
 	new_entity.instantiated.emit()
 	#print_tree_pretty()
 
