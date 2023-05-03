@@ -76,6 +76,14 @@ func continue_dialogue() -> void:
 
 ## Update [member last_dialogue_node]. Keep track of what dialogue is currently playing so you can interrupt it and keep it playing later.
 func update_dialogue_cache(dialogue_node:String = "", participants:Array[StringName] = [], data:Dictionary = {}) -> void:
+	if last_dialogue_node.is_empty():
+		last_dialogue_node = {
+			&"node" : dialogue_node,
+			&"participants" : participants,
+			&"data" : data
+		}
+		return
+	
 	last_dialogue_node = {
 		&"node" : dialogue_node if not dialogue_node == "" else last_dialogue_node[&"node"],
 		&"participants" : participants if not participants.is_empty() else last_dialogue_node[&"participants"],

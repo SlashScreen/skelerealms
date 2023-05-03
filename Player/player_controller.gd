@@ -68,7 +68,7 @@ func _process(_delta):
 		var collider = ($Camera3D/InteractionRay as RayCast3D).get_collider() as Node # Attempt raycast
 		if collider == null: # if we didn't hit anything, return early
 			return
-		print(collider)
+			
 		var interactive = SkeleRealmsGlobal.get_interactive_node(collider)
 		if interactive:
 			interactive.interact(&"Player")
