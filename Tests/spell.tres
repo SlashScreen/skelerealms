@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Spell" load_steps=3 format=3 uid="uid://dqypgn1cark21"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/SpellCasting/spell.gd" id="1_f8hys"]
+[ext_resource type="Resource" uid="uid://fedk6iw0ltkn" path="res://Tests/test_effect.tres" id="2_28mol"]
+
+[resource]
+script = ExtResource("1_f8hys")
+spell_name = ""
+spell_assets = {}
+spell_effects = Array[Resource("res://addons/skelerealms/scripts/SpellCasting/spell_effect.gd")]([ExtResource("2_28mol")])
+aggressive = false

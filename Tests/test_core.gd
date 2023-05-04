@@ -41,3 +41,24 @@ func test_in_scene() -> void:
 	test_cam.position = Vector3(0, 0, 0)
 	gut.simulate(entity, 1, 0.1) # advance a frame
 	assert_false(entity.in_scene, "Should fail- entity should not be in scene here - not in world, not in range.")
+
+
+func test_merchant() -> void:
+	pass_test("Test not yet implemented")
+	# Test transaction
+
+
+func test_inventory() -> void:
+	pass_test("Test not yet implemented")
+	# Test add
+	# Test remove
+	# Test transfer
+	# Test equip
+	# Test drop
+
+
+func test_crime() -> void:
+	pass_test("Test not yet implemented")
+	# Test add crime
+	# Test bounty
+	# Test coven reaction

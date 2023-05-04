@@ -17,6 +17,7 @@ func get_archetype_components() -> Array[EntityComponent]:
 	components.append(SkillsComponent.new())
 	components.append(AttributesComponent.new())
 	components.append(VitalsComponent.new())
+	components.append(SpellTargetComponent.new())
 	components.append(CovensComponent.new(npc_data.covens))
 	components.append(DamageableComponent.new())
 	components.append(NavigatorComponent.new())

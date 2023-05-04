@@ -72,7 +72,7 @@ func _find_spell_targets_in_range(pos:Vector3, radius:float, ignore_self:bool = 
 ## Only works if target is of type [SpellTargetComponent] or [SpellTargetObject].
 func _apply_spell_effect_to(target, effect:SpellEffect):
 	# return early if invalid object
-	if not target is SpellTargetComponent or not target is SpellTargetObject:
+	if not target is SpellTargetComponent and not target is SpellTargetObject:
 		return
 	target.add_effect(effect)
 
