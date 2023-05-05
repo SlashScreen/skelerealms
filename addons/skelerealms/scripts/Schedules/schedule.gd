@@ -11,10 +11,11 @@ extends Node
 
 func find_schedule_activity_for_current_time() -> Option:
 	# Scan events
-	for ev in events:
-		# Compare timestamps
-		if Timestamp.build_from_world_timestamp().is_in_between(ev.from, ev.to):
-			# If we find one in the right timeframe, select it
+	var valid_events = events.filter(func(ev:ScheduleEvent): return Timestamp.build_from_world_timestamp().is_in_between(ev.from, ev.to)) # get those that are in the time space
+	valid_events.sort_custom(func(a:ScheduleEvent, b:ScheduleEvent): return a.priority > b.priority ) # sort descending by priority
+	# find first one that is valid
+	for ev in valid_events:
+		if (ev as ScheduleEvent).condition == null or (ev as ScheduleEvent).condition.evaluate():
 			return Option.from(ev)
 	# If we make it this far, we didn't find any, return none.
 	return Option.none()

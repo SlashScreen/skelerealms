@@ -375,11 +375,8 @@ func _calculate_new_schedule() -> void:
 	var ev = _schedule.find_schedule_activity_for_current_time() # Scan schedule
 	if ev.some(): 
 		if not ev.unwrap() == _current_schedule_event: 
-			if (ev.unwrap() as ScheduleEvent).condition == null or (ev.unwrap() as ScheduleEvent).condition.evaluate(): 
-				# if no condition, it passes. Otherwise, check if passes
-				# If we find a schedule and it isn't the one we currently have, set it to the new event.
-				_current_schedule_event = ev.unwrap()
-				schedule_updated.emit(_current_schedule_event)
+			_current_schedule_event = ev.unwrap()
+			schedule_updated.emit(_current_schedule_event)
 	else:
 		# Else we have no schewdule for this time period
 		_current_schedule_event = null

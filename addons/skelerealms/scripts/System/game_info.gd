@@ -28,7 +28,7 @@ var world_time:Dictionary = {
 	&"month" : 0,
 	&"year" : 0,
 }
-## Continmuity flags are values that can be set that allow for dialogue and the world to match up with that the player has done.
+## Continuity flags are values that can be set that allow for dialogue and the world to match up with that the player has done.
 ## for example, dialogue could set [code]met_alice:true[/code] if the Player meets the character Alice. Then, if the player meets Alice elsewhere, Alice can read this value and respond as though she as a character already knows the player.
 var continuity_flags:Dictionary = {}
 
