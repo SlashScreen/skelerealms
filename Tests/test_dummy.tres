@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="NPCData" load_steps=9 format=3 uid="uid://dnxrsrs4jlcxu"]
+[gd_resource type="Resource" script_class="NPCData" load_steps=17 format=3 uid="uid://dnxrsrs4jlcxu"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/npc_data.gd" id="1_5mc0v"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_damage_module.gd" id="1_i4yub"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_interact_response.gd" id="2_ts27d"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_threat_response.gd" id="3_gqrf7"]
 [ext_resource type="PackedScene" uid="uid://24i73ycvxysf" path="res://test_npc_prefab.tscn" id="4_eio35"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/System/timestamp.gd" id="5_rhswb"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Schedules/sandbox_schedule.gd" id="6_i1yqi"]
 
 [sub_resource type="Resource" id="Resource_g8o8h"]
 script = ExtResource("1_i4yub")
@@ -34,10 +36,86 @@ friendly_fire_behavior = 1
 warn_radius = 20.0
 attack_radius = 8.0
 
+[sub_resource type="Resource" id="Resource_8cp1i"]
+script = ExtResource("5_rhswb")
+compare = 2
+minute = 0
+hour = 0
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_15g4i"]
+script = ExtResource("5_rhswb")
+compare = 2
+minute = 0
+hour = 2
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_gv71r"]
+script = ExtResource("6_i1yqi")
+energy = 0.0
+can_swim = false
+can_sit = true
+can_eat = true
+can_sleep = true
+can_engage_conversation = true
+use_idle_points = true
+be_at_location = true
+location_position = Vector3(0, 0, 0)
+location_world = ""
+target_radius = 25.0
+name = "sandbox 1"
+from = SubResource("Resource_8cp1i")
+to = SubResource("Resource_15g4i")
+priority = 0.0
+
+[sub_resource type="Resource" id="Resource_p04li"]
+script = ExtResource("5_rhswb")
+compare = 2
+minute = 0
+hour = 2
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_4lnbe"]
+script = ExtResource("5_rhswb")
+compare = 2
+minute = 0
+hour = 8
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_hjuw6"]
+script = ExtResource("6_i1yqi")
+energy = 0.0
+can_swim = false
+can_sit = true
+can_eat = true
+can_sleep = true
+can_engage_conversation = true
+use_idle_points = true
+be_at_location = true
+location_position = Vector3(0, 0, 0)
+location_world = ""
+target_radius = 25.0
+name = "sandbox 2"
+from = SubResource("Resource_p04li")
+to = SubResource("Resource_4lnbe")
+priority = 0.0
+
 [resource]
 script = ExtResource("1_5mc0v")
 prefab = ExtResource("4_eio35")
-schedule = Array[Resource("res://addons/skelerealms/scripts/Schedules/schedule_event.gd")]([])
+schedule = Array[Resource("res://addons/skelerealms/scripts/Schedules/schedule_event.gd")]([SubResource("Resource_gv71r"), SubResource("Resource_hjuw6")])
 covens = Array[Resource("res://addons/skelerealms/scripts/Covens/coven_rank_data.gd")]([])
 default_player_opinion = 0
 loyalty = 0

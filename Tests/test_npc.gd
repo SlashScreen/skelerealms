@@ -62,7 +62,6 @@ func test_spells() -> void:
 	add_child(root)
 	var em:EntityManager = root.get_child(0)
 	var npc:Entity = em.get_entity("test_dummy").unwrap()
-	var damage_module:DefaultDamageModule = (npc.get_component("NPCComponent").unwrap() as NPCComponent).data.modules.filter(func(x:AIModule): return x is DefaultDamageModule).front()
 	var spell_component:SpellTargetComponent = (npc.get_component("SpellTargetComponent").unwrap() as SpellTargetComponent)
 	var vitals_component:VitalsComponent = (npc.get_component("VitalsComponent").unwrap() as VitalsComponent)
 	
@@ -80,9 +79,22 @@ func test_spells() -> void:
 
 
 func test_schedule() -> void:
-	pass_test("Test not yet implemented")
+	var root = setup_npc()
+	add_child(root)
+	var em:EntityManager = root.get_child(0)
+	var npc:Entity = em.get_entity("test_dummy").unwrap()
+	var npc_component:NPCComponent = (npc.get_component("NPCComponent").unwrap() as NPCComponent)
+	
 	# Test at different hours
+	npc_component._calculate_new_schedule()
+	assert_eq(npc_component._current_schedule_event.name, "sandbox 1", "Should pass - the current schedule should be the first one.")
+	
+	GameInfo.world_time[&"hour"] = 3
+	npc_component._calculate_new_schedule()
+	assert_eq(npc_component._current_schedule_event.name, "sandbox 2", "Should pass - the current schedule should be the second one.")
+	
 	# Test conditions
+	# Test schedule points
 
 
 func test_navigation() -> void:
