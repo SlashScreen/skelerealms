@@ -36,6 +36,26 @@ signal entered_scene
 signal instantiated
 
 
+func _init(res:InstanceData = null) -> void:
+	if not res:
+		return
+	
+	var new_nodes = res.get_archetype_components() # Get the entity components
+	
+	name = res.ref_id # set its name to the instance refID
+	world = res.world
+	position = res.position
+	
+	for n in new_nodes: # add all components to entity
+		add_child(n)
+		n.owner = self
+	
+	# call entity ready
+	instantiated.emit()
+	for c in get_children():
+		c._entity_ready()
+
+
 func _ready():
 	add_to_group("savegame_entity")
 

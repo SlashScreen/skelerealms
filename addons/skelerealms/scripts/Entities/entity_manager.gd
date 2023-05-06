@@ -71,23 +71,12 @@ func _cache_entities(path:String):
 ## add a new entity.
 func add_entity(res:InstanceData):
 	print("Adding entity %s"  % res.ref_id)
-	var new_nodes = res.get_archetype_components() # Get the entity components
 	
-	var new_entity = Entity.new() # make a new entity
-	new_entity.name = res.ref_id # set its name to the instance refID
-	new_entity.world = res.world
-	new_entity.position = res.position
-	
-	for n in new_nodes: # add all components to entity
-		new_entity.add_child(n)
-		n.owner = new_entity
-		#n._ready()
-	
+	var new_entity = Entity.new(res) # make a new entity
 	# add new entity to self, and the dictionary
 	entities[res.ref_id] = new_entity
 	add_child(new_entity)
 	print("instantiated")
-	new_entity.instantiated.emit()
 	#print_tree_pretty()
 
 

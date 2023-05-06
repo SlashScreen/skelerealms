@@ -70,11 +70,11 @@ func _process(delta):
 
 
 ## Creates a plan to satisfy a set of goals from all child [GOAPAction]s.
-func _plan(actions:Array[GOAPAction], goal:Dictionary, world_states:Dictionary) -> Array[GOAPAction]:
-	var action_pool:Array[GOAPAction] = actions.filter(func(a:GOAPAction): return a.is_achievable()) # get all of the actions currently achievable.
+func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOAPAction]:
+	var action_pool:Array = actions.filter(func(a:GOAPAction): return a.is_achievable()) # get all of the actions currently achievable.
 	
-	var leaves:Array[PlannerNode] # create an array keeping track of all of the possible nodes that could make up our path.
-	var start = PlannerNode.build(null, world_states, null, 0) # build the starting node.
+	var leaves:Array[PlannerNode] = [] # create an array keeping track of all of the possible nodes that could make up our path.
+	var start = PlannerNode.new(null, world_states, null, 0) # build the starting node.
 	var success = _build_graph(start, leaves, goal, action_pool) # try to find a path.
 	
 	if not success: # if we have not found a path, we have failed.
@@ -82,14 +82,13 @@ func _plan(actions:Array[GOAPAction], goal:Dictionary, world_states:Dictionary) 
 		return []
 		
 	leaves.sort_custom(func(a:PlannerNode,b:PlannerNode): return a.cost < b.cost ) #Sort to find valid node with least cost.
-	var cheapest:PlannerNode = leaves[0] # the cheapest will be at the bottom.
+	var cheapest:PlannerNode = leaves[0]
 	
 	var new_plan:Array[GOAPAction] = [] # create the plan for the AI to use. This will be treated like a queue.
 	# walk back up the parent chain that the selected node has kept (sorta like a linked list) and build a queue from that.
 	var n = cheapest 
-	while not n == null: # if it is null, we have reached the root node, since it will have no parents.
-		if not n == null:
-			new_plan.push_back(n.action)
+	while not n.parent == null: # if it is null, we have reached the root node, since it will have no parents.
+		new_plan.push_back(n.action)
 		n = n.parent
 	
 	#new_plan.reverse() # may be necessary?
@@ -97,7 +96,7 @@ func _plan(actions:Array[GOAPAction], goal:Dictionary, world_states:Dictionary) 
 
 
 ## Recursive method to try to find all possible action chains that could satisfy the goal.
-func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary, action_pool:Array[GOAPAction]) -> bool:
+func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary, action_pool:Array) -> bool:
 	var found_path:bool = false
 	
 	# due to the recursive nature of this function, we will be building branching paths from all of the actions until a valid path is found.
@@ -113,7 +112,7 @@ func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary
 				
 			# create a new child planner node, which will have an accumulation of all the previous costs.
 			# this will help us find the shortest path later.
-			var next_node:PlannerNode = PlannerNode.build(parent, current_state, action, parent.cost + action.cost)
+			var next_node:PlannerNode = PlannerNode.new(parent, current_state, action, parent.cost + action.cost)
 			
 			if _goal_achieved(goal, current_state):
 				# if we have reached the state we are looking for, append the node to the leaves, and set found_path.
@@ -123,7 +122,7 @@ func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary
 				# if we have not reached the goal,
 				# create a subset of the action pool that removes the current action.
 				# this will prevent circular action chains.
-				var subset:Array[GOAPAction] = action_pool.duplicate() # no deep copy, we don't want to clone the nodes.
+				var subset:Array = action_pool.duplicate() # no deep copy, we don't want to clone the nodes.
 				subset.erase(action)
 				
 				# then, recurse and find the next possible node.
@@ -162,6 +161,7 @@ func _complete_current_action():
 ## Add an objective for this asgent to attempt to satisfy.
 func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float):
 	objectives.append(Objective.build(goals, remove_after_satisfied, priority))
+	_rebuild_plan = true
 
 
 ## An objective for the AI to try to solve for.
@@ -190,10 +190,8 @@ class PlannerNode:
 	var states:Dictionary
 	
 	
-	static func build(p:PlannerNode, s:Dictionary, a:GOAPAction, c:float) -> PlannerNode:
-		var pn = PlannerNode.new()
-		pn.parent = p
-		pn.action = a
-		pn.cost = c
-		pn.states = s
-		return pn
+	func _init(p:PlannerNode, s:Dictionary, a:GOAPAction, c:float) -> void:
+		parent = p
+		action = a
+		cost = c
+		states = s

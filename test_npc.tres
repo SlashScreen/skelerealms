@@ -57,4 +57,5 @@ start_dialogue_node = ""
 interactive = true
 relationships = Array[Resource("res://addons/skelerealms/scripts/Relationships/relationship.gd")]([])
 modules = Array[Object]([SubResource("Resource_j5814"), SubResource("Resource_metpx"), SubResource("Resource_lx4hi")])
+goap_actions = Array[Resource("res://addons/skelerealms/scripts/AI/goap_behavior.gd")]([])
 id = "test_npc"

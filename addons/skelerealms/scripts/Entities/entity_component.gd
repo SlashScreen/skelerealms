@@ -19,6 +19,10 @@ func _ready():
 		parent_entity.entered_scene.connect(_on_enter_scene.bind())
 
 
+func _entity_ready() -> void:
+	pass
+
+
 ## Called when the parent entity enters a scene. See [signal Entity.entered_scene].
 func _on_enter_scene():
 	pass

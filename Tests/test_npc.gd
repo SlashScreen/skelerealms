@@ -113,10 +113,10 @@ func test_goap() -> void:
 	var npc_component:NPCComponent = (npc.get_component("NPCComponent").unwrap() as NPCComponent)
 	var goap_component:GOAPComponent = (npc.get_component("GOAPComponent").unwrap() as GOAPComponent)
 	# Test plan
-	# FIXME: Ready is not called...
+	# FIXME: Ready is not called, so no goap actions or anything else...
 	goap_component.add_objective({"goal":true}, false, 1)
 	gut.simulate(root, 1, 0.01)
-	assert_eq(goap_component.action_queue.map(func(x:GOAPAction): return x.name), ["step 1", "setp 2 a", "step 3"], "Should pass.")
+	assert_eq(goap_component.action_queue.map(func(x): return x.name), [&"step 1", &"setp 2 a", &"step 3"], "Should pass.")
 	# Test alternate path
 	# Test failure
 	# Test cost
