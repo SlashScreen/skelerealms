@@ -8,9 +8,13 @@ var puppet:Node
 signal spawned_puppet(puppet:Node)
 signal despawned_puppet
 
+
+func _init() -> void:
+	name = "PuppetSpawnerComponent"
+
+
 func _ready():
 	super._ready()
-	name = "PuppetSpawnerComponent"
 	# brute force getting the puppet for the player if it already exists.
 	if get_child_count() > 0:
 		puppet = get_child(0)

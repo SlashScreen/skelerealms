@@ -38,5 +38,5 @@
  "show_help": false,
  "suffix": ".gd",
  "tests": [],
- "unit_test_name": "test_schedule"
+ "unit_test_name": "test_goap"
 }

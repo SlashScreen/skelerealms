@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="1" >
-  <testsuite name="res://Tests/test_npc.gd" tests="1" failures="0" skipped="0" >
-      <testcase name="test_schedule" assertions="3" status="pass" classname="res://Tests/test_npc.gd" >
-      </testcase>
+<testsuites name="GutTests" failures="1" tests="1" >
+  <testsuite name="res://Tests/test_npc.gd" tests="1" failures="1" skipped="0" >
+      <testcase name="test_goap" assertions="1" status="fail" classname="res://Tests/test_npc.gd" >
+      <failure message="failed">Array([]) != Array(["step 1", "setp 2 a", "step 3"]).
+      [] != ["step 1", "setp 2 a", "step 3"]  3 of 3 indexes do not match.  Should pass.
+            at line 119</failure></testcase>
       </testsuite>
   </testsuites>

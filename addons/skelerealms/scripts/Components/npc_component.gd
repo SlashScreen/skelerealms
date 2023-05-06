@@ -51,13 +51,13 @@ var _busy:bool:
 			_busy = val
 #* Private
 ## Navigator.
-var _nav_component:NavigatorComponent
+@onready var _nav_component:NavigatorComponent = $"../NavigatorComponent" as NavigatorComponent
 ## Puppet manager component.
-var _puppet_component:PuppetSpawnerComponent
+@onready var _puppet_component:PuppetSpawnerComponent = $"../PuppetSpawnerComponent" as PuppetSpawnerComponent
 ## Interactive component.
-var _interactive_component:InteractiveComponent
+@onready var _interactive_component:InteractiveComponent = $"../InteractiveComponent" as InteractiveComponent
 ## Behavior planner.
-var _goap_component:GOAPComponent
+@onready var _goap_component:GOAPComponent = $"../GOAPComponent" as GOAPComponent
 ## The schedule event the NPC is following, if applicable.
 var _current_schedule_event:ScheduleEvent
 ## Scheduler node.
@@ -148,13 +148,7 @@ func _ready():
 	
 	await parent_entity.instantiated # wait for entity to be ready to instantiate to ger siblings
 	
-	if not ($"../InteractiveComponent" as InteractiveComponent).interacted.is_connected(func(x:String): interacted.emit(x)):
-		($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
-	
-	_nav_component = $"../NavigatorComponent" as NavigatorComponent
-	_puppet_component = $"../PuppetSpawnerComponent" as PuppetSpawnerComponent
-	_interactive_component = $"../InteractiveComponent" as InteractiveComponent
-	_goap_component = $"../GOAPComponent" as GOAPComponent
+	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
 	
 	# goap setup
 	for behavior in data.goap_actions:
@@ -166,6 +160,8 @@ func _ready():
 	
 	# misc setup
 	_interactive_component.interactible = data.interactive # TODO: Or instance override
+	
+	print("NPC ready!")
 
 
 func _on_enter_scene():
