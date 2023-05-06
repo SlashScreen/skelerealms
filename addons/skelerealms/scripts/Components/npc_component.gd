@@ -156,6 +156,10 @@ func _ready():
 	_interactive_component = $"../InteractiveComponent" as InteractiveComponent
 	_goap_component = $"../GOAPComponent" as GOAPComponent
 	
+	# goap setup
+	for behavior in data.goap_actions:
+		_goap_component.add_child(GOAPAction.new(behavior.duplicate(true)))
+	
 	# sync nav agent
 	_puppet_component.spawned_puppet.connect(func(x:Node): _puppet = x as NPCPuppet )
 	_puppet_component.despawned_puppet.connect(func(): _puppet = null )

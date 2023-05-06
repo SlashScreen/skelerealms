@@ -97,8 +97,6 @@ func test_schedule() -> void:
 	GameInfo.continuity_flags["test"] = 1
 	npc_component._calculate_new_schedule()
 	assert_eq(npc_component._current_schedule_event.name, "schedule overridden", "Should pass - the current schedule should be overridden, since it passes the codition.")
-	
-	# Test schedule points
 
 
 func test_navigation() -> void:

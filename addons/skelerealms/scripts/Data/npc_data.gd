@@ -33,10 +33,12 @@ class_name NPCData
 ## NPC relationships.
 @export var relationships:Array[Relationship]
 
-@export_category("AI Modules")
+@export_category("AI")
 ## AI Modules.
 @export var modules:Array[AIModule] = [
 		DefaultThreatResponseModule.new(),
 		DefaultInteractResponseModule.new(),
 		DefaultDamageModule.new()
 	]
+## GOAP Actions.
+@export var goap_actions:Array[GOAPBehavior] = []
