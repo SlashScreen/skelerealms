@@ -91,7 +91,7 @@ func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOA
 		new_plan.push_back(n.action)
 		n = n.parent
 	
-	#new_plan.reverse() # may be necessary?
+	new_plan.reverse()
 	return new_plan
 
 
@@ -128,6 +128,7 @@ func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary
 				# then, recurse and find the next possible node.
 				if _build_graph(next_node, leaves, goal, subset):
 					found_path = true
+					break
 	
 	return found_path
 
