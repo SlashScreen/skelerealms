@@ -98,37 +98,37 @@ func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOA
 ## Recursive method to try to find all possible action chains that could satisfy the goal.
 func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary, action_pool:Array) -> bool:
 	var found_path:bool = false
+	var achievable_actions = action_pool.filter(func(x): return x.is_achievable() and x.is_achievable_given(parent.states))
+	achievable_actions.sort_custom(func(a,b): return a.cost < b.cost ) #Sort to find node with least cost.
 	
 	# due to the recursive nature of this function, we will be building branching paths from all of the actions until a valid path is found.
-	for action in action_pool:
-		
+	for action in achievable_actions:
 		# if we can achieve this action,
-		if action.is_achievable():
-			# duplicate our working set of states.
-			var current_state:Dictionary = parent.states.duplicate(true)
+		# duplicate our working set of states.
+		var current_state:Dictionary = parent.states.duplicate(true)
+		
+		# Continue to accumulate effects in state, for passing on to the next node.
+		current_state.merge(action.effects, true) # overwrite to keep the state up to date.
 			
-			# Continue to accumulate effects in state, for passing on to the next node.
-			current_state.merge(action.effects, true) # overwrite to keep the state up to date.
-				
-			# create a new child planner node, which will have an accumulation of all the previous costs.
-			# this will help us find the shortest path later.
-			var next_node:PlannerNode = PlannerNode.new(parent, current_state, action, parent.cost + action.cost)
+		# create a new child planner node, which will have an accumulation of all the previous costs.
+		# this will help us find the shortest path later.
+		var next_node:PlannerNode = PlannerNode.new(parent, current_state, action, parent.cost + action.cost)
+		
+		if _goal_achieved(goal, current_state):
+			# if we have reached the state we are looking for, append the node to the leaves, and set found_path.
+			leaves.append(next_node)
+			found_path = true
+		else:
+			# if we have not reached the goal,
+			# create a subset of the action pool that removes the current action.
+			# this will prevent circular action chains.
+			var subset:Array = action_pool.duplicate() # no deep copy, we don't want to clone the nodes.
+			subset.erase(action)
 			
-			if _goal_achieved(goal, current_state):
-				# if we have reached the state we are looking for, append the node to the leaves, and set found_path.
-				leaves.append(next_node)
+			# then, recurse and find the next possible node.
+			if _build_graph(next_node, leaves, goal, subset):
 				found_path = true
-			else:
-				# if we have not reached the goal,
-				# create a subset of the action pool that removes the current action.
-				# this will prevent circular action chains.
-				var subset:Array = action_pool.duplicate() # no deep copy, we don't want to clone the nodes.
-				subset.erase(action)
-				
-				# then, recurse and find the next possible node.
-				if _build_graph(next_node, leaves, goal, subset):
-					found_path = true
-					break
+				break
 	
 	return found_path
 
