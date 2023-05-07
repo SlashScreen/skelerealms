@@ -23,10 +23,18 @@ func _init() -> void:
 	add_child(_timer)
 
 
+func setup(behaviors:Array[GOAPBehavior]) -> void:
+	for b in behaviors:
+		var new_behavior = b.duplicate(true)
+		new_behavior.entity = get_parent()
+		new_behavior.parent_goap = self
+		add_child(GOAPAction.new(new_behavior))
+
+
 func _process(delta):
 	# if we are not done with the current action
 	if not _current_action == null and _current_action.running:
-		if _agent.is_navigation_finished(): # if agent navigation is finished
+		if _current_action.is_target_reached(_agent): # if agent navigation is finished
 			if not _invoked: # if we aren't actively waiting for an action to be completed
 				if _current_action.target_reached(): # call the target reached callback
 					_invoke_in_time(_complete_current_action.bind(), _current_action.duration)
@@ -98,8 +106,13 @@ func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOA
 ## Recursive method to try to find all possible action chains that could satisfy the goal.
 func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary, action_pool:Array) -> bool:
 	var found_path:bool = false
-	var achievable_actions = action_pool.filter(func(x): return x.is_achievable() and x.is_achievable_given(parent.states))
-	achievable_actions.sort_custom(func(a,b): return a.cost < b.cost ) #Sort to find node with least cost.
+	
+	# get all actions that are 
+	# 1) achievable
+	# 2) achievable given prerequisites
+	# 3) has not already had effects satisfied <- may cause issues
+	var achievable_actions = action_pool.filter(func(x): return x.is_achievable() and x.is_achievable_given(parent.states) and not parent.states.has_all(x.effects.keys()))
+	achievable_actions.sort_custom(func(a,b): return a.cost < b.cost ) #Sort to resolve actions with least cost first.
 	
 	# due to the recursive nature of this function, we will be building branching paths from all of the actions until a valid path is found.
 	for action in achievable_actions:

@@ -159,8 +159,7 @@ func _entity_ready() -> void:
 	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
 	
 	# goap setup
-	for behavior in data.goap_actions:
-		_goap_component.add_child(GOAPAction.new(behavior.duplicate(true)))
+	_goap_component.setup(data.goap_actions)
 	
 	# sync nav agent
 	_puppet_component.spawned_puppet.connect(func(x:Node): _puppet = x as NPCPuppet )

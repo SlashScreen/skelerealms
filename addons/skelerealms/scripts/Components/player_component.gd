@@ -36,8 +36,9 @@ func _init() -> void:
 
 func _ready():
 	($"../TeleportComponent" as TeleportComponent).teleporting.connect(teleport.bind())
-	
-	await parent_entity.instantiated
+
+
+func _entity_ready() -> void:
 	
 	var h = (%HUD as HudControl)
 	# Shouldn't connect them here but im lazy

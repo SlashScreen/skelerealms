@@ -58,3 +58,7 @@ func target_reached() -> bool:
 
 func post_perform() -> bool:
 	return goap_behavior.post_perform()
+
+
+func is_target_reached(agent:NavigationAgent3D) -> bool:
+	return goap_behavior.is_target_reached(agent)

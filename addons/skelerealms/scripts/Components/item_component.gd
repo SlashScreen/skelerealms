@@ -23,9 +23,10 @@ func _init() -> void:
 
 func _ready() -> void:
 	super._ready()
-	await parent_entity.instantiated
-	if not $"../InteractiveComponent".interacted.is_connected(interact.bind()):
-		$"../InteractiveComponent".interacted.connect(interact.bind())
+
+
+func _entity_ready() -> void:
+	$"../InteractiveComponent".interacted.connect(interact.bind())
 
 
 func _on_enter_scene():

@@ -5,7 +5,7 @@ extends Resource
 @export var id:StringName
 @export var prerequisites:Dictionary
 @export var effects:Dictionary
-@export var cost:float
+@export var cost:float = 1
 @export var duration:float
 ## Whether this objective is actively being worked on
 var running:bool = false
@@ -30,4 +30,8 @@ func target_reached() -> bool:
 
 
 func post_perform() -> bool:
+	return true
+
+
+func is_target_reached(agent:NavigationAgent3D) -> bool:
 	return true
