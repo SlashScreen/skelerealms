@@ -112,16 +112,19 @@ func test_goap() -> void:
 	var npc:Entity = em.get_entity("test_dummy").unwrap()
 	# var npc_component:NPCComponent = (npc.get_component("NPCComponent").unwrap() as NPCComponent)
 	var goap_component:GOAPComponent = (npc.get_component("GOAPComponent").unwrap() as GOAPComponent)
+	# Part 1: Plan creation
 	# Test plan and cost
 	goap_component.add_objective({"goal":true}, true, 1)
 	gut.simulate(root, 1, 0.01)
-	assert_eq(goap_component.action_queue.map(func(x): return x.name), [&"action a", &"action b", &"action c"], "Should pass. This is the least costly path to the goal.")
+	assert_eq(goap_component.action_queue.map(func(x): return x.name), [&"action c", &"action b"], "Should pass. This is the least costly path to the goal, minus the first action.")
+	assert_eq(goap_component._current_action.name, &"action a", "Should pass - Current action should be action a")
 	# Test conditional path
 	npc.world = &"goap"
 	gut.simulate(root, 1, 0.01)
-	assert_eq(goap_component.action_queue.map(func(x): return x.name), [&"action a", &"action e", &"action c"], "Should pass. This is the least costly path to the goal with the condition.")
-	# Test failure
-	gut.simulate(root, 4, 0.01)
-	print("test")
+	assert_eq(goap_component.action_queue.map(func(x): return x.name), [&"action c", &"action e"], "Should pass. This is the least costly path to the goal with the condition, minus the first action.")
+	assert_eq(goap_component._current_action.name, &"action a", "Should pass - Current action should be action a")
+	# Part 2: Plan Execution
+	#gut.simulate(root, 4, 0.01)
+	#print("test")
 	# Test priority
 	# Test repeating

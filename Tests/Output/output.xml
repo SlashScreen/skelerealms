@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="2" tests="1" >
-  <testsuite name="res://Tests/test_npc.gd" tests="1" failures="2" skipped="0" >
-      <testcase name="test_goap" assertions="2" status="fail" classname="res://Tests/test_npc.gd" >
-      <failure message="failed">Array([&"action b", &"action c"]) != Array([&"action a", &"action b", &"action c"]).
-      [&"action b", &"action c"] != [&"action a", &"action b", &"action c"]  3 of 3 indexes do not match.  Should pass. This is the least costly path to the goal.
-            at line 118</failure></testcase>
+<testsuites name="GutTests" failures="0" tests="1" >
+  <testsuite name="res://Tests/test_npc.gd" tests="1" failures="0" skipped="0" >
+      <testcase name="test_goap" assertions="4" status="pass" classname="res://Tests/test_npc.gd" >
+      </testcase>
       </testsuite>
   </testsuites>

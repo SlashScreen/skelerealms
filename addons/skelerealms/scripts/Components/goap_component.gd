@@ -33,15 +33,19 @@ func setup(behaviors:Array[GOAPBehavior]) -> void:
 
 func _process(delta):
 	# if we are not done with the current action
-	if not _current_action == null and _current_action.running:
-		if _current_action.is_target_reached(_agent): # if agent navigation is finished
-			if not _invoked: # if we aren't actively waiting for an action to be completed
-				if _current_action.target_reached(): # call the target reached callback
-					_invoke_in_time(_complete_current_action.bind(), _current_action.duration)
-					_invoked = true
-				else:
-					_rebuild_plan = true
-		return
+	if not _current_action == null: 
+		if _current_action.running:
+			if _current_action.is_target_reached(_agent): # if agent navigation is finished
+				if not _invoked: # if we aren't actively waiting for an action to be completed
+					if _current_action.target_reached(): # call the target reached callback
+						_invoke_in_time(_complete_current_action.bind(), _current_action.duration)
+						_invoked = true
+					else:
+						_rebuild_plan = true
+			return
+		else:
+			if not action_queue.is_empty():
+				_pop_action()
 	
 	# if we are set to rebuild our plan
 	if _rebuild_plan:
@@ -54,6 +58,7 @@ func _process(delta):
 			)
 			# if we made a plan, stop sorting through objectives
 			if not action_queue.is_empty():
+				_pop_action()
 				_current_objective = o
 				break
 	
@@ -66,15 +71,14 @@ func _process(delta):
 			objectives.erase(_current_objective)
 		# trigger plan rebuild next frame
 		_rebuild_plan = true
-	
-	# if we are not done with our plan
-	if not action_queue.is_empty():
-		_current_action = action_queue.pop_front() # may need to pop back?
-		_current_action.running = true
-		# if pre perform fails, rebuild plan
-		if not _current_action.pre_perform():
-			_rebuild_plan
-	
+
+
+func _pop_action() -> void:
+	_current_action = action_queue.pop_back()
+	_current_action.running = true
+	# if pre perform fails, rebuild plan
+	if not _current_action.pre_perform():
+		_rebuild_plan
 
 
 ## Creates a plan to satisfy a set of goals from all child [GOAPAction]s.
@@ -99,7 +103,7 @@ func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOA
 		new_plan.push_back(n.action)
 		n = n.parent
 	
-	new_plan.reverse()
+	#new_plan.reverse()
 	return new_plan
 
 
