@@ -19,6 +19,8 @@ var duration:float:
 var running:bool:
 	get: 
 		return goap_behavior.running
+	set(val):
+		goap_behavior.running = val
 var parent_goap:GOAPComponent:
 	get: 
 		return goap_behavior.parent_goap

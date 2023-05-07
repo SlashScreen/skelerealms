@@ -120,11 +120,12 @@ func test_goap() -> void:
 	assert_eq(goap_component._current_action.name, &"action a", "Should pass - Current action should be action a")
 	# Test conditional path
 	npc.world = &"goap"
+	goap_component.regenerate_plan()
 	gut.simulate(root, 1, 0.01)
 	assert_eq(goap_component.action_queue.map(func(x): return x.name), [&"action c", &"action e"], "Should pass. This is the least costly path to the goal with the condition, minus the first action.")
 	assert_eq(goap_component._current_action.name, &"action a", "Should pass - Current action should be action a")
 	# Part 2: Plan Execution
-	#gut.simulate(root, 4, 0.01)
-	#print("test")
+	gut.simulate(root, 4, 0.01)
+	assert_eq(goap_component.objectives, [], "Should pass - objectives finished")
 	# Test priority
 	# Test repeating

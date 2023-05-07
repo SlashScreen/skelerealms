@@ -18,7 +18,7 @@ var _rebuild_plan:bool
 func _init() -> void:
 	name = "GOAPComponent"
 	# add timer
-	var _timer = Timer.new()
+	_timer = Timer.new()
 	_timer.name = "Timer"
 	add_child(_timer)
 
@@ -32,6 +32,31 @@ func setup(behaviors:Array[GOAPBehavior]) -> void:
 
 
 func _process(delta):
+	# if we are set to rebuild our plan
+	if _rebuild_plan:
+		print("Rebuilding plan")
+		# Find the highest priority objective
+		objectives.sort_custom(func(a:Objective, b:Objective): a.priority > b.priority)
+		for o in objectives:
+			action_queue = _plan(get_children()\
+				.filter(func(x): return x is GOAPAction)\
+				.map(func(x): return x as GOAPAction), o.goals, {}\
+			)
+			# if we made a plan, stop sorting through objectives
+			if not action_queue.is_empty():
+				_pop_action()
+				_current_objective = o
+				_rebuild_plan = false
+				break
+	
+	# if we are done with the plan
+	if not _rebuild_plan and action_queue.is_empty():
+		# if we need to remove the objective, remove it
+		if _current_objective.remove_after_satisfied:
+			objectives.erase(_current_objective)
+		# trigger plan rebuild next frame
+		_rebuild_plan = true
+	
 	# if we are not done with the current action
 	if not _current_action == null: 
 		if _current_action.running:
@@ -46,31 +71,6 @@ func _process(delta):
 		else:
 			if not action_queue.is_empty():
 				_pop_action()
-	
-	# if we are set to rebuild our plan
-	if _rebuild_plan:
-		# Find the highest priority objective
-		objectives.sort_custom(func(a:Objective, b:Objective): a.priority > b.priority)
-		for o in objectives:
-			action_queue = _plan(get_children()\
-				.filter(func(x): return x is GOAPAction)\
-				.map(func(x): return x as GOAPAction), o.goals, {}\
-			)
-			# if we made a plan, stop sorting through objectives
-			if not action_queue.is_empty():
-				_pop_action()
-				_current_objective = o
-				break
-	
-	if _current_action == null:
-		return
-	# if we are done with the plan
-	if not _rebuild_plan and action_queue.is_empty():
-		# if we need to remove the objective, remove it
-		if _current_objective.remove_after_satisfied:
-			objectives.erase(_current_objective)
-		# trigger plan rebuild next frame
-		_rebuild_plan = true
 
 
 func _pop_action() -> void:
@@ -78,7 +78,7 @@ func _pop_action() -> void:
 	_current_action.running = true
 	# if pre perform fails, rebuild plan
 	if not _current_action.pre_perform():
-		_rebuild_plan
+		_rebuild_plan = true
 
 
 ## Creates a plan to satisfy a set of goals from all child [GOAPAction]s.
@@ -178,7 +178,13 @@ func _complete_current_action():
 
 ## Add an objective for this asgent to attempt to satisfy.
 func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float):
+	print("Added objective")
 	objectives.append(Objective.build(goals, remove_after_satisfied, priority))
+	_rebuild_plan = true
+
+
+func regenerate_plan() -> void:
+	print("Asked regenerating plan")
 	_rebuild_plan = true
 
 
