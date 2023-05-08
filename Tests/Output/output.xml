@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="5" >
-  <testsuite name="res://Tests/test_npc.gd" tests="5" failures="0" skipped="0" >
-      <testcase name="test_damage" assertions="5" status="pass" classname="res://Tests/test_npc.gd" >
+<testsuites name="GutTests" failures="0" tests="1" >
+  <testsuite name="res://Tests/test_npc.gd" tests="0" failures="0" skipped="0" >
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd.TestSpells" tests="0" failures="0" skipped="0" >
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd.TestDamage" tests="0" failures="0" skipped="0" >
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd.TestNavigation" tests="0" failures="0" skipped="0" >
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd.TestSchedule" tests="1" failures="0" skipped="0" >
+      <testcase name="test_conditional" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestSchedule" >
       </testcase>
-      <testcase name="test_spells" assertions="3" status="pass" classname="res://Tests/test_npc.gd" >
-      </testcase>
-      <testcase name="test_schedule" assertions="3" status="pass" classname="res://Tests/test_npc.gd" >
-      </testcase>
-      <testcase name="test_navigation" assertions="1" status="pass" classname="res://Tests/test_npc.gd" >
-      </testcase>
-      <testcase name="test_goap" assertions="9" status="pass" classname="res://Tests/test_npc.gd" >
-      </testcase>
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd.TestGOAP" tests="0" failures="0" skipped="0" >
       </testsuite>
   </testsuites>

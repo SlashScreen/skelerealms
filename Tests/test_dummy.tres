@@ -227,7 +227,7 @@ name = "schedule overridden"
 from = SubResource("Resource_forwd")
 to = SubResource("Resource_8ca1i")
 condition = SubResource("Resource_titkw")
-priority = 1.0
+priority = 2.0
 
 [resource]
 script = ExtResource("1_5mc0v")

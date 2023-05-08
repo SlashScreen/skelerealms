@@ -14,7 +14,7 @@
  "hide_orphans": false,
  "ignore_pause": false,
  "include_subdirs": true,
- "inner_class": null,
+ "inner_class": "TestSchedule",
  "junit_xml_file": "J:/Programs/godot/Skelerealms/Tests/Output/output.xml",
  "junit_xml_timestamp": false,
  "log_level": 1,
@@ -38,5 +38,5 @@
  "show_help": false,
  "suffix": ".gd",
  "tests": [],
- "unit_test_name": null
+ "unit_test_name": "test_conditional"
 }
