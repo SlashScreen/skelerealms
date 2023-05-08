@@ -34,7 +34,6 @@ func setup(behaviors:Array[GOAPBehavior]) -> void:
 func _process(delta):
 	# if we are set to rebuild our plan
 	if _rebuild_plan:
-		print("Rebuilding plan")
 		# Find the highest priority objective
 		objectives.sort_custom(func(a:Objective, b:Objective): a.priority > b.priority)
 		for o in objectives:
@@ -182,13 +181,11 @@ func _complete_current_action():
 
 ## Add an objective for this asgent to attempt to satisfy.
 func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float):
-	print("Added objective")
-	objectives.append(Objective.build(goals, remove_after_satisfied, priority))
+	objectives.append(Objective.new(goals, remove_after_satisfied, priority))
 	_rebuild_plan = true
 
 
 func regenerate_plan() -> void:
-	print("Asked regenerating plan")
 	_rebuild_plan = true
 
 
@@ -201,13 +198,10 @@ class Objective:
 	## Priority
 	var priority:float
 	
-	static func build(g:Dictionary, rem:bool, p:float) -> Objective:
-		var o = Objective.new()
-		o.goals = g
-		o.remove_after_satisfied = rem
-		o.priority = p
-		return o
-	
+	func _init(g:Dictionary, rem:bool, p:float) -> void:
+		goals = g
+		remove_after_satisfied = rem
+		priority = p
 
 
 ## Internal node for planning a GOAP chain.

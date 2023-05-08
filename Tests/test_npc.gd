@@ -127,5 +127,11 @@ func test_goap() -> void:
 	# Part 2: Plan Execution
 	gut.simulate(root, 4, 0.01)
 	assert_eq(goap_component.objectives, [], "Should pass - objectives finished")
-	# Test priority
+	assert_eq(goap_component.action_queue, [], "Should pass: Done with the queue")
 	# Test repeating
+	goap_component.add_objective({"goal":true}, false, 1)
+	goap_component.regenerate_plan()
+	gut.simulate(root, 5, 0.01)
+	assert_eq(goap_component.objectives.size(), 1, "Should pass: Still has goal")
+	# Test priority
+	
