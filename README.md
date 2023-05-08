@@ -56,7 +56,7 @@ Not started :hole:
 | Schedules | :evergreen_tree: |
 | Outside of scene AI navigation | :warning: |
 | World loading | :evergreen_tree: |
-| Skills/Attributes | :warning: |
+| Skills/Attributes | :evergreen_tree: |
 | NPC Perception | :warning: |
 | Spells and Spell effects | :evergreen_tree: |
 | Audio events | :warning: |
@@ -70,7 +70,7 @@ Not started :hole:
 | Chests | :warning: |
 | Merchants | :warning: |
 
-## Upcoming Plugins
+## Planned Plugins
 
 - A compatability layer with [Gloot](https://github.com/peter-kish/gloot) to work with the in-house inventory system
 - A location-based asset streamer, allowing you to load in chunks of objects based on proximity to the player.
