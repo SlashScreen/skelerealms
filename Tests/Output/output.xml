@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="4" >
-  <testsuite name="res://Tests/test_core.gd" tests="0" failures="0" skipped="0" >
+<testsuites name="GutTests" failures="0" tests="3" >
+  <testsuite name="res://Tests/test_npc.gd" tests="0" failures="0" skipped="0" >
       </testsuite>
-  <testsuite name="res://Tests/test_core.gd.TestInScene" tests="4" failures="0" skipped="0" >
-      <testcase name="test_in_world" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestInScene" >
+  <testsuite name="res://Tests/test_npc.gd.TestSpells" tests="3" failures="0" skipped="0" >
+      <testcase name="test_spell_apply" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestSpells" >
       </testcase>
-      <testcase name="test_out_of_world" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestInScene" >
+      <testcase name="test_spell_damage" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestSpells" >
       </testcase>
-      <testcase name="test_in_world_out_range" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestInScene" >
+      <testcase name="test_spell_autoremoval" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestSpells" >
       </testcase>
-      <testcase name="test_out_world_out_range" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestInScene" >
-      </testcase>
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd.TestDamage" tests="0" failures="0" skipped="0" >
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd.TestNavigation" tests="0" failures="0" skipped="0" >
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd.TestSchedule" tests="0" failures="0" skipped="0" >
+      </testsuite>
+  <testsuite name="res://Tests/test_npc.gd.TestGOAP" tests="0" failures="0" skipped="0" >
       </testsuite>
   </testsuites>

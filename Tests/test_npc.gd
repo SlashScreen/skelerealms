@@ -53,7 +53,7 @@ class TestSpells:
 	func test_spell_damage() -> void:
 		spell._apply_spell_effect_to(spell_component, spell.spell_effects.front())
 		gut.simulate(root, 10, 0.1)
-		assert_almost_eq(vitals_component.vitals["health"], 99, 0.01, "Should pass - Took 1 poison damage over 1 second without modifiers.")
+		assert_almost_eq(vitals_component.vitals["health"], 99.0, 0.01, "Should pass - Took 1 poison damage over 1 second without modifiers.")
 	
 	
 	func test_spell_autoremoval() -> void:
