@@ -51,7 +51,7 @@ func _process(delta):
 				break
 	
 	# if we are done with the plan
-	if not _rebuild_plan and action_queue.is_empty():
+	if _current_objective and not _rebuild_plan and action_queue.is_empty():
 		# if we need to remove the objective, remove it
 		if _current_objective.remove_after_satisfied:
 			objectives.erase(_current_objective)

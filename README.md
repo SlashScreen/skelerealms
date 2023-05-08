@@ -52,13 +52,13 @@ Not started :hole:
 | Feature | Status |
 |---------|--------:|
 | Scene persistence | :evergreen_tree:
-| GOAP AI | :warning: |
-| Schedules | :warning: |
+| GOAP AI | :evergreen_tree: |
+| Schedules | :evergreen_tree: |
 | Outside of scene AI navigation | :warning: |
 | World loading | :evergreen_tree: |
 | Skills/Attributes | :warning: |
 | NPC Perception | :warning: |
-| Spells and Spell effects | :warning: |
+| Spells and Spell effects | :evergreen_tree: |
 | Audio events | :warning: |
 | Factions | :evergreen_tree: |
 | Crime | :warning: |

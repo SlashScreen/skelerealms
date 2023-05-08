@@ -106,6 +106,8 @@ func test_navigation() -> void:
 
 
 func test_goap() -> void:
+	# TODO: May need to break this up into multiple tests
+	# TODO: More edge cases, longer plans?
 	var root = setup_npc()
 	add_child(root)
 	var em:EntityManager = root.get_child(0)
