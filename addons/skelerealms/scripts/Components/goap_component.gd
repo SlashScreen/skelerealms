@@ -35,7 +35,9 @@ func _process(delta):
 	# if we are set to rebuild our plan
 	if _rebuild_plan:
 		# Find the highest priority objective
-		objectives.sort_custom(func(a:Objective, b:Objective): a.priority > b.priority)
+		objectives.sort_custom(func(a:Objective, b:Objective): return a.priority > b.priority)
+		if objectives.size() > 1:
+			print(objectives.map(func(x:Objective): return "%s of priority %s" % [x.goals, x.priority]))
 		for o in objectives:
 			action_queue = _plan(get_children()\
 				.filter(func(x): return x is GOAPAction)\
@@ -107,6 +109,7 @@ func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOA
 ## Recursive method to try to find all possible action chains that could satisfy the goal.
 func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary, action_pool:Array) -> bool:
 	var found_path:bool = false
+	# FIXME: We need to be doing breadth first search
 	
 	# get all actions that are 
 	# 1) achievable
@@ -142,7 +145,6 @@ func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary
 			# then, recurse and find the next possible node.
 			if _build_graph(next_node, leaves, goal, subset):
 				found_path = true
-				break
 	
 	return found_path
 
@@ -180,9 +182,11 @@ func _complete_current_action():
 
 
 ## Add an objective for this asgent to attempt to satisfy.
-func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float):
-	objectives.append(Objective.new(goals, remove_after_satisfied, priority))
+func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float) -> Objective:
+	var o = Objective.new(goals, remove_after_satisfied, priority)
+	objectives.append(o)
 	_rebuild_plan = true
+	return o
 
 
 func regenerate_plan() -> void:

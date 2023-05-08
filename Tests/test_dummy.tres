@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NPCData" load_steps=29 format=3 uid="uid://dnxrsrs4jlcxu"]
+[gd_resource type="Resource" script_class="NPCData" load_steps=30 format=3 uid="uid://dnxrsrs4jlcxu"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/npc_data.gd" id="1_5mc0v"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_damage_module.gd" id="1_i4yub"]
@@ -67,6 +67,18 @@ effects = {
 "objective2": true
 }
 cost = 0.5
+duration = 0.0
+
+[sub_resource type="Resource" id="Resource_56wkf"]
+script = ExtResource("1_snrm6")
+id = &"action f"
+prerequisites = {
+"objective2": true
+}
+effects = {
+"priority": true
+}
+cost = 1.0
 duration = 0.0
 
 [sub_resource type="Resource" id="Resource_g8o8h"]
@@ -233,5 +245,5 @@ start_dialogue_node = ""
 interactive = true
 relationships = Array[Resource("res://addons/skelerealms/scripts/Relationships/relationship.gd")]([])
 modules = Array[Object]([SubResource("Resource_g8o8h"), SubResource("Resource_hr8l8"), SubResource("Resource_o8fm3")])
-goap_actions = Array[ExtResource("1_snrm6")]([SubResource("Resource_43uvo"), SubResource("Resource_oqbhy"), SubResource("Resource_66r5m"), SubResource("Resource_hjg4o"), SubResource("Resource_ax50k")])
+goap_actions = Array[ExtResource("1_snrm6")]([SubResource("Resource_43uvo"), SubResource("Resource_oqbhy"), SubResource("Resource_66r5m"), SubResource("Resource_hjg4o"), SubResource("Resource_ax50k"), SubResource("Resource_56wkf")])
 id = "test_dummy"

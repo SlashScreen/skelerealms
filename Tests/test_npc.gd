@@ -110,10 +110,8 @@ func test_goap() -> void:
 	add_child(root)
 	var em:EntityManager = root.get_child(0)
 	var npc:Entity = em.get_entity("test_dummy").unwrap()
-	# var npc_component:NPCComponent = (npc.get_component("NPCComponent").unwrap() as NPCComponent)
 	var goap_component:GOAPComponent = (npc.get_component("GOAPComponent").unwrap() as GOAPComponent)
-	# Part 1: Plan creation
-	# Test plan and cost
+	# Test plan creation with cost
 	goap_component.add_objective({"goal":true}, true, 1)
 	gut.simulate(root, 1, 0.01)
 	assert_eq(goap_component.action_queue.map(func(x): return x.name), [&"action c", &"action b"], "Should pass. This is the least costly path to the goal, minus the first action.")
@@ -124,14 +122,21 @@ func test_goap() -> void:
 	gut.simulate(root, 1, 0.01)
 	assert_eq(goap_component.action_queue.map(func(x): return x.name), [&"action c", &"action e"], "Should pass. This is the least costly path to the goal with the condition, minus the first action.")
 	assert_eq(goap_component._current_action.name, &"action a", "Should pass - Current action should be action a")
-	# Part 2: Plan Execution
+	# Test plan execution
 	gut.simulate(root, 4, 0.01)
 	assert_eq(goap_component.objectives, [], "Should pass - objectives finished")
 	assert_eq(goap_component.action_queue, [], "Should pass: Done with the queue")
-	# Test repeating
+	# Test repeating goals
 	goap_component.add_objective({"goal":true}, false, 1)
 	goap_component.regenerate_plan()
 	gut.simulate(root, 5, 0.01)
 	assert_eq(goap_component.objectives.size(), 1, "Should pass: Still has goal")
-	# Test priority
-	
+	# Test goal priority
+	goap_component.objectives.clear()
+	goap_component._current_objective = null
+	npc.world = &""
+	goap_component.add_objective({"goal":true}, true, 1)
+	goap_component.add_objective({"priority":true}, true, 2)
+	gut.simulate(root, 1, 0.01)
+	assert_eq(goap_component.action_queue.map(func(x): return x.name), [&"action f", &"action b"], "Should pass. This is the least costly path to the higher priority goal, minus the first action.")
+	assert_eq(goap_component._current_action.name, &"action a", "Should pass - Current action should be action a")
