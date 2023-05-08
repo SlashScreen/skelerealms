@@ -13,7 +13,6 @@ func _ready():
 	regex = RegEx.new()
 	regex.compile("([^\\/\n\\r]+).tres")
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
-	print("Cached entities")
 
 
 ## Gets an entity in the game. [br]
@@ -70,14 +69,10 @@ func _cache_entities(path:String):
 
 ## add a new entity.
 func add_entity(res:InstanceData):
-	print("Adding entity %s"  % res.ref_id)
-	
 	var new_entity = Entity.new(res) # make a new entity
 	# add new entity to self, and the dictionary
 	entities[res.ref_id] = new_entity
 	add_child(new_entity)
-	print("instantiated")
-	#print_tree_pretty()
 
 
 ## Remove an entity from the game.

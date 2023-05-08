@@ -36,8 +36,6 @@ func _process(delta):
 	if _rebuild_plan:
 		# Find the highest priority objective
 		objectives.sort_custom(func(a:Objective, b:Objective): return a.priority > b.priority)
-		if objectives.size() > 1:
-			print(objectives.map(func(x:Objective): return "%s of priority %s" % [x.goals, x.priority]))
 		for o in objectives:
 			action_queue = _plan(get_children()\
 				.filter(func(x): return x is GOAPAction)\

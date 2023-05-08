@@ -167,8 +167,6 @@ func _entity_ready() -> void:
 	
 	# misc setup
 	_interactive_component.interactible = data.interactive # TODO: Or instance override
-	
-	print("NPC ready!")
 
 
 func _on_enter_scene():
