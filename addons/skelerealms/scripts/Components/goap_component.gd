@@ -64,10 +64,8 @@ func _process(delta):
 				if not _invoked: # if we aren't actively waiting for an action to be completed
 					if _current_action.target_reached(): # call the target reached callback
 						_invoke_in_time(_complete_current_action.bind(), _current_action.duration)
-						_invoked = true
 					else:
 						_rebuild_plan = true
-			return
 		else:
 			if not action_queue.is_empty():
 				_pop_action()
@@ -157,6 +155,12 @@ func _goal_achieved(goal:Dictionary, current_state:Dictionary) -> bool:
 
 ## Invoke a callable in a set amount of time.
 func _invoke_in_time(f:Callable, time:float):
+	# Invoke immediately if no duration
+	if time == 0:
+		f.call()
+		return
+	
+	_invoked = true
 	_timer.start(time)
 	_timer.timeout.connect(func():
 		# disconnect all events
