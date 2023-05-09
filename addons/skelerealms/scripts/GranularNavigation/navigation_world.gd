@@ -3,6 +3,8 @@ extends Node
 ## A world of the granular navigation system. [br]
 
 
+const dimension = 0
+
 @export var world:String
 
 

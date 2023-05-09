@@ -61,6 +61,14 @@ class TestNavmaster:
 	var ndata:Network
 	
 	
+	func get_children_recursive(n:Node) -> Array[Node]:
+		var res:Array[Node] = []
+		for c in n.get_children():
+			res.append(c)
+			res.append_array(get_children_recursive(c))
+		return res
+	
+	
 	func before_all() -> void:
 		ndata = load("res://Tests/TestAssets/test network2.tres")
 	
@@ -78,6 +86,18 @@ class TestNavmaster:
 		nmaster._load_from_networks({&"net test":ndata})
 		nmaster.print_tree_pretty()
 		assert_gt(nmaster.get_child_count(), 0)
+		var to_check = get_children_recursive(nmaster.get_child(0).get_child(0)) # should be root of tree
+		for n in to_check:
+			var p = n.get_parent() as NavNode
+			# check less than if left
+			if n == p.left_child:
+				print("Should be left")
+				if not n.position[p.dimension] == p.position[p.dimension]:
+					assert_lt(n.position[p.dimension], p.position[p.dimension], "This node should be to the 'left' of the parent.")
+			else: # check greater than if right
+				print("Should be right")
+				if not n.position[p.dimension] == p.position[p.dimension]:
+					assert_gt(n.position[p.dimension], p.position[p.dimension], "This node should be to the 'right' of the parent.")
 	
 	
 	func test_find_closest_point() -> void:
