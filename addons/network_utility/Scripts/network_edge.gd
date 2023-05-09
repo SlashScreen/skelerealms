@@ -8,7 +8,7 @@ extends Resource
 @export var bidirectional:bool = true
 
 
-func _init(a:NetworkPoint, b:NetworkPoint, cost:float = 1, bidirectional:bool = true) -> void:
+func _init(a:NetworkPoint = null, b:NetworkPoint = null, cost:float = 1, bidirectional:bool = true) -> void:
 	self.point_a = a
 	self.point_b = b
 	self.cost = cost

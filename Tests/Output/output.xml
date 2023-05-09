@@ -4,13 +4,15 @@
       </testsuite>
   <testsuite name="res://Tests/test_core.gd.TestInScene" tests="0" failures="0" skipped="0" >
       </testsuite>
+  <testsuite name="res://Tests/test_core.gd.TestNavmaster" tests="1" failures="0" skipped="0" >
+      <testcase name="test_load" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestNavmaster" >
+      </testcase>
+      </testsuite>
   <testsuite name="res://Tests/test_core.gd.TestMerchant" tests="0" failures="0" skipped="0" >
       </testsuite>
   <testsuite name="res://Tests/test_core.gd.TestInventory" tests="0" failures="0" skipped="0" >
       </testsuite>
-  <testsuite name="res://Tests/test_core.gd.TestCrime" tests="1" failures="0" skipped="0" >
-      <testcase name="test_coven_opinion_change" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestCrime" >
-      </testcase>
+  <testsuite name="res://Tests/test_core.gd.TestCrime" tests="0" failures="0" skipped="0" >
       </testsuite>
   <testsuite name="res://Tests/test_core.gd.TestSkills" tests="0" failures="0" skipped="0" >
       </testsuite>

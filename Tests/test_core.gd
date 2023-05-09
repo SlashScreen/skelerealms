@@ -54,6 +54,26 @@ class TestInScene:
 		assert_false(entity.in_scene, "Should fail- entity should not be in scene here - not in world, not in range.")
 
 
+class TestNavmaster:
+	extends GutTest
+	
+	var nmaster:NavMaster
+	var ndata:Network
+	
+	
+	func before_all() -> void:
+		ndata = load("res://Tests/TestAssets/test network2.tres")
+	
+	
+	func before_each() -> void:
+		nmaster = autofree(NavMaster.new())
+		add_child(nmaster)
+	
+	
+	func test_load() -> void:
+		assert_ne(ndata.points, [], "Should pass: Data should be loaded.")
+
+
 class TestMerchant:
 	extends GutTest
 	# Test transaction
