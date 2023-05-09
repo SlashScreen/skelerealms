@@ -1,6 +1,0 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://fedk6iw0ltkn"]
-
-[ext_resource type="Script" path="res://Tests/test_spell_effect.gd" id="1_tq8m5"]
-
-[resource]
-script = ExtResource("1_tq8m5")

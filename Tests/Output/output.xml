@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="2" >
+<testsuites name="GutTests" failures="0" tests="1" >
   <testsuite name="res://Tests/test_core.gd" tests="0" failures="0" skipped="0" >
       </testsuite>
   <testsuite name="res://Tests/test_core.gd.TestInScene" tests="0" failures="0" skipped="0" >
@@ -8,14 +8,12 @@
       </testsuite>
   <testsuite name="res://Tests/test_core.gd.TestInventory" tests="0" failures="0" skipped="0" >
       </testsuite>
-  <testsuite name="res://Tests/test_core.gd.TestCrime" tests="0" failures="0" skipped="0" >
+  <testsuite name="res://Tests/test_core.gd.TestCrime" tests="1" failures="0" skipped="0" >
+      <testcase name="test_coven_opinion_change" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestCrime" >
+      </testcase>
       </testsuite>
   <testsuite name="res://Tests/test_core.gd.TestSkills" tests="0" failures="0" skipped="0" >
       </testsuite>
-  <testsuite name="res://Tests/test_core.gd.TestAttributes" tests="2" failures="0" skipped="0" >
-      <testcase name="test_save" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestAttributes" >
-      </testcase>
-      <testcase name="test_load" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestAttributes" >
-      </testcase>
+  <testsuite name="res://Tests/test_core.gd.TestAttributes" tests="0" failures="0" skipped="0" >
       </testsuite>
   </testsuites>

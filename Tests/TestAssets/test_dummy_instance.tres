@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="NPCInstance" load_steps=3 format=3 uid="uid://dia5ionjby25u"]
+[gd_resource type="Resource" script_class="NPCInstance" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/InstanceData/npc_instance.gd" id="1_50aqu"]
-[ext_resource type="Resource" uid="uid://dnxrsrs4jlcxu" path="res://Tests/test_dummy.tres" id="1_y7ebi"]
+[ext_resource type="Resource" uid="uid://dnxrsrs4jlcxu" path="res://Tests/TestAssets/test_dummy.tres" id="1_y7ebi"]
 
 [resource]
 script = ExtResource("1_50aqu")

@@ -47,3 +47,9 @@ func get_coven_opinions(covens:Array) -> Array[int]:
 			opinion_list.append(0)
 	
 	return opinion_list
+
+
+## Get the crime opinion modifier for an entity against this coven.
+## The formula is [code]max_crime_severity * -10[/code].
+func get_crime_modifier(who:StringName) -> int:
+	return CrimeMaster.max_crime_severity(who, coven_id) * -10

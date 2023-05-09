@@ -6,7 +6,7 @@ extends GutTest
 func setup_npc() -> Node:
 	var em:EntityManager = autofree(EntityManager.new())
 	em.name = "EntityManager"
-	em.add_entity(load("res://Tests/test_dummy_instance.tres"))
+	em.add_entity(load("res://Tests/TestAssets/test_dummy_instance.tres"))
 	
 	var test_cam = autofree(Camera3D.new())
 	test_cam.position = Vector3()
@@ -34,7 +34,7 @@ class TestSpells:
 	
 	
 	func before_all() -> void:
-		spell = load("res://Tests/spell.tres")
+		spell = load("res://Tests/TestAssets/spell.tres")
 	
 	
 	func before_each() -> void:

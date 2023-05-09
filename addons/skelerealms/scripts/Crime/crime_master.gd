@@ -50,17 +50,18 @@ func add_crime(crime:Crime):
 				}
 
 
-## Returns the max wanted level for crimes for a Coven.
+## Returns the max wanted level for crimes against a Coven.
 func max_crime_severity(id:StringName, coven:StringName) -> int:
 	if not crimes.has(coven):
 		return 0
-	return max(crimes[coven]["unpunished"]\
+	var cr = crimes[coven]["unpunished"]\
 		.filter(func(x:Crime): return x.perpetrator == id)\
-		.map(func(x:Crime): return x.severity))
+		.map(func(x:Crime): return x.severity)
+	return 0 if cr.is_empty() else cr.max()
 
 
 ## Calculate the bounty a Coven has for an entity.
-func bounty_for_region(id:StringName, coven:StringName) -> int:
+func bounty_for_coven(id:StringName, coven:StringName) -> int:
 	if not crimes.has(coven):
 		return 0
 	return crimes[coven]["unpunished"]\

@@ -61,7 +61,7 @@ Not started :hole:
 | Spells and Spell effects | :evergreen_tree: |
 | Audio events | :warning: |
 | Factions | :evergreen_tree: |
-| Crime | :warning: |
+| Crime | :evergreen_tree: |
 | Editor tools | :construction: |
 | Quest system | :warning: |
 | Save/Load system | :warning: |
