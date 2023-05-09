@@ -109,9 +109,9 @@ func nearest_point(pt:NavPoint) -> NavNode:
 		# if the distance betweeen the walking node's splitting plane and the current closest's splitting plane,
 		# we want to check the opposite branch, too.
 		# FIXME: Use parent dimensions instead
-		if abs(walking_node.position[walking_node.dimension] - pt.position[walking_node.dimension]) < \
-		abs(current_closest.position[current_closest.dimension] - pt.position[current_closest.dimension]):
-			if pt.position[walking_node.dimension] < walking_node.position[walking_node.dimension]: # "is left" check
+		if abs(walking_node.position[walking_node.get_parent().dimension] - pt.position[walking_node.get_parent().dimension]) < \
+		abs(current_closest.position[walking_node.get_parent().dimension] - pt.position[walking_node.get_parent().dimension]):
+			if pt.position[walking_node.get_parent().dimension] < walking_node.position[walking_node.get_parent().dimension]: # "is left" check
 				if walking_node.right_child:
 					walking_node = walking_node.right_child.get_closest_point(pt.position)
 			else:

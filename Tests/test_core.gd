@@ -69,6 +69,19 @@ class TestNavmaster:
 		return res
 	
 	
+	func find_closest_brute_force(goal:Vector3, nodes:Array) -> Vector3:
+		var closest_node:Node
+		var closest_distance = INF
+		
+		for n in nodes:
+			var mag = goal.distance_to(n.position)
+			if mag < closest_distance:
+				closest_node = n
+				closest_distance = mag
+		
+		return closest_node.position
+	
+	
 	func before_all() -> void:
 		ndata = load("res://Tests/TestAssets/test network2.tres")
 	
@@ -104,7 +117,7 @@ class TestNavmaster:
 		nmaster._load_from_networks({&"net test":ndata})
 		nmaster.print_tree_pretty()
 		var pt = Vector3(1, 0, 1)
-		var correct = Vector3(-2.80927, 0, 1.4936)
+		var correct = find_closest_brute_force(pt, get_children_recursive(nmaster.get_child(0)))
 		var closest = nmaster.nearest_point(NavPoint.new(&"net test", pt))
 		if not closest:
 			fail_test("A node should be found.")
