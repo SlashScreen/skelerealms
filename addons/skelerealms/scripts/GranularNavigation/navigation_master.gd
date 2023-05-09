@@ -16,7 +16,7 @@ var worlds:Dictionary = {}
 
 
 func _ready() -> void:
-	load_all_networks()
+	pass#load_all_networks()
 
 
 func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
@@ -111,9 +111,11 @@ func nearest_point(pt:NavPoint) -> NavNode:
 		if abs(walking_node.position[walking_node.dimension] - pt.position[walking_node.dimension]) < \
 		abs(current_closest.position[current_closest.dimension] - pt.position[current_closest.dimension]):
 			if pt.position[walking_node.dimension] < walking_node.position[walking_node.dimension]: # "is left" check
-				walking_node = walking_node.right_child.get_closest_point(pt.position)
+				if walking_node.right_child:
+					walking_node = walking_node.right_child.get_closest_point(pt.position)
 			else:
-				walking_node = walking_node.left_child.get_closest_point(pt.position)
+				if walking_node.left_child:
+					walking_node = walking_node.left_child.get_closest_point(pt.position)
 		
 		# ascend up the tree.
 		walking_node = walking_node.get_parent() as NavNode
@@ -205,11 +207,13 @@ func construct_tree(points:Array[NavPoint]):
 ## Add a point to the tree
 func add_point(world:String, pos:Vector3) -> NavNode:
 	print("Adding a point at %s in world %s" % [pos, world])
-	var world_node: NavWorld = find_child(world)
+	var world_node: NavWorld = get_node_or_null(world)
 	# Add world if it doesnt already exist
 	if not world_node:
 		world_node = NavWorld.new()
+		world_node.world = world
 		world_node.name = world
+		worlds[world] = world_node
 		add_child(world_node)
 	
 	return world_node.add_point(pos)
@@ -271,3 +275,7 @@ func load_all_networks() -> void:
 	_load_from_networks(networks)
 	
 	print_tree_pretty()
+
+
+static func format_point_name(pt:Vector3, world:StringName) -> String:
+	return ("%s-%s" % [world, pt]).replace(".", "_")

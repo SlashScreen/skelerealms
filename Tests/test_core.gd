@@ -72,6 +72,24 @@ class TestNavmaster:
 	
 	func test_load() -> void:
 		assert_ne(ndata.points, [], "Should pass: Data should be loaded.")
+	
+	
+	func test_build_network() -> void:
+		nmaster._load_from_networks({&"net test":ndata})
+		nmaster.print_tree_pretty()
+		assert_gt(nmaster.get_child_count(), 0)
+	
+	
+	func test_find_closest_point() -> void:
+		nmaster._load_from_networks({&"net test":ndata})
+		nmaster.print_tree_pretty()
+		var pt = Vector3(1, 0, 1)
+		var correct = Vector3(-2.80927, 0, 1.4936)
+		var closest = nmaster.nearest_point(NavPoint.new(&"net test", pt))
+		if not closest:
+			fail_test("A node should be found.")
+			return
+		assert_eq(closest.position, correct, "Should pass. That is the closest node.")
 
 
 class TestMerchant:

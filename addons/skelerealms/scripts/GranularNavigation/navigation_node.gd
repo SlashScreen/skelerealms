@@ -31,6 +31,8 @@ func add_nav_node(pos:Vector3) -> NavNode:
 			var new_n = NavNode.new()
 			new_n.position = pos # set position
 			new_n.dimension = (dimension + 1) % 3 # set dimension and wrap to 3 dimensions
+			new_n.world = world
+			new_n.name = NavMaster.format_point_name(pos, world)
 			add_child(new_n)
 			left_child = new_n
 			return new_n
@@ -41,6 +43,8 @@ func add_nav_node(pos:Vector3) -> NavNode:
 			var new_n = NavNode.new()
 			new_n.position = pos
 			new_n.dimension = (dimension + 1) % 3
+			new_n.world = world
+			new_n.name = NavMaster.format_point_name(pos, world)
 			add_child(new_n)
 			right_child = new_n
 			return new_n

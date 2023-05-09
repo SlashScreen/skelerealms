@@ -12,6 +12,8 @@ func add_point(pos:Vector3) -> NavNode:
 		var new_n = NavNode.new()
 		new_n.position = pos # set position
 		new_n.dimension = 0
+		new_n.world = world
+		new_n.name = NavMaster.format_point_name(pos, world)
 		add_child(new_n)
 		return new_n
 	#else, tell that child to add one
