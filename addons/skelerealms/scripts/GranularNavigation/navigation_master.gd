@@ -91,35 +91,62 @@ func _load():
 	pass
 
 
+## Recursive descent for the nearest point algorithm.
+func _walk_down(n:NavNode, goal:NavPoint, current_closest:NavNode) -> NavNode:
+	# set current closest to this if the distance to goal is smaller
+	if  n.position.distance_squared_to(goal.position) < current_closest.position.distance_squared_to(goal.position):
+		current_closest = n
+	# if no children, return this node
+	if not n.left_child and not n.right_child:
+		return n
+	# make binary decision
+	var is_left:bool = goal.position[n.dimension] < n.position[n.dimension]
+	if is_left:
+		if n.left_child:
+			return _walk_down(n.left_child, goal, current_closest)
+		else:
+			return n
+	else:
+		if n.right_child:
+			return _walk_down(n.right_child, goal, current_closest)
+		else:
+			return n
+
+
 ## Find the nav node closest to a given point.
 func nearest_point(pt:NavPoint) -> NavNode:
+	
+	# 1. Define the point for which you want to find the closest node.
+	# 2. Start at the root node of the tree.
+	# 3. Traverse the tree recursively, making a series of binary decisions at each node based on whether the point is on the left or right side of the current node's splitting hyperplane. 
+	# 4. Keep track of the closest node found so far, initially set it to the root node. 
+	# 5. Compute the distance between the query point and the current node. If this distance is less than the distance between the query point and the current closest node, update the closest node to be the current node.
+	# 6. Recursively search the other side of the splitting hyperplane if the distance between the query point and the splitting hyperplane is less than the distance between the query point and the closest node found so far.
+	# 7. Repeat steps 4-6 until the entire tree has been searched.
+	# 8. The final closest node found is the one with the minimum distance to the query point.
+	
 	if not worlds.has(pt.world):
 		return null
 	
-	# recursive descent to find closest leaf
-	var current_closest:NavNode = worlds[pt.world].get_closest_point(pt.position)
-	
-	var walking_node:NavNode = current_closest.get_parent() as NavNode
+	var root = worlds[pt.world].get_child(0)
+	var current_closest:NavNode = root # root by default
+	# walk down initially
+	_walk_down(root, pt, current_closest) # walk down the tree initially
+	#walk back up the tree, searching other branches if necessary
+	var walking_node:NavNode = current_closest
 	while walking_node.get_parent() is NavNode:
-		# step 1: compare distance with current closes t:
-		if current_closest.position.distance_squared_to(pt.position) > walking_node.position.distance_squared_to(pt.position): # if is further than closest
-			current_closest = walking_node # set
+		# closest check. may be redundant
+		#if  walking_node.position.distance_squared_to(pt.position) < current_closest.position.distance_squared_to(pt.position):
+		#	current_closest = walking_node
 			
-		# step 2: explore other branches 
-		# if the distance betweeen the walking node's splitting plane and the current closest's splitting plane,
-		# we want to check the opposite branch, too.
-		# FIXME: Use parent dimensions instead
-		if abs(walking_node.position[walking_node.get_parent().dimension] - pt.position[walking_node.get_parent().dimension]) < \
-		abs(current_closest.position[walking_node.get_parent().dimension] - pt.position[walking_node.get_parent().dimension]):
-			if pt.position[walking_node.get_parent().dimension] < walking_node.position[walking_node.get_parent().dimension]: # "is left" check
-				if walking_node.right_child:
-					walking_node = walking_node.right_child.get_closest_point(pt.position)
+		var p = walking_node.get_parent() as NavNode
+		# Recursively search the other side of the splitting hyperplane if the distance between the query point and the splitting hyperplane is less than the distance between the query point and the closest node found so far
+		if p.position[p.dimension] - walking_node.position[p.dimension] < walking_node.position.distance_to(current_closest.position):
+			if p.left_child == walking_node:
+				_walk_down(p.right_child, pt, current_closest)
 			else:
-				if walking_node.left_child:
-					walking_node = walking_node.left_child.get_closest_point(pt.position)
-		
-		# ascend up the tree.
-		walking_node = walking_node.get_parent() as NavNode
+				_walk_down(p.left_child, pt, current_closest)
+			walking_node = current_closest
 	
 	return current_closest
 

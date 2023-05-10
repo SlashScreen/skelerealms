@@ -70,16 +70,8 @@ class TestNavmaster:
 	
 	
 	func find_closest_brute_force(goal:Vector3, nodes:Array) -> Vector3:
-		var closest_node:Node
-		var closest_distance = INF
-		
-		for n in nodes:
-			var mag = goal.distance_to(n.position)
-			if mag < closest_distance:
-				closest_node = n
-				closest_distance = mag
-		
-		return closest_node.position
+		nodes.sort_custom(func(a, b): return a.position.distance_squared_to(goal) < b.position.distance_squared_to(goal))
+		return nodes.front().position
 	
 	
 	func before_all() -> void:
