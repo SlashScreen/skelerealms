@@ -52,12 +52,14 @@ func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
 			if closed_list.has(c):
 				continue
 			
+			came_from[c] = current # set path parent
+			
 			# If connection is the end node, we found a path.
 			if c == end_node:
 				return _reconstruct_path(came_from, c)
 			
 			open_list.append(c) # add to current
-			came_from[c] = current # set path parent
+			
 			# update G score from previosu to 
 			g_score[c] = g_score[current] + current.connections[c]
 		

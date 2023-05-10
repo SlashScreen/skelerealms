@@ -115,6 +115,14 @@ class TestNavmaster:
 			fail_test("A node should be found.")
 			return
 		assert_eq(closest.position, correct, "Should pass. That is the closest node.")
+	
+	
+	func test_find_path() -> void:
+		nmaster._load_from_networks({&"net test":ndata})
+		var start = NavPoint.new(&"net test", Vector3(1, 0, 1))
+		var end = NavPoint.new(&"net test", Vector3(-1, 0, -5))
+		var path = nmaster.calculate_path(start, end)
+		assert_gt(path.filter(func(x:NavPoint): return x.position), [Vector3(-2.809, 0, 1.494), Vector3(-6.11, 0, -2.782), Vector3(-2.54, 0, -6.143)])
 
 
 class TestMerchant:

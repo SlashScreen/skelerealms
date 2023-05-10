@@ -5,7 +5,7 @@
   <testsuite name="res://Tests/test_core.gd.TestInScene" tests="0" failures="0" skipped="0" >
       </testsuite>
   <testsuite name="res://Tests/test_core.gd.TestNavmaster" tests="1" failures="0" skipped="0" >
-      <testcase name="test_find_closest_point" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestNavmaster" >
+      <testcase name="test_find_path" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestNavmaster" >
       </testcase>
       </testsuite>
   <testsuite name="res://Tests/test_core.gd.TestMerchant" tests="0" failures="0" skipped="0" >
