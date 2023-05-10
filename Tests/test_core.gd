@@ -108,7 +108,7 @@ class TestNavmaster:
 	func test_find_closest_point() -> void:
 		nmaster._load_from_networks({&"net test":ndata})
 		nmaster.print_tree_pretty()
-		var pt = Vector3(1, 0, 1)
+		var pt = Vector3(1, 0, 5)
 		var correct = find_closest_brute_force(pt, get_children_recursive(nmaster.get_child(0)))
 		var closest = nmaster.nearest_point(NavPoint.new(&"net test", pt))
 		if not closest:
