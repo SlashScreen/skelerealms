@@ -96,11 +96,9 @@ class TestNavmaster:
 			var p = n.get_parent() as NavNode
 			# check less than if left
 			if n == p.left_child:
-				print("Should be left")
 				if not n.position[p.dimension] == p.position[p.dimension]:
 					assert_lt(n.position[p.dimension], p.position[p.dimension], "This node should be to the 'left' of the parent.")
 			else: # check greater than if right
-				print("Should be right")
 				if not n.position[p.dimension] == p.position[p.dimension]:
 					assert_gt(n.position[p.dimension], p.position[p.dimension], "This node should be to the 'right' of the parent.")
 	
@@ -122,7 +120,10 @@ class TestNavmaster:
 		var start = NavPoint.new(&"net test", Vector3(1, 0, 1))
 		var end = NavPoint.new(&"net test", Vector3(-1, 0, -5))
 		var path = nmaster.calculate_path(start, end)
+		# TODO: Make sure that path is actually correct
 		assert_gt(path.filter(func(x:NavPoint): return x.position), [Vector3(-2.809, 0, 1.494), Vector3(-6.11, 0, -2.782), Vector3(-2.54, 0, -6.143)])
+	
+	# TODO: Test path between worlds
 
 
 class TestMerchant:

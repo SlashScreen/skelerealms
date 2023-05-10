@@ -54,7 +54,7 @@ Not started :hole:
 | Scene persistence | :evergreen_tree:
 | GOAP AI | :evergreen_tree: |
 | Schedules | :evergreen_tree: |
-| Outside of scene AI navigation | :warning: |
+| Outside of scene AI navigation | :evergreen_tree: |
 | World loading | :evergreen_tree: |
 | Skills/Attributes | :evergreen_tree: |
 | NPC Perception | :warning: |
@@ -74,3 +74,9 @@ Not started :hole:
 
 - A compatability layer with [Gloot](https://github.com/peter-kish/gloot) to work with the in-house inventory system
 - A location-based asset streamer, allowing you to load in chunks of objects based on proximity to the player.
+
+## Future Imporovements
+
+- I'd like to rework the way inter-scene navigation is represented during runtime, because the current method is cumbersome and not anywhere close to memory-efficient. Packed arrays and lots of index maps world do well. However, I need something that works right now.
+- I'd like to make much more advanced editor tools to make the experience very easy.
+- Much more thorough tests.
