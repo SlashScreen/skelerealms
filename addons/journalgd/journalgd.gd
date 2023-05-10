@@ -13,11 +13,13 @@ func _enter_tree() -> void:
 	quest_panel_instance = QuestWindow.instantiate() # Instantiate editor
 	get_editor_interface().get_editor_main_screen().add_child(quest_panel_instance) # Add to main screen
 	_make_visible(false) #hide by default
+	ProjectSettings.set_setting("journalgd/quests_path", "res://Quests")
 
 
 func _exit_tree() -> void:
 	if quest_panel_instance:
 		quest_panel_instance.queue_free() # destroy panel
+	ProjectSettings.set_setting("journalgd/quests_path", null)
 
 
 func _has_main_screen() -> bool:
@@ -35,3 +37,13 @@ func _get_plugin_icon() -> Texture2D:
 func _make_visible(state:bool) -> void:
 	if quest_panel_instance:
 		quest_panel_instance.visible = state
+
+
+func _handles(object: Object) -> bool:
+	return object is Quest
+
+
+func _edit(object: Object) -> void:
+	# TODO: Open and edit quest
+	print("Opening quest")
+	quest_panel_instance.find_child("GraphEdit").open(object)

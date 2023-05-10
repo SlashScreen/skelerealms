@@ -99,12 +99,12 @@ func _set_handle(gizmo: EditorNode3DGizmo, handle_id: int, secondary: bool, came
 
 
 func _commit_handle(gizmo: EditorNode3DGizmo, handle_id: int, secondary: bool, restore, cancel: bool) -> void:
-	print("Commit handle %s that has restore %s " % [handle_id, restore])
+	# print("Commit handle %s that has restore %s " % [handle_id, restore])
 	# get associated point
 	var pt = handle_associations[handle_id]
 	# restore if cancel
 	if cancel:
-		pt.position = restore
+		#pt.position = restore
 		return
 	
 

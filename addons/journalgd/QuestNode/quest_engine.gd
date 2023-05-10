@@ -13,7 +13,7 @@ var complete_quests:Array[String]
 
 ## Loads all quests from the [code]biznasty/quests_directory[/code] project setting, and then instantiates them as child [QuestObject]s.
 func load_quest_objects():
-	_load_dir(ProjectSettings.get_setting("skelerealms/quests_directory"))
+	_load_dir(ProjectSettings.get_setting("journalgd/quests_path"))
 
 
 func _load_dir(path:String):
@@ -60,7 +60,7 @@ func register_quest_event(path:String):
 		if qnode == null:
 			return
 		qnode.register_step_event(chunks[1])
-	else: # if jsut the key
+	else: # if just the key
 		for q in get_children().map(func(x): return x as QuestNode):
 			q.register_step_event(path)
 

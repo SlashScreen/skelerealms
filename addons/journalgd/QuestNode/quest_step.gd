@@ -1,10 +1,13 @@
+@tool
+
 class_name QuestStep
 extends Node
 
 var type:StepType = StepType.ALL
 var is_final_step:bool = false
 var is_already_complete:bool
-@export var next_steps:Array[Node]#Dictionary = {}
+var next_steps:Array#Dictionary = {}
+var editor_coordinates:Vector2
 
 var next_step:QuestStep:
 	get:

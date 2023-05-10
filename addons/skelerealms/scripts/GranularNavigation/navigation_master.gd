@@ -8,7 +8,7 @@ extends Node
 ## Each [NavWorld] contains [NavNode]s as children that are laid out to match the physical space of a world.
 ## When NPCs are offscreen, instead of using a navmesh, they will attempt to go to their destination by following these nodes.
 ## This is done to improve performance. However, be sure not to have [i]too[/i] many entities using this at once, otherwise performance may suffer. 
-## See project setting [code]biznasty/granular_navigation_sim_distance[/code] to adjust how far away the actors have to be before they stop using this system and just stay idle.
+## See project setting [code]skelerelams/granular_navigation_sim_distance[/code] to adjust how far away the actors have to be before they stop using this system and just stay idle.
 
 
 ## Dictionary of references to the roots of KD trees.

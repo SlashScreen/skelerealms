@@ -17,10 +17,6 @@ extends Resource
 signal redraw
 
 
-func _init() -> void:
-	return
-
-
 ## Add a point to this network.
 func add_point(pt:Vector3, portal:bool = false) -> NetworkPoint:
 	# Create edge

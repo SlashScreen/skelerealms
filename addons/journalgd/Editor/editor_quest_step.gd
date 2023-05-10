@@ -4,12 +4,18 @@ class_name EditorQuestStep
 extends GraphNode
 
 
-var is_entry:bool
-var is_exit:bool
+const GOAL_PREFAB = preload("res://addons/journalgd/Editor/goal_prefab.tscn")
+
+var is_exit:bool:
+	get:
+		return $IsExitButton.button_pressed
+	set(val):
+		$IsExitButton.button_pressed = val
 var step_name:String:
 	get: 
 		return ($StepName as LineEdit).text
-var node_position:Vector2
+	set(val):
+		($StepName as LineEdit).text = val
 var next_connections:Array[String]
 var step_type:QuestStep.StepType:
 	get:
@@ -22,22 +28,21 @@ var step_type:QuestStep.StepType:
 				return QuestStep.StepType.BRANCH
 			_:
 				return QuestStep.StepType.ALL
-var optional:bool
-
-
-var step_name_field:LineEdit
-var is_exit_button:CheckButton
+	set(val):
+		match val:
+			QuestStep.StepType.ALL:
+				$StepType.select(0)
+			QuestStep.StepType.ANY:
+				$StepType.select(1)
+			QuestStep.StepType.BRANCH:
+				$StepType.select(2)
+			_:
+				$StepType.select(0)
 
 
 func _update_is_exit(val:bool):
 	print("update is exit")
-	is_exit = val
 	set_slot_enabled_right(0, not val)
-
-
-## Evaluate whether the quest is complete or not.
-func evaluate() -> bool:
-	return true
 
 
 func _on_delete_node_button_up():
@@ -46,4 +51,11 @@ func _on_delete_node_button_up():
 
 
 func get_goals() -> Array:
-	return $Scroll/GoalsContainer.get_children().map(func(x): return x as EditorQuestGoal)
+	return $Scroll/GoalsContainer.get_children()
+
+
+func _on_add_goal() -> EditorQuestGoal:
+	var n = GOAL_PREFAB.instantiate()
+	$Scroll/GoalsContainer.add_child(n)
+	n.owner = self
+	return n

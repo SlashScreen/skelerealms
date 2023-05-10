@@ -1,3 +1,5 @@
+@tool
+
 class_name QuestNode
 extends Node
 ## This is an instance of a [Quest] within the scene.

@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://vpv70w0bqhoa"]
 
 [ext_resource type="Script" path="res://addons/journalgd/Editor/editor_quest_step.gd" id="1_kwd5h"]
-[ext_resource type="PackedScene" path="res://addons/journalgd/Editor/goal_prefab.tscn" id="2_cm17v"]
 
 [node name="step" type="GraphNode"]
 process_mode = 3
@@ -72,6 +71,15 @@ slot/6/right_type = 0
 slot/6/right_color = Color(1, 1, 1, 1)
 slot/6/right_icon = null
 slot/6/draw_stylebox = true
+slot/7/left_enabled = false
+slot/7/left_type = 0
+slot/7/left_color = Color(1, 1, 1, 1)
+slot/7/left_icon = null
+slot/7/right_enabled = false
+slot/7/right_type = 0
+slot/7/right_color = Color(1, 1, 1, 1)
+slot/7/right_icon = null
+slot/7/draw_stylebox = true
 script = ExtResource("1_kwd5h")
 
 [node name="DeleteNode" type="Button" parent="."]
@@ -101,6 +109,10 @@ popup/item_2/id = 2
 layout_mode = 2
 text = "Exit node"
 
+[node name="AddGoalButton" type="Button" parent="."]
+layout_mode = 2
+text = "Add Goal"
+
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2
 
@@ -113,11 +125,6 @@ vertical_scroll_mode = 2
 [node name="GoalsContainer" type="VBoxContainer" parent="Scroll"]
 layout_mode = 2
 
-[node name="Goal" parent="Scroll/GoalsContainer" instance=ExtResource("2_cm17v")]
-layout_mode = 2
-
-[node name="Goal2" parent="Scroll/GoalsContainer" instance=ExtResource("2_cm17v")]
-layout_mode = 2
-
 [connection signal="button_up" from="DeleteNode" to="." method="_on_delete_node_button_up"]
 [connection signal="toggled" from="IsExitButton" to="." method="_update_is_exit"]
+[connection signal="pressed" from="AddGoalButton" to="." method="_on_add_goal"]
