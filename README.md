@@ -2,7 +2,7 @@
 
 Skelerealms is a work-in-progress framework for creating open world RPGs, like The Elder Scrolls series.  
 Skelerealms is made to be modular and extensible, and easy to hook into for actual gameplay.  
-This addon is still under construction, and should probably not yet be used.  
+**This addon is still under construction- should you use it, be wary of bugs.** (if you do find bugs, please open an issue!)  
 It is part of a family of sister addons, some of which it depends on:  
 - [Godot Network Graph](https://github.com/SlashScreen/godot-network-graph) - **Required**
 - [JournalGD](https://github.com/SlashScreen/journalgd-godot) - **Required**
