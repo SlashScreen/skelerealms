@@ -325,3 +325,7 @@ class TestAttributes:
 		
 		attributes_component.load_data(save_data)
 		assert_eq(attributes_component.attributes[&"luck"], 5)
+
+
+class TestSaveLoad:
+	extends GutTest

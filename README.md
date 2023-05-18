@@ -63,7 +63,7 @@ Not started :hole:
 | Factions | :evergreen_tree: |
 | Crime | :evergreen_tree: |
 | Editor tools | :construction: |
-| Quest system | :warning: |
+| Quest system | :evergreen_tree: |
 | Save/Load system | :warning: |
 | Items | :evergreen_tree: |
 | NPCs | :warning: |
