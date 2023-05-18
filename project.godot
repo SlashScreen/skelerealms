@@ -93,6 +93,10 @@ interact={
 
 locale/translations=PackedStringArray("res://locales/ui.de.translation", "res://locales/ui.en.translation")
 
+[journalgd]
+
+quests_path="res://Quests"
+
 [physics]
 
 3d/run_on_separate_thread=true

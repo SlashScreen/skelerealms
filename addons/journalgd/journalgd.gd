@@ -40,7 +40,7 @@ func _make_visible(state:bool) -> void:
 
 
 func _handles(object: Object) -> bool:
-	return object is Quest
+	return object is SavedQuest
 
 
 func _edit(object: Object) -> void:

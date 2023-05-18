@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cpim3fonsxtr4"]
+[gd_scene load_steps=2 format=3 uid="uid://cpim3fonsxtr4"]
 
 [ext_resource type="Script" path="res://addons/journalgd/Editor/quest_editor.gd" id="1_1ktoh"]
-[ext_resource type="PackedScene" uid="uid://vpv70w0bqhoa" path="res://addons/journalgd/Editor/step_prefab.tscn" id="2_dvrvu"]
 
 [node name="quest_editor_screen" type="Control"]
 process_mode = 3
@@ -51,7 +50,6 @@ layout_mode = 2
 size_flags_vertical = 3
 right_disconnects = true
 script = ExtResource("1_1ktoh")
-node_prefab = ExtResource("2_dvrvu")
 
 [connection signal="pressed" from="Vbox/HBoxContainer/Clear" to="Vbox/GraphEdit" method="_on_clear_pressed"]
 [connection signal="button_down" from="Vbox/HBoxContainer/Add_new" to="Vbox/GraphEdit" method="_on_add_new_button_down"]
