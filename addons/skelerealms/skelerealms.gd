@@ -19,6 +19,23 @@ func _enter_tree():
 	add_autoload_singleton("SaveSystem", "res://addons/skelerealms/scripts/System/save_system.gd")
 	add_autoload_singleton("CrimeMaster", "res://addons/skelerealms/scripts/Crime/crime_master.gd")
 	add_autoload_singleton("DialogueHooks", "res://addons/skelerealms/scripts/System/dialogue_hooks.gd")
+
+
+func _exit_tree():
+	# gizmos
+	remove_node_3d_gizmo_plugin(item_gizmo_plugin)
+	remove_node_3d_gizmo_plugin(npc_gizmo_plugin)
+	remove_inspector_plugin(door_jump_plugin)
+	# autoload
+	remove_autoload_singleton("SkeleRealmsGlobal")
+	remove_autoload_singleton("CovenSystem")
+	remove_autoload_singleton("GameInfo")
+	remove_autoload_singleton("SaveSystem")
+	remove_autoload_singleton("CrimeMaster")
+	remove_autoload_singleton("DialogueHooks")
+
+
+func _enable_plugin() -> void:
 	# settings
 	ProjectSettings.set_setting("skelerealms/actor_fade_distance", 100.0)
 	ProjectSettings.set_setting("skelerealms/entity_cleanup_timer", 300.0)
@@ -39,18 +56,7 @@ func _enter_tree():
 	ProjectSettings.set_setting("skelerealms/networks_path", "res://Networks")
 
 
-func _exit_tree():
-	# gizmos
-	remove_node_3d_gizmo_plugin(item_gizmo_plugin)
-	remove_node_3d_gizmo_plugin(npc_gizmo_plugin)
-	remove_inspector_plugin(door_jump_plugin)
-	# autoload
-	remove_autoload_singleton("SkeleRealmsGlobal")
-	remove_autoload_singleton("CovenSystem")
-	remove_autoload_singleton("GameInfo")
-	remove_autoload_singleton("SaveSystem")
-	remove_autoload_singleton("CrimeMaster")
-	remove_autoload_singleton("DialogueHooks")
+func _disable_plugin() -> void:
 	# settings
 	ProjectSettings.set_setting("skelerealms/actor_fade_distance", null)
 	ProjectSettings.set_setting("skelerealms/entity_cleanup_timer", null)

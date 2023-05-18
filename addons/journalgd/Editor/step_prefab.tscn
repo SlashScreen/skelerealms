@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/journalgd/Editor/editor_quest_step.gd" id="1_kwd5h"]
 
-[sub_resource type="Theme" id="Theme_kjdmw"]
+[sub_resource type="Theme" id="Theme_no2em"]
 Color/colors/title_color = Color(0, 0.733333, 0.247059, 0.231373)
 GraphNode/colors/title_color = Color(1, 1, 1, 1)
 color/colors/title_color = Color(0, 0.733333, 0.247059, 0.231373)
@@ -12,7 +12,7 @@ process_mode = 3
 offset_right = 268.0
 offset_bottom = 324.0
 mouse_filter = 1
-theme = SubResource("Theme_kjdmw")
+theme = SubResource("Theme_no2em")
 show_close = true
 resizable = true
 slot/0/left_enabled = false
