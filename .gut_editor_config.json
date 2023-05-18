@@ -14,7 +14,7 @@
  "hide_orphans": false,
  "ignore_pause": false,
  "include_subdirs": true,
- "inner_class": "TestNavmaster",
+ "inner_class": null,
  "junit_xml_file": "J:/Programs/godot/Skelerealms/Tests/Output/output.xml",
  "junit_xml_timestamp": false,
  "log_level": 1,
@@ -31,12 +31,12 @@
  "post_run_script": "",
  "pre_run_script": "",
  "prefix": "test_",
- "selected": "test_core.gd",
+ "selected": "test_inventory.gd",
  "should_exit": false,
  "should_exit_on_success": false,
  "should_maximize": false,
  "show_help": false,
  "suffix": ".gd",
  "tests": [],
- "unit_test_name": "test_find_path"
+ "unit_test_name": null
 }
