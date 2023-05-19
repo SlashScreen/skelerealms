@@ -43,4 +43,4 @@ func bind(fn:Callable) -> Variant:
 	if some():
 		return fn.call(unwrap())
 	else:
-		return null
+		return Option.none()

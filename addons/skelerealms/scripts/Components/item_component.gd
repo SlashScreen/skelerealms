@@ -35,6 +35,7 @@ func _on_enter_scene():
 
 func _spawn():
 	print("spawning %s" % parent_entity.name)
+
 	$"../PuppetSpawnerComponent".spawn(data.prefab)
 
 
@@ -89,7 +90,10 @@ func drop():
 	var drop_dir:Quaternion = e.rotation
 	print(drop_dir.get_euler().normalized() * DROP_DISTANCE)
 	# This whole bit is genericizing dropping the item in front of the player. It's meant to be used with the player, it should work with anything with a puppet. 
-	
+	contained_inventory\
+		.bind(func(id:String): print(id); return SkeleRealmsGlobal.entity_manager.get_entity(id))\
+		.bind(func(e:Entity): print(e); return e.get_component("InventoryComponent"))\
+		.bind(func(ic:InventoryComponent): print(ic); ic.remove_from_inventory(parent_entity.name))
 	# raycast in front of puppet if possible to do wall check
 	var psc = e.get_component("PuppetSpawnerComponent")
 	if e.in_scene and psc.some():

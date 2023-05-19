@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=5 format=3 uid="uid://dd70wjw4xc7s8"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/ItemDataComponents/equippable_component.gd" id="1_0asff"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/item_data.gd" id="1_d4mo5"]
+[ext_resource type="PackedScene" path="res://test_item_prefab.tscn" id="2_hdfvi"]
+
+[sub_resource type="Resource" id="Resource_so6cl"]
+script = ExtResource("1_0asff")
+valid_slots = Array[int]([0])
+
+[resource]
+script = ExtResource("1_d4mo5")
+prefab = ExtResource("2_hdfvi")
+weight = 0.0
+worth = 0
+components = Array[Resource("res://addons/skelerealms/scripts/Data/ItemDataComponents/item_data_component.gd")]([SubResource("Resource_so6cl")])
+id = "test_item_2"

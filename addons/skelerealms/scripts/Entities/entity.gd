@@ -106,6 +106,10 @@ func has_component(type:String) -> bool:
 	return x.some()
 
 
+func add_component(c:EntityComponent) -> void:
+	add_child(c)
+
+
 func save() -> Dictionary: 
 	var data:Dictionary = {
 		"entity_data": {

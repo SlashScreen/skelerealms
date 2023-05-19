@@ -60,3 +60,7 @@ func remove_snails(amount:int):
 func _clamp_snails():
 	if snails < 0:
 		snails = 0
+
+
+func has_item(ref_id:String) -> bool:
+	return inventory.has(ref_id)

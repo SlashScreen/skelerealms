@@ -63,11 +63,18 @@ func _cache_entities(path:String):
 
 
 ## add a new entity.
-func add_entity(res:InstanceData):
+func add_entity(res:InstanceData) -> Entity:
 	var new_entity = Entity.new(res) # make a new entity
 	# add new entity to self, and the dictionary
 	entities[res.ref_id] = new_entity
 	add_child(new_entity)
+	return new_entity
+
+
+func _add_entity_raw(e:Entity) -> Entity:
+	entities[e.name] = e
+	add_child(e)
+	return e
 
 
 ## Remove an entity from the game.
@@ -76,7 +83,7 @@ func remove_entity(refID:String):
 	entities.erase(refID)
 
 
-# ONLY call after save
+## ONLY call after save!!!
 func _cleanup_stale_entities():
 	# Get all children
 	for c in get_children():

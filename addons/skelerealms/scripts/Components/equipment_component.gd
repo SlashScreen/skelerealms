@@ -26,7 +26,7 @@ func equip(item:StringName, slot:EquipmentSlots.Slots) -> bool:
 	if not ic.some():
 		return false
 	# Get equippable data component
-	var ec = (ic.unwrap() as ItemComponent).get_component("EquippableDataComponent")
+	var ec = (ic.unwrap() as ItemComponent).data.get_component("EquippableDataComponent")
 	if not ec.some():
 		return false
 	# Check slot validity
@@ -54,3 +54,9 @@ func unequip_item(item:StringName) -> void:
 			unequipped.emit(item, s)
 			equipment_slot[s] = null
 			return
+
+
+func is_item_equipped(item:StringName, slot:EquipmentSlots.Slots) -> bool:
+	if not equipment_slot.has(slot):
+		return false
+	return equipment_slot[slot] == item
