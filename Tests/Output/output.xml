@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="1" >
-  <testsuite name="res://Tests/test_inventory.gd" tests="1" failures="0" skipped="0" >
-      <testcase name="test_drop" assertions="2" status="pass" classname="res://Tests/test_inventory.gd" >
+<testsuites name="GutTests" failures="0" tests="4" >
+  <testsuite name="res://Tests/test_merchant.gd" tests="4" failures="0" skipped="0" >
+      <testcase name="test_sell" assertions="2" status="pass" classname="res://Tests/test_merchant.gd" >
+      </testcase>
+      <testcase name="test_buy" assertions="2" status="pass" classname="res://Tests/test_merchant.gd" >
+      </testcase>
+      <testcase name="test_sell_modifier" assertions="2" status="pass" classname="res://Tests/test_merchant.gd" >
+      </testcase>
+      <testcase name="test_buy_modifier" assertions="2" status="pass" classname="res://Tests/test_merchant.gd" >
       </testcase>
       </testsuite>
   </testsuites>
