@@ -12,6 +12,6 @@ valid_slots = Array[int]([0])
 script = ExtResource("1_d4mo5")
 prefab = ExtResource("2_hdfvi")
 weight = 0.0
-worth = 0
+worth = 30
 components = Array[Resource("res://addons/skelerealms/scripts/Data/ItemDataComponents/item_data_component.gd")]([SubResource("Resource_so6cl")])
 id = "test_item_2"

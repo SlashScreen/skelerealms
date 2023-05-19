@@ -15,11 +15,6 @@ var buying:Array[String] = []
 var balance:int
 
 
-# TODO:
-# Calculate balance
-# apply any stat bonuses/modifiers
-
-
 func _init(v:InventoryComponent, c:InventoryComponent) -> void:
 	vendor = v
 	customer = c

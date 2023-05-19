@@ -7,6 +7,6 @@
 script = ExtResource("1_apdmb")
 prefab = ExtResource("1_8kb6t")
 weight = 0.0
-worth = 0
+worth = 20
 components = Array[Resource("res://addons/skelerealms/scripts/Data/ItemDataComponents/item_data_component.gd")]([])
 id = "test_item_1"
