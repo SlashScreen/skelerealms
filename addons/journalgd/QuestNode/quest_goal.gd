@@ -4,30 +4,43 @@ class_name QuestGoal
 extends Node
 
 var optional:bool = false
-var key_registered:bool = false
-var internal_amount:int = 0
+var update_signal:Signal
+var internal_amount:int = 0:
+	get:
+		return internal_amount
+	set(val):
+		_emit_updated()
+		internal_amount = val
 var already_satisfied:bool = false:
 	get:
 		return already_satisfied
 	set(val):
+		_emit_updated()
 		already_satisfied = val
-
+var data:Dictionary:
+	get:
+		return {
+			"progress": internal_amount,
+			"target": amount,
+			"filter": filter,
+			"optional": optional,
+			"only_while_active": only_while_active
+		}
 @export var amount:int = 1
-@export var refID:String
-@export var baseID:String
+@export var filter:String
 @export var only_while_active:bool = true
 # TODO: Multiple events to satisfy, match against refID
 # TODO: Allow undoing events
 
 
-func _init(eqg:SavedGoal = null) -> void:
+func _init(eqg:SavedGoal = null, goal_update_signal:Signal = Signal()) -> void:
 	if not eqg:
 		return
 	optional = eqg.optional
 	amount = eqg.amount
-	refID = eqg.ref_id
-	baseID = eqg.base_id
+	filter = eqg.filter
 	only_while_active = eqg.only_while_active
+	update_signal = goal_update_signal
 	name = eqg.goal_key
 
 
@@ -42,17 +55,31 @@ func evaluate(is_active_step:bool) -> bool:
 
 
 ## Attempt to register an event with this goal.
-func attempt_register(r_key:String, args:Dictionary): # TODO: only_while_active
+func attempt_register(r_key:String, args:Dictionary, undo:bool): # TODO: only_while_active
 	# check event name
 	if not r_key == name:
 		return
-	# check for invalid refID
-	if not refID == "":
-		if args.has("refid") and not args["refid"] == refID:
-			return
-	# check for invalid baseID
-	if not baseID == "":
-		if args.has("baseid") and not args["baseid"] == baseID:
+	# check for invalid filter
+	if not filter == "":
+		if args.has("filter") and not args["filter"] == filter:
 			return
 	# all checks passed, increase amount
-	internal_amount += 1
+	internal_amount += -1 if undo else 1
+	if undo and already_satisfied:
+		already_satisfied = false
+
+
+func save() -> Dictionary:
+	return {
+		"already_satisfied" : already_satisfied,
+		"internal_amount" : internal_amount
+	}
+
+
+func load_data(data:Dictionary) -> void:
+	already_satisfied = data.already_satisfied
+	internal_amount = data.internal_amount
+
+
+func _emit_updated() -> void:
+	update_signal.emit("%s/%s/%s" % [get_parent().get_parent().name, get_parent().name, name], data)

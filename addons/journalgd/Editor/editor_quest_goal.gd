@@ -13,16 +13,11 @@ var optional:bool:
 		return ($VBoxContainer/OptionalButton as CheckButton).button_pressed
 	set(val):
 		($VBoxContainer/OptionalButton as CheckButton).button_pressed = val
-var base_id:String:
+var filter:String:
 	get:
 		return ($VBoxContainer/BaseID as LineEdit).text
 	set(val):
 		($VBoxContainer/BaseID as LineEdit).text = val
-var ref_id:String:
-	get:
-		return ($VBoxContainer/RefID as LineEdit).text
-	set(val):
-		($VBoxContainer/RefID as LineEdit).text = val
 var amount:int:
 	get:
 		return ($VBoxContainer/HBoxContainer/AmountBox as SpinBox).value
@@ -43,7 +38,6 @@ func _on_delete_pressed() -> void:
 func setup(eg:SavedGoal) -> void:
 	goal_key = eg.goal_key
 	optional = eg.optional
-	base_id = eg.base_id
-	ref_id = eg.ref_id
+	filter = eg.filter
 	amount = eg.amount
 	only_while_active = eg.only_while_active

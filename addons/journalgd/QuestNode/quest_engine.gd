@@ -16,9 +16,11 @@ signal quest_started(q_id:String)
 ## Emitted when a quest is complete.
 signal quest_complete(q_id:String)
 ## Emitted when a quest goal has been updated - the amount has been increased, or it is marked as complete.
-signal goal_updated(quest_path:String) # TODO
+signal goal_updated(quest_path:String, data:Dictionary)
 ## Emitted when a step is updated - when a step is marked as complete.
-signal step_updated(quest_path:String) # TODO
+signal step_updated(quest_path:String, data:Dictionary)
+## Emitted when a quest updates.
+signal quest_updated(quest_path:String, data:Dictionary)
 
 
 ## Loads all quests from the [code]biznasty/quests_directory[/code] project setting, and then instantiates them as child [QuestObject]s.
@@ -61,7 +63,7 @@ func add_node_from_saved(q:SavedQuest) -> void:
 	
 	# Create steps
 	for s in q.steps:
-		var s_node = QuestStep.new(q.steps[s])
+		var s_node = QuestStep.new(q.steps[s], step_updated, goal_updated)
 		if q.steps[s].is_entry_step:
 			q_node._active_step = s_node 
 		q_node.add_child(s_node)
@@ -82,10 +84,10 @@ func is_member_active(q_path) -> bool:
 		{"quest": var quest}:
 			return active_quests.has(quest)
 		{"quest": var quest, "step": var step}:
-			var q:QuestNode = get_member(quest)
+			var q:QuestNode = _get_member_node(quest)
 			return q._active_step.name == step
 		{"goal", ..}:
-			var g:QuestGoal = get_member(path_info)
+			var g:QuestGoal = _get_member_node(path_info)
 			return g.already_satisfied
 		_:
 			return false
@@ -100,10 +102,10 @@ func is_member_complete(q_path) -> bool:
 			return complete_quests.has(quest)
 		{"quest": var quest, "step": var step}:
 			var p = "%s/%s" % [quest, step]
-			var s:QuestStep = get_member(p)
+			var s:QuestStep = _get_member_node(p)
 			return s.is_already_complete
 		{"goal", ..}:
-			var g:QuestGoal = get_member(path_info)
+			var g:QuestGoal = _get_member_node(path_info)
 			return g.already_satisfied
 		_:
 			return false
@@ -115,8 +117,38 @@ func has_member_been_started(q_path) -> bool:
 	return is_member_active(path_info) or is_member_complete(path_info)
 
 
-## Get a [QuestNode], [QuestStep], or [QuestGoal] from the quest path. Returns one of those 3 classes, or null if none found.
-func get_member(q_path) -> Variant:
+## Get a [QuestNode], [QuestStep], or [QuestGoal]'s data from the quest path. Returns a dictionary:
+## [CodeBlock]
+## Goal:
+## {
+##     "progress": int <- how many times this event has been triggered
+##     "target": int <- the amount of times to be triggered to be considered completed
+##     "filter": String
+##     "optional": bool
+##     "only_while_active": bool
+## }
+## Step:
+## {
+##     "type": StepType <- All, Any, Branch
+##     "is_first_step": bool
+##     "is_last_step": bool
+##     "goal_keys": Array[String] <- Keys of all goals
+## }
+## Quest:
+## {
+##     "steps": Array[String] <- Names of all steps
+## }
+## [/CodeBlock]
+func get_member(q_path) -> Dictionary:
+	var path_info = q_path if q_path is String else _fuse_path(q_path)
+	var n = get_node_or_null(path_info)
+	if n:
+		return n.data
+	else:
+		return {}
+
+
+func _get_member_node(q_path) -> Variant:
 	var path_info = q_path if q_path is String else _fuse_path(q_path)
 	return get_node_or_null(path_info)
 
@@ -128,24 +160,24 @@ func get_member(q_path) -> Variant:
 ## [code]args[/code] is an optional dictionary with the shape of
 ## [CodeBlock]
 ## {
-##  	"ref_id" : String <- Optional, ref id to check against for goal conditions.
-##  	"base_id" : String <- Optional, base id to check against for goal conditions.
+##  	"filter" : String <- Optional, filter to check against for goal conditions.
 ## }
 ## [/CodeBlock]
-func register_quest_event(path:String, args:Dictionary = {}):
+## Use "undo" to instad un-register an event, if you need to do that.
+func register_quest_event(path:String, args:Dictionary = {}, undo:bool = false):
 	match _parse_quest_path(path):
 		{"quest": var key}:
-			propagate_call("register_step_event", [path, args])
+			propagate_call("register_step_event", [path, args, undo])
 		{"quest": var quest, "step": var key}:
-			var qnode = get_member({"quest": quest})
+			var qnode = _get_member_node({"quest": quest})
 			if not qnode:
 				return
-			qnode.register_step_event(key, args)
+			qnode.register_step_event(key, args, undo)
 		{"quest": var quest, "step": var step, "goal": var key}:
-			var snode:QuestStep = get_member({"quest": quest, "step": step})
+			var snode:QuestStep = _get_member_node({"quest": quest, "step": step})
 			if not snode:
 				return
-			snode.register_event(key, args)
+			snode.register_event(key, args, undo)
 		_:
 			return
 	_update_all_quests()
@@ -178,3 +210,21 @@ func _fuse_path(path:Dictionary) -> String:
 	if path.has("goal"):
 		output += "/" + path["goal"]
 	return output
+
+
+func save() -> Dictionary:
+	var quest_data = {}
+	for quest in get_children():
+		quest_data[quest.name] = quest.save()
+	return {
+		"active_quests": active_quests,
+		"complete_quests": complete_quests,
+		"quest_data": quest_data
+	}
+
+
+func load_data(data:Dictionary) -> void:
+	active_quests = data.active_quests
+	complete_quests = data.complete_quests
+	for quest in data.quest_data:
+		get_node(quest).load_data(data.quest_data[quest])

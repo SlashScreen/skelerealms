@@ -30,11 +30,7 @@ text = "Optional?"
 
 [node name="BaseID" type="LineEdit" parent="VBoxContainer"]
 layout_mode = 2
-placeholder_text = "BaseID"
-
-[node name="RefID" type="LineEdit" parent="VBoxContainer"]
-layout_mode = 2
-placeholder_text = "RefID"
+placeholder_text = "Filter"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2

@@ -6,14 +6,16 @@ extends Node
 
 
 ## The quest data.
-var _q_data:Quest
 var qID:String
 var complete:bool = false
 var _active_step:QuestStep
-
-
-signal quest_complete(qID:String)
-signal quest_updated(qID:String)
+var data:Dictionary:
+	get:
+		return{
+			"active_step": _active_step.name,
+			"steps": get_children().map(func(x): return x.name)
+		}
+var update_signal:Signal
 
 
 # Might be useless
@@ -34,14 +36,14 @@ func update():
 	if _active_step.evaluate(true): #if active step is true, move to the next one
 		if _active_step.is_final_step:
 			complete = true
-			quest_complete.emit(qID)
+			update_signal.emit(name, data)
 			return
 		_active_step = _active_step.next_step
 
 
-func register_step_event(key:String, args:Dictionary = {}):
+func register_step_event(key:String, args:Dictionary = {}, undo:bool = false):
 	for g in get_children():
-		g.register_event(key, args)
+		g.register_event(key, args, undo)
 
 
 func is_step_complete(id:String):
@@ -49,3 +51,21 @@ func is_step_complete(id:String):
 	if not st:
 		return false
 	return st.evaluate(false)
+
+
+func save() -> Dictionary:
+	var step_data = {}
+	for s in get_children():
+		step_data[s.name] = s.save()
+	return {
+		"complete": complete,
+		"active_step": _active_step.name,
+		"step_data": step_data
+	}
+
+
+func load_data(data:Dictionary) -> void:
+	complete = data.complete
+	_active_step = get_node(data.active_step)
+	for s_name in data.step_data:
+		get_node(s_name).load_data(data.step_data[s_name])

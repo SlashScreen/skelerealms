@@ -31,17 +31,12 @@ func get_entity(id:StringName) -> Option:
 	if potential_data.some(): # if found:
 		add_entity(load(disk_assets[id])) # load default from disk
 		entities[id].load_data(potential_data.unwrap()) # and then load using the data blob we got from the save file
+		(entities[id] as Entity).reset_stale_timer()
 		return Option.from(entities[id])
-# 3. Checks to find the entity's data in the most recent save file. [br]
-	# stage 3: attempt find in children 
-	#var possible_child = get_node_or_null(id as String)
-	#if possible_child != null:
-	#	entities[id] = possible_child # cache entity
-	#	return Option.from(possible_child)
-	# stage 4: check on disk
+	# stage 3: check on disk
 	if disk_assets.has(id):
 		add_entity(load(disk_assets[id]))
-		#print_tree_pretty()
+		(entities[id] as Entity).reset_stale_timer()
 		return Option.from(entities[id]) # we added the entity in #add_entity
 		
 	# Other than that, we've failed. Attempt to find the entity in the child count as a failsave, then return none.
