@@ -67,8 +67,8 @@ Not started :hole:
 | Save/Load system | :warning: |
 | Items | :evergreen_tree: |
 | NPCs | :warning: |
-| Chests | :warning: |
-| Merchants | :warning: |
+| Chests | :evergreen_tree: |
+| Merchants | :evergreen_tree: |
 
 ## Planned Plugins
 

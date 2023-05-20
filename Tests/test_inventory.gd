@@ -35,7 +35,7 @@ func before_each() -> void:
 
 
 func test_add() -> void:
-	inventory1.move_to_inventory("inventory1")
+	(item1.get_component("ItemComponent").unwrap() as ItemComponent).move_to_inventory("inventory1")
 	assert_true(inventory1.has_item("test_item_1"))
 
 
@@ -66,6 +66,6 @@ func test_equip() -> void:
 
 func test_drop() -> void:
 	(item1.get_component("ItemComponent").unwrap() as ItemComponent).move_to_inventory("inventory1")
-	assert_true((inventory1.get_component("InventoryComponent").unwrap() as InventoryComponent).has_item("test_item_1"))
+	assert_true(inventory1.has_item("test_item_1"))
 	(item1.get_component("ItemComponent").unwrap() as ItemComponent).drop()
-	assert_false((inventory1.get_component("InventoryComponent").unwrap() as InventoryComponent).has_item("test_item_1"))
+	assert_false(inventory1.has_item("test_item_1"))

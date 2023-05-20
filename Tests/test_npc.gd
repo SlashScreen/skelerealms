@@ -85,14 +85,14 @@ class TestDamage:
 	func test_blunt_damage() -> void:
 		vitals_component.vitals["health"] = 100
 		damage_component.damage(DamageInfo.new("", {&"blunt":10}))
-		assert_eq(vitals_component.vitals["health"], 90, "Should pass - Took 10 blunt damage without modifiers.")
+		assert_eq(vitals_component.vitals["health"], 90.0, "Should pass - Took 10 blunt damage without modifiers.")
 	
 	
 	func test_resistance() -> void:
 		vitals_component.vitals["health"] = 100
 		damage_module.piercing_modifier = 0.5
 		damage_component.damage(DamageInfo.new("", {&"piercing":10}))
-		assert_eq(vitals_component.vitals["health"], 95, "Should pass - Took 10 piercing damage with a 0.5 modifier.")
+		assert_eq(vitals_component.vitals["health"], 95.0, "Should pass - Took 10 piercing damage with a 0.5 modifier.")
 	
 	
 	func test_stacked_magic_resistance() -> void:
@@ -106,13 +106,13 @@ class TestDamage:
 	func test_stamina_damage() -> void:
 		vitals_component.vitals["moxie"] = 100
 		damage_component.damage(DamageInfo.new("", {&"moxie":10}))
-		assert_eq(vitals_component.vitals["moxie"], 90, "Should pass - Took 10 stamina damage without modifiers.")
+		assert_eq(vitals_component.vitals["moxie"], 90.0, "Should pass - Took 10 stamina damage without modifiers.")
 	
 	
 	func test_will_damage() -> void:
 		vitals_component.vitals["will"] = 100
 		damage_component.damage(DamageInfo.new("", {&"will":10}))
-		assert_eq(vitals_component.vitals["will"], 90, "Should pass - Took 10 will damage without modifiers.")
+		assert_eq(vitals_component.vitals["will"], 90.0, "Should pass - Took 10 will damage without modifiers.")
 
 
 # TODO
