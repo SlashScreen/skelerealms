@@ -4,11 +4,15 @@ extends Node
 
 var current_transaction:Transaction
 
+## Emitted when the barter process begins
 signal begun_barter(vendor:InventoryComponent, customer:InventoryComponent, tx:Transaction)
-signal end_barter
+## Emitted when the barter process is ended - cancelled or accepted.
+signal ended_barter
+## Emitted when the barter is cancelled. Note that `ended_barter` is also called when this happens.
+signal cancelled_barter
 
 
-# Begin shopping
+## Begin the barter process.
 func start_barter(vendor:InventoryComponent, customer:InventoryComponent) -> void:
 	current_transaction = Transaction.new(vendor, customer)
 	begun_barter.emit(vendor, customer, current_transaction)
@@ -17,6 +21,7 @@ func start_barter(vendor:InventoryComponent, customer:InventoryComponent) -> voi
 # TODO: Allow for checking what items can and cannot be sold to this vendor
 # TODO: Allow haggling?
 ## Sell or cancel buying an item. Returns whether it succeeded.
+## Will return false if the item cannot be sold, or is cancelling a buy.
 func sell_item(item:String) -> bool:
 	# Skip if no transaction
 	if not current_transaction:
@@ -34,6 +39,7 @@ func sell_item(item:String) -> bool:
 
 
 ## Buy or cancel selling an item. Returns whether it succeeded.
+## Will return false if the item cannot be bought, or is cancelling a sell.
 func buy_item(item:String) -> bool:
 	# Skip if no transaction
 	if not current_transaction:
@@ -50,11 +56,16 @@ func buy_item(item:String) -> bool:
 	return true
 
 
+## Cancel the current barter session if applicable.
 func cancel_barter() -> void:
-	current_transaction = null
-	end_barter.emit()
+	if current_transaction:
+		current_transaction = null
+		ended_barter.emit()
+		cancelled_barter.emit()
 
 
+## Resolve the transaction, and stop the trandaction. The arguments are multipliers for the money being moved around - for vendor to customer, and customer to vendor, respectively.
+## Will return false if either part doesn't have enough money to complete the transaction.
 func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 	if not current_transaction:
 		return false
@@ -75,7 +86,7 @@ func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 	# Move items
 	#? Could optimize
 	for item in current_transaction.selling:
-		# Move from seller to vendor.
+		# Move from customer to vendor.
 		SkeleRealmsGlobal.entity_manager\
 			.get_entity(item)\
 			.unwrap()\
@@ -83,7 +94,7 @@ func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 			.unwrap()\
 			.move_to_inventory(current_transaction.vendor.parent_entity.name)
 	for item in current_transaction.buying:
-		# Move from vendor to seller.
+		# Move from vendor to customer.
 		SkeleRealmsGlobal.entity_manager\
 			.get_entity(item)\
 			.unwrap()\
@@ -93,5 +104,5 @@ func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 
 	#clean up
 	current_transaction = null
-	end_barter.emit()
+	ended_barter.emit()
 	return true

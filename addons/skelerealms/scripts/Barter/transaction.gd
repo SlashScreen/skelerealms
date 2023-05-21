@@ -26,23 +26,23 @@ func total_transaction(selling_modifier:float, buying_modifier:float) -> int:
 	# Total selling amount and add
 	total += selling.reduce(
 		func(accum: int, item:String):
-			return accum + ( SkeleRealmsGlobal.entity_manager.get_entity(item)\
+			return accum + roundi(( SkeleRealmsGlobal.entity_manager.get_entity(item)\
 				.unwrap()\
 				.get_component("ItemComponent")\
 				.unwrap() as ItemComponent)\
 				.data\
-				.worth * selling_modifier
+				.worth * selling_modifier)
 	,0
 	)
 	# Total selling amount and subtract
 	total -= buying.reduce(
 		func(accum: int, item:String):
-			return accum + ( SkeleRealmsGlobal.entity_manager.get_entity(item)\
+			return accum + roundi(( SkeleRealmsGlobal.entity_manager.get_entity(item)\
 				.unwrap()\
 				.get_component("ItemComponent")\
 				.unwrap() as ItemComponent)\
 				.data\
-				.worth * buying_modifier
+				.worth * buying_modifier)
 	,0
 	)
 	return total
