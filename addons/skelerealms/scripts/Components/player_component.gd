@@ -5,30 +5,6 @@ extends EntityComponent
 
 var _set_up:bool
 
-var health:float:
-	get:
-		return health
-	set(val):
-		update_health.emit(val)
-		health = val # May cause a loop?
-var moxie:float:
-	get:
-		return moxie
-	set(val):
-		update_moxie.emit(val)
-		moxie = val # May cause a loop?
-var will:float:
-	get:
-		return will
-	set(val):
-		update_will.emit(val)
-		will = val # May cause a loop?
-
-
-signal update_health(new_value:float)
-signal update_moxie(new_value:float)
-signal update_will(new_value:float)
-
 
 func _init() -> void:
 	name = "PlayerComponent"
@@ -36,19 +12,6 @@ func _init() -> void:
 
 func _ready():
 	($"../TeleportComponent" as TeleportComponent).teleporting.connect(teleport.bind())
-
-
-func _entity_ready() -> void:
-	
-	var h = (%HUD as HudControl)
-	# Shouldn't connect them here but im lazy
-	update_health.connect(h.set_health.bind())
-	update_moxie.connect(h.set_stamina.bind())
-	update_will.connect(h.set_will.bind())
-	# Set to initial values.
-	update_health.emit(health)
-	update_moxie.emit(moxie)
-	update_will.emit(will)
 
 
 ## Set the entity's position.

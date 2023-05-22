@@ -1,0 +1,100 @@
+[gd_scene load_steps=3 format=3 uid="uid://rgxfrjvg7gox"]
+
+[ext_resource type="Script" path="res://addons/network_utility/Editor/network_editor_utility.gd" id="1_yifem"]
+[ext_resource type="Script" path="res://addons/network_utility/Editor/cost_popup.gd" id="2_3dol8"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yifem")
+
+[node name="Box" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 305.0
+offset_bottom = 31.0
+
+[node name="Add" type="Button" parent="Box"]
+layout_mode = 2
+toggle_mode = true
+text = "Add"
+flat = true
+
+[node name="Remove" type="Button" parent="Box"]
+layout_mode = 2
+text = "Remove"
+flat = true
+
+[node name="Link" type="Button" parent="Box"]
+layout_mode = 2
+text = "Link"
+flat = true
+
+[node name="Unlink" type="Button" parent="Box"]
+layout_mode = 2
+text = "Unlink"
+flat = true
+
+[node name="Merge" type="Button" parent="Box"]
+layout_mode = 2
+text = "Merge"
+flat = true
+
+[node name="Dissolve" type="Button" parent="Box"]
+layout_mode = 2
+text = "Dissolve"
+flat = true
+
+[node name="Subdivide" type="Button" parent="Box"]
+layout_mode = 2
+text = "Subdivide"
+flat = true
+
+[node name="Portal" type="Button" parent="Box"]
+layout_mode = 2
+toggle_mode = true
+text = "Portal"
+flat = true
+
+[node name="ChangeCost" type="Button" parent="Box"]
+layout_mode = 2
+text = "Cost"
+flat = true
+
+[node name="VSeparator" type="VSeparator" parent="Box"]
+layout_mode = 2
+
+[node name="CostWindow" type="ConfirmationDialog" parent="."]
+title = "Select new cost"
+position = Vector2i(525, 152)
+size = Vector2i(200, 153)
+script = ExtResource("2_3dol8")
+
+[node name="LineEdit" type="LineEdit" parent="CostWindow"]
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 8.0
+offset_top = -68.5
+offset_right = -8.0
+offset_bottom = 27.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+text = "1"
+placeholder_text = "1"
+
+[connection signal="toggled" from="Box/Add" to="." method="_on_add_toggled"]
+[connection signal="pressed" from="Box/Remove" to="." method="_on_remove_pressed"]
+[connection signal="pressed" from="Box/Link" to="." method="_on_link_pressed"]
+[connection signal="pressed" from="Box/Unlink" to="." method="_on_unlink_pressed"]
+[connection signal="pressed" from="Box/Merge" to="." method="_on_merge_pressed"]
+[connection signal="pressed" from="Box/Dissolve" to="." method="_on_dissolve_pressed"]
+[connection signal="pressed" from="Box/Subdivide" to="." method="_on_subdivide_pressed"]
+[connection signal="toggled" from="Box/Portal" to="." method="_on_portal_toggled"]
+[connection signal="pressed" from="Box/ChangeCost" to="." method="_on_change_cost_pressed"]

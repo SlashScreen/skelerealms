@@ -1,0 +1,136 @@
+[gd_scene load_steps=3 format=3 uid="uid://vpv70w0bqhoa"]
+
+[ext_resource type="Script" path="res://addons/journalgd/Editor/editor_quest_step.gd" id="1_kwd5h"]
+
+[sub_resource type="Theme" id="Theme_akb1w"]
+Color/colors/title_color = Color(0, 0.733333, 0.247059, 0.231373)
+GraphNode/colors/title_color = Color(1, 1, 1, 1)
+color/colors/title_color = Color(0, 0.733333, 0.247059, 0.231373)
+
+[node name="step" type="GraphNode"]
+process_mode = 3
+offset_right = 268.0
+offset_bottom = 324.0
+mouse_filter = 1
+theme = SubResource("Theme_akb1w")
+show_close = true
+resizable = true
+slot/0/left_enabled = false
+slot/0/left_type = 1
+slot/0/left_color = Color(1, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 1
+slot/0/right_color = Color(1, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = false
+slot/1/left_type = 1
+slot/1/left_color = Color(1, 1, 1, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 1
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+slot/2/left_enabled = false
+slot/2/left_type = 1
+slot/2/left_color = Color(1, 1, 1, 1)
+slot/2/left_icon = null
+slot/2/right_enabled = false
+slot/2/right_type = 1
+slot/2/right_color = Color(1, 1, 1, 1)
+slot/2/right_icon = null
+slot/2/draw_stylebox = true
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color(1, 1, 1, 1)
+slot/3/left_icon = null
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color(1, 1, 1, 1)
+slot/3/right_icon = null
+slot/3/draw_stylebox = true
+slot/4/left_enabled = true
+slot/4/left_type = 1
+slot/4/left_color = Color(1, 1, 1, 1)
+slot/4/left_icon = null
+slot/4/right_enabled = false
+slot/4/right_type = 1
+slot/4/right_color = Color(1, 1, 1, 1)
+slot/4/right_icon = null
+slot/4/draw_stylebox = true
+slot/5/left_enabled = false
+slot/5/left_type = 0
+slot/5/left_color = Color(1, 1, 1, 1)
+slot/5/left_icon = null
+slot/5/right_enabled = false
+slot/5/right_type = 0
+slot/5/right_color = Color(1, 1, 1, 1)
+slot/5/right_icon = null
+slot/5/draw_stylebox = true
+slot/6/left_enabled = false
+slot/6/left_type = 0
+slot/6/left_color = Color(1, 1, 1, 1)
+slot/6/left_icon = null
+slot/6/right_enabled = false
+slot/6/right_type = 0
+slot/6/right_color = Color(1, 1, 1, 1)
+slot/6/right_icon = null
+slot/6/draw_stylebox = true
+slot/7/left_enabled = false
+slot/7/left_type = 0
+slot/7/left_color = Color(1, 1, 1, 1)
+slot/7/left_icon = null
+slot/7/right_enabled = false
+slot/7/right_type = 0
+slot/7/right_color = Color(1, 1, 1, 1)
+slot/7/right_icon = null
+slot/7/draw_stylebox = true
+script = ExtResource("1_kwd5h")
+
+[node name="StepName" type="LineEdit" parent="."]
+layout_mode = 2
+placeholder_text = "Step Name"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Step type:"
+
+[node name="StepType" type="OptionButton" parent="."]
+layout_mode = 2
+item_count = 3
+selected = 0
+popup/item_0/text = "All"
+popup/item_0/id = 0
+popup/item_1/text = "Any"
+popup/item_1/id = 1
+popup/item_2/text = "Branch"
+popup/item_2/id = 2
+
+[node name="IsEntryButton" type="CheckButton" parent="."]
+layout_mode = 2
+text = "Is starting step"
+
+[node name="IsExitButton" type="CheckButton" parent="."]
+layout_mode = 2
+text = "Is last step"
+
+[node name="AddGoalButton" type="Button" parent="."]
+layout_mode = 2
+text = "Add Goal"
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+vertical_scroll_mode = 2
+
+[node name="GoalsContainer" type="VBoxContainer" parent="Scroll"]
+layout_mode = 2
+
+[connection signal="toggled" from="IsExitButton" to="." method="_update_is_exit"]
+[connection signal="pressed" from="AddGoalButton" to="." method="_on_add_goal"]
