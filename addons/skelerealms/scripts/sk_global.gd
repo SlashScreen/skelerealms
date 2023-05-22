@@ -43,17 +43,17 @@ func get_child_rids(child:Node) -> Array:
 
 ## Get any damageable node in parent chain or children 1 layer deep; either [DamageableObject] or [DamageableComponent]. Null if none found.
 func get_damageable_node(n:Node) -> Node:
-	return _walk_for_component(n, "DamageableCOmponent", func(x:Node): return n is DamageableObject)
+	return _walk_for_component(n, "DamageableCOmponent", func(x:Node): return x is DamageableObject)
 
 
 ## Get any interactible node in parent chain or children 1 layer deep; either [InteractiveObject] or [InteractiveComponent]. Null if none found.
 func get_interactive_node(n:Node) -> Node:
-	return _walk_for_component(n, "InteractiveComponent", func(x:Node): return n is InteractiveObject)
+	return _walk_for_component(n, "InteractiveComponent", func(x:Node): return x is InteractiveObject)
 
 
 ## Get any spell target node in parent chain or children 1 layer deep; either [SpellTargetObject] or [SpellTargetComponent]. Null if none found.
 func get_spell_target_component(n:Node) -> Node:
-	return _walk_for_component(n, "SpellTargetComponent", func(x:Node): return n is SpellTargetObject)
+	return _walk_for_component(n, "SpellTargetComponent", func(x:Node): return x is SpellTargetObject)
 
 
 ## Walks the tree in parent chain above or 1 layer of children below for a node that satisfies one of the following condition:
