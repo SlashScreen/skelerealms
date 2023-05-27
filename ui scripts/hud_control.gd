@@ -28,7 +28,7 @@ func _ready():
 
 
 func _set_timer_text():
-	timer_label.text = _time_string % [tr("TIME"),GameInfo.world_time[&"hour"], GameInfo.world_time[&"minute"]]
+	timer_label.text = _time_string % [tr("TIME"), GameInfo.world_time[&"hour"], GameInfo.world_time[&"minute"]]
 
 
 ## Spawn a notification with a label.

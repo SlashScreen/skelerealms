@@ -9,8 +9,8 @@ signal dies
 signal exhausted
 ## Called when the magica value reaches 0. See [member will].
 signal drained
-
 signal hurt
+signal vitals_updated(data:Dictionary)
 
 
 ## Health, stamina, magica, and max of values.
@@ -27,6 +27,7 @@ var vitals = {
 	set(val):
 		vitals = val
 		dirty = true
+		vitals_updated.emit(vitals)
 
 
 ## Whether this agent is dead.

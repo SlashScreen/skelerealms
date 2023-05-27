@@ -27,7 +27,7 @@ func _process(delta):
 	if _set_up:
 		return
 	
-	var pc = ($"../PuppetSpawnerComponent".puppet as PlayerController)
+	var pc = $"../PuppetSpawnerComponent".puppet
 	
 	if not pc == null:
 		pc.update_position.connect(set_entity_position.bind())
