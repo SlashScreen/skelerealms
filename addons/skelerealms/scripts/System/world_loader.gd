@@ -15,6 +15,11 @@ signal begin_world_loading
 signal world_loading_ready
 
 
+func _enter_tree() -> void:
+	if get_child_count() > 0:
+		GameInfo.world = get_child(0).name
+
+
 func _ready():
 	regex = RegEx.new()
 	regex.compile("([^\\/\n\\r]+).tscn") 

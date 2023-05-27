@@ -3,7 +3,7 @@ extends Node
 
 
 ## What world the player is in.
-@export var world: String = "test world 1"
+@export var world: String = ""
 
 
 var paused:bool = false
