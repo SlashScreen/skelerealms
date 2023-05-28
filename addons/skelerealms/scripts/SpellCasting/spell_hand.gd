@@ -7,17 +7,22 @@ extends Node3D
 ## What spell is active right now.
 var _active_spell:Spell
 
-
 func cast_spell():
+	if not _active_spell:
+		return
 	_active_spell.reset()
 	_active_spell.on_spell_cast()
 
 
 func hold_spell(delta):
+	if not _active_spell:
+		return
 	_active_spell.on_spell_held(delta)
 
 
 func release_spell():
+	if not _active_spell:
+		return
 	_active_spell.on_spell_released()
 
 

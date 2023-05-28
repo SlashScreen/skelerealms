@@ -4,11 +4,19 @@ extends Node
 
 
 ## Reference to the [EntityManager] singleton.
-var entity_manager:EntityManager
+var entity_manager:EntityManager:
+	get:
+		return entity_manager
+	set(val):
+		entity_manager = val
+		if val:
+			entity_manager_loaded.emit()
 ## Reference to the [QuestEngine].
 var quest_engine:QuestEngine
 ## World states for the GOAP system.
 var world_states:Dictionary
+
+signal entity_manager_loaded
 
 
 ## Attempts to find an entity in the tree above a node. Returns null if none found. Automatically takes account of reparented puppets.

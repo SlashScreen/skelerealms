@@ -65,3 +65,10 @@ func is_item_equipped(item:StringName, slot:EquipmentSlots.Slots) -> bool:
 	if not equipment_slot.has(slot):
 		return false
 	return equipment_slot[slot] == item
+
+
+func is_slot_occupied(slot:EquipmentSlots.Slots) -> Option:
+	if equipment_slot.has(slot):
+		return Option.wrap(equipment_slot[slot])
+	else:
+		return Option.none()
