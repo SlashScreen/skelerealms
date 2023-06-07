@@ -1,7 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://dl8vo4jn7mx63"]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://ui scripts/menu_control.gd" id="1_t5doc"]
-[ext_resource type="Theme" uid="uid://b3rcvlcx4caci" path="res://addons/skelerealms/menu_theme.tres" id="2_iwgrb"]
+[ext_resource type="Theme" uid="uid://b3rcvlcx4caci" path="res://ui scripts/menu_theme.tres" id="2_iwgrb"]
 [ext_resource type="Script" path="res://ui scripts/system_menu.gd" id="3_ig4wq"]
 [ext_resource type="Script" path="res://ui scripts/journal_menu.gd" id="4_mmivr"]
 [ext_resource type="Script" path="res://ui scripts/inventory_menu.gd" id="5_g8rl4"]

@@ -6,6 +6,7 @@ extends CharacterBody3D
 var eyes:EyesPerception
 var npc_component:NPCComponent
 var puppeteer:PuppetSpawnerComponent
+var view_dir:ViewDirectionComponent
 
 
 ## Called every frame to update the entity's position.
@@ -30,6 +31,7 @@ func _ready() -> void:
 	eyes = $EyesPerception
 	puppeteer = $"../../".get_component("PuppetSpawnerComponent").unwrap()
 	npc_component = $"../../".get_component("NPCComponent").unwrap()
+	view_dir = $"../../".get_component("ViewDirectionComponent").unwrap()
 	if npc_component:
 		print("Connecting percieved event")
 		eyes.perceived.connect(npc_component.on_percieve_start.bind())
@@ -93,3 +95,4 @@ func _physics_process(delta) -> void:
 
 func _process(delta) -> void:
 	change_position.emit(position)
+	view_dir.view_rot = rotation

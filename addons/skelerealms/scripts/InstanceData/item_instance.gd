@@ -6,7 +6,7 @@ extends InstanceData
 @export var item_data:ItemData
 @export var item_owner:String
 @export var contained_inventory:String
-@export var rotation:Quaternion
+@export var rotation:Quaternion = Quaternion.IDENTITY
 @export var quest_item:bool = false
 
 
