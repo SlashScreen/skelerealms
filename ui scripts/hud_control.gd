@@ -21,8 +21,8 @@ const _time_string = "%s:  %02X:%02X"
 
 
 func _ready():
-	GameInfo.pause.connect(_on_pause.bind())
-	GameInfo.unpause.connect(_on_unpause.bind())
+	GameInfo.paused.connect(_on_pause.bind())
+	GameInfo.unpaused.connect(_on_unpause.bind())
 	GameInfo.minute_incremented.connect(_set_timer_text.bind())
 	_set_timer_text()
 

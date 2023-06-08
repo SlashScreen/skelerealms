@@ -3,10 +3,8 @@ extends Node
 
 
 ## What world the player is in.
-@export var world: String = "test world 1"
-
-
-var paused:bool = false
+@export var world: String = ""
+var is_paused:bool = false
 var active_camera:Camera3D:
 	get:
 		if not active_camera:
@@ -55,10 +53,11 @@ var month:int:
 var year:int:
 	get:
 		return world_time[&"year"]
+var is_game_started:bool
 
 
-signal pause
-signal unpause
+signal paused
+signal unpaused
 signal minute_incremented
 signal hour_incremented
 signal day_incremented
@@ -66,6 +65,7 @@ signal week_incremented
 signal month_incremented
 signal year_incremented
 signal game_started
+signal game_stopped
 
 
 func _ready():
@@ -88,19 +88,19 @@ func _ready():
 ## Puase the game.
 func pause_game():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	paused = true
+	is_paused = true
 	get_tree().paused = true
 	$Timer.paused = true
-	pause.emit()
+	paused.emit()
 
 
 ## Unpause the game.
 func unpause_game():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	paused = false
+	is_paused = false
 	get_tree().paused = false
 	$Timer.paused = false
-	unpause.emit()
+	unpaused.emit()
 
 
 func _input(event):
@@ -109,7 +109,10 @@ func _input(event):
 
 
 func toggle_pause():
-	if paused:
+	if not is_game_started:
+		return
+	
+	if is_paused:
 		unpause_game()
 	else:
 		pause_game()
@@ -163,3 +166,9 @@ func load_game(data:Dictionary):
 
 func start_game() -> void:
 	game_started.emit()
+	is_game_started = true
+
+
+func stop_game() -> void:
+	game_stopped.emit()
+	is_game_started = false

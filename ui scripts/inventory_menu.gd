@@ -15,10 +15,10 @@ func _ready() -> void:
 		.unwrap()\
 		.get_component("InventoryComponent")\
 		.unwrap()
-	GameInfo.pause.connect(_refresh_inventory.bind())
+	GameInfo.paused.connect(_refresh_inventory.bind())
 	pinventory.inventory_changed.connect(func(): # we refresh the inventory if it's changed, but only if it's paused
 		# TODO: make it only add or remove the item we care about
-		if GameInfo.paused:
+		if GameInfo.is_paused:
 			_refresh_inventory()
 	)
 	$VBoxContainer/drop_button.pressed.connect(func():

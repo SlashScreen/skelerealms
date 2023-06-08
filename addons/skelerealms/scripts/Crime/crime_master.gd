@@ -24,6 +24,10 @@ const bounty_amount:Dictionary = {
 var crimes:Dictionary = {}
 
 
+func _ready():
+	crimes.clear()
+
+
 ## Move all unpunished crimes to punished crimes.
 func punish_crimes(coven:StringName):
 	crimes[coven]["punished"].append(crimes[coven]["unpunished"])

@@ -6,5 +6,5 @@ extends Control
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	hide()
-	GameInfo.pause.connect(show.bind())
-	GameInfo.unpause.connect(hide.bind())
+	GameInfo.paused.connect(show.bind())
+	GameInfo.unpaused.connect(hide.bind())
