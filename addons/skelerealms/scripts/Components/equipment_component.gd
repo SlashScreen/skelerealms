@@ -44,18 +44,19 @@ func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> b
 ## Unequip anything in a slot.
 func clear_slot(slot:EquipmentSlots.Slots, silent:bool = false) -> void:
 	if equipment_slot.has(slot):
-		if not silent:
-			unequipped.emit(equipment_slot[slot], slot)
+		var to_unequip = equipment_slot[slot]
 		equipment_slot[slot] = null
+		if not silent:
+			unequipped.emit(to_unequip, slot)
 
 
 ## Unequip a specific item, no matter what slot it's in.
 func unequip_item(item:StringName, silent:bool = false) -> void:
 	for s in equipment_slot:
 		if equipment_slot[s] == item:
+			equipment_slot[s] = null
 			if not silent:
 				unequipped.emit(item, s)
-			equipment_slot[s] = null
 			return
 
 
