@@ -24,6 +24,7 @@ func _ready():
 	regex = RegEx.new()
 	regex.compile("([^\\/\n\\r]+).tscn") 
 	_cache_worlds(ProjectSettings.get_setting("skelerealms/worlds_path"))
+	
 
 
 ## Load a new world.

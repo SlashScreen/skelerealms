@@ -3,11 +3,17 @@ extends Node
 
 
 ## What world the player is in.
-@export var world: String = ""
+@export var world: String = "test world 1"
 
 
 var paused:bool = false
-var active_camera:Camera3D
+var active_camera:Camera3D:
+	get:
+		if not active_camera:
+			active_camera = get_viewport().get_camera_3d()
+		return active_camera
+	set(val):
+		active_camera = val
 var game_running:bool = true :
 	get:
 		return game_running

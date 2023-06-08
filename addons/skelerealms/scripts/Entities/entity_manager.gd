@@ -29,13 +29,13 @@ func get_entity(id:StringName) -> Option:
 	# stage 2: Check in save file
 	var potential_data = SaveSystem.entity_in_save(id) # chedk the save system
 	if potential_data.some(): # if found:
-		add_entity(load(disk_assets[id])) # load default from disk
+		add_entity(ResourceLoader.load(disk_assets[id], "InstanceData")) # load default from disk
 		entities[id].load_data(potential_data.unwrap()) # and then load using the data blob we got from the save file
 		(entities[id] as Entity).reset_stale_timer()
 		return Option.from(entities[id])
 	# stage 3: check on disk
 	if disk_assets.has(id):
-		add_entity(load(disk_assets[id]))
+		add_entity(ResourceLoader.load(disk_assets[id], "InstanceData"))
 		(entities[id] as Entity).reset_stale_timer()
 		return Option.from(entities[id]) # we added the entity in #add_entity
 		
@@ -52,8 +52,11 @@ func _cache_entities(path:String):
 			if dir.current_is_dir(): # if is directory, cache subdirectory
 				_cache_entities(file_name)
 			else: # if filename, cache filename
+				if '.tres.remap' in file_name:
+					file_name = file_name.trim_suffix('.remap')
 				var result = regex.search(file_name)
 				if result:
+					print("%s : %s" % [result.get_string(1), "%s/%s" % [path, file_name]])
 					disk_assets[result.get_string(1)] = "%s/%s" % [path, file_name] # TODO: Check if it's actually an InstanceData
 			file_name = dir.get_next()
 		dir.list_dir_end()

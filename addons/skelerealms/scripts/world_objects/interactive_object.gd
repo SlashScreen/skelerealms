@@ -7,5 +7,8 @@ extends Node3D
 signal on_interact(id:String)
 
 
+@export var object_name:String
+
+
 func interact(id:String):
 	on_interact.emit(id)

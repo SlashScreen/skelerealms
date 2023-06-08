@@ -16,7 +16,7 @@ var worlds:Dictionary = {}
 
 
 func _ready() -> void:
-	pass#load_all_networks()
+	GameInfo.game_started.connect(load_all_networks.bind())
 
 
 func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
@@ -265,6 +265,8 @@ func _load_from_disk(path:String, networks:Dictionary, regex:RegEx) -> void:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
+			if '.tres.remap' in file_name:
+				file_name = file_name.trim_suffix('.remap')
 			if dir.current_is_dir(): # if is directory, cache subdirectory
 				_load_from_disk(file_name, networks, regex)
 			else: # if filename, cache filename

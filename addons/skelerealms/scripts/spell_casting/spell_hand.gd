@@ -7,6 +7,7 @@ extends Node3D
 ## What spell is active right now.
 var _active_spell:Spell
 
+
 func cast_spell():
 	if not _active_spell:
 		return

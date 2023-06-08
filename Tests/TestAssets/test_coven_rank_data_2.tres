@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="CovenRankData" load_steps=3 format=3 uid="uid://bnqj5unk0xgr7"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Covens/coven_rank_data.gd" id="1_2fiw6"]
-[ext_resource type="Resource" uid="uid://bl6r48ooyuucl" path="res://Tests/TestAssets/test_coven_2.tres" id="1_3a7yp"]
+[ext_resource type="Resource" uid="uid://bl6r48ooyuucl" path="res://tests/TestAssets/test_coven_2.tres" id="1_3a7yp"]
 
 [resource]
 script = ExtResource("1_2fiw6")

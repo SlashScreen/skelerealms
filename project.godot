@@ -12,17 +12,17 @@ config_version=5
 
 config/name="Skelerealms"
 run/main_scene="res://test.tscn"
-config/features=PackedStringArray("4.0", "C#", "Forward Plus")
+config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-SaveSystem="*res://addons/skelerealms/scripts/System/save_system.gd"
-CovenSystem="*res://addons/skelerealms/scripts/Covens/coven_system.gd"
-GameInfo="*res://addons/skelerealms/scripts/System/game_info.gd"
 SkeleRealmsGlobal="*res://addons/skelerealms/scripts/sk_global.gd"
-CrimeMaster="*res://addons/skelerealms/scripts/Crime/crime_master.gd"
-DialogueHooks="*res://addons/skelerealms/scripts/System/dialogue_hooks.gd"
+CovenSystem="*res://addons/skelerealms/scripts/covens/coven_system.gd"
+GameInfo="*res://addons/skelerealms/scripts/system/game_info.gd"
+SaveSystem="*res://addons/skelerealms/scripts/system/save_system.gd"
+CrimeMaster="*res://addons/skelerealms/scripts/crime/crime_master.gd"
+DialogueHooks="*res://addons/skelerealms/scripts/system/dialogue_hooks.gd"
 
 [display]
 
@@ -34,7 +34,7 @@ project/assembly_name="Skelerealms"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/skelerealms/plugin.cfg", "res://addons/network_utility/plugin.cfg", "res://addons/journalgd/plugin.cfg")
+enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/network_utility/plugin.cfg", "res://addons/skelerealms/plugin.cfg", "res://addons/journalgd/plugin.cfg")
 
 [input]
 
@@ -108,19 +108,19 @@ look_sensitivity=0.01
 
 [skelerealms]
 
+quests_directory="res://Quests"
 actor_fade_distance=100.0
+entity_cleanup_timer=300.0
+granular_navigation_sim_distance=1000.0
+savegame_indents=true
 seconds_per_minute=2.0
 minutes_per_hour=31.0
 hours_per_day=15.0
-granular_navigation_sim_distance=1000.0
-savegame_indents=true
-entity_cleanup_timer=300.0
 days_per_week=8
 weeks_in_month=4
 months_in_year=8
-quests_directory="res://Quests"
-worlds_path="res://Worlds"
-entities_path="res://Entities"
-covens_path="res://Covens"
-doors_path="res://Doors"
-networks_path="res://Networks"
+worlds_path="res://worlds"
+entities_path="res://entities"
+covens_path="res://covens"
+doors_path="res://doors"
+networks_path="res://networks"

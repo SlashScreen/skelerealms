@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://itfouqmshnrx"]
 
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/light_estimation_provider.gd" id="1_q2rje"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/ai/light_estimation_provider.gd" id="1_q2rje"]
 [ext_resource type="ArrayMesh" uid="uid://blag3iii8af8j" path="res://addons/skelerealms/octa.obj" id="2_8iqk2"]
 
 [node name="Probe" type="Node3D"]

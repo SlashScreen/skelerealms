@@ -1,12 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://d3xvrivp3iwfb"]
+[gd_scene load_steps=16 format=3 uid="uid://d3xvrivp3iwfb"]
 
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/WorldObjects/door.gd" id="1_kyxr1"]
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/WorldObjects/world_item.gd" id="2_045t8"]
-[ext_resource type="Resource" uid="uid://cv8u88wgiod3r" path="res://Doors/test world 1-test interior.tres" id="2_dt16j"]
-[ext_resource type="Resource" uid="uid://cf47t8iaa6sj" path="res://Doors/test interior-test world 1.tres" id="3_p5vna"]
-[ext_resource type="Resource" uid="uid://dslcodrk4llsq" path="res://Entities/test_item_instance.tres" id="3_svi1k"]
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/WorldObjects/world_npc.gd" id="4_hohrk"]
-[ext_resource type="Resource" uid="uid://b55fvsmvsd6tw" path="res://Entities/test_npc_instance.tres" id="5_7tm42"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/world_objects/door.gd" id="1_dlxw8"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/world_objects/world_item.gd" id="2_jmga7"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/world_objects/world_npc.gd" id="3_iy322"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_3ukhe"]
 vertices = PackedVector3Array(7.5, 0.0915144, -4.25, 7, 0.0915144, -4.25, 5.75, 0.0915144, -3.75, 7.5, 0.0915144, 7.5, 4.5, 0.0915144, -5.5, 4.75, 0.0915144, -7, 4.75, 0.0915144, -7.5, -1.5, 0.0915144, -7.5, -7.5, 0.0915144, 0, -7.5, 0.0915144, 7.5, 0, 0.0915144, 7.5, 5.25, 0.0915144, -4.25, 4.5, 0.0915144, -5.5, -1.5, 0.0915144, -7.5, 5.75, 0.0915144, -3.75, 5.25, 0.0915144, -4.25, -1.5, 0.0915144, -7.5, -1.5, 0.0915144, -7.5, -7.5, 0.0915144, -7.5, -7.5, 0.0915144, 0, 0, 0.0915144, 7.5, 7.5, 0.0915144, 7.5, 5.75, 0.0915144, -3.75, 4.75, 0.0915144, -7.5, 4.75, 0.0915144, -7, 6.25, 0.0915144, -6.5, 7.5, 0.0915144, -7.5, 6.25, 0.0915144, -6.5, 7, 0.0915144, -4.25, 7.5, 0.0915144, -4.25, 7.5, 0.0915144, -7.5)
@@ -77,9 +73,7 @@ shape = SubResource("WorldBoundaryShape3D_5e7d5")
 
 [node name="Door" type="Node3D" parent="NavigationRegion3D" groups=["calc_navigation"]]
 transform = Transform3D(0.85785, 0, 0.740446, 0, 1, 0, -0.513901, 0, 1.23602, 5.17423, -0.0948777, -4.8825)
-script = ExtResource("1_kyxr1")
-instance = ExtResource("2_dt16j")
-destination_instance = ExtResource("3_p5vna")
+script = ExtResource("1_dlxw8")
 
 [node name="DoorMesh" type="MeshInstance3D" parent="NavigationRegion3D/Door"]
 transform = Transform3D(0.339742, 0, 0, 0, 2.77841, 0, -1.49012e-08, 0, 1.39705, 0.594846, 1.51554, 0.0573331)
@@ -106,10 +100,8 @@ data = SubResource("VoxelGIData_o2lta")
 
 [node name="WorldItem" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.67772, 1.11064, 5.035)
-script = ExtResource("2_045t8")
-instance = ExtResource("3_svi1k")
+script = ExtResource("2_jmga7")
 
 [node name="WorldNPC" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32303, 0, -4.62638)
-script = ExtResource("4_hohrk")
-instance = ExtResource("5_7tm42")
+script = ExtResource("3_iy322")

@@ -14,11 +14,11 @@ func _enter_tree():
 	add_inspector_plugin(door_jump_plugin)
 	# autoload
 	add_autoload_singleton("SkeleRealmsGlobal", "res://addons/skelerealms/scripts/sk_global.gd")
-	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/Covens/coven_system.gd")
-	add_autoload_singleton("GameInfo", "res://addons/skelerealms/scripts/System/game_info.gd")
-	add_autoload_singleton("SaveSystem", "res://addons/skelerealms/scripts/System/save_system.gd")
-	add_autoload_singleton("CrimeMaster", "res://addons/skelerealms/scripts/Crime/crime_master.gd")
-	add_autoload_singleton("DialogueHooks", "res://addons/skelerealms/scripts/System/dialogue_hooks.gd")
+	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/covens/coven_system.gd")
+	add_autoload_singleton("GameInfo", "res://addons/skelerealms/scripts/system/game_info.gd")
+	add_autoload_singleton("SaveSystem", "res://addons/skelerealms/scripts/system/save_system.gd")
+	add_autoload_singleton("CrimeMaster", "res://addons/skelerealms/scripts/crime/crime_master.gd")
+	add_autoload_singleton("DialogueHooks", "res://addons/skelerealms/scripts/system/dialogue_hooks.gd")
 
 
 func _exit_tree():
@@ -49,11 +49,11 @@ func _enable_plugin() -> void:
 	ProjectSettings.set_setting("skelerealms/weeks_in_month", 4)
 	ProjectSettings.set_setting("skelerealms/months_in_year", 8)
 	
-	ProjectSettings.set_setting("skelerealms/worlds_path", "res://Worlds")
-	ProjectSettings.set_setting("skelerealms/entities_path", "res://Entities")
-	ProjectSettings.set_setting("skelerealms/covens_path", "res://Covens")
-	ProjectSettings.set_setting("skelerealms/doors_path", "res://Doors")
-	ProjectSettings.set_setting("skelerealms/networks_path", "res://Networks")
+	ProjectSettings.set_setting("skelerealms/worlds_path", "res://worlds")
+	ProjectSettings.set_setting("skelerealms/entities_path", "res://entities")
+	ProjectSettings.set_setting("skelerealms/covens_path", "res://covens")
+	ProjectSettings.set_setting("skelerealms/doors_path", "res://doors")
+	ProjectSettings.set_setting("skelerealms/networks_path", "res://networks")
 
 
 func _disable_plugin() -> void:

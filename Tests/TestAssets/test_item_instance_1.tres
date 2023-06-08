@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemInstance" load_steps=3 format=3 uid="uid://cgiv1we365g8v"]
 
-[ext_resource type="Resource" uid="uid://ksv4jcwwgx2g" path="res://Tests/TestAssets/test_item_data_1.tres" id="1_c4gu0"]
+[ext_resource type="Resource" uid="uid://ksv4jcwwgx2g" path="res://tests/TestAssets/test_item_data_1.tres" id="1_c4gu0"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/InstanceData/item_instance.gd" id="1_dul6t"]
 
 [resource]

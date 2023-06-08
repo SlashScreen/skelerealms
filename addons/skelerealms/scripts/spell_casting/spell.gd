@@ -85,8 +85,8 @@ func _raycast(from:Vector3, direction:Vector3, distance:float, ignore_self:bool 
 	var space_state = _caster.get_world_3d().direct_space_state # get space state
 	await _caster.get_tree().physics_frame
 	var res = space_state.intersect_ray(ray)
-	if ignore_self:
-		return res.filter(func(x:Dictionary):
-			return not (x["collider"] as Node).is_ancestor_of(_caster) and not (x["collider"] as Node).find_child(_caster.name)
-		)
-	return res
+	if res.is_empty():
+		return {}
+	if not res.collider.is_ancestor_of(_caster) and not res.collider.find_child(_caster.name):
+		return res
+	return {}

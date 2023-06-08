@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Spell" load_steps=3 format=3 uid="uid://dj43w2nt5vriv"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/SpellCasting/spell.gd" id="1_f8hys"]
-[ext_resource type="Resource" path="res://Tests/TestAssets/test_effect.tres" id="2_28mol"]
+[ext_resource type="Resource" path="res://tests/TestAssets/test_effect.tres" id="2_28mol"]
 
 [resource]
 script = ExtResource("1_f8hys")

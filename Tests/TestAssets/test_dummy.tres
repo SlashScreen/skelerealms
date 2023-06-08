@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/Data/npc_data.gd" id="1_5mc0v"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_damage_module.gd" id="1_i4yub"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/goap_behavior.gd" id="1_snrm6"]
-[ext_resource type="Script" path="res://Tests/TestAssets/test_conditional_goap_behavior.gd" id="2_k10rr"]
+[ext_resource type="Script" path="res://tests/TestAssets/test_conditional_goap_behavior.gd" id="2_k10rr"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_interact_response.gd" id="2_ts27d"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/AI/Modules/default_threat_response.gd" id="3_gqrf7"]
 [ext_resource type="PackedScene" uid="uid://24i73ycvxysf" path="res://test_npc_prefab.tscn" id="4_eio35"]

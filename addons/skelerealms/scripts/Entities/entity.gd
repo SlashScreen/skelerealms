@@ -9,7 +9,7 @@ extends Node
 ## Position within the world it's in.
 @export var position:Vector3
 ## Rotation of this Enitiy.
-@export var rotation:Quaternion = Quaternion.IDENTITY
+@export var rotation:Quaternion
 ## An internal timer of how long this entity has gone without being modified or referenced. 
 ## One it's beyond a certain point, the [EntityManager] will mark it for cleanup after a save.
 var stale_timer:float

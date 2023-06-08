@@ -16,7 +16,6 @@ func _ready() -> void:
 	super._ready()
 
 
-## Equip an item to a slot, if valid. Returns false if invalid slot. Pass "silent" to not emit [signal equipped].
 func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> bool:
 	# Get component
 	var e = SkeleRealmsGlobal.entity_manager.get_entity(item)
@@ -42,7 +41,7 @@ func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> b
 	return true
 
 
-## Unequip anything in a slot. Pass "silent" to not emit [signal unequipped].
+## Unequip anything in a slot.
 func clear_slot(slot:EquipmentSlots.Slots, silent:bool = false) -> void:
 	if equipment_slot.has(slot):
 		if not silent:
@@ -50,7 +49,7 @@ func clear_slot(slot:EquipmentSlots.Slots, silent:bool = false) -> void:
 		equipment_slot[slot] = null
 
 
-## Unequip a specific item, no matter what slot it's in. Pass "silent" to not emit [signal unequipped].
+## Unequip a specific item, no matter what slot it's in.
 func unequip_item(item:StringName, silent:bool = false) -> void:
 	for s in equipment_slot:
 		if equipment_slot[s] == item:
@@ -60,7 +59,6 @@ func unequip_item(item:StringName, silent:bool = false) -> void:
 			return
 
 
-## Returns if an item is equipped in a slot.
 func is_item_equipped(item:StringName, slot:EquipmentSlots.Slots) -> bool:
 	if not equipment_slot.has(slot):
 		return false
