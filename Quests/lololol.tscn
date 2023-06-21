@@ -1,7 +1,0 @@
-[gd_scene load_steps=3 format=3]
-
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/Quests/QuestNode/quest_node.gd" id="1_fx6j8"]
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/Quests/QuestNode/quest.gd" id="2_tufh1"]
-
-[node name="lololol" type="Node"]
-script = ExtResource("1_fx6j8")

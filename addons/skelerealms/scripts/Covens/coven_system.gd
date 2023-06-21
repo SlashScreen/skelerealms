@@ -12,7 +12,6 @@ func _ready():
 		regex.compile("([^\\/\n\\r]+).tres")
 		_cache_covens(ProjectSettings.get_setting("skelerealms/covens_path"))
 		)
-	GameInfo.game_stopped.connect(func(): covens.clear())
 
 
 ## Gets a [Coven] if it exists.

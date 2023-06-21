@@ -120,7 +120,7 @@ signal damaged_with_effect(effect:StringName)
 signal added_to_conversation
 ## Singaal emitted when the NPC is removed from a conversation.
 signal removed_from_conversation
-
+signal updated(delta:float)
 
 #* ### OVERRIDES
 
@@ -162,11 +162,19 @@ func _entity_ready() -> void:
 	_goap_component.setup(data.goap_actions)
 	
 	# sync nav agent
-	_puppet_component.spawned_puppet.connect(func(x:Node): _puppet = x as NPCPuppet )
-	_puppet_component.despawned_puppet.connect(func(): _puppet = null )
+	_puppet_component.spawned_puppet.connect(func(x:Node): 
+		_puppet = x as NPCPuppet
+		_goap_component._agent = (x as NPCPuppet).navigation_agent
+		)
+	_puppet_component.despawned_puppet.connect(func(): 
+		_puppet = null
+		_goap_component._agent = null
+		)
 	
 	# misc setup
 	_interactive_component.interactible = data.interactive # TODO: Or instance override
+	
+	GameInfo.minute_incremented.connect(_calculate_new_schedule.bind())
 
 
 func _on_enter_scene():
@@ -191,6 +199,8 @@ func _process(delta):
 				_next_point() # get next point
 				parent_entity.world = _current_target_point.world # set world
 			parent_entity.position = parent_entity.position.move_toward(_current_target_point.position, delta * _walk_speed) # move towards position
+	
+	updated.emit(delta)
 
 
 func _exit_tree() -> void:
@@ -231,6 +241,10 @@ func remove_from_conversation() -> void:
 func set_destination(dest:NavPoint) -> void:
 	# Recalculate path
 	_path = _nav_component.calculate_path_to(dest)
+	# if no path calculated, try to set it to the destination for the navigation master
+	if parent_entity.in_scene and _path.size() == 0 and dest.world == parent_entity.world:
+		_current_target_point = dest
+		return
 	# detect any doors
 	for i in range(_path.size() - 1):
 		if not _path[i].world == _path[i + 1].world: # if next world that isnt this world then it is a door
@@ -293,6 +307,11 @@ func _pop_path() -> NavPoint:
 ## Add a Goap objective.
 func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float):
 	_goap_component.add_objective(goals, remove_after_satisfied, priority)
+
+
+## Remove objectives that have a set of goals. Goals must match exactly.
+func remove_objective_by_goals(goals:Dictionary) -> void:
+	_goap_component.remove_objective_by_goals(goals)
 
 
 #* ### PERCEPTION
@@ -380,7 +399,14 @@ func _calculate_new_schedule() -> void:
 	var ev = _schedule.find_schedule_activity_for_current_time() # Scan schedule
 	if ev.some(): 
 		if not ev.unwrap() == _current_schedule_event: 
+			if _current_schedule_event:
+				_current_schedule_event.on_event_ended()
+			
 			_current_schedule_event = ev.unwrap()
+			
+			if _current_schedule_event.has_method("attach_npc"):
+				_current_schedule_event.attach_npc(self)
+			_current_schedule_event.on_event_started()
 			schedule_updated.emit(_current_schedule_event)
 	else:
 		# Else we have no schewdule for this time period

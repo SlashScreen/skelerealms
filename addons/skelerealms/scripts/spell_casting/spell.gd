@@ -42,6 +42,14 @@ func reset():
 	pass
 
 
+func process(delta:float) -> void:
+	pass
+
+
+func physics_process(delta:float) -> void:
+	pass
+
+
 ## Find all nodes in a range of a point, with the results in a dictionary matching a physics query (like raycasting). 
 ## You can use this for an AOE attack.
 ## Using ignore_self assumes that the caster's origin defines the root of the actor casting it.

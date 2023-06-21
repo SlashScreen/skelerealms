@@ -18,6 +18,7 @@ extends ScheduleEvent
 @export var location_position:Vector3
 @export var location_world:String
 @export var target_radius:float = 25
+var _npc:NPCComponent
 
 
 func get_event_location() -> NavPoint:
@@ -37,3 +38,17 @@ func satisfied_at_location(e:Entity) -> bool:
 		return false
 	# else, we passed
 	return true
+
+
+func on_event_started() -> void:
+	_npc.add_objective({"perform_idle_point":true}, false, 0)
+	_npc.goap_memory["sandbox_schedule"] = self
+
+
+func on_event_ended() -> void:
+	_npc.remove_objective_by_goals({"perform_idle_point":true})
+	_npc.goap_memory.erase("sandbox_schedule")
+
+
+func attach_npc(n:NPCComponent) -> void:
+	_npc = n

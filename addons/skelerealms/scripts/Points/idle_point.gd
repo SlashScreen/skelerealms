@@ -18,5 +18,14 @@ signal occupied
 signal unoccupied
 
 
-func occupy() -> void:
+func _ready() -> void:
+	add_to_group("idle_points")
+
+
+func occupy(who:String) -> void:
 	is_occupied = true
+	owning_entity = who
+
+
+func unoccupy() -> void:
+	is_occupied = false

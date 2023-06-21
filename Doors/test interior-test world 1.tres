@@ -1,6 +1,0 @@
-[gd_resource type="Resource" script_class="DoorInstance" load_steps=2 format=3 uid="uid://cf47t8iaa6sj"]
-
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/InstanceData/door_instance.gd" id="1_l7jft"]
-
-[resource]
-script = ExtResource("1_l7jft")

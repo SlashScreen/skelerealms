@@ -37,11 +37,6 @@ func _init(behavior:GOAPBehavior = null) -> void:
 		name = behavior.id
 
 
-func _ready():
-	goap_behavior.parent_goap = get_parent() as GOAPComponent
-	goap_behavior.entity = parent_goap.parent_entity
-
-
 func is_achievable_given(state:Dictionary) -> bool:
 	return goap_behavior.is_achievable_given(state)
 
@@ -63,4 +58,11 @@ func post_perform() -> bool:
 
 
 func is_target_reached(agent:NavigationAgent3D) -> bool:
+	if not agent:
+		return true
 	return goap_behavior.is_target_reached(agent)
+
+
+func interrupt() -> void:
+	if goap_behavior:
+		goap_behavior.interrupt()

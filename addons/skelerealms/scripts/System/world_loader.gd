@@ -24,21 +24,19 @@ func _ready():
 	regex = RegEx.new()
 	regex.compile("([^\\/\n\\r]+).tscn") 
 	_cache_worlds(ProjectSettings.get_setting("skelerealms/worlds_path"))
-	
 
 
 ## Load a new world.
 func load_world(wid:String):
 	begin_world_loading.emit()
 	_unload_world()
-	print(world_paths)
 	
 	if not world_paths.has(wid):
 		print("World not found: %s" % wid)
 		return
 	
 	var w = load(world_paths[wid]) as PackedScene
-	if !w:
+	if not w:
 		print("Error loading world: %s" % wid)
 	
 	add_child(w.instantiate())
@@ -57,6 +55,8 @@ func _cache_worlds(path:String):
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
+			if '.tscn.remap' in file_name:
+				file_name = file_name.trim_suffix('.remap')
 			if dir.current_is_dir(): # if is directory, cache subdirectory
 				_cache_worlds(file_name)
 			else: # if filename, cache filename

@@ -10,6 +10,11 @@ var skills:Dictionary = {
 	&"short_blade" : 0,
 	&"long_blade" : 0,
 	&"blunt" : 0,
+	&"block" : 0,
+	&"litheness" : 0,
+	&"barter" : 10,
+	&"speech" : 0,
+	&"alchemy" : 0
 }:
 	get:
 		return skills

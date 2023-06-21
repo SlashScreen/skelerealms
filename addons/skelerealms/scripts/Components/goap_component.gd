@@ -44,7 +44,7 @@ func _process(delta):
 			# if we made a plan, stop sorting through objectives
 			if not action_queue.is_empty():
 				_pop_action()
-				_current_objective = o
+				#_current_objective = o
 				_rebuild_plan = false
 				break
 	
@@ -68,6 +68,8 @@ func _process(delta):
 		else:
 			if not action_queue.is_empty():
 				_pop_action()
+			else:
+				_rebuild_plan = true
 
 
 func _pop_action() -> void:
@@ -87,7 +89,6 @@ func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOA
 	var success = _build_graph(start, leaves, goal, action_pool) # try to find a path.
 	
 	if not success: # if we have not found a path, we have failed.
-		print("No plan")
 		return []
 		
 	leaves.sort_custom(func(a:PlannerNode,b:PlannerNode): return a.cost < b.cost ) #Sort to find valid node with least cost.
@@ -164,7 +165,7 @@ func _invoke_in_time(f:Callable, time:float):
 	_timer.timeout.connect(func():
 		# disconnect all events
 		for c in _timer.timeout.get_connections():
-			_timer.timeout.disconnect(c)
+			_timer.timeout.disconnect(c.callable)
 		# call function
 		f.call()
 	)
@@ -187,8 +188,21 @@ func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float
 	return o
 
 
+func remove_objective_by_goals(goals:Dictionary) -> void:
+	var to_remove = objectives.filter(func(x:Objective): return x.goals == goals)
+	for o in to_remove:
+		objectives.erase(o)
+
+
 func regenerate_plan() -> void:
 	_rebuild_plan = true
+
+
+func interrupt() -> void:
+	if _current_action:
+		_current_action.interrupt()
+		_timer.stop() # cancel callback
+	regenerate_plan()
 
 
 ## An objective for the AI to try to solve for.

@@ -13,7 +13,19 @@ const DROP_DISTANCE:float = 2
 var in_inventory:bool: 
 	get:
 		return contained_inventory.some()
+## If this is a quest item.
 var quest_item:bool
+## If this item is "owned" by someone.
+var item_owner:StringName = &"":
+	get:
+		return item_owner
+	set(val):
+		item_owner = val
+		if val == &"":
+			$"../InteractiveComponent".interact_verb = "TAKE"
+		else:
+			# TODO: Determine using worth and owner relationships
+			$"../InteractiveComponent".interact_verb = "STEAL"
 # TODO: Item functions
 
 
@@ -27,6 +39,11 @@ func _ready() -> void:
 
 func _entity_ready() -> void:
 	$"../InteractiveComponent".interacted.connect(interact.bind())
+	if item_owner == &"":
+		$"../InteractiveComponent".interact_verb = "TAKE"
+	else:
+		# TODO: Determine using worth and owner relationships
+		$"../InteractiveComponent".interact_verb = "STEAL"
 
 
 func _on_enter_scene():
@@ -35,8 +52,9 @@ func _on_enter_scene():
 
 func _spawn():
 	print("spawning %s" % parent_entity.name)
-
+	
 	$"../PuppetSpawnerComponent".spawn(data.prefab)
+	($"../PuppetSpawnerComponent".get_child(0) as ItemPuppet).quaternion = parent_entity.rotation
 
 
 func _on_exit_scene():

@@ -1,7 +1,0 @@
-[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://bae2oymuqmvyb"]
-
-[ext_resource type="Texture2D" uid="uid://b0jb3d8oe1tfm" path="res://kenney_ui-pack-rpg-expansion/Spritesheet/uipack_rpg_sheet.png" id="1_kah85"]
-
-[resource]
-atlas = ExtResource("1_kah85")
-region = Rect2(190.331, 311.721, 8.05785, 18.2362)

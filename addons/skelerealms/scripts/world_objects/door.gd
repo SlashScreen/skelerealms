@@ -6,8 +6,6 @@ extends InteractiveObject
 
 @export var instance:DoorInstance
 @export var destination_instance:DoorInstance
-@export var open_verb:String = "OPEN"
-
 var dest_world:String:
 	get:
 		return destination_instance.world

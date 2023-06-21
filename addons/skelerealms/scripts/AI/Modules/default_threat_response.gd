@@ -173,8 +173,9 @@ func _add_enemy(e:Entity) -> void:
 	if _npc.goap_memory.has("enemies"):
 		if not _npc.goap_memory["enemies"].has(e.name):
 			_npc.goap_memory["enemies"].append(e)
-		else:
-			_npc.goap_memory["enemies"] = [e.name]
+	else:
+		_npc.goap_memory["enemies"] = [e.name]
+		_npc._goap_component.interrupt() # interrupt current task if entering combat
 
 
 func _warn(e:Entity) -> void:

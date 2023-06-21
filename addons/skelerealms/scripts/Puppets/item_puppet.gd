@@ -1,5 +1,5 @@
 class_name ItemPuppet
-extends Node3D
+extends RigidBody3D
 
 
 var puppeteer:PuppetSpawnerComponent

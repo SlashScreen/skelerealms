@@ -9,7 +9,7 @@ extends Node
 ## Position within the world it's in.
 @export var position:Vector3
 ## Rotation of this Enitiy.
-@export var rotation:Quaternion
+@export var rotation:Quaternion = Quaternion.IDENTITY
 ## An internal timer of how long this entity has gone without being modified or referenced. 
 ## One it's beyond a certain point, the [EntityManager] will mark it for cleanup after a save.
 var stale_timer:float
@@ -45,6 +45,8 @@ func _init(res:InstanceData = null) -> void:
 	name = res.ref_id # set its name to the instance refID
 	world = res.world
 	position = res.position
+	if res.has_meta("rotation"):
+		rotation = res.rotation
 	
 	for n in new_nodes: # add all components to entity
 		add_child(n)

@@ -15,5 +15,13 @@ extends Resource
 func get_event_location() -> NavPoint:
 	return null
 
+
 func satisfied_at_location(e:Entity) -> bool:
 	return true
+
+func on_event_started() -> void:
+	return
+
+
+func on_event_ended() -> void:
+	return

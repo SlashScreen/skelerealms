@@ -6,8 +6,10 @@ extends Node3D
 
 signal on_interact(id:String)
 
-
-@export var object_name:String
+## Name of thje object.
+@export var object_name:String = "THING"
+## Verb to use when hovered over.
+@export var interact_verb:String = "INTERACT"
 
 
 func interact(id:String):

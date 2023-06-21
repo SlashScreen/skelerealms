@@ -6,6 +6,8 @@ extends Node3D
 
 ## What spell is active right now.
 var _active_spell:Spell
+## The Entity this hand is attached to.
+var entity:Entity
 
 
 func cast_spell():

@@ -7,8 +7,8 @@ signal interacted(id:String)
 
 ## Whether it can be interacted with.
 @export var interactible:bool = true
-## What tooltip to display when the cursor hovers over this.
-@export var interact_text:String
+## What tooltip to display when the cursor hovers over this. The RefID is used as the object name.
+@export var interact_verb:String = "INTERACT"
 
 
 func _init() -> void:

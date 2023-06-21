@@ -17,11 +17,6 @@ var worlds:Dictionary = {}
 
 func _ready() -> void:
 	GameInfo.game_started.connect(load_all_networks.bind())
-	GameInfo.game_stopped.connect(func():
-		for c in worlds:
-			worlds[c].queue_free()
-		worlds.clear()
-		)
 
 
 func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
