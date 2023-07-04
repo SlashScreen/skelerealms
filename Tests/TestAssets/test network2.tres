@@ -89,4 +89,4 @@ SubResource("Resource_v8tc7"): [SubResource("Resource_db82r"), SubResource("Reso
 SubResource("Resource_jo586"): [SubResource("Resource_mwx71"), SubResource("Resource_nx3rg")],
 SubResource("Resource_tji6t"): [SubResource("Resource_nx3rg"), SubResource("Resource_0vmae")]
 }
-portals = Array[Resource("res://addons/network_utility/Scripts/network_portal.gd")]([])
+portals = Array[Resource("res://addons/network_utility/Scripts/Scripts/network_portal.gd")]([])

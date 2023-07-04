@@ -105,7 +105,7 @@ func unpause_game():
 
 
 func _input(event):
-	if Input.is_action_just_pressed("ui_cancel") and not IODSingleton.is_player_captured:
+	if Input.is_action_just_pressed("ui_cancel"):
 		toggle_pause()
 
 

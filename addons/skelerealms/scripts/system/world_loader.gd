@@ -27,8 +27,10 @@ func _ready():
 
 
 ## Load a new world.
-func load_world(wid:String):
+func load_world(wid:String) -> void:
+	print("loading world")
 	begin_world_loading.emit()
+	await get_tree().process_frame
 	_unload_world()
 	
 	if not world_paths.has(wid):
@@ -40,7 +42,7 @@ func load_world(wid:String):
 		print("Error loading world: %s" % wid)
 	
 	add_child(w.instantiate())
-	
+	print("finished loading world")
 	world_loading_ready.emit()
 
 

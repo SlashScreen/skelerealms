@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="CovenRankData" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="CovenRankData" load_steps=3 format=3 uid="uid://bwovdkegfjpv"]
 
-[ext_resource type="Resource" uid="uid://wu88rgegya0d" path="res://tests/TestAssets/test_coven_1.tres" id="1_1c6ad"]
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/Covens/coven_rank_data.gd" id="1_2fiw6"]
+[ext_resource type="Resource" uid="uid://bl6r48ooyuucl" path="res://Tests/TestAssets/test_coven_2.tres" id="1_qintl"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/covens/coven_rank_data.gd" id="2_x5jrx"]
 
 [resource]
-script = ExtResource("1_2fiw6")
-coven = ExtResource("1_1c6ad")
+script = ExtResource("2_x5jrx")
+coven = ExtResource("1_qintl")
 rank = 0

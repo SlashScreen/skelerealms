@@ -8,7 +8,13 @@ const DROP_DISTANCE:float = 2
 ## The data blob this item has.
 @export var data: ItemData
 ## What inventory this item is in.
-@onready var contained_inventory: Option = Option.none()
+@onready var contained_inventory: Option = Option.none():
+	get:
+		return contained_inventory
+	set(val):
+		contained_inventory = val
+		if parent_entity:
+			parent_entity.supress_spawning = contained_inventory.some() # prevent spawning if item is in inventory
 ## Whether this item is in inventory or not.
 var in_inventory:bool: 
 	get:
@@ -54,7 +60,7 @@ func _spawn():
 	print("spawning %s" % parent_entity.name)
 	
 	$"../PuppetSpawnerComponent".spawn(data.prefab)
-	($"../PuppetSpawnerComponent".get_child(0) as ItemPuppet).quaternion = parent_entity.rotation
+	($"../PuppetSpawnerComponent".get_child(0) as ItemPuppet).quaternion = parent_entity.rotation # TODO: This doesn't work.
 
 
 func _on_exit_scene():

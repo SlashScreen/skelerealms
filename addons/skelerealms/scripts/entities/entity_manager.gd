@@ -56,6 +56,7 @@ func _cache_entities(path:String):
 					file_name = file_name.trim_suffix('.remap')
 				var result = regex.search(file_name)
 				if result:
+					print("%s : %s" % [result.get_string(1), "%s/%s" % [path, file_name]])
 					disk_assets[result.get_string(1)] = "%s/%s" % [path, file_name] # TODO: Check if it's actually an InstanceData
 			file_name = dir.get_next()
 		dir.list_dir_end()

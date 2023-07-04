@@ -27,7 +27,7 @@ func spawn(data:PackedScene):
 	puppet = n
 	add_child(n)
 	spawned_puppet.emit(puppet)
-	print("spawned %s at %s" % [parent_entity.name, parent_entity.position])
+	print("spawned %s at %s : %s" % [parent_entity.name, parent_entity.world, parent_entity.position])
 
 
 ## Despawn a puppet.

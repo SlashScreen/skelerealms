@@ -5,6 +5,15 @@ extends RefData
 
 ## The model for an item.
 @export var prefab: PackedScene
+## A custom model for when this item is held in an NPC's hand. Will default to [member prefab] if not set.
+@export var hand_item: PackedScene:
+	get:
+		if hand_item == null:
+			return prefab
+		else:
+			return hand_item
+	set(val):
+		hand_item = val
 ## How much it weighs.
 @export var weight: float
 ## The base cost in snails.

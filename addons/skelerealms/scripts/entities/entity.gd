@@ -13,6 +13,9 @@ extends Node
 ## An internal timer of how long this entity has gone without being modified or referenced. 
 ## One it's beyond a certain point, the [EntityManager] will mark it for cleanup after a save.
 var stale_timer:float
+## This is used to prevent items from spawning, even if they are supposed to be in scene.
+## For example, items in invcentories should not spawn despite technically being "in the scene".
+var supress_spawning:bool
 
 
 ## Whether this entity is in the scene or not.
@@ -74,6 +77,9 @@ func _process(delta):
 
 ## Determine that this entity should be in scene
 func _should_be_in_scene():
+	if supress_spawning:
+		in_scene = false
+		return
 	# if not in correct world
 	if GameInfo.world != world:
 		in_scene = false

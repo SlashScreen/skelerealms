@@ -13,6 +13,7 @@ signal hurt
 signal vitals_updated(data:Dictionary)
 
 
+const DISHONORED_MODE:bool = false
 ## Health, stamina, magica, and max of values.
 var vitals = {
 	"health" = 100.0,
@@ -21,6 +22,7 @@ var vitals = {
 	"max_health" = 100.0,
 	"max_moxie" = 100.0,
 	"max_will" = 100.0,
+	"return_to_will" = 0.0,
 }:
 	get:
 		return vitals
@@ -46,10 +48,19 @@ var is_exhausted:bool:
 var is_drained:bool: 
 	get:
 		return vitals["will"] < 1
+var will_timer:Timer
+var tween:Tween
 
 
 func _init() -> void:
 	name = "VitalsComponent"
+
+
+func _ready() -> void:
+	will_timer = Timer.new()
+	add_child(will_timer)
+	will_timer.timeout.connect(do_return_to_will.bind())
+	will_timer.one_shot = true
 
 
 func set_health(val:float) -> void:
@@ -83,9 +94,23 @@ func set_will(val:float) -> void:
 		drained.emit()
 
 
-## This is for special handling for casting spells.
 func cast_spell(cost:float) -> void:
+	if DISHONORED_MODE:
+		if tween:
+			tween.kill()
+		vitals.return_to_will = vitals["will"]
+		will_just_changed = true
+		will_timer.start(1.0)
 	change_will(-cost)
+
+
+func do_return_to_will() -> void:
+	if tween:
+		tween.kill()
+	tween = get_tree().create_tween()
+	tween.tween_method(set_will.bind(), vitals.will, vitals.return_to_will, 1.0)
+	tween.tween_callback(func(): 
+		will_just_changed = false)
 
 
 func change_will(val:float) -> void:
@@ -109,4 +134,5 @@ func _physics_process(delta: float) -> void:
 	
 	if not will_just_changed and not vitals.will == vitals.max_will:
 		change_will(will_recharge_rate * delta)
-	will_just_changed = false
+	if not DISHONORED_MODE:
+		will_just_changed = false

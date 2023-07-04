@@ -44,6 +44,7 @@ var _busy:bool:
 		get:
 			return _busy or in_combat # is also busy if in combat
 		set(val):
+			print("Set busy to %s" % val)
 			if val and _puppet:
 				_puppet.pause_nav()
 			elif not val and _puppet:

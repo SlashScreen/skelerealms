@@ -36,6 +36,7 @@ func _process(delta):
 
 ## Teleport the player.
 func teleport(world:String, pos:Vector3):
+	print("teleporting player to %s : %s" % [world, pos])
 	GameInfo.world = world # Set the game's world to destination world
 	parent_entity.world = world # Set this entity world to the destination
 	(%WorldLoader as WorldLoader).load_world(world) # Load world
