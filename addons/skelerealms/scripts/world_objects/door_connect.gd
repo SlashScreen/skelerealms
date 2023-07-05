@@ -24,9 +24,9 @@ func _jump_to_door_location(obj:Door):
 	var res = _find_world(path, obj.destination_instance.world)
 	if res == "":
 		return
-	print("TODO: Open scene without it crashing.")
-	#p.get_editor_interface().open_scene_from_path(res)
-	#p.get_editor_interface().edit_resource(load(res))
+	print("Jumping to location...")
+	# Workaround from https://github.com/godotengine/godot/issues/75669#issuecomment-1621230016
+	p.get_editor_interface().open_scene_from_path.call_deferred(res)
 
 
 func _set_position(obj:Door) -> void:

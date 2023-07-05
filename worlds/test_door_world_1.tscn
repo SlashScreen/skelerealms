@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://c0ol8qitncs7s"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/world_objects/door.gd" id="1_wny7y"]
+[ext_resource type="Resource" uid="uid://eyoynh64yd8m" path="res://Tests/TestAssets/tdw1_to_tdw2.tres" id="2_cxcta"]
+[ext_resource type="Resource" uid="uid://dumpipagn5xqg" path="res://Tests/TestAssets/tdw2_to_tdw1.tres" id="3_ey7v0"]
+
+[node name="test_door_world_1" type="Node3D"]
+
+[node name="Door" type="Node3D" parent="."]
+script = ExtResource("1_wny7y")
+instance = ExtResource("2_cxcta")
+destination_instance = ExtResource("3_ey7v0")

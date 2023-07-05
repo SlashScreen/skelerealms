@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="DoorInstance" load_steps=2 format=3 uid="uid://dumpipagn5xqg"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/instance_data/door_instance.gd" id="1_fsqdp"]
+
+[resource]
+script = ExtResource("1_fsqdp")
+ref_id = "tdw2_to_tdw1"
+world = &"test_door_world_2"
+position = Vector3(13.9644, 0, 0)
