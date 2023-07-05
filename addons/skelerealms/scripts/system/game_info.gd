@@ -3,7 +3,7 @@ extends Node
 
 
 ## What world the player is in.
-@export var world: String = "test world 1"
+@export var world: String = "init"
 
 
 var paused:bool = false
@@ -157,12 +157,28 @@ func save() -> Dictionary:
 	return {
 		"world" : world,
 		&"world_time" : world_time,
+		"continuity_flags" : continuity_flags
 	}
 
 
 func load_game(data:Dictionary):
 	world = data["world"]
 	world_time = data[&"world_time"]
+	continuity_flags = data["continuity_flags"]
+
+
+func reset_data() -> void: # this should never happen but just in case
+	world_time = {
+		&"world_time" : 0,
+		&"minute" : 0,
+		&"hour" : 0,
+		&"day" : 0,
+		&"week" : 0,
+		&"month" : 0,
+		&"year" : 0,
+	}
+	continuity_flags = {}
+	world = "init"
 
 
 func start_game() -> void:

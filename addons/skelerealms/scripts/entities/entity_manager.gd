@@ -43,6 +43,13 @@ func get_entity(id:StringName) -> Option:
 	return Option.from(get_node_or_null(id as String))
 
 
+func get_disk_data_for_entity(id:StringName) -> InstanceData:
+	if disk_assets.has(id):
+		return ResourceLoader.load(disk_assets[id], "InstanceData")
+	else:
+		return null
+
+
 func _cache_entities(path:String):
 	var dir = DirAccess.open(path)
 	if dir:

@@ -61,10 +61,28 @@ func load_game(path:String):
 	var file = FileAccess.open(path, FileAccess.READ) # open file
 	var data_blob:String = file.get_as_text() # read file
 	var save_data:Dictionary = _deserialize(data_blob) # parse data
+	
+	# Reset to default state if it doesn't have an entry in the save data
+	for e in SkeleRealmsGlobal.entity_manager.entities:
+		if not save_data["entity_data"].has(e):
+			SkeleRealmsGlobal.entity_manager.entities[e].reset_data()
 	# load entity data - loop through all data, get entity (spawning it if it isn't there), call load
-	# FIXME: Reset to default state if it doesn't have a load?
 	for data in save_data["entity_data"]:
 		SkeleRealmsGlobal.entity_manager.get_entity(data).unwrap().load_data(save_data["entity_data"][data])
+	
+	# load game info data
+	for si in get_tree().get_nodes_in_group("savegame_gameinfo"):
+		if save_data["game_info"].has(si.name):
+			si.load_data(save_data["game_info"][si.name])
+		else:
+			si.reset_data()
+	
+	# load others data
+	for so in get_tree().get_nodes_in_group("savegame_other"):
+		if save_data["other_data"].has(so.name):
+			so.load_data(save_data["other_data"][so.name])
+		else:
+			so.reset_data()
 
 
 ## Check if an entity is accounted for in the save system. Returns the save data blob if there is, else none.

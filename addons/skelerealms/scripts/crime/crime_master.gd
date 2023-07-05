@@ -24,6 +24,10 @@ const bounty_amount:Dictionary = {
 var crimes:Dictionary = {}
 
 
+func _ready():
+	add_to_group("savegame_gameinfo")
+
+
 ## Move all unpunished crimes to punished crimes.
 func punish_crimes(coven:StringName):
 	crimes[coven]["punished"].append(crimes[coven]["unpunished"])
@@ -67,3 +71,17 @@ func bounty_for_coven(id:StringName, coven:StringName) -> int:
 	return crimes[coven]["unpunished"]\
 		.filter(func(x:Crime): return x.perpetrator == id)\
 		.reduce(func(sum:int, x:Crime): return sum + bounty_amount[x.severity], 0)
+
+
+func save() -> Dictionary:
+	return {
+		"crime" : crimes
+	}
+
+
+func load_data(data:Dictionary) -> void:
+	crimes = data["crime"]
+
+
+func reset_data() -> void:
+	crimes = {}

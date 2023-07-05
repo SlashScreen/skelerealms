@@ -44,6 +44,8 @@ func _init(res:InstanceData = null) -> void:
 		return
 	
 	var new_nodes = res.get_archetype_components() # Get the entity components
+	for c in get_children(): # if this entity already exists, get rid of the components. FIXME: This is inefficient.
+		c.queue_free()
 	
 	name = res.ref_id # set its name to the instance refID
 	world = res.world
@@ -118,7 +120,7 @@ func add_component(c:EntityComponent) -> void:
 	add_child(c)
 
 
-func save() -> Dictionary: 
+func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If not, save that as well. This will Theoretically allow for dynamic instances.
 	var data:Dictionary = {
 		"entity_data": {
 			"world" = world,
@@ -130,7 +132,7 @@ func save() -> Dictionary:
 	return data
 
 
-func load_data(data:Dictionary):
+func load_data(data:Dictionary) -> void:
 	world = data["entity_data"]["world"]
 	position = JSON.parse_string(data["entity_data"]["position"])
 	
@@ -140,7 +142,14 @@ func load_data(data:Dictionary):
 	pass
 
 
-func reset_stale_timer():
+func reset_data() -> void:
+	# TODO: Figure out how to reset entities that are generated at runtime. oh boy that's gonna be fun.
+	var i = SkeleRealmsGlobal.entity_manager.get_disk_data_for_entity(name)
+	if i:
+		_init(i)
+
+
+func reset_stale_timer() -> void:
 	stale_timer = 0
 
 
