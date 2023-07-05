@@ -1,6 +1,7 @@
 class_name DoorJumpPlugin
 extends EditorInspectorPlugin
 
+
 var p:EditorPlugin
 
 
@@ -27,6 +28,7 @@ func _jump_to_door_location(obj:Door):
 	print("Jumping to location...")
 	# Workaround from https://github.com/godotengine/godot/issues/75669#issuecomment-1621230016
 	p.get_editor_interface().open_scene_from_path.call_deferred(res)
+	p.get_editor_interface().edit_resource.call_deferred(load(res)) # switch tab
 
 
 func _set_position(obj:Door) -> void:
@@ -45,8 +47,6 @@ func _find_world(path:String, target:String) -> String:
 				if not res == "":
 					return res
 			else: # if filename, cache filename
-				print(file_name)
-				print(target)
 				var result = file_name.contains(target)
 				if result:
 					return "%s/%s" % [path, file_name] 

@@ -34,7 +34,7 @@ project/assembly_name="Skelerealms"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/network_utility/plugin.cfg", "res://addons/journalgd/plugin.cfg", "res://addons/skelerealms/plugin.cfg")
+enabled=PackedStringArray("res://addons/gut/plugin.cfg", "res://addons/journalgd/plugin.cfg", "res://addons/skelerealms/plugin.cfg", "res://addons/network_utility/plugin.cfg")
 
 [input]
 
