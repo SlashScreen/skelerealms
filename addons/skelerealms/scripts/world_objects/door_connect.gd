@@ -2,7 +2,11 @@ class_name DoorJumpPlugin
 extends EditorInspectorPlugin
 
 
+const NODE_3D_VIEWPORT_CLASS_NAME = "Node3DEditorViewport"
+
 var p:EditorPlugin
+var _viewports:Array = []
+var _cams:Array[Camera3D] = []
 
 
 func _can_handle(object):
@@ -29,6 +33,14 @@ func _jump_to_door_location(obj:Door):
 	# Workaround from https://github.com/godotengine/godot/issues/75669#issuecomment-1621230016
 	p.get_editor_interface().open_scene_from_path.call_deferred(res)
 	p.get_editor_interface().edit_resource.call_deferred(load(res)) # switch tab
+	p.get_editor_interface().set_main_screen_editor.call_deferred("3D")
+#	var finish_up = func():
+#		print("setting camera position %s" % _cams[0].get_parent().get_parent())
+#		print(_cams.map(func(c:Camera3D): return c.global_position))
+#		var set_cam_position = func():
+#			_cams[0].global_position = obj.destination_instance.position
+#		set_cam_position.call_deferred()
+#	finish_up.call_deferred()
 
 
 func _set_position(obj:Door) -> void:
@@ -57,3 +69,28 @@ func _find_world(path:String, target:String) -> String:
 
 func _init(plug:EditorPlugin):
 	p = plug
+	_populate_data()
+
+
+func _populate_data() -> void:
+	_find_viewports(p.get_editor_interface().get_base_control())
+	for v in _viewports:
+		_find_cameras(v)
+
+
+func _find_viewports(n:Node) -> void:
+	if n.get_class() == NODE_3D_VIEWPORT_CLASS_NAME:
+		_viewports.append(n)
+		return
+	
+	for c in n.get_children():
+		_find_viewports(c)
+
+
+func _find_cameras(n:Node) -> void:
+	if n is Camera3D:
+		_cams.append(n)
+		return
+	
+	for c in n.get_children():
+		_find_cameras(c)

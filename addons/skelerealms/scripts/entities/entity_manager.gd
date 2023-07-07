@@ -3,6 +3,8 @@ extends Node
 ## Manages entities in the game.
 
 
+static var instance:EntityManager
+
 var entities:Dictionary = {}
 var disk_assets:Dictionary = {} # TODO: Figure out an alternative that isn't so memory heavy
 var regex:RegEx
@@ -13,6 +15,7 @@ func _ready():
 	regex = RegEx.new()
 	regex.compile("([^\\/\n\\r]+).tres")
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
+	instance = self
 
 
 ## Gets an entity in the game. [br]
