@@ -20,13 +20,13 @@ func _init(v:InventoryComponent, c:InventoryComponent) -> void:
 	customer = c
 
 
-## Get the total amount for the transaction, in terms of change in the customer's money. 
+## Get the total amount for the transaction, in terms of change in the customer's money.
 func total_transaction(selling_modifier:float, buying_modifier:float) -> int:
 	var total:int = 0
 	# Total selling amount and add
 	total += selling.reduce(
 		func(accum: int, item:String):
-			return accum + roundi(( SkeleRealmsGlobal.entity_manager.get_entity(item)\
+			return accum + roundi(( EntityManager.instance.get_entity(item)\
 				.unwrap()\
 				.get_component("ItemComponent")\
 				.unwrap() as ItemComponent)\
@@ -37,7 +37,7 @@ func total_transaction(selling_modifier:float, buying_modifier:float) -> int:
 	# Total selling amount and subtract
 	total -= buying.reduce(
 		func(accum: int, item:String):
-			return accum + roundi(( SkeleRealmsGlobal.entity_manager.get_entity(item)\
+			return accum + roundi(( EntityManager.instance.get_entity(item)\
 				.unwrap()\
 				.get_component("ItemComponent")\
 				.unwrap() as ItemComponent)\

@@ -38,14 +38,14 @@ signal participant_removed(who:StringName)
 
 
 func _ready() -> void:
-	# bind the npc adding and removing methods to this signal as well. 
+	# bind the npc adding and removing methods to this signal as well.
 	participant_added.connect(func(who:StringName):
-		SkeleRealmsGlobal.entity_manager.get_entity(who)\
+		EntityManager.instance.get_entity(who)\
 		.bind(func(e:Entity): return e.get_component("NPCComponent"))\
 		.bind(func(npc:NPCComponent): npc.add_to_conversation())
 	)
 	participant_removed.connect(func(who:StringName):
-		SkeleRealmsGlobal.entity_manager.get_entity(who)\
+		EntityManager.instance.get_entity(who)\
 		.bind(func(e:Entity): return e.get_component("NPCComponent"))\
 		.bind(func(npc:NPCComponent): npc.remove_from_conversation())
 	)
@@ -80,7 +80,7 @@ func add_participant(who:StringName) -> void:
 	participant_added.emit(who)
 
 
-## Remove a participant from the conversation. 
+## Remove a participant from the conversation.
 ## Returns true if removed, does nothing and returns false if no participant has been removed (when the participant wasn't in the conversation already).
 func remove_participant(who:StringName) -> bool:
 	if last_dialogue_node[&"participants"].has(who):
@@ -95,7 +95,7 @@ func remove_participant(who:StringName) -> bool:
 func continue_dialogue() -> void:
 	if last_dialogue_node.is_empty():
 		return
-	
+
 	start_dialogue(last_dialogue_node[&"node"], last_dialogue_node[&"participants"], last_dialogue_node[&"data"])
 
 
@@ -108,7 +108,7 @@ func update_dialogue_cache(dialogue_node:String = "", participants:Array[StringN
 			&"data" : data
 		}
 		return
-	
+
 	last_dialogue_node = {
 		&"node" : dialogue_node if not dialogue_node == "" else last_dialogue_node[&"node"],
 		&"participants" : participants if not participants.is_empty() else last_dialogue_node[&"participants"],
@@ -118,6 +118,6 @@ func update_dialogue_cache(dialogue_node:String = "", participants:Array[StringN
 
 ## Send a command to an entity without having to do monkey business trying to find it.
 func send_command_to_entity(ref_id:StringName, command:String, args:Array) -> void:
-	var e = SkeleRealmsGlobal.entity_manager.get_entity(ref_id)
+	var e = EntityManager.instance.get_entity(ref_id)
 	if e.some():
 		(e.unwrap() as Entity).dialogue_command(command, args)

@@ -18,7 +18,7 @@ func _ready() -> void:
 
 func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> bool:
 	# Get component
-	var e = SkeleRealmsGlobal.entity_manager.get_entity(item)
+	var e = EntityManager.instance.get_entity(item)
 	if not e.some():
 		return false
 	# Get item component
@@ -34,7 +34,7 @@ func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> b
 		return false
 	# Unequip if already in slot so we ca nput it in a new slot
 	unequip_item(item)
-	
+
 	equipment_slot[slot] = item
 	if not silent:
 		equipped.emit(item, slot)

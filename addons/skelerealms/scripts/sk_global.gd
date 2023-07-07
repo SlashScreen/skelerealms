@@ -3,19 +3,12 @@ extends Node
 ## It also has some important utility functions for working with entities.
 
 
-## Reference to the [EntityManager] singleton.
-var entity_manager:EntityManager:
-	get:
-		return entity_manager
-	set(val):
-		entity_manager = val
-		if val:
-			entity_manager_loaded.emit()
 ## Reference to the [QuestEngine].
 var quest_engine:QuestEngine
 ## World states for the GOAP system.
 var world_states:Dictionary
 
+## Called when the [EntityManager] has finished loading.
 signal entity_manager_loaded
 
 

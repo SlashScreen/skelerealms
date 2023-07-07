@@ -69,7 +69,7 @@ func cancel_barter() -> void:
 func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 	if not current_transaction:
 		return false
-	
+
 	var total: int = current_transaction.total_transaction(selling_modifier, buying_modifier)
 	# Adding and subtracting is done here because the total is how much money is leaving the customer
 	# If vendor cash is less than 0 when the balance is applied, return failure
@@ -78,7 +78,7 @@ func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 	# If customer cash is less than 0 when the balance is applied, return failure
 	if current_transaction.customer.snails + total < 0: # plus because if buying the total will be negative flow to customer
 		return false
-	
+
 	# Add total
 	current_transaction.vendor.remove_snails(total)
 	current_transaction.customer.add_snails(total)
@@ -87,7 +87,7 @@ func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 	#? Could optimize
 	for item in current_transaction.selling:
 		# Move from customer to vendor.
-		SkeleRealmsGlobal.entity_manager\
+		EntityManager.instance\
 			.get_entity(item)\
 			.unwrap()\
 			.get_component("ItemComponent")\
@@ -95,7 +95,7 @@ func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 			.move_to_inventory(current_transaction.vendor.parent_entity.name)
 	for item in current_transaction.buying:
 		# Move from vendor to customer.
-		SkeleRealmsGlobal.entity_manager\
+		EntityManager.instance\
 			.get_entity(item)\
 			.unwrap()\
 			.get_component("ItemComponent")\

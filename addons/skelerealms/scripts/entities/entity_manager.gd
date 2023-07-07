@@ -1,8 +1,9 @@
-class_name EntityManager 
+class_name EntityManager
 extends Node
 ## Manages entities in the game.
 
 
+## The instance of the entity manager.
 static var instance:EntityManager
 
 var entities:Dictionary = {}
@@ -11,11 +12,11 @@ var regex:RegEx
 
 
 func _ready():
-	SkeleRealmsGlobal.entity_manager = self
 	regex = RegEx.new()
 	regex.compile("([^\\/\n\\r]+).tres")
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
 	instance = self
+	SkeleRealmsGlobal.entity_manager_loaded.emit()
 
 
 ## Gets an entity in the game. [br]
@@ -41,7 +42,7 @@ func get_entity(id:StringName) -> Option:
 		add_entity(ResourceLoader.load(disk_assets[id], "InstanceData"))
 		(entities[id] as Entity).reset_stale_timer()
 		return Option.from(entities[id]) # we added the entity in #add_entity
-		
+
 	# Other than that, we've failed. Attempt to find the entity in the child count as a failsave, then return none.
 	return Option.from(get_node_or_null(id as String))
 
@@ -70,7 +71,7 @@ func _cache_entities(path:String):
 					disk_assets[result.get_string(1)] = "%s/%s" % [path, file_name] # TODO: Check if it's actually an InstanceData
 			file_name = dir.get_next()
 		dir.list_dir_end()
-	
+
 	else:
 		print("An error occurred when trying to access the path.")
 

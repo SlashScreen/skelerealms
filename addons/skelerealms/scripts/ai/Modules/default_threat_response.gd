@@ -16,7 +16,7 @@ const THREAT_LEVEL_MUCH_GREATER_INTERVAL = 5
 ## Aggressive: Will attack anything below the [member attack_threshold] on sight. [br]
 ## Frenzied: Will attack anything, ignoring opinion.
 @export_enum("Peaceful", "Bluffing", "Aggressive", "Frenzied") var aggression:int = 2
-## Agressive NPCs will attack any entity with an opinion below this threshold.  
+## Agressive NPCs will attack any entity with an opinion below this threshold.
 @export_range(-100, 100) var attack_threshold:int = -50
 ## Response to combat. [br]
 ## Coward: Flees from combat. [br]
@@ -48,7 +48,7 @@ var pull_out_of_thread = false
 
 func _initialize() -> void:
 	_npc.perception_transition.connect(_handle_perception_info.bind())
-	_npc.hit_by.connect(func(who): _aggress(SkeleRealmsGlobal.entity_manager.get_entity(who).unwrap()))
+	_npc.hit_by.connect(func(who): _aggress(EntityManager.instance.get_entity(who).unwrap()))
 
 
 func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionFSM_Machine) -> void:
@@ -57,7 +57,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 	print("handling perception info")
 	print("Opinion on %s: %s" % [what, opinion])
 	var below_attack_threshold = (opinion <= attack_threshold) or aggression == 3 # will be below attack threshold by default if frenzied
-	
+
 	match transition:
 		"AwareInvisible":
 			if aggression == 0: # if peaceful
@@ -70,17 +70,17 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 		"AwareVisible":
 			if aggression == 0: # if peaceful
 				return
-			
+
 			if below_attack_threshold: # if attack threshold or frenzied
 				if not _npc.in_combat:
 					print("start vigilance")
-					var e = SkeleRealmsGlobal.entity_manager.get_entity(what).unwrap()
-					
+					var e = EntityManager.instance.get_entity(what).unwrap()
+
 					# attack immediately if frenzied
 					if aggression == 3:
 						_begin_attack(e)
 						return
-					
+
 					_enter_vigilant_stance()
 					if vigilant_thread:
 						pull_out_of_thread = true
@@ -95,7 +95,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 		"Unaware":
 			if aggression == 0: # if peaceful
 				return
-			
+
 			# if threat, do "huh?" behavior
 			if below_attack_threshold:
 				print("needs to investigate")
@@ -109,9 +109,9 @@ func _stay_vigilant(e:Entity) -> void:
 	if _npc.in_combat: # don't react if already in combat
 		_add_enemy(e)
 		return
-	
+
 	var warned:bool = false
-	
+
 	while true:
 		# check if out of world
 		if not _npc.parent_entity.world == e.world:
@@ -248,11 +248,11 @@ func _determine_threat(e:Entity) -> int:
 	# if no skills component associated with the entity, default is 0
 	if not e_sc.some():
 		return 0
-	
+
 	var npc_level = _npc.parent_entity.get_component("SkillsComponent").unwrap().level
 	var e_level = e_sc.unwrap().level
 	var difference = e_level - npc_level # negative is weaker
-	
+
 	# Check if it's a bit weaker
 	if difference < -THREAT_LEVEL_WEAKER_INTERVAL:
 		return -1

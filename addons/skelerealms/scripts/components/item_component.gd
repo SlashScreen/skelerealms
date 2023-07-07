@@ -1,4 +1,4 @@
-class_name ItemComponent 
+class_name ItemComponent
 extends EntityComponent
 ## Keeps track of item data
 
@@ -16,7 +16,7 @@ const DROP_DISTANCE:float = 2
 		if parent_entity:
 			parent_entity.supress_spawning = contained_inventory.some() # prevent spawning if item is in inventory
 ## Whether this item is in inventory or not.
-var in_inventory:bool: 
+var in_inventory:bool:
 	get:
 		return contained_inventory.some()
 ## If this is a quest item.
@@ -58,7 +58,7 @@ func _on_enter_scene():
 
 func _spawn():
 	print("spawning %s" % parent_entity.name)
-	
+
 	$"../PuppetSpawnerComponent".spawn(data.prefab)
 	($"../PuppetSpawnerComponent".get_child(0) as ItemPuppet).quaternion = parent_entity.rotation # TODO: This doesn't work.
 
@@ -74,48 +74,48 @@ func _despawn():
 
 func _process(delta):
 	if in_inventory:
-		parent_entity.position = (SkeleRealmsGlobal.entity_manager.get_entity(contained_inventory.unwrap()).unwrap() as Entity).position
-		parent_entity.world = (SkeleRealmsGlobal.entity_manager.get_entity(contained_inventory.unwrap()).unwrap() as Entity).world
+		parent_entity.position = (EntityManager.instance.get_entity(contained_inventory.unwrap()).unwrap() as Entity).position
+		parent_entity.world = (EntityManager.instance.get_entity(contained_inventory.unwrap()).unwrap() as Entity).world
 
 
 ## Move this to another inventory. Adds and removes the item from the inventories.
 func move_to_inventory(refID:String):
 	# remove from inventory if we are in one
 	if contained_inventory.some():
-		SkeleRealmsGlobal.entity_manager\
+		EntityManager.instance\
 			.get_entity(contained_inventory.unwrap())\
 			.unwrap()\
 			.get_component("InventoryComponent")\
 			.unwrap()\
 			.remove_from_inventory(parent_entity.name)
-	
+
 	# drop if moved to inventory is empty
 	if refID == "":
 		drop()
 		return
-	
+
 	# add to new inventory
-	SkeleRealmsGlobal.entity_manager\
+	EntityManager.instance\
 		.get_entity(refID)\
 		.unwrap()\
 		.get_component("InventoryComponent")\
 		.unwrap()\
 		.add_to_inventory(parent_entity.name)
-	
+
 	contained_inventory = Option.from(refID)
-	
+
 	if in_inventory:
 		_despawn()
 
 
 ## Drop this on the ground.
 func drop():
-	var e:Entity = SkeleRealmsGlobal.entity_manager.get_entity(contained_inventory.unwrap()).unwrap()
+	var e:Entity = EntityManager.instance.get_entity(contained_inventory.unwrap()).unwrap()
 	var drop_dir:Quaternion = e.rotation
 	print(drop_dir.get_euler().normalized() * DROP_DISTANCE)
-	# This whole bit is genericizing dropping the item in front of the player. It's meant to be used with the player, it should work with anything with a puppet. 
+	# This whole bit is genericizing dropping the item in front of the player. It's meant to be used with the player, it should work with anything with a puppet.
 	contained_inventory\
-		.bind(func(id:String): print(id); return SkeleRealmsGlobal.entity_manager.get_entity(id))\
+		.bind(func(id:String): print(id); return EntityManager.instance.get_entity(id))\
 		.bind(func(e:Entity): print(e); return e.get_component("InventoryComponent"))\
 		.bind(func(ic:InventoryComponent): print(ic); ic.remove_from_inventory(parent_entity.name))
 	# raycast in front of puppet if possible to do wall check
@@ -146,9 +146,9 @@ func drop():
 				contained_inventory = Option.none()
 				_spawn() # Should check if we are in scene, although nothing should drop in the Ether
 				return
-	
+
 	parent_entity.position = parent_entity.position + Vector3(0, 1.5, 0)
-	
+
 	contained_inventory = Option.none()
 	_spawn() # Should check if we are in scene, although nothing should drop in the Ether
 

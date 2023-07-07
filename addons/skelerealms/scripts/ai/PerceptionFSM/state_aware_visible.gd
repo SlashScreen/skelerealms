@@ -23,4 +23,4 @@ func update(delta:float) -> void:
 
 
 func enter(msg:Dictionary = {}) -> void:
-	e = SkeleRealmsGlobal.entity_manager.get_entity((state_machine as PerceptionFSM_Machine).tracked).unwrap()
+	e = EntityManager.instance.get_entity((state_machine as PerceptionFSM_Machine).tracked).unwrap()

@@ -1,4 +1,4 @@
-class_name InventoryComponent 
+class_name InventoryComponent
 extends EntityComponent
 ## Keeps track of an inventory.
 
@@ -25,7 +25,7 @@ func _ready() -> void:
 
 ## Add an item to the inventory.
 func add_to_inventory(id:String):
-	var e = SkeleRealmsGlobal.entity_manager.get_entity(id)
+	var e = EntityManager.instance.get_entity(id)
 	if e.some():
 		var ic = (e.unwrap() as Entity).get_component("ItemComponent")
 		if ic.some():

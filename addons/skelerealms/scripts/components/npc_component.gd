@@ -1,4 +1,4 @@
-class_name NPCComponent 
+class_name NPCComponent
 extends EntityComponent
 ## The brain for an NPC. Handles AI behavior, scheduling, combat, dialogue interactions.
 ## The component itself is a blank slate, being comprised largely of state trackers and utility functions, and will likely do nothing without an [AIModule] to determine its behavior.
@@ -79,7 +79,7 @@ var _perception_memory:Dictionary = {}
 var _combat_target:String
 ## Navigation path.
 var _path:Array[NavPoint]
-## Opinions of entities 
+## Opinions of entities
 var _opinions = {}
 
 
@@ -97,9 +97,9 @@ signal destination_reached
 signal schedule_updated(ev:ScheduleEvent)
 ## Signal emitted when this NPC enters dialogue.
 signal start_dialogue
-## Signal emitted when it warns an entity. Passes ref id of who it is warning. 
+## Signal emitted when it warns an entity. Passes ref id of who it is warning.
 signal warning(ref_id:String)
-## Signal emitted when it wants to flee from an entity. Passes ref id of who it is warning. 
+## Signal emitted when it wants to flee from an entity. Passes ref id of who it is warning.
 signal flee(ref_id:String)
 ## Signal emitted when it hears an audio event.
 signal heard_something(emitter:AudioEventEmitter)
@@ -115,7 +115,7 @@ signal draw_weapons
 signal put_away_weapons
 ## Signal emitted when the NPC is hit by somebody.
 signal hit_by(who:String)
-## Signal emitted when the NPC is hit with a particular damage effect - blunt, piercing, magic, etc. 
+## Signal emitted when the NPC is hit with a particular damage effect - blunt, piercing, magic, etc.
 signal damaged_with_effect(effect:StringName)
 ## Signal emitted when the NPC is added to a conversation.
 signal added_to_conversation
@@ -134,14 +134,14 @@ func _init(d:NPCData) -> void:
 	s.events = data.schedule
 	add_child(s)
 	_schedule = s
-	
+
 	# Set default player opinion
 	_opinions[&"Player"] = d.default_player_opinion
 
 
 func _ready():
 	super._ready()
-	
+
 	# Initialize all AI Modules
 	for module in data.modules:
 		module.link(self)
@@ -158,23 +158,23 @@ func _entity_ready() -> void:
 ## Behavior planner.
 	_goap_component = $"../GOAPComponent" as GOAPComponent
 	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
-	
+
 	# goap setup
 	_goap_component.setup(data.goap_actions)
-	
+
 	# sync nav agent
-	_puppet_component.spawned_puppet.connect(func(x:Node): 
+	_puppet_component.spawned_puppet.connect(func(x:Node):
 		_puppet = x as NPCPuppet
 		_goap_component._agent = (x as NPCPuppet).navigation_agent
 		)
-	_puppet_component.despawned_puppet.connect(func(): 
+	_puppet_component.despawned_puppet.connect(func():
 		_puppet = null
 		_goap_component._agent = null
 		)
-	
+
 	# misc setup
 	_interactive_component.interactible = data.interactive # TODO: Or instance override
-	
+
 	GameInfo.minute_incremented.connect(_calculate_new_schedule.bind())
 
 
@@ -200,7 +200,7 @@ func _process(delta):
 				_next_point() # get next point
 				parent_entity.world = _current_target_point.world # set world
 			parent_entity.position = parent_entity.position.move_toward(_current_target_point.position, delta * _walk_speed) # move towards position
-	
+
 	updated.emit(delta)
 
 
@@ -259,11 +259,11 @@ func _next_point() -> void:
 	# return early if the path has no elements
 	if _path.size() == 0:
 		return
-	
+
 	if not parent_entity.in_scene: # if we arent in scene, we follow the path exactly
 		_current_target_point = _pop_path()
 		return
-	
+
 	# we do this rigamarole because it will look weird if an NPC follows the granular path exactly
 	if _doors_in_path.size() > 0: # if we have doors
 		var next_door:int = _doors_in_path[0] # get next door
@@ -272,10 +272,10 @@ func _next_point() -> void:
 			# skip all until door
 			# TODO: Interact with door?
 			for i in range(next_door): # this will make the target point the door
-				_current_target_point = _pop_path() 
+				_current_target_point = _pop_path()
 			return
 	else: # if we dont have doors (we can assume that the destination is in same world
-		if _path.back().position.distance_to(parent_entity.position) < ProjectSettings.get_setting("skelerealms/actor_fade_distance"): 
+		if _path.back().position.distance_to(parent_entity.position) < ProjectSettings.get_setting("skelerealms/actor_fade_distance"):
 			# if the last point is close enough, skip all until until last
 			_current_target_point = _path.back()
 			# clear path
@@ -366,7 +366,7 @@ func perception_forget(who:String) -> void:
 func get_remembered_items() -> Array[String]:
 	return _perception_memory.keys()\
 			.filter(func(p:String):
-				var e = SkeleRealmsGlobal.entity_manager.get_entity(p)
+				var e = EntityManager.instance.get_entity(p)
 				if e.some():
 					return not (e.unwrap as Entity).get_component("ItemComponent") == null
 				return false
@@ -384,7 +384,7 @@ func go_to_schedule_point() -> void:
 	# Don't recalculate if we are already at point
 	if _current_schedule_event.satisfied_at_location(parent_entity):
 		return
-	
+
 	# Go to the schedule point
 	var loc = _current_schedule_event.get_event_location()
 	if loc:
@@ -396,15 +396,15 @@ func _calculate_new_schedule() -> void:
 	# Don't do this if we are not being simulated.
 	if _sim_level == SimulationLevel.NONE:
 		return
-	
+
 	var ev = _schedule.find_schedule_activity_for_current_time() # Scan schedule
-	if ev.some(): 
-		if not ev.unwrap() == _current_schedule_event: 
+	if ev.some():
+		if not ev.unwrap() == _current_schedule_event:
 			if _current_schedule_event:
 				_current_schedule_event.on_event_ended()
-			
+
 			_current_schedule_event = ev.unwrap()
-			
+
 			if _current_schedule_event.has_method("attach_npc"):
 				_current_schedule_event.attach_npc(self)
 			_current_schedule_event.on_event_started()
@@ -436,40 +436,40 @@ func get_relationship_with(ref_id:String) -> Option:
 
 ## Determines the opinion of some entity. See the tutorial in the class docs for a more in-depth look at NPC opinions.
 func determine_opinion_of(id:StringName) -> float:
-	var e:Entity = SkeleRealmsGlobal.entity_manager.get_entity(id).unwrap()
+	var e:Entity = EntityManager.instance.get_entity(id).unwrap()
 	print(e)
-	
+
 	if not THREATENING_ENTITY_TYPES.any(func(x:String): return e.get_component(x).some()): # if it doesn't have any components that are marked as threatening, return neutral.
 		return 0
-	
+
 	var e_cc = e.get_component("CovensComponent")
 	var opinions = []
 	var opinion_total = 0
-	
+
 	# calculate modifiers
 	var covens_modifier = 2 if data.loyalty == 1 else 1 # if values covens, increase modifier
 	var self_modifier = 2 if data.loyalty == 2 else 1 # ditto
-	
+
 	# if has other covens, compare against ours
 	if e_cc.some():
 		var covens = parent_entity.get_component("CovensComponent").unwrap().covens
 		var coven_opinions_unfiltered = []
 		var e_covens_component = e_cc.unwrap()
 		print(e_covens_component.get_parent())
-		
+
 		# get all opinions
 		for coven in covens:
 			var c = CovenSystem.get_coven(coven)
 			# get the other coven opinions
-			coven_opinions_unfiltered.append_array(c.get_coven_opinions(e_covens_component.covens.keys())) # FIXME: Get this coven opinions on other 
-		
+			coven_opinions_unfiltered.append_array(c.get_coven_opinions(e_covens_component.covens.keys())) # FIXME: Get this coven opinions on other
+
 		opinions.append_array(coven_opinions_unfiltered.filter(func(x:int): return not x == 0)) # filter out zeroes
 		opinion_total += opinions.size() * covens_modifier # calculate total
 	# if has an opinion of the player, take into acocunt
 	if not _opinions[id] == 0:
 		opinions.append(_opinions[id])
 		opinion_total += self_modifier # avoid 1 * self_modifier because that's an identity function so we can just do self_modifier
-	
+
 	# Return weighted average
 	return opinions.reduce(func(sum, next): return sum + next, 0) / opinion_total
 

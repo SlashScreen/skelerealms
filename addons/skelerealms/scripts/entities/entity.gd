@@ -1,4 +1,4 @@
-class_name Entity 
+class_name Entity
 extends Node
 ## An entity for the pseudo-ecs. Contains [EntityComponent]s.
 ## These allow constructs such as NPCs and Items to persist even when not in the scene.
@@ -10,7 +10,7 @@ extends Node
 @export var position:Vector3
 ## Rotation of this Enitiy.
 @export var rotation:Quaternion = Quaternion.IDENTITY
-## An internal timer of how long this entity has gone without being modified or referenced. 
+## An internal timer of how long this entity has gone without being modified or referenced.
 ## One it's beyond a certain point, the [EntityManager] will mark it for cleanup after a save.
 var stale_timer:float
 ## This is used to prevent items from spawning, even if they are supposed to be in scene.
@@ -19,7 +19,7 @@ var supress_spawning:bool
 
 
 ## Whether this entity is in the scene or not.
-var in_scene: bool: 
+var in_scene: bool:
 	get:
 		return in_scene
 	set(val):
@@ -42,21 +42,21 @@ signal instantiated
 func _init(res:InstanceData = null) -> void:
 	if not res:
 		return
-	
+
 	var new_nodes = res.get_archetype_components() # Get the entity components
 	for c in get_children(): # if this entity already exists, get rid of the components. FIXME: This is inefficient.
 		c.queue_free()
-	
+
 	name = res.ref_id # set its name to the instance refID
 	world = res.world
 	position = res.position
 	if res.has_meta("rotation"):
 		rotation = res.rotation
-	
+
 	for n in new_nodes: # add all components to entity
 		add_child(n)
 		n.owner = self
-	
+
 	# call entity ready
 	instantiated.emit()
 	for c in get_children():
@@ -87,7 +87,7 @@ func _should_be_in_scene():
 		in_scene = false
 		return
 	# if we are outside of actor fade distance
-	if position.distance_squared_to(GameInfo.active_camera.position) > ProjectSettings.get_setting("skelerealms/actor_fade_distance") ** 2: 
+	if position.distance_squared_to(GameInfo.active_camera.position) > ProjectSettings.get_setting("skelerealms/actor_fade_distance") ** 2:
 		in_scene = false
 		return
 	in_scene = true
@@ -101,7 +101,7 @@ func _on_set_rotation(q:Quaternion) -> void:
 	rotation = q
 
 
-## Gets a component by the string name. 
+## Gets a component by the string name.
 ## Example: [codeblock]
 ## (e.get_component("NPCComponent").unwrap() as NPCComponent).kill()
 ## [/codeblock]
@@ -135,7 +135,7 @@ func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If no
 func load_data(data:Dictionary) -> void:
 	world = data["entity_data"]["world"]
 	position = JSON.parse_string(data["entity_data"]["position"])
-	
+
 	# loop through all saved components and call load
 	for d in data["components"]:
 		(get_node(d) as EntityComponent).load_data(data[d])
@@ -144,7 +144,7 @@ func load_data(data:Dictionary) -> void:
 
 func reset_data() -> void:
 	# TODO: Figure out how to reset entities that are generated at runtime. oh boy that's gonna be fun.
-	var i = SkeleRealmsGlobal.entity_manager.get_disk_data_for_entity(name)
+	var i = EntityManager.instance.get_disk_data_for_entity(name)
 	if i:
 		_init(i)
 

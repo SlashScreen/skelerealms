@@ -1,6 +1,6 @@
 extends Node
 ## OBEY THE CRIME MASTER[br]
-## This keeps track of any crimes committed against various [Coven]s. 
+## This keeps track of any crimes committed against various [Coven]s.
 
 
 ## Bounty amounts for various crime severity levels.
@@ -38,13 +38,13 @@ func punish_crimes(coven:StringName):
 ## Add a crime to the record
 func add_crime(crime:Crime):
 	# add crime to covens
-	var cc = SkeleRealmsGlobal.entity_manager.get_entity(crime.victim).unwrap().get_component("CovensComponent")
+	var cc = EntityManager.instance.get_entity(crime.victim).unwrap().get_component("CovensComponent")
 	if cc.some():
 		for coven in (cc.unwrap() as CovensComponent).covens:
 			## Skip if doesn't track crime
 			if not CovenSystem.get_coven(coven).track_crime:
 				continue
-			
+
 			if crimes.has(coven):
 				crimes[coven]["unpunished"].append(crime)
 			else: # if coven doesnt have crimes against it, initialize table

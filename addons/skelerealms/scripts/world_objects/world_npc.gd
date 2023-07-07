@@ -9,5 +9,5 @@ extends InteractiveObject
 
 func _ready():
 	print("Attempting to spawn %s" % instance.ref_id)
-	print("Can we spawn %s? %s" % [instance.ref_id, SkeleRealmsGlobal.entity_manager.get_entity(instance.ref_id).some()]) # calling get_entity will cause the enity manager to start tracking this instance, if it isn't already.
+	print("Can we spawn %s? %s" % [instance.ref_id, EntityManager.instance.get_entity(instance.ref_id).some()]) # calling get_entity will cause the enity manager to start tracking this instance, if it isn't already.
 	queue_free()
