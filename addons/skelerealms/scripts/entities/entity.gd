@@ -50,7 +50,7 @@ func _init(res:InstanceData = null) -> void:
 	name = res.ref_id # set its name to the instance refID
 	world = res.world
 	position = res.position
-	if res.has_meta("rotation"):
+	if not res.get("rotation") == null:
 		rotation = res.rotation
 
 	for n in new_nodes: # add all components to entity
