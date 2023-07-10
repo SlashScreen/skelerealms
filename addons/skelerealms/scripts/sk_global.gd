@@ -44,7 +44,7 @@ func get_child_rids(child:Node) -> Array:
 
 ## Get any damageable node in parent chain or children 1 layer deep; either [DamageableObject] or [DamageableComponent]. Null if none found.
 func get_damageable_node(n:Node) -> Node:
-	return _walk_for_component(n, "DamageableCOmponent", func(x:Node): return x is DamageableObject)
+	return _walk_for_component(n, "DamageableComponent", func(x:Node): return x is DamageableObject)
 
 
 ## Get any interactible node in parent chain or children 1 layer deep; either [InteractiveObject] or [InteractiveComponent]. Null if none found.
