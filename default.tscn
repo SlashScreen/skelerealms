@@ -1,3 +1,29 @@
-[gd_scene format=3 uid="uid://sxockcmh5y77"]
+[gd_scene load_steps=6 format=3 uid="uid://sxockcmh5y77"]
+
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/network_instance.gd" id="1_k74ds"]
+[ext_resource type="Resource" uid="uid://cgd1gvxr1bf58" path="res://tests/TestAssets/test_network_1.tres" id="2_kf674"]
+[ext_resource type="Resource" uid="uid://up8agln3axee" path="res://tests/TestAssets/test_network_2.tres" id="3_m0exu"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lsby4"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_nibtc"]
+points = PackedVector3Array(-1, 0, -1, -1, 0, 1, 1, 0, -1, 1, 0, 1)
 
 [node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(4.43723, 0, 0, 0, 1, 0, 0, 0, 4.40917, 0, 0, 0)
+mesh = SubResource("PlaneMesh_lsby4")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_nibtc")
+
+[node name="NetworkInstance" type="Node3D" parent="."]
+script = ExtResource("1_k74ds")
+network = ExtResource("2_kf674")
+
+[node name="NetworkInstance2" type="Node3D" parent="."]
+script = ExtResource("1_k74ds")
+network = ExtResource("3_m0exu")

@@ -1,0 +1,99 @@
+[gd_resource type="Resource" script_class="Network" load_steps=20 format=3 uid="uid://up8agln3axee"]
+
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/network_point.gd" id="1_koobd"]
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/network_portal.gd" id="2_8mkkq"]
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/network_edge.gd" id="3_03gn3"]
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/network.gd" id="4_0srh3"]
+[ext_resource type="Resource" uid="uid://dkcwrbnbaogcb" path="res://tests/TestAssets/portal_1.tres" id="4_g5ao4"]
+
+[sub_resource type="Resource" id="Resource_74h7t"]
+script = ExtResource("1_koobd")
+position = Vector3(-3.82321, 0, -2.20559)
+
+[sub_resource type="Resource" id="Resource_3klvo"]
+script = ExtResource("2_8mkkq")
+position = Vector3(2.26653, -2.98023e-08, -3.24677)
+
+[sub_resource type="Resource" id="Resource_8wdqg"]
+script = ExtResource("3_03gn3")
+point_a = SubResource("Resource_74h7t")
+point_b = SubResource("Resource_3klvo")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_1wfey"]
+script = ExtResource("1_koobd")
+position = Vector3(1.24864, -4.76837e-07, 2.37166)
+
+[sub_resource type="Resource" id="Resource_ui7hu"]
+script = ExtResource("3_03gn3")
+point_a = SubResource("Resource_1wfey")
+point_b = SubResource("Resource_74h7t")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_0u4ho"]
+script = ExtResource("1_koobd")
+position = Vector3(2.05532, 0, -3.90896)
+
+[sub_resource type="Resource" id="Resource_hkr0t"]
+script = ExtResource("3_03gn3")
+point_a = SubResource("Resource_74h7t")
+point_b = SubResource("Resource_0u4ho")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_jaep4"]
+script = ExtResource("1_koobd")
+position = Vector3(3.35381, 0, 3.00251)
+
+[sub_resource type="Resource" id="Resource_r7wd6"]
+script = ExtResource("3_03gn3")
+point_a = SubResource("Resource_jaep4")
+point_b = SubResource("Resource_1wfey")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_wyxvg"]
+script = ExtResource("2_8mkkq")
+position = Vector3(-1.112, 0, 3.13803)
+
+[sub_resource type="Resource" id="Resource_8c0nt"]
+script = ExtResource("3_03gn3")
+point_a = SubResource("Resource_wyxvg")
+point_b = SubResource("Resource_1wfey")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_6smmb"]
+script = ExtResource("1_koobd")
+position = Vector3(3.52989, 0, -2.25707)
+
+[sub_resource type="Resource" id="Resource_a5tqx"]
+script = ExtResource("3_03gn3")
+point_a = SubResource("Resource_6smmb")
+point_b = SubResource("Resource_jaep4")
+cost = 1.0
+bidirectional = true
+
+[sub_resource type="Resource" id="Resource_4qh84"]
+script = ExtResource("3_03gn3")
+point_a = SubResource("Resource_0u4ho")
+point_b = SubResource("Resource_6smmb")
+cost = 1.0
+bidirectional = true
+
+[resource]
+script = ExtResource("4_0srh3")
+points = Array[ExtResource("1_koobd")]([SubResource("Resource_74h7t"), SubResource("Resource_1wfey"), SubResource("Resource_jaep4"), SubResource("Resource_6smmb"), SubResource("Resource_0u4ho"), SubResource("Resource_wyxvg")])
+edges = Array[ExtResource("3_03gn3")]([SubResource("Resource_8wdqg"), SubResource("Resource_ui7hu"), SubResource("Resource_r7wd6"), SubResource("Resource_a5tqx"), SubResource("Resource_4qh84"), SubResource("Resource_hkr0t"), SubResource("Resource_8c0nt")])
+edge_map = {
+SubResource("Resource_74h7t"): [SubResource("Resource_8wdqg"), SubResource("Resource_ui7hu"), SubResource("Resource_hkr0t")],
+SubResource("Resource_3klvo"): [SubResource("Resource_8wdqg")],
+SubResource("Resource_1wfey"): [SubResource("Resource_ui7hu"), SubResource("Resource_r7wd6"), SubResource("Resource_8c0nt")],
+SubResource("Resource_jaep4"): [SubResource("Resource_r7wd6"), SubResource("Resource_a5tqx")],
+SubResource("Resource_6smmb"): [SubResource("Resource_a5tqx"), SubResource("Resource_4qh84")],
+SubResource("Resource_0u4ho"): [SubResource("Resource_4qh84"), SubResource("Resource_hkr0t")],
+SubResource("Resource_wyxvg"): [SubResource("Resource_8c0nt")]
+}
+portals = Array[ExtResource("2_8mkkq")]([ExtResource("4_g5ao4")])

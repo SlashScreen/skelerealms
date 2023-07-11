@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="1" >
-  <testsuite name="res://tests/test_npc.gd" tests="0" failures="0" skipped="0" >
-      </testsuite>
-  <testsuite name="res://tests/test_npc.gd.TestSpells" tests="0" failures="0" skipped="0" >
-      </testsuite>
-  <testsuite name="res://tests/test_npc.gd.TestDamage" tests="0" failures="0" skipped="0" >
-      </testsuite>
-  <testsuite name="res://tests/test_npc.gd.TestNavigation" tests="0" failures="0" skipped="0" >
-      </testsuite>
-  <testsuite name="res://tests/test_npc.gd.TestSchedule" tests="0" failures="0" skipped="0" >
-      </testsuite>
-  <testsuite name="res://tests/test_npc.gd.TestGOAP" tests="1" failures="0" skipped="0" >
-      <testcase name="test_plan_execution" assertions="2" status="pass" classname="res://tests/test_npc.gd.TestGOAP" >
+<testsuites name="GutTests" failures="0" tests="4" >
+  <testsuite name="res://tests/test_navmaster.gd" tests="4" failures="0" skipped="0" >
+      <testcase name="test_load" assertions="1" status="pass" classname="res://tests/test_navmaster.gd" >
+      </testcase>
+      <testcase name="test_build_network" assertions="4" status="pass" classname="res://tests/test_navmaster.gd" >
+      </testcase>
+      <testcase name="test_find_closest_point" assertions="1" status="pass" classname="res://tests/test_navmaster.gd" >
+      </testcase>
+      <testcase name="test_find_path" assertions="1" status="pass" classname="res://tests/test_navmaster.gd" >
       </testcase>
       </testsuite>
   </testsuites>

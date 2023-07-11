@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="NetworkPortal" load_steps=3 format=3 uid="uid://d064sbijblwy5"]
+
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/network_portal.gd" id="1_7ohdj"]
+[ext_resource type="Resource" uid="uid://dkcwrbnbaogcb" path="res://tests/TestAssets/portal_1.tres" id="1_w4vol"]
+
+[resource]
+script = ExtResource("1_7ohdj")
+destination_point = ExtResource("1_w4vol")
+position = Vector3(2.26653, -2.98023e-08, -3.24677)

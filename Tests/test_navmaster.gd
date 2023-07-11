@@ -19,7 +19,7 @@ func find_closest_brute_force(goal:Vector3, nodes:Array) -> Vector3:
 
 
 func before_all() -> void:
-	ndata = load("res://Tests/TestAssets/test network2.tres")
+	ndata = load("res://tests/TestAssets/test_network_1.tres")
 
 
 func before_each() -> void:
