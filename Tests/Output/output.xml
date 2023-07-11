@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="3" >
-  <testsuite name="res://tests/test_crime.gd" tests="3" failures="0" skipped="0" >
-      <testcase name="test_add_crime" assertions="1" status="pass" classname="res://tests/test_crime.gd" >
+<testsuites name="GutTests" failures="0" tests="5" >
+  <testsuite name="res://tests/test_inventory.gd" tests="5" failures="0" skipped="0" >
+      <testcase name="test_add" assertions="1" status="pass" classname="res://tests/test_inventory.gd" >
       </testcase>
-      <testcase name="test_bounty" assertions="1" status="pass" classname="res://tests/test_crime.gd" >
+      <testcase name="test_remove" assertions="2" status="pass" classname="res://tests/test_inventory.gd" >
       </testcase>
-      <testcase name="test_coven_opinion_change" assertions="1" status="pass" classname="res://tests/test_crime.gd" >
+      <testcase name="test_transfer" assertions="4" status="pass" classname="res://tests/test_inventory.gd" >
+      </testcase>
+      <testcase name="test_equip" assertions="2" status="pass" classname="res://tests/test_inventory.gd" >
+      </testcase>
+      <testcase name="test_drop" assertions="2" status="pass" classname="res://tests/test_inventory.gd" >
       </testcase>
       </testsuite>
   </testsuites>

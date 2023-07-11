@@ -1,6 +1,9 @@
 extends GutTest
 
 
+#const test_item_1:ItemInstance = preload("res://tests/TestAssets/test_item_instance_1.tres")
+#const test_item_2:ItemInstance = preload("res://tests/TestAssets/test_item_instance_2.tres")
+
 var em:EntityManager
 var e1:Entity
 var e2:Entity
@@ -14,8 +17,8 @@ var item2:Entity
 func before_each() -> void:
 	em = autofree(EntityManager.new())
 	# set up an item
-	item1 = em.add_entity(load("res://Tests/TestAssets/test_item_instance_1.tres"))
-	item2 = em.add_entity(load("res://Tests/TestAssets/test_item_instance_2.tres"))
+	item1 = em.add_entity(ResourceLoader.load("res://tests/TestAssets/test_item_instance_1.tres"))
+	item2 = em.add_entity(ResourceLoader.load("res://tests/TestAssets/test_item_instance_2.tres"))
 	# set up 2 test inventories and equips
 	e1 = Entity.new()
 	e1.name = &"inventory1"
