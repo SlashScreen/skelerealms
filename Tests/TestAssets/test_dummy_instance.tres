@@ -1,11 +1,257 @@
-[gd_resource type="Resource" script_class="NPCInstance" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="NPCInstance" load_steps=32 format=3 uid="uid://bi7mkouc7rrft"]
 
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/InstanceData/npc_instance.gd" id="1_50aqu"]
-[ext_resource type="Resource" uid="uid://dnxrsrs4jlcxu" path="res://Tests/TestAssets/test_dummy.tres" id="1_y7ebi"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/instance_data/npc_instance.gd" id="1_8h3ov"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/data/npc_data.gd" id="1_61fwf"]
+[ext_resource type="Script" path="res://tests/TestAssets/test_conditional_goap_behavior.gd" id="1_v6l3j"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/ai/Modules/default_damage_module.gd" id="2_7m8rq"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/ai/goap_behavior.gd" id="2_c5ege"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/ai/Modules/default_interact_response.gd" id="3_duqb2"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/ai/Modules/default_threat_response.gd" id="4_663ow"]
+[ext_resource type="PackedScene" uid="uid://24i73ycvxysf" path="res://test_npc_prefab.tscn" id="5_uixqd"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/schedules/sandbox_schedule.gd" id="6_d0nvc"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/system/timestamp.gd" id="6_qfkdr"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/schedules/continuity_condition.gd" id="8_lque1"]
+
+[sub_resource type="Resource" id="Resource_25lcs"]
+script = ExtResource("2_c5ege")
+id = &"action a"
+prerequisites = {}
+effects = {
+"objective1": true
+}
+cost = 1.0
+duration = 0.0
+
+[sub_resource type="Resource" id="Resource_c4ckc"]
+script = ExtResource("2_c5ege")
+id = &"action b"
+prerequisites = {
+"objective1": true
+}
+effects = {
+"objective2": true
+}
+cost = 1.0
+duration = 0.0
+
+[sub_resource type="Resource" id="Resource_gy3k0"]
+script = ExtResource("2_c5ege")
+id = &"action c"
+prerequisites = {
+"objective2": true
+}
+effects = {
+"goal": true
+}
+cost = 1.0
+duration = 0.0
+
+[sub_resource type="Resource" id="Resource_ykxhm"]
+script = ExtResource("2_c5ege")
+id = &"action d"
+prerequisites = {
+"objective1": true
+}
+effects = {
+"objective2": true
+}
+cost = 2.0
+duration = 0.0
+
+[sub_resource type="Resource" id="Resource_dnfjv"]
+script = ExtResource("1_v6l3j")
+id = &"action e"
+prerequisites = {
+"objective1": true
+}
+effects = {
+"objective2": true
+}
+cost = 0.5
+duration = 0.0
+
+[sub_resource type="Resource" id="Resource_jnaev"]
+script = ExtResource("2_c5ege")
+id = &"action f"
+prerequisites = {
+"objective2": true
+}
+effects = {
+"priority": true
+}
+cost = 1.0
+duration = 0.0
+
+[sub_resource type="Resource" id="Resource_hnvue"]
+script = ExtResource("2_7m8rq")
+sharp_modifier = 1.0
+piercing_modifier = 1.0
+blunt_modifier = 1.0
+poison_modifier = 1.0
+magic_modifier = 1.0
+light_modifier = 1.0
+frost_modifier = 1.0
+flame_modifier = 1.0
+plant_modifier = 1.0
+stamina_modifier = 1.0
+will_modifier = 1.0
+
+[sub_resource type="Resource" id="Resource_kmiqo"]
+script = ExtResource("3_duqb2")
+
+[sub_resource type="Resource" id="Resource_lrq0m"]
+script = ExtResource("4_663ow")
+aggression = 2
+attack_threshold = -50
+confidence = 2
+assistance = 1
+assistance_threshold = 0
+friendly_fire_behavior = 1
+warn_radius = 20.0
+attack_radius = 8.0
+
+[sub_resource type="Resource" id="Resource_x75qb"]
+script = ExtResource("6_qfkdr")
+compare = 2
+minute = 0
+hour = 0
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_bg22q"]
+script = ExtResource("6_qfkdr")
+compare = 2
+minute = 0
+hour = 2
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_qmeeq"]
+script = ExtResource("6_d0nvc")
+energy = 0.0
+can_swim = false
+can_sit = true
+can_eat = true
+can_sleep = true
+can_engage_conversation = true
+use_idle_points = true
+be_at_location = true
+location_position = Vector3(0, 0, 0)
+location_world = ""
+target_radius = 25.0
+name = ""
+from = SubResource("Resource_x75qb")
+to = SubResource("Resource_bg22q")
+priority = 0.0
+
+[sub_resource type="Resource" id="Resource_bja6w"]
+script = ExtResource("6_qfkdr")
+compare = 2
+minute = 0
+hour = 2
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_v5wll"]
+script = ExtResource("6_qfkdr")
+compare = 2
+minute = 0
+hour = 8
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_5tixp"]
+script = ExtResource("6_d0nvc")
+energy = 0.0
+can_swim = false
+can_sit = true
+can_eat = true
+can_sleep = true
+can_engage_conversation = true
+use_idle_points = true
+be_at_location = true
+location_position = Vector3(0, 0, 0)
+location_world = ""
+target_radius = 25.0
+name = ""
+from = SubResource("Resource_bja6w")
+to = SubResource("Resource_v5wll")
+priority = 0.0
+
+[sub_resource type="Resource" id="Resource_sjntr"]
+script = ExtResource("8_lque1")
+flag = "test"
+value = 1.0
+
+[sub_resource type="Resource" id="Resource_cogj1"]
+script = ExtResource("6_qfkdr")
+compare = 2
+minute = 0
+hour = 2
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_2dscn"]
+script = ExtResource("6_qfkdr")
+compare = 2
+minute = 0
+hour = 8
+day = 0
+week = 0
+month = 0
+year = 0
+
+[sub_resource type="Resource" id="Resource_s66rb"]
+script = ExtResource("6_d0nvc")
+energy = 0.0
+can_swim = false
+can_sit = true
+can_eat = true
+can_sleep = true
+can_engage_conversation = true
+use_idle_points = true
+be_at_location = true
+location_position = Vector3(0, 0, 0)
+location_world = ""
+target_radius = 25.0
+name = "schedule overridden"
+from = SubResource("Resource_cogj1")
+to = SubResource("Resource_2dscn")
+condition = SubResource("Resource_sjntr")
+priority = 2.0
+
+[sub_resource type="Resource" id="Resource_0h8if"]
+script = ExtResource("1_61fwf")
+prefab = ExtResource("5_uixqd")
+schedule = Array[Resource("res://addons/skelerealms/scripts/schedules/schedule_event.gd")]([SubResource("Resource_qmeeq"), SubResource("Resource_5tixp"), SubResource("Resource_s66rb")])
+covens = Array[Resource("res://addons/skelerealms/scripts/covens/coven_rank_data.gd")]([])
+default_player_opinion = 0
+loyalty = 0
+essential = true
+ghost = false
+invulnerable = false
+unique = true
+affects_stealth_meter = true
+start_dialogue_node = ""
+interactive = true
+relationships = Array[Resource("res://addons/skelerealms/scripts/relationships/relationship.gd")]([])
+modules = Array[Object]([SubResource("Resource_hnvue"), SubResource("Resource_kmiqo"), SubResource("Resource_lrq0m")])
+goap_actions = Array[ExtResource("2_c5ege")]([SubResource("Resource_25lcs"), SubResource("Resource_c4ckc"), SubResource("Resource_gy3k0"), SubResource("Resource_ykxhm"), SubResource("Resource_dnfjv"), SubResource("Resource_jnaev")])
+id = "test_dummy"
 
 [resource]
-script = ExtResource("1_50aqu")
-npc_data = ExtResource("1_y7ebi")
+script = ExtResource("1_8h3ov")
+npc_data = SubResource("Resource_0h8if")
 ref_id = "test_dummy"
-world = "none"
+world = "test_world"
 position = Vector3(0, 0, 0)

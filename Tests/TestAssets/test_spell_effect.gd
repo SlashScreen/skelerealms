@@ -1,3 +1,4 @@
+class_name TestSpellEffect
 extends SpellEffect
 
 

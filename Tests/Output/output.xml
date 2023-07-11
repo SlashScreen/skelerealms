@@ -1,123 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="45" >
-  <testsuite name="res://Tests/test_attributes.gd" tests="2" failures="0" skipped="0" >
-      <testcase name="test_save" assertions="1" status="pass" classname="res://Tests/test_attributes.gd" >
-      </testcase>
-      <testcase name="test_load" assertions="1" status="pass" classname="res://Tests/test_attributes.gd" >
-      </testcase>
+<testsuites name="GutTests" failures="0" tests="1" >
+  <testsuite name="res://tests/test_npc.gd" tests="0" failures="0" skipped="0" >
       </testsuite>
-  <testsuite name="res://Tests/test_core.gd" tests="0" failures="0" skipped="0" >
+  <testsuite name="res://tests/test_npc.gd.TestSpells" tests="0" failures="0" skipped="0" >
       </testsuite>
-  <testsuite name="res://Tests/test_core.gd.TestInScene" tests="4" failures="0" skipped="0" >
-      <testcase name="test_in_world" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestInScene" >
-      </testcase>
-      <testcase name="test_out_of_world" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestInScene" >
-      </testcase>
-      <testcase name="test_in_world_out_range" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestInScene" >
-      </testcase>
-      <testcase name="test_out_world_out_range" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestInScene" >
-      </testcase>
+  <testsuite name="res://tests/test_npc.gd.TestDamage" tests="0" failures="0" skipped="0" >
       </testsuite>
-  <testsuite name="res://Tests/test_core.gd.TestActivityTimers" tests="2" failures="0" skipped="0" >
-      <testcase name="test_stale_timer" assertions="2" status="pass" classname="res://Tests/test_core.gd.TestActivityTimers" >
-      </testcase>
-      <testcase name="test_poke" assertions="1" status="pass" classname="res://Tests/test_core.gd.TestActivityTimers" >
-      </testcase>
+  <testsuite name="res://tests/test_npc.gd.TestNavigation" tests="0" failures="0" skipped="0" >
       </testsuite>
-  <testsuite name="res://Tests/test_crime.gd" tests="3" failures="0" skipped="0" >
-      <testcase name="test_add_crime" assertions="1" status="pass" classname="res://Tests/test_crime.gd" >
-      </testcase>
-      <testcase name="test_bounty" assertions="1" status="pass" classname="res://Tests/test_crime.gd" >
-      </testcase>
-      <testcase name="test_coven_opinion_change" assertions="1" status="pass" classname="res://Tests/test_crime.gd" >
-      </testcase>
+  <testsuite name="res://tests/test_npc.gd.TestSchedule" tests="0" failures="0" skipped="0" >
       </testsuite>
-  <testsuite name="res://Tests/test_inventory.gd" tests="5" failures="0" skipped="0" >
-      <testcase name="test_add" assertions="1" status="pass" classname="res://Tests/test_inventory.gd" >
-      </testcase>
-      <testcase name="test_remove" assertions="2" status="pass" classname="res://Tests/test_inventory.gd" >
-      </testcase>
-      <testcase name="test_transfer" assertions="4" status="pass" classname="res://Tests/test_inventory.gd" >
-      </testcase>
-      <testcase name="test_equip" assertions="2" status="pass" classname="res://Tests/test_inventory.gd" >
-      </testcase>
-      <testcase name="test_drop" assertions="2" status="pass" classname="res://Tests/test_inventory.gd" >
-      </testcase>
-      </testsuite>
-  <testsuite name="res://Tests/test_merchant.gd" tests="4" failures="0" skipped="0" >
-      <testcase name="test_sell" assertions="2" status="pass" classname="res://Tests/test_merchant.gd" >
-      </testcase>
-      <testcase name="test_buy" assertions="2" status="pass" classname="res://Tests/test_merchant.gd" >
-      </testcase>
-      <testcase name="test_sell_modifier" assertions="2" status="pass" classname="res://Tests/test_merchant.gd" >
-      </testcase>
-      <testcase name="test_buy_modifier" assertions="2" status="pass" classname="res://Tests/test_merchant.gd" >
-      </testcase>
-      </testsuite>
-  <testsuite name="res://Tests/test_navmaster.gd" tests="4" failures="0" skipped="0" >
-      <testcase name="test_load" assertions="1" status="pass" classname="res://Tests/test_navmaster.gd" >
-      </testcase>
-      <testcase name="test_build_network" assertions="5" status="pass" classname="res://Tests/test_navmaster.gd" >
-      </testcase>
-      <testcase name="test_find_closest_point" assertions="1" status="pass" classname="res://Tests/test_navmaster.gd" >
-      </testcase>
-      <testcase name="test_find_path" assertions="1" status="pass" classname="res://Tests/test_navmaster.gd" >
-      </testcase>
-      </testsuite>
-  <testsuite name="res://Tests/test_npc.gd" tests="0" failures="0" skipped="0" >
-      </testsuite>
-  <testsuite name="res://Tests/test_npc.gd.TestSpells" tests="3" failures="0" skipped="0" >
-      <testcase name="test_spell_apply" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestSpells" >
-      </testcase>
-      <testcase name="test_spell_damage" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestSpells" >
-      </testcase>
-      <testcase name="test_spell_autoremoval" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestSpells" >
-      </testcase>
-      </testsuite>
-  <testsuite name="res://Tests/test_npc.gd.TestDamage" tests="5" failures="0" skipped="0" >
-      <testcase name="test_blunt_damage" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestDamage" >
-      </testcase>
-      <testcase name="test_resistance" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestDamage" >
-      </testcase>
-      <testcase name="test_stacked_magic_resistance" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestDamage" >
-      </testcase>
-      <testcase name="test_stamina_damage" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestDamage" >
-      </testcase>
-      <testcase name="test_will_damage" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestDamage" >
-      </testcase>
-      </testsuite>
-  <testsuite name="res://Tests/test_npc.gd.TestNavigation" tests="0" failures="0" skipped="0" >
-      </testsuite>
-  <testsuite name="res://Tests/test_npc.gd.TestSchedule" tests="2" failures="0" skipped="0" >
-      <testcase name="test_different_hours" assertions="2" status="pass" classname="res://Tests/test_npc.gd.TestSchedule" >
-      </testcase>
-      <testcase name="test_conditional" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestSchedule" >
-      </testcase>
-      </testsuite>
-  <testsuite name="res://Tests/test_npc.gd.TestGOAP" tests="5" failures="0" skipped="0" >
-      <testcase name="test_plan_creation" assertions="2" status="pass" classname="res://Tests/test_npc.gd.TestGOAP" >
-      </testcase>
-      <testcase name="test_conditional_path" assertions="2" status="pass" classname="res://Tests/test_npc.gd.TestGOAP" >
-      </testcase>
-      <testcase name="test_plan_execution" assertions="2" status="pass" classname="res://Tests/test_npc.gd.TestGOAP" >
-      </testcase>
-      <testcase name="test_repeating_goals" assertions="1" status="pass" classname="res://Tests/test_npc.gd.TestGOAP" >
-      </testcase>
-      <testcase name="test_goal_priority" assertions="2" status="pass" classname="res://Tests/test_npc.gd.TestGOAP" >
-      </testcase>
-      </testsuite>
-  <testsuite name="res://Tests/test_skills.gd" tests="6" failures="0" skipped="0" >
-      <testcase name="test_default_level" assertions="1" status="pass" classname="res://Tests/test_skills.gd" >
-      </testcase>
-      <testcase name="test_manual_level" assertions="1" status="pass" classname="res://Tests/test_skills.gd" >
-      </testcase>
-      <testcase name="test_save_default" assertions="1" status="pass" classname="res://Tests/test_skills.gd" >
-      </testcase>
-      <testcase name="test_save_manual" assertions="1" status="pass" classname="res://Tests/test_skills.gd" >
-      </testcase>
-      <testcase name="test_load_default" assertions="2" status="pass" classname="res://Tests/test_skills.gd" >
-      </testcase>
-      <testcase name="test_load_manual" assertions="2" status="pass" classname="res://Tests/test_skills.gd" >
+  <testsuite name="res://tests/test_npc.gd.TestGOAP" tests="1" failures="0" skipped="0" >
+      <testcase name="test_plan_execution" assertions="2" status="pass" classname="res://tests/test_npc.gd.TestGOAP" >
       </testcase>
       </testsuite>
   </testsuites>

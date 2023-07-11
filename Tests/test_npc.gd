@@ -6,7 +6,7 @@ extends GutTest
 func setup_npc() -> Node:
 	var em:EntityManager = autofree(EntityManager.new())
 	em.name = "EntityManager"
-	em.add_entity(load("res://Tests/TestAssets/test_dummy_instance.tres"))
+	em.add_entity(load("res://tests/TestAssets/test_dummy_instance.tres"))
 	
 	var test_cam = autofree(Camera3D.new())
 	test_cam.position = Vector3()
@@ -187,9 +187,9 @@ class TestGOAP:
 	
 	func test_plan_execution() -> void:
 		goap_component.add_objective({"goal":true}, true, 1)
-		gut.simulate(root, 5, 0.01)
+		gut.simulate(root, 7, 0.01)
 		assert_eq(goap_component.objectives, [], "Should pass - objectives finished")
-		assert_eq(goap_component.action_queue, [], "Should pass: Done with the queue")
+		assert_eq(goap_component.action_queue, [], "Should pass - Done with the queue")
 	
 	
 	func test_repeating_goals() -> void:

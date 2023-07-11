@@ -70,7 +70,7 @@ signal game_started
 
 
 func _ready():
-	name = "GameInfo"
+	set_name.call_deferred("GameInfo")
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	

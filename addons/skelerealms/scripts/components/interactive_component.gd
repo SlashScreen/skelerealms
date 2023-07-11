@@ -14,10 +14,6 @@ signal interacted(id:String)
 func _init() -> void:
 	name = "InteractiveComponent"
 
-
-func _ready():
-	name = "InteractiveComponent"
-
 ## Interact with this as the player.
 ## Shorthand for [codeblock] interact("Player") [/codeblock].
 func interact_by_player():
