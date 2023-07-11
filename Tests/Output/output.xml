@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="GutTests" failures="0" tests="4" >
-  <testsuite name="res://tests/test_navmaster.gd" tests="4" failures="0" skipped="0" >
-      <testcase name="test_load" assertions="1" status="pass" classname="res://tests/test_navmaster.gd" >
+<testsuites name="GutTests" failures="0" tests="3" >
+  <testsuite name="res://tests/test_crime.gd" tests="3" failures="0" skipped="0" >
+      <testcase name="test_add_crime" assertions="1" status="pass" classname="res://tests/test_crime.gd" >
       </testcase>
-      <testcase name="test_build_network" assertions="4" status="pass" classname="res://tests/test_navmaster.gd" >
+      <testcase name="test_bounty" assertions="1" status="pass" classname="res://tests/test_crime.gd" >
       </testcase>
-      <testcase name="test_find_closest_point" assertions="1" status="pass" classname="res://tests/test_navmaster.gd" >
-      </testcase>
-      <testcase name="test_find_path" assertions="1" status="pass" classname="res://tests/test_navmaster.gd" >
+      <testcase name="test_coven_opinion_change" assertions="1" status="pass" classname="res://tests/test_crime.gd" >
       </testcase>
       </testsuite>
   </testsuites>

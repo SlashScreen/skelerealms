@@ -241,13 +241,14 @@ func connect_nodes(a:NavNode, b:NavNode, cost:float) -> void:
 ## Build a series of KD Trees from [Netowrk]s. Dictionary assumes the key is the world name, and the value is the network.
 func _load_from_networks(data:Dictionary):
 	# thank god we use RC instead of GC but this is still memory heavy
+	# TODO: COnvert to a system using packed arrays and indices. Will be *far* more memory efficient, but a bit difficult to reason about, which is why I did it this way first.
 	# use dictionary to hold the point and the new node it contains, to avoid duplicates and to have lookups later
 	var added_nodes = {}
 	var edges = []
 	var portals = []
 	# add each point from each network
 	for world in data:
-		print("processing %s" % world)
+		print("loading world network %s" % world)
 		edges.append_array(data[world].edges)
 		portals.append_array(data[world].portals)
 		for point in data[world].points + data[world].portals:

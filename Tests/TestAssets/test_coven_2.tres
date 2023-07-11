@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Coven" load_steps=2 format=3 uid="uid://dolmjc3wmga5k"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/covens/coven.gd" id="1_hwahn"]
+
+[resource]
+script = ExtResource("1_hwahn")
+coven_id = &"gut_test_coven_1"
+other_coven_opinions = {}
+hidden_from_player = false
+ranks = {}
+ignore_crimes_against_others = false
+ignore_crimes_against_members = false
+track_crime = true
