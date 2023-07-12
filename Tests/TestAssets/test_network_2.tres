@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="Network" load_steps=20 format=3 uid="uid://up8agln3axee"]
+[gd_resource type="Resource" script_class="Network" load_steps=23 format=3 uid="uid://up8agln3axee"]
 
 [ext_resource type="Script" path="res://addons/network_utility/Scripts/network_point.gd" id="1_koobd"]
 [ext_resource type="Script" path="res://addons/network_utility/Scripts/network_portal.gd" id="2_8mkkq"]
 [ext_resource type="Script" path="res://addons/network_utility/Scripts/network_edge.gd" id="3_03gn3"]
 [ext_resource type="Script" path="res://addons/network_utility/Scripts/network.gd" id="4_0srh3"]
 [ext_resource type="Resource" uid="uid://dkcwrbnbaogcb" path="res://tests/TestAssets/portal_1.tres" id="4_g5ao4"]
+[ext_resource type="Resource" uid="uid://d064sbijblwy5" path="res://tests/TestAssets/portal_2.tres" id="4_tm0me"]
+[ext_resource type="Script" path="res://addons/network_utility/Scripts/portal_edge.gd" id="6_t8nam"]
 
 [sub_resource type="Resource" id="Resource_74h7t"]
 script = ExtResource("1_koobd")
@@ -83,6 +85,11 @@ point_b = SubResource("Resource_6smmb")
 cost = 1.0
 bidirectional = true
 
+[sub_resource type="Resource" id="Resource_527bp"]
+script = ExtResource("6_t8nam")
+portal_from = ExtResource("4_tm0me")
+portal_to = ExtResource("4_g5ao4")
+
 [resource]
 script = ExtResource("4_0srh3")
 points = Array[ExtResource("1_koobd")]([SubResource("Resource_74h7t"), SubResource("Resource_1wfey"), SubResource("Resource_jaep4"), SubResource("Resource_6smmb"), SubResource("Resource_0u4ho"), SubResource("Resource_wyxvg")])
@@ -97,3 +104,4 @@ SubResource("Resource_0u4ho"): [SubResource("Resource_4qh84"), SubResource("Reso
 SubResource("Resource_wyxvg"): [SubResource("Resource_8c0nt")]
 }
 portals = Array[ExtResource("2_8mkkq")]([ExtResource("4_g5ao4")])
+portal_edges = Array[ExtResource("6_t8nam")]([SubResource("Resource_527bp")])

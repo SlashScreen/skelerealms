@@ -12,7 +12,8 @@ extends Resource
 @export var edge_map:Dictionary = {}
 ## The portals this network has.
 @export var portals:Array[NetworkPortal] = []
-
+## Connections between worlds
+@export var portal_edges:Array[PortalEdge] = []
 
 signal redraw
 

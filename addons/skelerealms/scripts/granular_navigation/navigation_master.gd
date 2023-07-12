@@ -246,22 +246,24 @@ func _load_from_networks(data:Dictionary):
 	var added_nodes = {}
 	var edges = []
 	var portals = []
+	var portal_edges = []
 	# add each point from each network
 	for world in data:
 		print("loading world network %s" % world)
 		edges.append_array(data[world].edges)
 		portals.append_array(data[world].portals)
+		portal_edges.append(data[world].portal_edges)
+		
 		for point in data[world].points + data[world].portals:
 			added_nodes[point] = add_point(world, point.position)
 	# then go back and connect edges and portals, using the dictionary as a lookup
 	for edge in edges:
 		connect_nodes(added_nodes[edge.point_a], added_nodes[edge.point_b], edge.cost)
-	for portal in portals:
-		if not portal.destination_point == null:
-			if added_nodes.has(portal.destination_point):
-				connect_nodes(added_nodes[portal], added_nodes[portal.destination_point], 0)
-			else:
-				print("Unable to make portal connection from portal at world %s position %s. Ensure that connecting world is loaded." % [added_nodes[portal].world, added_nodes[portal].position])
+	for edge in portal_edges:
+		if added_nodes.has(edge.portal_from) and added_nodes.has(edge.portal_to):
+			connect_nodes(added_nodes[edge.portal_from], added_nodes[edge.portal_to], 0)
+		else:
+			print("Unable to make portal connection. Ensure that connecting world is loaded.")
 
 
 func _load_from_disk(path:String, networks:Dictionary, regex:RegEx) -> void:
