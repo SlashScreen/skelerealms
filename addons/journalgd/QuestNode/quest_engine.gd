@@ -6,6 +6,8 @@ extends Node
 ## When functions ask for a "Quest path", they are referring to a string in the format of [code]quest_name/step_name/goal_name[/code].
 
 
+static var instance:QuestEngine
+
 ## Array of IDs of all the quests that are currently active.
 var active_quests: Array[String]
 ## Array of IDs of all the quests the player has completed.
@@ -21,6 +23,10 @@ signal goal_updated(quest_path:String, data:Dictionary)
 signal step_updated(quest_path:String, data:Dictionary)
 ## Emitted when a quest updates.
 signal quest_updated(quest_path:String, data:Dictionary)
+
+
+func _ready() -> void:
+	instance = self
 
 
 ## Loads all quests from the [code]biznasty/quests_directory[/code] project setting, and then instantiates them as child [QuestObject]s.
