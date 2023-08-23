@@ -12,6 +12,12 @@ func _init() -> void:
 
 func _ready():
 	($"../TeleportComponent" as TeleportComponent).teleporting.connect(teleport.bind())
+	(parent_entity.get_component("DamageableComponent").unwrap() as DamageableComponent).damaged.connect(on_damage.bind())
+
+
+func on_damage(info:DamageInfo) -> void:
+	# TODO: Genericize, calculate buffs and debuffs
+	(parent_entity.get_component("VitalsComponent").unwrap() as VitalsComponent).change_health(-info.damage_effects[&"blunt"])
 
 
 ## Set the entity's position.
@@ -24,6 +30,8 @@ func set_entity_rotation(q:Quaternion) -> void:
 
 
 func _process(delta):
+	parent_entity.world = GameInfo.world
+	
 	if _set_up:
 		return
 	

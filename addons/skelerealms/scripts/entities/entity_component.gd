@@ -43,3 +43,12 @@ func save() -> Dictionary:
 
 func load_data(data:Dictionary):
 	pass
+
+
+func gather_debug_info() -> String:
+	return ""
+
+
+## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
+func printe(text:String) -> void:
+	parent_entity.printe(text)

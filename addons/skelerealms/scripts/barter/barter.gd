@@ -106,3 +106,21 @@ func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 	current_transaction = null
 	ended_barter.emit()
 	return true
+
+
+## Determine whether a shop will accept an item or not.
+func shop_will_accept_iten(shop:ShopInstance, item:StringName) -> bool:
+	var ic:ItemComponent = EntityManager.instance.get_entity(item).unwrap().get_component("ItemComponent").unwrap()
+	
+	if not shop.whitelist.is_empty():
+		if not ic.data.tags.any(func(tag): return shop.whitelist.has(tag)): # if no tags in whitelist
+			return false
+	
+	if not shop.blacklist.is_empty():
+		if ic.data.tags.any(func(tag): return shop.blacklist.has(tag)): # if any tag in blacklist
+			return false
+	
+	if not shop.accept_stolen and ic.stolen: # if item stolen and vendor accepts no stolen
+		return false
+	
+	return true

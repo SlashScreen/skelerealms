@@ -61,13 +61,12 @@ func _cache_entities(path:String):
 		var file_name = dir.get_next()
 		while file_name != "":
 			if dir.current_is_dir(): # if is directory, cache subdirectory
-				_cache_entities(file_name)
+				_cache_entities("%s/%s" % [path, file_name])
 			else: # if filename, cache filename
 				if '.tres.remap' in file_name:
 					file_name = file_name.trim_suffix('.remap')
 				var result = regex.search(file_name)
 				if result:
-					print("%s : %s" % [result.get_string(1), "%s/%s" % [path, file_name]])
 					disk_assets[result.get_string(1)] = "%s/%s" % [path, file_name] # TODO: Check if it's actually an InstanceData
 			file_name = dir.get_next()
 		dir.list_dir_end()

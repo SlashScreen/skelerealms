@@ -10,7 +10,7 @@ var attributes:Dictionary = {
 	&"luck" : 0,
 	&"amity" : 0,
 	&"maxnomity" : 0,
-	&"litheness" : 0,
+	&"nerve" : 0,
 }:
 	get:
 		return attributes
@@ -32,3 +32,13 @@ func save() -> Dictionary:
 func load_data(data:Dictionary):
 	attributes = data
 	dirty = false
+
+
+func gather_debug_info() -> String:
+	return """
+[b]AttributesComponent[/b]
+	Attributes: 
+%s
+""" % [
+	JSON.stringify(attributes, '\t').indent("\t\t")
+]

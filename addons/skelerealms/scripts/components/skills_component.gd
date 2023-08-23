@@ -14,7 +14,8 @@ var skills:Dictionary = {
 	&"litheness" : 0,
 	&"barter" : 10,
 	&"speech" : 0,
-	&"alchemy" : 0
+	&"alchemy" : 0,
+	&"unarmed" : 0,
 }:
 	get:
 		return skills
@@ -56,3 +57,13 @@ func load_data(data:Dictionary):
 	skills = data["skills"]
 	level = data["level"]
 	dirty = false
+
+
+func gather_debug_info() -> String:
+	return """
+[b]SkillsComponent[/b]
+	Skills:
+%s
+""" % [
+	JSON.stringify(skills, '\t').indent("\t\t")
+]

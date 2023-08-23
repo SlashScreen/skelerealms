@@ -17,6 +17,7 @@ const CRIMES:Dictionary = {
 var crime_type:StringName
 var perpetrator:String
 var victim:String
+var witnesses:Array[StringName] = []
 ## Severity of this crime
 var severity:int:
 	get:

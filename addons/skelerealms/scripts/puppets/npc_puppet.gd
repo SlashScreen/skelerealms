@@ -19,23 +19,38 @@ var target_reached:bool:
 		return navigation_agent.is_navigation_finished()
 
 var movement_paused:bool = false
-
 ## The navigation agent.
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
+var hands_manager:HandsManager:
+	get:
+		if hands_manager == null:
+			hands_manager = get_node("Hands manager")
+		return hands_manager
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	call_deferred("_actor_setup")
+	add_to_group("perception_target")
 	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
 	eyes = $EyesPerception
 	puppeteer = $"../../".get_component("PuppetSpawnerComponent").unwrap()
 	npc_component = $"../../".get_component("NPCComponent").unwrap()
 	view_dir = $"../../".get_component("ViewDirectionComponent").unwrap()
 	if npc_component:
-		print("Connecting percieved event")
+		puppeteer.printe("Connecting percieved event")
 		eyes.perceived.connect(npc_component.on_percieve_start.bind())
 		eyes.not_perceived.connect(npc_component.on_percieve_end.bind())
+		
+		npc_component.entered_combat.connect(draw_weapons.bind())
+		npc_component.left_combat.connect(lower_weapons.bind())
+		
+		hands_manager.weapons_drawn = npc_component.in_combat
+		for h in hands_manager.hands:
+			if npc_component.in_combat:
+				hands_manager.get_hand(h).show()
+			else:
+				hands_manager.get_hand(h).hide()
 	else:
 		push_warning("NPC Puppet not a child of an entity with an NPCComponent. Perception turned off.")
 
@@ -75,7 +90,7 @@ func continue_nav() -> void:
 func _physics_process(delta) -> void:
 	if npc_component:
 		eyes.try_perception()
-
+	
 	if navigation_agent.is_navigation_finished():
 		return
 	
@@ -84,15 +99,26 @@ func _physics_process(delta) -> void:
 	
 	var current_agent_position: Vector3 = global_transform.origin
 	var next_path_position: Vector3 = navigation_agent.get_next_path_position()
-
+	
 	var new_velocity: Vector3 = next_path_position - current_agent_position
 	new_velocity = new_velocity.normalized()
 	new_velocity = new_velocity * movement_speed
-
+	
 	set_velocity(new_velocity)
+	if not new_velocity.length() == 0:
+		look_at(position + Vector3(new_velocity.normalized().x, 0, new_velocity.normalized().z))
 	move_and_slide()
 
 
 func _process(delta) -> void:
 	change_position.emit(position)
 	view_dir.view_rot = rotation
+
+
+func draw_weapons() -> void:
+	hands_manager.raise_weapons.emit()
+
+
+func lower_weapons() -> void:
+	puppeteer.printe("Lowering weapons.")
+	hands_manager.lower_weapons.emit()

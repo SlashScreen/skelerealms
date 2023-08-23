@@ -34,7 +34,7 @@ func post_perform() -> bool:
 
 
 func is_target_reached(agent:NavigationAgent3D) -> bool:
-	return true
+	return agent.is_navigation_finished()
 
 
 func interrupt() -> void:

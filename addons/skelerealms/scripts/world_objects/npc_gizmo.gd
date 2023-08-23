@@ -18,8 +18,6 @@ func _redraw(gizmo:EditorNode3DGizmo):
 	var npc:WorldNPC = gizmo.get_node_3d()
 	var mesh:Mesh = SphereMesh.new()
 	if npc.instance:
-		npc.instance.position = npc.position
-		npc.instance.world = npc.owner.name
 		#shit, how do I set the world?...
 		var prefab:Node = npc.instance.npc_data.prefab.instantiate()
 		if npc.get_child_count() > 0:

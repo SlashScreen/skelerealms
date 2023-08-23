@@ -16,7 +16,7 @@ func _init(coven_list:Array[CovenRankData] = []) -> void:
 		return
 	# Load rank info
 	for crd in coven_list:
-		print("Adding to coven %s" % crd.coven.coven_id)
+		#printe("Adding to coven %s" % crd.coven.coven_id)
 		covens[crd.coven.coven_id] = crd.rank
 
 

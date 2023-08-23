@@ -5,13 +5,17 @@ extends EditorPlugin
 var item_gizmo_plugin = WorldItemGizmo.new()
 var npc_gizmo_plugin = WorldNPCGizmo.new()
 var door_jump_plugin = DoorJumpPlugin.new(self)
+var world_thing_plugin = WorldObjectPlugin.new()
+var point_gizmo = PointGizmo.new()
 
 
 func _enter_tree():
 	# gizmos
 	add_node_3d_gizmo_plugin(item_gizmo_plugin)
 	add_node_3d_gizmo_plugin(npc_gizmo_plugin)
+	add_node_3d_gizmo_plugin(point_gizmo)
 	add_inspector_plugin(door_jump_plugin)
+	add_inspector_plugin(world_thing_plugin)
 	# autoload
 	add_autoload_singleton("SkeleRealmsGlobal", "res://addons/skelerealms/scripts/sk_global.gd")
 	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/covens/coven_system.gd")
@@ -25,7 +29,9 @@ func _exit_tree():
 	# gizmos
 	remove_node_3d_gizmo_plugin(item_gizmo_plugin)
 	remove_node_3d_gizmo_plugin(npc_gizmo_plugin)
+	remove_node_3d_gizmo_plugin(point_gizmo)
 	remove_inspector_plugin(door_jump_plugin)
+	remove_inspector_plugin(world_thing_plugin)
 	# autoload
 	remove_autoload_singleton("SkeleRealmsGlobal")
 	remove_autoload_singleton("CovenSystem")

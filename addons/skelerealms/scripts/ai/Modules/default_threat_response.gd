@@ -53,9 +53,8 @@ func _initialize() -> void:
 
 func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionFSM_Machine) -> void:
 	var opinion = _npc.determine_opinion_of(what)
-	print("----------")
-	print("handling perception info")
-	print("Opinion on %s: %s" % [what, opinion])
+	_npc.printe("handling perception info on %s" % what)
+	_npc.printe("Opinion on %s: %s" % [what, opinion])
 	var below_attack_threshold = (opinion <= attack_threshold) or aggression == 3 # will be below attack threshold by default if frenzied
 
 	match transition:
@@ -64,7 +63,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 				return
 			# if threat, seek last known position
 			if below_attack_threshold:
-				print("seek last known position")
+				_npc.printe("seek last known position")
 				_npc.goap_memory["last_seen_position"] = NavPoint.new(fsm.last_seen_world, fsm.last_seen_position) # commit to memory
 				_npc.add_objective({"enemy_sought" = true}, true, 10) # add goal to seek position
 		"AwareVisible":
@@ -73,7 +72,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 
 			if below_attack_threshold: # if attack threshold or frenzied
 				if not _npc.in_combat:
-					print("start vigilance")
+					_npc.printe("start vigilance")
 					var e = EntityManager.instance.get_entity(what).unwrap()
 
 					# attack immediately if frenzied
@@ -88,7 +87,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 					vigilant_thread = Thread.new()
 					vigilant_thread.start(_stay_vigilant.bind(e))
 				else:
-					print("needs to attack")
+					_npc.printe("needs to attack")
 		"Lost":
 			# may be useless
 			return
@@ -98,7 +97,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 
 			# if threat, do "huh?" behavior
 			if below_attack_threshold:
-				print("needs to investigate")
+				_npc.printe("needs to investigate")
 				# TODO: Stop, investigate
 				return
 
@@ -172,9 +171,11 @@ func _begin_attack(e:Entity) -> void:
 func _add_enemy(e:Entity) -> void:
 	if _npc.goap_memory.has("enemies"):
 		if not _npc.goap_memory["enemies"].has(e.name):
+			print("Adding enemy %s" % e.name)
 			_npc.goap_memory["enemies"].append(e)
 	else:
 		_npc.goap_memory["enemies"] = [e.name]
+		print("Adding enemy %s" % e.name)
 		_npc._goap_component.interrupt() # interrupt current task if entering combat
 
 

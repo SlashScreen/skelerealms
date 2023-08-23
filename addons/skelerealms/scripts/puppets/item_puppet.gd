@@ -42,7 +42,7 @@ func get_puppeteer() -> PuppetSpawnerComponent:
 
 
 func set_collision_state(n:Node, state:bool) -> void:
-	if n is CollisionShape3D:
+	if n is CollisionShape3D and not n.get_parent() is HitDetector:
 		(n as CollisionShape3D).disabled = not state
 	for c in n.get_children():
 		set_collision_state(c, state)

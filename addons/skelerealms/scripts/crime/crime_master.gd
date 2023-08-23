@@ -22,6 +22,11 @@ const bounty_amount:Dictionary = {
 ## }
 ## [/codeblock]
 var crimes:Dictionary = {}
+## This is a has set. All crimes reported will go into this set to be processed in the next frame.
+## This is so that the same crime doesn't get reported over and over again. 
+var crime_queue:Dictionary = {}
+signal crimes_against_covens_updated(affected:Array[StringName])
+signal crime_committed(crime:Crime, position:NavPoint)
 
 
 func _ready():
@@ -35,24 +40,31 @@ func punish_crimes(coven:StringName):
 
 
 # TODO: Track crimes against others?
-## Add a crime to the record
-func add_crime(crime:Crime):
-	# add crime to covens
-	var cc = EntityManager.instance.get_entity(crime.victim).unwrap().get_component("CovensComponent")
-	if cc.some():
-		for coven in (cc.unwrap() as CovensComponent).covens:
-			## Skip if doesn't track crime
-			if not CovenSystem.get_coven(coven).track_crime:
-				continue
+## Report a crime. The caller is also added as a witness.
+func add_crime(crime:Crime, witness:StringName):
+	crime_queue[crime] = true
 
-			if crimes.has(coven):
-				crimes[coven]["unpunished"].append(crime)
-			else: # if coven doesnt have crimes against it, initialize table
-				crimes[coven] = {
-					"punished" : [],
-					"unpunished" : [crime]
-				}
 
+func _process_crime_queue() -> void:
+	if crime_queue.size() > 0:
+		for crime in crime_queue:
+		# add crime to covens
+			var cc = EntityManager.instance.get_entity(crime.victim).unwrap().get_component("CovensComponent")
+			if cc.some():
+				for coven in (cc.unwrap() as CovensComponent).covens:
+					## Skip if doesn't track crime
+					if not CovenSystem.get_coven(coven).track_crime:
+						continue
+
+					if crimes.has(coven):
+						crimes[coven]["unpunished"].append(crime)
+					else: # if coven doesnt have crimes against it, initialize table
+						crimes[coven] = {
+							"punished" : [],
+							"unpunished" : [crime]
+						}
+				crimes_against_covens_updated.emit((cc.unwrap() as CovensComponent).covens)
+		crime_queue.clear()
 
 ## Returns the max wanted level for crimes against a Coven.
 func max_crime_severity(id:StringName, coven:StringName) -> int:

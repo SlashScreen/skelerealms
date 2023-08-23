@@ -27,12 +27,26 @@ var item_owner:StringName = &"":
 		return item_owner
 	set(val):
 		item_owner = val
+		if get_parent() == null: #stops this from being called while setting up
+			return
 		if val == &"":
 			$"../InteractiveComponent".interact_verb = "TAKE"
 		else:
 			# TODO: Determine using worth and owner relationships
 			$"../InteractiveComponent".interact_verb = "STEAL"
-# TODO: Item functions
+var stolen:bool ## If this has been stolen or not.
+
+
+## Shorthand to get an item component for an entity by ID.
+static func get_item_component(id:StringName) -> ItemComponent:
+	var eop = EntityManager.instance.get_entity(id)
+	if not eop.some():
+		return null
+	var icop = eop.unwrap().get_component("ItemComponent")
+	if icop.some():
+		return icop.unwrap()
+	else:
+		return null
 
 
 func _init() -> void:
@@ -45,6 +59,7 @@ func _ready() -> void:
 
 func _entity_ready() -> void:
 	$"../InteractiveComponent".interacted.connect(interact.bind())
+	$"../InteractiveComponent".translation_callback = get_translated_name.bind()
 	if item_owner == &"":
 		$"../InteractiveComponent".interact_verb = "TAKE"
 	else:
@@ -57,14 +72,11 @@ func _on_enter_scene():
 
 
 func _spawn():
-	print("spawning %s" % parent_entity.name)
-
 	$"../PuppetSpawnerComponent".spawn(data.prefab)
 	($"../PuppetSpawnerComponent".get_child(0) as ItemPuppet).quaternion = parent_entity.rotation # TODO: This doesn't work.
 
 
 func _on_exit_scene():
-	print("despawn")
 	_despawn()
 
 
@@ -156,6 +168,20 @@ func drop():
 ## Interact with this item. Called from [InteractiveComponent].
 func interact(interacted_refID):
 	move_to_inventory(interacted_refID)
+	if not interacted_refID == item_owner:
+		printe("Stolen.")
+		stolen = true
+		CrimeMaster.crime_committed.emit(
+			Crime.new(&"theft",
+			interacted_refID,
+			item_owner),
+			parent_entity.position
+			)
+
+
+## Allows an item to be taken without being stolen.
+func allow() -> void:
+	item_owner = &"";
 
 
 func save() -> Dictionary:
@@ -166,3 +192,11 @@ func save() -> Dictionary:
 
 func load_data(data:Dictionary):
 	contained_inventory = Option.none() if data["contained_inventory"] == "" else Option.from(data["contained_inventory"])
+
+
+func get_translated_name() -> String:
+	var t = tr(parent_entity.name)
+	if t == parent_entity.name:
+		return t
+	else:
+		return tr(data.id)

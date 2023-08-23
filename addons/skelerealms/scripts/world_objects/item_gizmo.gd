@@ -18,9 +18,6 @@ func _redraw(gizmo:EditorNode3DGizmo):
 	var item:WorldItem = gizmo.get_node_3d()
 	var mesh:Mesh = SphereMesh.new()
 	if item.instance:
-		item.instance.position = item.position
-		item.instance.rotation = item.quaternion.normalized()
-		item.instance.world = item.owner.name
 		#shit, how do I set the world?...
 		var prefab:Node = item.instance.item_data.prefab.instantiate()
 		if item.get_child_count() > 0:

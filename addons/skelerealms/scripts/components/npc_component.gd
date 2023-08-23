@@ -26,10 +26,10 @@ var in_combat:bool:
 		return in_combat
 	set(val):
 		if val and not in_combat: # these checks prevent spamming
-			print("entering combat")
+			printe("entering combat")
 			entered_combat.emit()
 		elif not val and in_combat:
-			print("leaving combat")
+			printe("leaving combat")
 			left_combat.emit()
 		in_combat = val
 var _current_target_point:NavPoint:
@@ -44,7 +44,7 @@ var _busy:bool:
 		get:
 			return _busy or in_combat # is also busy if in combat
 		set(val):
-			print("Set busy to %s" % val)
+			printe("Set busy to %s" % val)
 			if val and _puppet:
 				_puppet.pause_nav()
 			elif not val and _puppet:
@@ -119,9 +119,24 @@ signal hit_by(who:String)
 signal damaged_with_effect(effect:StringName)
 ## Signal emitted when the NPC is added to a conversation.
 signal added_to_conversation
-## Singaal emitted when the NPC is removed from a conversation.
+## Signal emitted when the NPC is removed from a conversation.
 signal removed_from_conversation
+## Signal emitted when a crime is witnessed
+signal crime_witnessed 
 signal updated(delta:float)
+
+
+## Shorthand to get an npc component for an entity by ID.
+static func get_npc_component(id:StringName) -> NPCComponent:
+	var eop = EntityManager.instance.get_entity(id)
+	if not eop.some():
+		return null
+	var icop = eop.unwrap().get_component("NPCComponent")
+	if icop.some():
+		return icop.unwrap()
+	else:
+		return null
+
 
 #* ### OVERRIDES
 
@@ -141,7 +156,7 @@ func _init(d:NPCData) -> void:
 
 func _ready():
 	super._ready()
-
+	
 	# Initialize all AI Modules
 	for module in data.modules:
 		module.link(self)
@@ -174,6 +189,7 @@ func _entity_ready() -> void:
 
 	# misc setup
 	_interactive_component.interactible = data.interactive # TODO: Or instance override
+	_interactive_component.translation_callback = get_translated_name.bind()
 
 	GameInfo.minute_incremented.connect(_calculate_new_schedule.bind())
 
@@ -373,6 +389,14 @@ func get_remembered_items() -> Array[String]:
 				)
 
 
+func can_see_entity(id:StringName) -> bool:
+	if not parent_entity.in_scene:
+		return false
+	if not _perception_memory.has(id):
+		return false
+	return (_perception_memory[id] as PerceptionFSM_Machine).state._get_state_name() == "AwareVisible"
+
+
 #* ### SCHEDULE
 
 
@@ -437,7 +461,6 @@ func get_relationship_with(ref_id:String) -> Option:
 ## Determines the opinion of some entity. See the tutorial in the class docs for a more in-depth look at NPC opinions.
 func determine_opinion_of(id:StringName) -> float:
 	var e:Entity = EntityManager.instance.get_entity(id).unwrap()
-	print(e)
 
 	if not THREATENING_ENTITY_TYPES.any(func(x:String): return e.get_component(x).some()): # if it doesn't have any components that are marked as threatening, return neutral.
 		return 0
@@ -455,7 +478,6 @@ func determine_opinion_of(id:StringName) -> float:
 		var covens = parent_entity.get_component("CovensComponent").unwrap().covens
 		var coven_opinions_unfiltered = []
 		var e_covens_component = e_cc.unwrap()
-		print(e_covens_component.get_parent())
 
 		# get all opinions
 		for coven in covens:
@@ -471,7 +493,36 @@ func determine_opinion_of(id:StringName) -> float:
 		opinion_total += self_modifier # avoid 1 * self_modifier because that's an identity function so we can just do self_modifier
 
 	# Return weighted average
-	return opinions.reduce(func(sum, next): return sum + next, 0) / opinion_total
+	return opinions.reduce(func(sum, next): return sum + next, 0) / 1 if opinion_total == 0 else opinion_total
+
+
+func gather_debug_info() -> String:
+	return """
+[b]NPCComponent[/b]
+	Visibility threshold: %s
+	In combat: %s
+	Busy: %s
+	GOAP Memory: %s
+	Current Target Point: %s
+	Path: %s
+	Simulation Level: %s
+""" % [
+	visibility_threshold,
+	in_combat,
+	_busy,
+	goap_memory,
+	_current_target_point,
+	_path,
+	_sim_level
+]
+
+
+func get_translated_name() -> String:
+	var t = tr(parent_entity.name)
+	if t == parent_entity.name:
+		return tr(data.id)
+	else:
+		return t
 
 
 ## Current simulation level for an NPC.

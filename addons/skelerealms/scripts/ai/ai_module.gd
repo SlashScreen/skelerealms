@@ -21,3 +21,8 @@ func _initialize() -> void:
 
 func _clean_up() -> void:
 	return
+
+
+## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
+func printe(text:String) -> void:
+	_npc.printe(text)

@@ -44,7 +44,7 @@ func _jump_to_door_location(obj:Door):
 
 
 func _set_position(obj:Door) -> void:
-	obj.instance.position = obj.position
+	obj.instance.position = obj.global_position
 	obj.instance.world = obj.owner.name
 
 

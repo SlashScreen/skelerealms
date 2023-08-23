@@ -16,6 +16,8 @@ var stale_timer:float
 ## This is used to prevent items from spawning, even if they are supposed to be in scene.
 ## For example, items in invcentories should not spawn despite technically being "in the scene".
 var supress_spawning:bool
+## FLag telling if this was created dynamically (eg. [class SpawnPoint]).
+var generated:bool
 
 
 ## Whether this entity is in the scene or not.
@@ -56,6 +58,7 @@ func _init(res:InstanceData = null) -> void:
 	for n in new_nodes: # add all components to entity
 		add_child(n)
 		n.owner = self
+		(n as EntityComponent).parent_entity = self
 
 	# call entity ready
 	instantiated.emit()
@@ -125,6 +128,7 @@ func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If no
 		"entity_data": {
 			"world" = world,
 			"position" = position,
+			"generated" = generated
 		}
 	}
 	for c in get_children().filter(func(x:EntityComponent): return x.dirty): # filter to get dirty acomponents
@@ -135,6 +139,7 @@ func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If no
 func load_data(data:Dictionary) -> void:
 	world = data["entity_data"]["world"]
 	position = JSON.parse_string(data["entity_data"]["position"])
+	generated = JSON.parse_string(data["entity_data"]["generated"])
 
 	# loop through all saved components and call load
 	for d in data["components"]:
@@ -162,3 +167,38 @@ func broadcast_message(msg:String) -> void:
 func dialogue_command(command:String, args:Array) -> void:
 	for c in get_children():
 		c._try_dialogue_command(command, args)
+
+
+func gather_debug_info() -> Array[String]:
+	var info: Array[String] = []
+	info.push_back("""
+[b]Entity[/b]
+	Entity RefID: %s
+	World: %s
+	Position: x%s y%s z%s
+	Rotation: x%s y%s z%s w%s
+	In scene: %s
+""" % [
+	name,
+	world,
+	position.x,
+	position.y,
+	position.z,
+	rotation.x,
+	rotation.y,
+	rotation.z,
+	rotation.w,
+	in_scene
+])
+	
+	for c in get_children():
+		var i:String = (c as EntityComponent).gather_debug_info()
+		if not i.is_empty():
+			info.push_back(i)
+	
+	return info
+
+
+## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
+func printe(text:String) -> void:
+	print_rich("[b]%s[/b]: %s" % [name, text])

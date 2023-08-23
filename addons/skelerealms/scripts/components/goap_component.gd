@@ -20,6 +20,7 @@ func _init() -> void:
 	# add timer
 	_timer = Timer.new()
 	_timer.name = "Timer"
+	_timer.one_shot = true
 	add_child(_timer)
 
 
@@ -32,6 +33,8 @@ func setup(behaviors:Array[GOAPBehavior]) -> void:
 
 
 func _process(delta):
+	if GameInfo.is_loading:
+		return
 	# if we are set to rebuild our plan
 	if _rebuild_plan:
 		# Find the highest priority objective
@@ -164,11 +167,15 @@ func _invoke_in_time(f:Callable, time:float):
 	_timer.start(time)
 	_timer.timeout.connect(func():
 		# disconnect all events
-		for c in _timer.timeout.get_connections():
-			_timer.timeout.disconnect(c.callable)
+		_clear_timer()
 		# call function
 		f.call()
 	)
+
+
+func _clear_timer() -> void:
+	for c in _timer.timeout.get_connections():
+		_timer.timeout.disconnect(c.callable)
 
 
 ## Wrap up the running action.
@@ -205,6 +212,41 @@ func interrupt() -> void:
 	regenerate_plan()
 
 
+func gather_debug_info() -> String:
+	return """
+[b]GOAPComponent[/b]
+	Objectives: %s
+	Current objective: %s
+	Current action: %s (Running: %s)
+	Action queue: %s
+	Current action duration: %s
+	Remaining action time: %s / %s (Timer running: %s)
+	Target reached: %s (Final point: %s, Target Distance: %s)
+""" % [
+	objectives\
+		.map(func(o:Objective): return o.serialize())\
+		.reduce(func(sum, next): return sum + next, ""),
+	_current_objective.serialize(),
+	_current_action.name,
+	_current_action.running,
+	" -> ".join(
+		(
+			func():
+				var x = action_queue.map(func(action:GOAPAction): return action.name)
+				x.reverse()
+				return x
+				).call()
+		),
+	-1 if _current_action == null else _current_action.duration,
+	_timer.time_left,
+	_timer.wait_time,
+	not _timer.is_stopped(),
+	"No agent" if _agent == null else _agent.is_target_reached(),
+	"No agent" if _agent == null else _agent.get_final_position(),
+	"No agent" if _agent == null else _agent.target_desired_distance
+]
+
+
 ## An objective for the AI to try to solve for.
 class Objective:
 	## Goals to satisfy this objective.
@@ -218,6 +260,17 @@ class Objective:
 		goals = g
 		remove_after_satisfied = rem
 		priority = p
+	
+	func serialize() -> String:
+		return """
+		Remove after satisfied: %s
+		Priority: %s
+		Goals: %s
+		""" % [
+			remove_after_satisfied,
+			priority,
+			JSON.stringify(goals, '\t')
+		]
 
 
 ## Internal node for planning a GOAP chain.

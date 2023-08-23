@@ -18,6 +18,10 @@ extends RefData
 @export var weight: float
 ## The base cost in snails.
 @export var worth: int
+## Whether this item can be stacked in the inventory or not. Does nothing on its' own. To be used in inventory systems.
+@export var stackable:bool
+## Tags this item has.
+@export var tags:Array[StringName] = []
 ## The components that describe this item.
 @export var components:Array[ItemDataComponent]
 

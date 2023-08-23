@@ -17,4 +17,4 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		instance.rotation = quaternion
-		instance.position = position
+		instance.position = global_position

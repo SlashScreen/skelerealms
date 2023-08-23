@@ -136,3 +136,13 @@ func _physics_process(delta: float) -> void:
 		change_will(will_recharge_rate * delta)
 	if not DISHONORED_MODE:
 		will_just_changed = false
+
+
+func gather_debug_info() -> String:
+	return """
+[b]VitalsComponent[/b]
+	Vitals: 
+%s
+""" % [
+	JSON.stringify(vitals, '\t').indent("\t\t")
+]

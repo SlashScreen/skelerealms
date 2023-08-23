@@ -5,7 +5,7 @@ extends Node
 ## What world the player is in.
 @export var world: String = "init"
 
-
+var is_loading:bool = false
 var paused:bool = false
 var active_camera:Camera3D:
 	get:
@@ -56,10 +56,14 @@ var year:int:
 	get:
 		return world_time[&"year"]
 var is_game_started:bool
+var command_paused:bool
 
 
 signal pause
 signal unpause
+signal console_frozen
+signal console_unfrozen
+
 signal minute_incremented
 signal hour_incremented
 signal day_incremented
@@ -88,6 +92,8 @@ func _ready():
 
 ## Puase the game.
 func pause_game():
+	if command_paused:
+		return
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	paused = true
 	get_tree().paused = true
@@ -97,6 +103,8 @@ func pause_game():
 
 ## Unpause the game.
 func unpause_game():
+	if command_paused:
+		return
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	paused = false
 	get_tree().paused = false
@@ -104,9 +112,41 @@ func unpause_game():
 	unpause.emit()
 
 
+func console_freeze() -> void:
+	if paused:
+		return
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	command_paused = true
+	get_tree().paused = true
+	$Timer.paused = true
+	console_frozen.emit()
+
+
+func console_unfreeze() -> void:
+	if paused:
+		return
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	command_paused = false
+	get_tree().paused = false
+	$Timer.paused = false
+	console_unfrozen.emit()
+
+
+func toggle_console_freeze() -> void:
+	if not is_game_started:
+		return
+	
+	if command_paused:
+		console_unfreeze()
+	else:
+		console_freeze()
+
+
 func _input(event):
 	if Input.is_action_just_pressed("ui_cancel"):
 		toggle_pause()
+	#if Input.is_action_just_pressed("gdshell_toggle_ui"):
+	#	toggle_console_freeze()
 
 
 func toggle_pause():

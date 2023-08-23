@@ -6,7 +6,9 @@ extends Node3D
 
 signal on_interact(id:String)
 
-## Name of thje object.
+## Whether it can be interacted with.
+@export var interactible:bool = true
+## Name of the object.
 @export var object_name:String = "THING"
 ## Verb to use when hovered over.
 @export var interact_verb:String = "INTERACT"
