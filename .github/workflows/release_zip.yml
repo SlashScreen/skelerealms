@@ -21,9 +21,9 @@ jobs:
 
       - name: Zip up folder
         run: |
-          mkdir -p ${{ github.workspace }}/artifact
-          zip -r ${{ github.workspace }}/artifact/skelerealms.zip ${{ github.workspace }}/addons/skelerealms
+          mkdir -p /artifact
+          zip -r /artifact/skelerealms.zip ${{ github.workspace }}/addons/skelerealms
       - uses: actions/upload-artifact@v3
         with:
           name: skelerealms
-          path: ${{ github.workspace }}/artifact/skelerealms.zip
+          path: /artifact/skelerealms.zip
