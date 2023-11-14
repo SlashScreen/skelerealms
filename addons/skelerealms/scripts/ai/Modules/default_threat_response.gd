@@ -48,7 +48,7 @@ var pull_out_of_thread = false
 
 func _initialize() -> void:
 	_npc.perception_transition.connect(_handle_perception_info.bind())
-	_npc.hit_by.connect(func(who): _aggress(EntityManager.instance.get_entity(who).unwrap()))
+	_npc.hit_by.connect(func(who): _aggress(EntityManager.instance.get_entity(who)))
 
 
 func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionFSM_Machine) -> void:
@@ -73,7 +73,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 			if below_attack_threshold: # if attack threshold or frenzied
 				if not _npc.in_combat:
 					_npc.printe("start vigilance")
-					var e = EntityManager.instance.get_entity(what).unwrap()
+					var e = EntityManager.instance.get_entity(what)
 
 					# attack immediately if frenzied
 					if aggression == 3:
@@ -250,8 +250,8 @@ func _determine_threat(e:Entity) -> int:
 	if not e_sc.some():
 		return 0
 
-	var npc_level = _npc.parent_entity.get_component("SkillsComponent").unwrap().level
-	var e_level = e_sc.unwrap().level
+	var npc_level = _npc.parent_entity.get_component("SkillsComponent").level
+	var e_level = e_sc.level
 	var difference = e_level - npc_level # negative is weaker
 
 	# Check if it's a bit weaker

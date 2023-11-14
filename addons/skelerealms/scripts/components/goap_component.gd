@@ -226,9 +226,9 @@ func gather_debug_info() -> String:
 	objectives\
 		.map(func(o:Objective): return o.serialize())\
 		.reduce(func(sum, next): return sum + next, ""),
-	_current_objective.serialize(),
-	_current_action.name,
-	_current_action.running,
+	_current_objective.serialize() if _current_objective else "None",
+	_current_action.name if _current_action else "None",
+	_current_action.running if _current_action else "false",
 	" -> ".join(
 		(
 			func():

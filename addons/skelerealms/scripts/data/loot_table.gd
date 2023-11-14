@@ -13,7 +13,7 @@ const uuid = preload("res://addons/skelerealms/scripts/vendor/uuid.gd")
 @export var entries:Array[LootTableEntry]
 
 
-## Create new [ItemInstance]s from the table.
+## Create new [class ItemInstance]s from the table.
 func resolve_table_to_instances() -> Array[ItemInstance]:
 	# Get all entries that pass the random generation
 	var successes = entries.filter(func(e:LootTableEntry): return e.determine_success())

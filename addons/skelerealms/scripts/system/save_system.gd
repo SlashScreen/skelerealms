@@ -68,7 +68,7 @@ func load_game(path:String):
 			EntityManager.instance.entities[e].reset_data()
 	# load entity data - loop through all data, get entity (spawning it if it isn't there), call load
 	for data in save_data["entity_data"]:
-		EntityManager.instance.get_entity(data).unwrap().load_data(save_data["entity_data"][data])
+		EntityManager.instance.get_entity(data).load_data(save_data["entity_data"][data])
 
 	# load game info data
 	for si in get_tree().get_nodes_in_group("savegame_gameinfo"):

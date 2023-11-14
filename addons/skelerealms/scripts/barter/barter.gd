@@ -66,22 +66,22 @@ func cancel_barter() -> void:
 
 ## Resolve the transaction, and stop the trandaction. The arguments are multipliers for the money being moved around - for vendor to customer, and customer to vendor, respectively.
 ## Will return false if either part doesn't have enough money to complete the transaction.
-func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
+func accept_barter(selling_modifier:float, buying_modifier:float, currency: StringName) -> bool:
 	if not current_transaction:
 		return false
 
 	var total: int = current_transaction.total_transaction(selling_modifier, buying_modifier)
 	# Adding and subtracting is done here because the total is how much money is leaving the customer
 	# If vendor cash is less than 0 when the balance is applied, return failure
-	if current_transaction.vendor.snails - total < 0: # subtracting because if selling the total will be positive flow to customer
+	if current_transaction.vendor.currencies[currency] - total < 0: # subtracting because if selling the total will be positive flow to customer
 		return false
 	# If customer cash is less than 0 when the balance is applied, return failure
-	if current_transaction.customer.snails + total < 0: # plus because if buying the total will be negative flow to customer
+	if current_transaction.customer.currencies[currency] + total < 0: # plus because if buying the total will be negative flow to customer
 		return false
 
 	# Add total
-	current_transaction.vendor.remove_snails(total)
-	current_transaction.customer.add_snails(total)
+	current_transaction.vendor.remove_money(total, currency)
+	current_transaction.customer.add_money(total, currency)
 
 	# Move items
 	#? Could optimize
@@ -89,17 +89,13 @@ func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 		# Move from customer to vendor.
 		EntityManager.instance\
 			.get_entity(item)\
-			.unwrap()\
 			.get_component("ItemComponent")\
-			.unwrap()\
 			.move_to_inventory(current_transaction.vendor.parent_entity.name)
 	for item in current_transaction.buying:
 		# Move from vendor to customer.
 		EntityManager.instance\
 			.get_entity(item)\
-			.unwrap()\
 			.get_component("ItemComponent")\
-			.unwrap()\
 			.move_to_inventory(current_transaction.customer.parent_entity.name)
 
 	#clean up
@@ -110,7 +106,7 @@ func accept_barter(selling_modifier:float, buying_modifier:float) -> bool:
 
 ## Determine whether a shop will accept an item or not.
 func shop_will_accept_iten(shop:ShopInstance, item:StringName) -> bool:
-	var ic:ItemComponent = EntityManager.instance.get_entity(item).unwrap().get_component("ItemComponent").unwrap()
+	var ic:ItemComponent = EntityManager.instance.get_entity(item).get_component("ItemComponent")
 	
 	if not shop.whitelist.is_empty():
 		if not ic.data.tags.any(func(tag): return shop.whitelist.has(tag)): # if no tags in whitelist

@@ -53,3 +53,23 @@ func get_coven_opinions(covens:Array) -> Array[int]:
 ## The formula is [code]max_crime_severity * -10[/code].
 func get_crime_modifier(who:StringName) -> int:
 	return CrimeMaster.max_crime_severity(who, coven_id) * -10
+
+
+func get_debug_info() -> String:
+	return """
+[b]%s[/b]
+	Opinions: %s
+	Hidden from player: %s
+	Ranks: %s
+	Ignores crimes against others: %s
+	Ignores crimes against members: %s
+	Track Crime: %s
+	""" % [
+		coven_id,
+		JSON.stringify(other_coven_opinions),
+		hidden_from_player,
+		JSON.stringify(ranks),
+		ignore_crimes_against_others,
+		ignore_crimes_against_members,
+		track_crime
+	]

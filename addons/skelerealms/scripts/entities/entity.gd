@@ -90,7 +90,7 @@ func _should_be_in_scene():
 		in_scene = false
 		return
 	# if we are outside of actor fade distance
-	if position.distance_squared_to(GameInfo.active_camera.position) > ProjectSettings.get_setting("skelerealms/actor_fade_distance") ** 2:
+	if position.distance_squared_to(GameInfo.active_camera.global_position) > ProjectSettings.get_setting("skelerealms/actor_fade_distance") ** 2:
 		in_scene = false
 		return
 	in_scene = true
@@ -106,17 +106,17 @@ func _on_set_rotation(q:Quaternion) -> void:
 
 ## Gets a component by the string name.
 ## Example: [codeblock]
-## (e.get_component("NPCComponent").unwrap() as NPCComponent).kill()
+## (e.get_component("NPCComponent") as NPCComponent).kill()
 ## [/codeblock]
-func get_component(type:String) -> Option:
+func get_component(type:String) -> EntityComponent:
 	var n = get_node_or_null(type)
-	return Option.from(n)
+	return n
 
 
 ## Whether it has a component type or not. Useful for checking the capabilities of an entity.
 func has_component(type:String) -> bool:
 	var x = get_component(type)
-	return x.some()
+	return not x == null
 
 
 func add_component(c:EntityComponent) -> void:

@@ -22,7 +22,7 @@ func _ready():
 func _handle_teleport_request(id:String):
 	print("teleporting %s to world %s at position %s" % [id, dest_world, dest_pos])
 	var teleportee = EntityManager.instance.get_entity(id) # get an entity
-	if teleportee.some(): # if there is a valid object
-		var tc = (teleportee.unwrap() as Entity).get_component("TeleportComponent")  # Try to get a teleport component
-		if tc.some():
-			(tc.unwrap() as TeleportComponent).teleport(dest_world, dest_pos)
+	if teleportee: # if there is a valid object
+		var tc = teleportee.get_component("TeleportComponent")  # Try to get a teleport component
+		if tc:
+			(tc as TeleportComponent).teleport(dest_world, dest_pos)

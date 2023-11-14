@@ -85,7 +85,6 @@ func _walk_for_component(n:Node, component_type:String, wo_check:Callable) -> No
 	var e = get_entity_in_tree(n)
 	if e:
 		var dc = e.get_component(component_type)
-		if dc.some():
-			return dc.unwrap()
+		return dc
 	
 	return null

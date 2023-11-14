@@ -3,11 +3,9 @@ extends Node
 ## World scene loader
 
 
-
-
 var world_paths:Dictionary = {}
 var regex:RegEx
-var load_check_thread:Thread
+var load_check_thread:Thread = Thread.new()
 
 
 ## Called when the loading process begins.
@@ -43,11 +41,14 @@ func load_world(wid:String) -> void:
 	GameInfo.console_unfreeze()
 	GDShell.ui_handler.visible = false
 	begin_world_loading.emit()
+	GameInfo.game_loading.emit(wid)
 	GameInfo.is_loading = true
 	await get_tree().process_frame
 	_unload_world()
 	# Spawn waiting thread
 	ResourceLoader.load_threaded_request(world_paths[wid], "PackedScene", true)
+	if load_check_thread.is_started(): 
+		load_check_thread.wait_to_finish()
 	load_check_thread = Thread.new()
 	load_check_thread.start(_load_check_thread.bind(world_paths[wid]))
 
@@ -72,6 +73,8 @@ func _finish_load(w:PackedScene) -> void:
 	world_loading_ready.emit()
 	GameInfo.is_loading = false
 	print("World instantiated.")
+	QuestEngine.instance.register_quest_event("enter_location", {"filter":GameInfo.world})
+	GameInfo.game_loaded.emit()
 
 
 func _unload_world():

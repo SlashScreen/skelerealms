@@ -32,9 +32,9 @@ func has_component(c:String) -> bool:
 
 
 ## Gets the first component of a type. [code]c[/code] is the name of the component type, like "HoldableDataComponent".
-func get_component(c:String) -> Option:
+func get_component(c:String) -> ItemDataComponent:
 	var valid_components = components.filter(func(x:ItemDataComponent): return x.get_type() == c)
 	if valid_components.is_empty():
-		return Option.none()
+		return null
 	else:
-		return Option.from(valid_components[0])
+		return valid_components[0]

@@ -40,11 +40,11 @@ var stolen:bool ## If this has been stolen or not.
 ## Shorthand to get an item component for an entity by ID.
 static func get_item_component(id:StringName) -> ItemComponent:
 	var eop = EntityManager.instance.get_entity(id)
-	if not eop.some():
+	if not eop:
 		return null
-	var icop = eop.unwrap().get_component("ItemComponent")
-	if icop.some():
-		return icop.unwrap()
+	var icop = eop.get_component("ItemComponent")
+	if icop:
+		return icop
 	else:
 		return null
 
@@ -86,8 +86,8 @@ func _despawn():
 
 func _process(delta):
 	if in_inventory:
-		parent_entity.position = (EntityManager.instance.get_entity(contained_inventory.unwrap()).unwrap() as Entity).position
-		parent_entity.world = (EntityManager.instance.get_entity(contained_inventory.unwrap()).unwrap() as Entity).world
+		parent_entity.position = EntityManager.instance.get_entity(contained_inventory.unwrap()).position
+		parent_entity.world = EntityManager.instance.get_entity(contained_inventory.unwrap()).world
 
 
 ## Move this to another inventory. Adds and removes the item from the inventories.
@@ -96,9 +96,7 @@ func move_to_inventory(refID:String):
 	if contained_inventory.some():
 		EntityManager.instance\
 			.get_entity(contained_inventory.unwrap())\
-			.unwrap()\
 			.get_component("InventoryComponent")\
-			.unwrap()\
 			.remove_from_inventory(parent_entity.name)
 
 	# drop if moved to inventory is empty
@@ -109,9 +107,7 @@ func move_to_inventory(refID:String):
 	# add to new inventory
 	EntityManager.instance\
 		.get_entity(refID)\
-		.unwrap()\
 		.get_component("InventoryComponent")\
-		.unwrap()\
 		.add_to_inventory(parent_entity.name)
 
 	contained_inventory = Option.from(refID)
@@ -122,7 +118,7 @@ func move_to_inventory(refID:String):
 
 ## Drop this on the ground.
 func drop():
-	var e:Entity = EntityManager.instance.get_entity(contained_inventory.unwrap()).unwrap()
+	var e:Entity = EntityManager.instance.get_entity(contained_inventory.unwrap())
 	var drop_dir:Quaternion = e.rotation
 	print(drop_dir.get_euler().normalized() * DROP_DISTANCE)
 	# This whole bit is genericizing dropping the item in front of the player. It's meant to be used with the player, it should work with anything with a puppet.
@@ -132,16 +128,16 @@ func drop():
 		.bind(func(ic:InventoryComponent): print(ic); ic.remove_from_inventory(parent_entity.name))
 	# raycast in front of puppet if possible to do wall check
 	var psc = e.get_component("PuppetSpawnerComponent")
-	if e.in_scene and psc.some():
+	if e.in_scene and psc:
 		print("has puppet component, in scene")
-		if psc.unwrap().puppet:
+		if psc.puppet:
 			print("puppet exists")
 			# construct raycast
 			var from = parent_entity.position + Vector3(0, 1.5, 0)
 			var to = parent_entity.position + Vector3(0, 1.5, 0) + (drop_dir.get_euler().normalized() * DROP_DISTANCE)
 			var query = PhysicsRayQueryParameters3D.create(from, to, 0xFFFFFFFF, SkeleRealmsGlobal.get_child_rids(psc.unwrap().puppet))
 			await get_tree().physics_frame
-			var space = (psc.unwrap().puppet as Node3D).get_world_3d().direct_space_state
+			var space = (psc.puppet as Node3D).get_world_3d().direct_space_state
 			# FIXME: Direction is weird
 			var res = space.intersect_ray(query)
 			if res.is_empty():
@@ -168,7 +164,7 @@ func drop():
 ## Interact with this item. Called from [InteractiveComponent].
 func interact(interacted_refID):
 	move_to_inventory(interacted_refID)
-	if not interacted_refID == item_owner:
+	if not interacted_refID == item_owner and not item_owner == "":
 		printe("Stolen.")
 		stolen = true
 		CrimeMaster.crime_committed.emit(
@@ -186,17 +182,32 @@ func allow() -> void:
 
 func save() -> Dictionary:
 	return {
-		"contained_inventory" = contained_inventory.unwrap() if contained_inventory.some() else ""
+		"contained_inventory" = contained_inventory.unwrap() if contained_inventory.some() else "",
+		"item_owner" = item_owner
 	}
 
 
 func load_data(data:Dictionary):
 	contained_inventory = Option.none() if data["contained_inventory"] == "" else Option.from(data["contained_inventory"])
+	item_owner = data["item_owner"]
 
 
 func get_translated_name() -> String:
 	var t = tr(parent_entity.name)
 	if t == parent_entity.name:
-		return t
-	else:
 		return tr(data.id)
+	else :
+		return t
+
+
+func gather_debug_info() -> String:
+	return """
+[b]ItemComponent[/b]
+	Contained Inventory: %s
+	Owner: %s
+	Quest Item?: %s
+	""" % [
+		contained_inventory.unwrap() if contained_inventory.some() else "None",
+		item_owner,
+		quest_item
+	]

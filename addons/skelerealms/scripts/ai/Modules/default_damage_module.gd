@@ -25,11 +25,11 @@ signal damage_received
 
 
 func _initialize() -> void:
-	_npc.parent_entity.get_component("DamageableComponent").unwrap().damaged.connect(func(info):
+	_npc.parent_entity.get_component("DamageableComponent").damaged.connect(func(info):
 		process_damage(info)
 	)
-	spell_component = _npc.parent_entity.get_component("SpellTargetComponent").unwrap()
-	vitals_component = _npc.parent_entity.get_component("VitalsComponent").unwrap()
+	spell_component = _npc.parent_entity.get_component("SpellTargetComponent")
+	vitals_component = _npc.parent_entity.get_component("VitalsComponent")
 
 
 func process_damage(info:DamageInfo) -> void:

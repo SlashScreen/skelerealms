@@ -15,6 +15,7 @@ func _get_state_name() -> String:
 
 func on_ready() -> void:
 	_npc = owner as NPCComponent
+	print(_npc)
 
 
 func update(delta:float) -> void:
@@ -27,5 +28,5 @@ func update(delta:float) -> void:
 
 func enter(message:Dictionary) -> void:
 	# if we are tracking an item, skip right to aware visible
-	if (EntityManager.instance.get_entity((state_machine as PerceptionFSM_Machine).tracked).unwrap() as Entity).get_component("ItemComponent"):
+	if EntityManager.instance.get_entity((state_machine as PerceptionFSM_Machine).tracked).get_component("ItemComponent"):
 		state_machine.transition("AwareVisible")

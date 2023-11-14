@@ -35,8 +35,14 @@ func spawn() -> void:
 	# add that shiz
 	spawn_tracker[generate_id()] = true
 	var e = EntityManager.instance.add_entity(npci)
-	e.rotation = global_position
+	e.rotation = quaternion
 	e.generated = true
+	
+	# resolve loot table
+	if t.loot_table:
+		for i in t.loot_table.resolve_table_to_instances():
+			var ie = EntityManager.instance.add_entity(i) # Add entity
+			(e.get_component("ItemComponent") as ItemComponent).contained_inventory = e.name # set contained inventory
 
 
 func reset_spawner() -> void:

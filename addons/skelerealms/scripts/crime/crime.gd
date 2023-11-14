@@ -36,3 +36,7 @@ func serialize() -> Dictionary:
 		"perpetrator":perpetrator,
 		"victim":victim,
 	}
+
+
+func _to_string() -> String:
+	return "Type: %s, Perp: %s, Victim: %s, Severity %s, Witnesses %s" % [crime_type, perpetrator, victim, severity, witnesses]

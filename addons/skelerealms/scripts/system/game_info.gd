@@ -72,6 +72,9 @@ signal month_incremented
 signal year_incremented
 signal game_started
 
+signal game_loading(wid:String)
+signal game_loaded
+
 
 func _ready():
 	set_name.call_deferred("GameInfo")

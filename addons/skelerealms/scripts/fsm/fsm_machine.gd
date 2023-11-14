@@ -22,6 +22,7 @@ func setup(states:Array[FSMState]) -> void:
 	owner = get_parent()
 	# call on ready
 	for c in get_children():
+		c.owner = get_parent()
 		(c as FSMState).on_ready()
 	# transition to initial states
 	transition(initial_state)

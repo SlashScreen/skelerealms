@@ -24,7 +24,7 @@ func _ready():
 		inactive = true
 		return
 	
-	puppeteer = $"../../".get_component("PuppetSpawnerComponent").unwrap()
+	puppeteer = $"../../".get_component("PuppetSpawnerComponent")
 	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
 	change_rotation.connect((get_parent().get_parent() as Entity)._on_set_rotation.bind())
 

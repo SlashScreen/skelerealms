@@ -12,12 +12,18 @@ func _init() -> void:
 
 func _ready():
 	($"../TeleportComponent" as TeleportComponent).teleporting.connect(teleport.bind())
-	(parent_entity.get_component("DamageableComponent").unwrap() as DamageableComponent).damaged.connect(on_damage.bind())
+	(parent_entity.get_component("DamageableComponent") as DamageableComponent).damaged.connect(on_damage.bind())
 
 
 func on_damage(info:DamageInfo) -> void:
 	# TODO: Genericize, calculate buffs and debuffs
-	(parent_entity.get_component("VitalsComponent").unwrap() as VitalsComponent).change_health(-info.damage_effects[&"blunt"])
+	(parent_entity.get_component("VitalsComponent") as VitalsComponent).change_health(-info.damage_effects[&"blunt"])
+
+
+func _entity_ready() -> void:
+	var ic:InventoryComponent = parent_entity.get_component("InventoryComponent")
+	ic.added_to_inventory.connect(func(id): QuestEngine.instance.register_quest_event("item_get", {"filter":id}))
+	ic.removed_from_inventory.connect(func(id): QuestEngine.instance.register_quest_event("item_get", {"filter":id}, true))
 
 
 ## Set the entity's position.

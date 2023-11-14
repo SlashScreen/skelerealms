@@ -25,31 +25,31 @@ func _ready():
 ## 2. Scans its children entities to see if it missed any (this step may be removed in the future) [br]
 ## 3. Attempts to load the entity from disk. [br]
 ## Failing all of these, it will return [code]none[/code].
-func get_entity(id:StringName) -> Option:
+func get_entity(id:StringName) -> Entity:
 	# stage 1: attempt find in cache
 	if entities.has(id):
 		(entities[id] as Entity).reset_stale_timer() # FIXME: If another entity is carrying a reference to this entity, then we might break stuff by cleaning it up in this way?
-		return Option.from(entities[id])
+		return entities[id]
 	# stage 2: Check in save file
 	var potential_data = SaveSystem.entity_in_save(id) # chedk the save system
 	if potential_data.some(): # if found:
 		add_entity(ResourceLoader.load(disk_assets[id], "InstanceData")) # load default from disk
 		entities[id].load_data(potential_data.unwrap()) # and then load using the data blob we got from the save file
 		(entities[id] as Entity).reset_stale_timer()
-		return Option.from(entities[id])
+		return entities[id]
 	# stage 3: check on disk
 	if disk_assets.has(id):
-		add_entity(ResourceLoader.load(disk_assets[id], "InstanceData"))
+		add_entity(load(disk_assets[id]))
 		(entities[id] as Entity).reset_stale_timer()
-		return Option.from(entities[id]) # we added the entity in #add_entity
+		return entities[id] # we added the entity in #add_entity
 
 	# Other than that, we've failed. Attempt to find the entity in the child count as a failsave, then return none.
-	return Option.from(get_node_or_null(id as String))
+	return get_node_or_null(id as String)
 
 
 func get_disk_data_for_entity(id:StringName) -> InstanceData:
 	if disk_assets.has(id):
-		return ResourceLoader.load(disk_assets[id], "InstanceData")
+		return load(disk_assets[id])
 	else:
 		return null
 

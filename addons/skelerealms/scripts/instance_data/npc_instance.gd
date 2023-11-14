@@ -4,6 +4,8 @@ extends InstanceData
 
 
 @export var npc_data: NPCData
+## Any items this NPC has in their inventory that will not be generated.
+@export var unique_items: Array[ItemInstance] = []
 
 
 func get_archetype_components() -> Array[EntityComponent]:
@@ -23,7 +25,7 @@ func get_archetype_components() -> Array[EntityComponent]:
 	components.append(NavigatorComponent.new())
 	components.append(ViewDirectionComponent.new())
 	components.append(EquipmentComponent.new())
-	components.append(InventoryComponent.new())
+	components.append(InventoryComponent.new(unique_items))
 	if not _try_override_script(npc_data.custom_script) == null:
 		components.append(ScriptComponent.new(npc_data.custom_script))
 	

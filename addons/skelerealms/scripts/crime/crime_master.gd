@@ -43,15 +43,22 @@ func punish_crimes(coven:StringName):
 ## Report a crime. The caller is also added as a witness.
 func add_crime(crime:Crime, witness:StringName):
 	crime_queue[crime] = true
+	crime.witnesses.append(witness)
+
+
+func _process(_delta: float) -> void:
+	_process_crime_queue()
 
 
 func _process_crime_queue() -> void:
 	if crime_queue.size() > 0:
 		for crime in crime_queue:
+			if crime.victim == "":
+				continue
 		# add crime to covens
-			var cc = EntityManager.instance.get_entity(crime.victim).unwrap().get_component("CovensComponent")
-			if cc.some():
-				for coven in (cc.unwrap() as CovensComponent).covens:
+			var cc = EntityManager.instance.get_entity(crime.victim).get_component("CovensComponent")
+			if cc:
+				for coven in (cc as CovensComponent).covens:
 					## Skip if doesn't track crime
 					if not CovenSystem.get_coven(coven).track_crime:
 						continue
@@ -63,8 +70,9 @@ func _process_crime_queue() -> void:
 							"punished" : [],
 							"unpunished" : [crime]
 						}
-				crimes_against_covens_updated.emit((cc.unwrap() as CovensComponent).covens)
+				crimes_against_covens_updated.emit((cc as CovensComponent).covens)
 		crime_queue.clear()
+
 
 ## Returns the max wanted level for crimes against a Coven.
 func max_crime_severity(id:StringName, coven:StringName) -> int:

@@ -48,3 +48,14 @@ func add_coven(c:Coven) -> void:
 ## Remove coven from system.
 func remove_coven(id:StringName) -> void:
 	covens.erase(id)
+
+
+## Change the opinion a coven (of) has of another coven (what) by amount.
+func change_opinion(of:StringName, what:StringName, amount:int) -> void:
+	var c = get_coven(of)
+	if not c:
+		return
+	if c.other_coven_opinions.has(what):
+		c.other_coven_opinions[what] = c.other_coven_opinions[what] + amount
+	else:
+		c.other_coven_opinions[what] = amount

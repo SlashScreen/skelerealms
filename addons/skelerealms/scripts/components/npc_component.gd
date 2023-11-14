@@ -129,11 +129,11 @@ signal updated(delta:float)
 ## Shorthand to get an npc component for an entity by ID.
 static func get_npc_component(id:StringName) -> NPCComponent:
 	var eop = EntityManager.instance.get_entity(id)
-	if not eop.some():
+	if not eop:
 		return null
-	var icop = eop.unwrap().get_component("NPCComponent")
-	if icop.some():
-		return icop.unwrap()
+	var icop = eop.get_component("NPCComponent")
+	if icop:
+		return icop
 	else:
 		return null
 
@@ -460,9 +460,9 @@ func get_relationship_with(ref_id:String) -> Option:
 
 ## Determines the opinion of some entity. See the tutorial in the class docs for a more in-depth look at NPC opinions.
 func determine_opinion_of(id:StringName) -> float:
-	var e:Entity = EntityManager.instance.get_entity(id).unwrap()
+	var e:Entity = EntityManager.instance.get_entity(id)
 
-	if not THREATENING_ENTITY_TYPES.any(func(x:String): return e.get_component(x).some()): # if it doesn't have any components that are marked as threatening, return neutral.
+	if not THREATENING_ENTITY_TYPES.any(func(x:String): return not e.get_component(x) == null): # if it doesn't have any components that are marked as threatening, return neutral.
 		return 0
 
 	var e_cc = e.get_component("CovensComponent")
@@ -474,26 +474,28 @@ func determine_opinion_of(id:StringName) -> float:
 	var self_modifier = 2 if data.loyalty == 2 else 1 # ditto
 
 	# if has other covens, compare against ours
-	if e_cc.some():
-		var covens = parent_entity.get_component("CovensComponent").unwrap().covens
+	if e_cc:
+		var covens = parent_entity.get_component("CovensComponent").covens
 		var coven_opinions_unfiltered = []
-		var e_covens_component = e_cc.unwrap()
+		var e_covens_component = e_cc
 
 		# get all opinions
 		for coven in covens:
 			var c = CovenSystem.get_coven(coven)
 			# get the other coven opinions
 			coven_opinions_unfiltered.append_array(c.get_coven_opinions(e_covens_component.covens.keys())) # FIXME: Get this coven opinions on other
+			# take crimes into account
+			opinions.append(CrimeMaster.max_crime_severity(id, coven) * -10) # sing opinion by -10 for each severity point
 
 		opinions.append_array(coven_opinions_unfiltered.filter(func(x:int): return not x == 0)) # filter out zeroes
 		opinion_total += opinions.size() * covens_modifier # calculate total
-	# if has an opinion of the player, take into acocunt
-	if not _opinions[id] == 0:
+	# if has an opinion of the player, take into account
+	if _opinions.has(id) and not _opinions[id] == 0:
 		opinions.append(_opinions[id])
 		opinion_total += self_modifier # avoid 1 * self_modifier because that's an identity function so we can just do self_modifier
-
+	
 	# Return weighted average
-	return opinions.reduce(func(sum, next): return sum + next, 0) / 1 if opinion_total == 0 else opinion_total
+	return opinions.reduce(func(sum, next): return sum + next, 0) / (1 if opinion_total == 0 else opinion_total)
 
 
 func gather_debug_info() -> String:

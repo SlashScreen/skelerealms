@@ -19,18 +19,18 @@ func _ready() -> void:
 func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> bool:
 	# Get component
 	var e = EntityManager.instance.get_entity(item)
-	if not e.some():
+	if not e:
 		return false
 	# Get item component
-	var ic = e.unwrap().get_component("ItemComponent")
-	if not ic.some():
+	var ic = e.get_component("ItemComponent")
+	if not ic:
 		return false
 	# Get equippable data component
-	var ec = (ic.unwrap() as ItemComponent).data.get_component("EquippableDataComponent")
-	if not ec.some():
+	var ec = (ic as ItemComponent).data.get_component("EquippableDataComponent")
+	if not ec:
 		return false
 	# Check slot validity
-	if not (ec.unwrap() as EquippableDataComponent).valid_slots.has(slot):
+	if not (ec as EquippableDataComponent).valid_slots.has(slot):
 		return false
 	# Unequip if already in slot so we ca nput it in a new slot
 	unequip_item(item)

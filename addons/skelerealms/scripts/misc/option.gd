@@ -44,3 +44,11 @@ func bind(fn:Callable) -> Variant:
 		return fn.call(unwrap())
 	else:
 		return Option.none()
+
+
+## Return a specified value if the option is none.
+func orelse(v:Variant) -> Variant:
+	if some():
+		return _data
+	else:
+		return v
