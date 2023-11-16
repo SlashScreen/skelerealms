@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbph67tp6ro6i"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/puppets/item_puppet.gd" id="1_l0auv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ivnhw"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qxh5q"]
+
+[node name="Item" type="RigidBody3D"]
+script = ExtResource("1_l0auv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_ivnhw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+gi_mode = 2
+mesh = SubResource("BoxMesh_qxh5q")
+skeleton = NodePath("../../..")

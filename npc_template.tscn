@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/ai/perception_eyes.gd" id="2_fvcq2"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/puppets/npc_puppet.gd" id="2_fw0xe"]
+[ext_resource type="PackedScene" uid="uid://itfouqmshnrx" path="res://addons/skelerealms/light_probe.tscn" id="3_64vvy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_utii8"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_s5g5c"]
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+script = ExtResource("2_fw0xe")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_utii8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_s5g5c")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.5
+target_desired_distance = 0.5
+avoidance_enabled = true
+
+[node name="EyesPerception" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.534157)
+script = ExtResource("2_fvcq2")
+
+[node name="Probe" parent="EyesPerception" instance=ExtResource("3_64vvy")]
