@@ -8,7 +8,7 @@ It is part of a family of sister addons, some of which it depends on:
 - [JournalGD](https://github.com/SlashScreen/journalgd-godot) - **Required**
 - [Bibliodot](https://github.com/SlashScreen/Bibliodot) - Not required, but intended to be used with this.
 
-You can download the addon easily by using the [submodule version](https://github.com/SlashScreen/skelerealms-submodule)m which will make it easier to stay up-to-date.
+You can download the addon easily by using the [submodule version](https://github.com/SlashScreen/skelerealms-submodule) which will make it easier to stay up-to-date.
 
 ## What does it include?
 
