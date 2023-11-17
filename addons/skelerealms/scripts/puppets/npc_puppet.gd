@@ -3,20 +3,21 @@ extends CharacterBody3D
 ## Puppet "brain" for an NPC.
 
 
+@export var animator: AnimationController
+@onready var movement_target_position: Vector3 = position # No world because this agent only works in the scene.
 var eyes:EyesPerception
 var npc_component:NPCComponent
 var puppeteer:PuppetSpawnerComponent
 var view_dir:ViewDirectionComponent
-
+var movement_speed: float = 1.0
+var target_reached:bool:
+	get:
+		return navigation_agent.is_navigation_finished()
 
 ## Called every frame to update the entity's position.
 signal change_position(Vector3)
 
-var movement_speed: float = 2.0
-@onready var movement_target_position: Vector3 = position # No world because this agent only works in the scene.
-var target_reached:bool:
-	get:
-		return navigation_agent.is_navigation_finished()
+
 
 var movement_paused:bool = false
 ## The navigation agent.
@@ -34,9 +35,9 @@ func _ready() -> void:
 	add_to_group("perception_target")
 	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
 	eyes = $EyesPerception
-	puppeteer = $"../../".get_component("PuppetSpawnerComponent").unwrap()
-	npc_component = $"../../".get_component("NPCComponent").unwrap()
-	view_dir = $"../../".get_component("ViewDirectionComponent").unwrap()
+	puppeteer = $"../../".get_component("PuppetSpawnerComponent")
+	npc_component = $"../../".get_component("NPCComponent")
+	view_dir = $"../../".get_component("ViewDirectionComponent")
 	if npc_component:
 		puppeteer.printe("Connecting percieved event")
 		eyes.perceived.connect(npc_component.on_percieve_start.bind())
@@ -91,22 +92,22 @@ func _physics_process(delta) -> void:
 	if npc_component:
 		eyes.try_perception()
 	
-	if navigation_agent.is_navigation_finished():
+	if navigation_agent.is_navigation_finished() or movement_paused:
+		animator.set_value(&"walk_speed", 0)
 		return
 	
-	if movement_paused:
-		return
+	animator.set_value(&"walk_speed", movement_speed) # In-game, moves at a brisk pace
 	
 	var current_agent_position: Vector3 = global_transform.origin
 	var next_path_position: Vector3 = navigation_agent.get_next_path_position()
 	
-	var new_velocity: Vector3 = next_path_position - current_agent_position
-	new_velocity = new_velocity.normalized()
-	new_velocity = new_velocity * movement_speed
+	var new_direction: Vector3 = next_path_position - current_agent_position # Calculate direction to point in
+	if not new_direction.length() == 0:
+		look_at(position + Vector3(new_direction.normalized().x, 0, new_direction.normalized().z))
+	var new_velocity = (new_direction.normalized() * movement_speed) if animator == null \
+						else (quaternion * -(animator.root_motion_callback.call() / delta))
 	
 	set_velocity(new_velocity)
-	if not new_velocity.length() == 0:
-		look_at(position + Vector3(new_velocity.normalized().x, 0, new_velocity.normalized().z))
 	move_and_slide()
 
 
