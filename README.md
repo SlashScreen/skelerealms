@@ -1,4 +1,4 @@
-# Skelerealms - An open world RPG framework for Godot 4
+# Skelerealms - An open world RPG framework for Godot 4.1+
 
 Skelerealms is a work-in-progress framework for creating open world RPGs, like The Elder Scrolls series.  
 Skelerealms is made to be modular and extensible, and easy to hook into for actual gameplay.  
@@ -7,6 +7,8 @@ It is part of a family of sister addons, some of which it depends on:
 - [Godot Network Graph](https://github.com/SlashScreen/godot-network-graph) - **Required**
 - [JournalGD](https://github.com/SlashScreen/journalgd-godot) - **Required**
 - [Bibliodot](https://github.com/SlashScreen/Bibliodot) - Not required, but intended to be used with this.
+
+You can download the addon easily by using the [submodule version](https://github.com/SlashScreen/skelerealms-submodule)m which will make it easier to stay up-to-date.
 
 ## What does it include?
 
