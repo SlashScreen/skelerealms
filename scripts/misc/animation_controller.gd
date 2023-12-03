@@ -8,6 +8,7 @@ extends Node
 
 signal value_set(key:StringName, value:Variant)
 signal triggered(key:StringName)
+signal swapped(now_true:StringName, now_false:StringName)
 
 
 var root_motion_callback:Callable = func(): return Vector3(0,0,0)
@@ -21,6 +22,10 @@ func set_value(key:StringName, value:Variant) -> void:
 
 func trigger(key:StringName) -> void:
 	triggered.emit(key)
+
+
+func swap(now_true:StringName, now_false:StringName) -> void:
+	swapped.emit(now_true, now_false)
 
 
 ## Use this to find the controller in the tree.
