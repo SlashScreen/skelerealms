@@ -17,15 +17,13 @@ var target_reached:bool:
 ## Called every frame to update the entity's position.
 signal change_position(Vector3)
 
-
-
 var movement_paused:bool = false
 ## The navigation agent.
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 var hands_manager:HandsManager:
 	get:
 		if hands_manager == null:
-			hands_manager = get_node("Hands manager")
+			hands_manager = get_node("HandsManager")
 		return hands_manager
 
 

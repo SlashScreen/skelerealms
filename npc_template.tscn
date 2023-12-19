@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=6 format=3 uid="uid://dj6sa6ksct1xi"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/ai/perception_eyes.gd" id="2_fvcq2"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/puppets/npc_puppet.gd" id="2_fw0xe"]
