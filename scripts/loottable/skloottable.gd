@@ -3,25 +3,40 @@ extends Resource
 
 
 @export var items:Array[SKLootTableItem] = []
-@export var currencies:Array[SKLootTableCurrency] = []
 
 
-## Get generated items from the loot table.
-func resolve_items() -> Array[ItemData]:
-	var output: Array[ItemData] = []
+## Generate all members of the loot table. Returns a dictionary shaped like {&"items":Array[ItemData], &"currencies":{name:amount,...}}
+func resolve() -> Dictionary:
+	var output:LootTableResult = LootTableResult.new()
 	for i:SKLootTableItem in items:
-		output.append_array(i.resolve())
-	return output
+		output.concat(i.resolve())
+	return output.to_dict()
 
 
-## Get currencies from loot table currency entires
-func resolve_currencies() -> Dictionary:
-	var output = {}
-	for d:SKLootTableCurrency in currencies:
-		var r: Dictionary = d.resolve()
-		for c:StringName in r:
-			if output.has(c):
-				output[c] += r[c]
+class LootTableResult:
+	extends Object
+	
+	
+	var items: Array[ItemData] = []
+	var currencies: Dictionary = {}
+	
+	
+	func _init(i:Array[ItemData] = [], c:Dictionary = {}) -> void:
+		items = i
+		currencies = c
+	
+	
+	func concat(other:LootTableResult) -> void:
+		items.append_array(other.items)
+		for c:StringName in other.currencies:
+			if currencies.has(c):
+				currencies[c] += other.currencies[c]
 			else:
-				output[c] = r[c]
-	return output
+				currencies[c] = other.currencies[c]
+	
+	
+	func to_dict() -> Dictionary:
+		return {
+			&"items": items,
+			&"currencies": currencies
+		}

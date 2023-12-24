@@ -90,15 +90,16 @@ func _add_entity_raw(e:Entity) -> Entity:
 	return e
 
 
-## Remove an entity from the game.
-func remove_entity(refID:String):
-	remove_child(get_node(refID)) # FIXME: Has to loop through everything
-	entities.erase(refID)
-
-
 ## ONLY call after save!!!
 func _cleanup_stale_entities():
 	# Get all children
 	for c in get_children():
 		if (c as Entity).stale_timer >= ProjectSettings.get_setting("skelerealms/entity_cleanup_timer"): # If stale timer is beyond threshold
 			remove_entity(c.name) # remove
+
+
+## Remove entity from the game.
+func remove_entity(rid:StringName) -> void:
+	if entities.has(rid):
+		entities[rid].queue_free()
+		entities.erase(rid)

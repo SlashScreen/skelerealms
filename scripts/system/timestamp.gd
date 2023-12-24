@@ -109,3 +109,24 @@ func gte(to:Timestamp) -> bool:
 		return false
 	
 	return true
+
+
+func time_since(other:Timestamp) -> Dictionary:
+	return {
+		&"year": other.year - year,
+		&"month": other.month - month,
+		&"week": other.week - week,
+		&"day": other.day - day,
+		&"hour": other.hour - hour,
+		&"minute": other.minute - minute
+	}
+
+
+## Convert a dictionary time, like produced by [method time_since], to minutes.
+static func dict_to_minutes(t:Dictionary) -> int:
+	var my:int = t.year * ProjectSettings.get_setting("skelerealms/months_in_year") # months from years
+	var wm: int = (t.month + my) * ProjectSettings.get_setting("skelerealms/weeks_in_month") # weeks from months
+	var dw: int = (t.week + wm) * ProjectSettings.get_setting("skelerealms/days_per_week") # days from weeks
+	var hd: int = (t.day + dw) * ProjectSettings.get_setting("skelerealms/hours_per_day") # hours from days
+	var mh: int = (t.hour + hd) * ProjectSettings.get_setting("skelerealms/minutes_per_hour") # minutes from hours
+	return t.minute + mh

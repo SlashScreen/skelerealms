@@ -38,7 +38,6 @@ func add_to_inventory(id:String):
 
 ## Remove an item from the inventory.
 func remove_from_inventory(id:String):
-	print(inventory)
 	var index = inventory.find(id)
 	if index == -1: # catch if it doesnt have the item
 		return

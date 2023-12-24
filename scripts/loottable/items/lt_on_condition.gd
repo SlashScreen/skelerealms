@@ -6,13 +6,13 @@ extends SKLootTableItem
 @export var items:Array[SKLootTableItem] = []
 
 
-func resolve() -> Array[ItemData]:
+func resolve() -> SKLootTable.LootTableResult:
 	if not _check_condition():
-		return []
+		return SKLootTable.LootTableResult.new()
 	
-	var o:Array[ItemData] = []
+	var o:SKLootTable.LootTableResult = SKLootTable.LootTableResult.new()
 	for i:SKLootTableItem in items:
-		o.append_array(i.resolve())
+		o.concat(i.resolve())
 	return o
 
 

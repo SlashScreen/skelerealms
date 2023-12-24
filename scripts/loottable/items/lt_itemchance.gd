@@ -6,8 +6,8 @@ extends SKLootTableItem
 @export_range(0.0, 1.0) var chance:float = 1.0
 
 
-func resolve() -> Array[ItemData]:
+func resolve() -> SKLootTable.LootTableResult:
 	if randf() > chance:
-		return [item]
+		return SKLootTable.LootTableResult.new([item], {})
 	else:
-		return []
+		return SKLootTable.LootTableResult.new()

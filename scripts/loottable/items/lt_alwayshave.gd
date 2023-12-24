@@ -5,8 +5,8 @@ extends SKLootTableItem
 @export var items:Array[SKLootTableItem] = []
 
 
-func resolve() -> Array[ItemData]:
-	var o:Array[ItemData] = []
+func resolve() -> SKLootTable.LootTableResult:
+	var o:SKLootTable.LootTableResult = SKLootTable.LootTableResult.new()
 	for i:SKLootTableItem in items:
-		o.append_array(i.resolve())
+		o.concat(i.resolve())
 	return o

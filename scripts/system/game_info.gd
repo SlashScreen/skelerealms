@@ -58,7 +58,6 @@ var year:int:
 var is_game_started:bool
 var command_paused:bool
 
-
 signal pause
 signal unpause
 signal console_frozen

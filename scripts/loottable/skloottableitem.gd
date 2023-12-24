@@ -2,5 +2,5 @@ class_name SKLootTableItem
 extends Resource
 
 
-func resolve() -> Array[ItemData]:
-	return []
+func resolve() -> SKLootTable.LootTableResult:
+	return SKLootTable.LootTableResult.new()
