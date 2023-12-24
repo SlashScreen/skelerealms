@@ -46,7 +46,9 @@ func reroll() -> void:
 		item.item_data = id
 		item.contained_inventory = parent_entity.name
 		item.item_owner = owner_id
+		item.ref_id = preload("res://addons/skelerealms/scripts/vendor/uuid.gd").v4()
 		
 		var e:Entity = EntityManager.instance.add_entity(item)
 		ic.add_to_inventory(e.name)
+	
 	ic.currencies = res.currencies
