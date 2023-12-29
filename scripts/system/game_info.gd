@@ -93,14 +93,15 @@ func _ready():
 
 
 ## Puase the game.
-func pause_game():
+func pause_game(silent:bool = false):
 	if command_paused:
 		return
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	paused = true
 	get_tree().paused = true
 	$Timer.paused = true
-	pause.emit()
+	if not silent:
+		pause.emit()
 
 
 ## Unpause the game.

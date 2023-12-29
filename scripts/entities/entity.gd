@@ -18,8 +18,6 @@ var stale_timer:float
 var supress_spawning:bool
 ## FLag telling if this was created dynamically (eg. [class SpawnPoint]).
 var generated:bool
-
-
 ## Whether this entity is in the scene or not.
 var in_scene: bool:
 	get:
@@ -30,6 +28,7 @@ var in_scene: bool:
 		if !in_scene && val: # if was not in scene and now is
 			entered_scene.emit()
 		in_scene = val
+var conditions:Array[StringName] = []
 
 
 ## Emitted when an entity enters a scene.

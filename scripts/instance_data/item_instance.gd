@@ -15,7 +15,7 @@ func get_archetype_components() -> Array[EntityComponent]:
 	# set up item component
 	var item_component = ItemComponent.new()
 	item_component.data = item_data
-	item_component.contained_inventory = Option.wrap(contained_inventory)
+	item_component.contained_inventory = contained_inventory
 	item_component.name = "ItemComponent" # be sure to name them
 	item_component.quest_item = quest_item
 	item_component.item_owner = item_owner

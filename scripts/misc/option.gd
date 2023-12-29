@@ -1,4 +1,5 @@
 class_name Option
+extends RefCounted
 ## A crude implementation of an option/maybe type.
 ## May get rid of this, because it adds complexity to replicate features that nullability kind of already does...
 

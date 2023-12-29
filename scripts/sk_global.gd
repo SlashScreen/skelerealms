@@ -10,6 +10,8 @@ var world_states:Dictionary
 
 ## Called when the [EntityManager] has finished loading.
 signal entity_manager_loaded
+## When a chest (or other inventory) is opened.
+signal inventory_opened(id:StringName)
 
 
 ## Attempts to find an entity in the tree above a node. Returns null if none found. Automatically takes account of reparented puppets.

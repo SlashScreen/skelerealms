@@ -3,7 +3,7 @@ extends EditorInspectorPlugin
 
 
 func _can_handle(object):
-	return object is WorldNPC or object is WorldItem or object is WorldMarker
+	return object is WorldNPC or object is WorldItem or object is WorldMarker or object is Chest
 
 
 func _parse_begin(object):

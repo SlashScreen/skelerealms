@@ -18,12 +18,15 @@ func _init(oid:StringName = &"", lt:SKLootTable = null, rt:int = -1) -> void:
 
 
 func _ready() -> void:
+	reroll()
 	if reset_time_minutes > 0:
 		GameInfo.minute_incremented.connect(_check_should_restore.bind())
 
 
 func _check_should_restore() -> void:
-	if parent_entity.in_scene or Timestamp.build_from_world_timestamp().time_since(looted_time) < reset_time_minutes: # will not refresh while in scene
+	if not looted_time:
+		return
+	if parent_entity.in_scene or Timestamp.dict_to_minutes(Timestamp.build_from_world_timestamp().time_since(looted_time)) < reset_time_minutes: # will not refresh while in scene
 		return
 	clear()
 	reroll()
@@ -44,7 +47,7 @@ func reroll() -> void:
 	for id:ItemData in res.items:
 		var item: ItemInstance = ItemInstance.new()
 		item.item_data = id
-		item.contained_inventory = parent_entity.name
+		item.contained_inventory = String(parent_entity.name)
 		item.item_owner = owner_id
 		item.ref_id = preload("res://addons/skelerealms/scripts/vendor/uuid.gd").v4()
 		

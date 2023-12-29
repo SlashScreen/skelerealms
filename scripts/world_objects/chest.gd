@@ -3,17 +3,18 @@ extends InteractiveObject
 ## A chest's represenmtation in the world.
 
 
-@export var data:ChestInstance
+@export var instance:ChestInstance
 
 
 signal opened_inventory
 
 
 func _ready():
-	EntityManager.instance.get_entity(data.ref_id) # bring the chest instance into the world
-	on_interact.connect(try_open_inventory.bind())
+	EntityManager.instance.get_entity(instance.ref_id) # bring the chest instance into the world
+	on_interact.connect(func(_id): try_open_inventory())
 
 
 # TODO: Allow for lockpicking
 func try_open_inventory():
 	opened_inventory.emit()
+	SkeleRealmsGlobal.inventory_opened.emit(instance.ref_id)
