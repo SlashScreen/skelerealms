@@ -8,5 +8,12 @@ extends InteractiveObject
 
 
 func _ready():
+	if visible:
+		_spawn()
+	else:
+		visibility_changed.connect(func(s:bool) -> void: if s: _spawn())
+
+
+func _spawn():
 	var e = EntityManager.instance.get_entity(instance.ref_id) # calling get_entity will cause the enity manager to start tracking this instance, if it isn't already.
 	queue_free()

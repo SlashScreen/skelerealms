@@ -23,7 +23,7 @@ var movement_paused:bool = false
 var hands_manager:HandsManager:
 	get:
 		if hands_manager == null:
-			hands_manager = get_node("HandsManager")
+			hands_manager = %HandsManager
 		return hands_manager
 
 

@@ -8,9 +8,17 @@ const UUID = preload("../vendor/uuid.gd")
 static var spawn_tracker: Dictionary # TODO: Save this
 @export var templates: Array[NPCTemplateOption]
 @export_enum("One Shot", "Every Time", "Must Be Triggered") var mode:int
+@export var despawn_when_exit_scene:bool ## Whether this entity should despawn when it leaves the scene.
 
 
 func _ready() -> void:
+	if visible:
+		_roll()
+	else:
+		visibility_changed.connect(func(s:bool)->void: if s: _roll())
+
+
+func _roll() -> void:
 	match mode:
 		0:
 			if not spawn_tracker.has(generate_id()):
@@ -37,6 +45,8 @@ func spawn() -> void:
 	var e = EntityManager.instance.add_entity(npci)
 	e.rotation = quaternion
 	e.generated = true
+	if despawn_when_exit_scene:
+		e.left_scene.connect(func() -> void: EntityManager.instance.remove_entity(e.name))
 	
 	# resolve loot table
 	if t.loot_table:

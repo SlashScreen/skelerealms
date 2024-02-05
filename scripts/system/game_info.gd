@@ -7,13 +7,6 @@ extends Node
 
 var is_loading:bool = false
 var paused:bool = false
-var active_camera:Camera3D:
-	get:
-		if not active_camera:
-			active_camera = get_viewport().get_camera_3d()
-		return active_camera
-	set(val):
-		active_camera = val
 var game_running:bool = true :
 	get:
 		return game_running
@@ -57,6 +50,12 @@ var year:int:
 		return world_time[&"year"]
 var is_game_started:bool
 var command_paused:bool
+## This is the point at which all entity loading, chunk loading, etc. is done. Normally, you would want this to be the player.
+var world_origin:Node3D:
+	get:
+		if world_origin == null:
+			world_origin = get_viewport().get_camera_3d()
+		return world_origin
 
 signal pause
 signal unpause
@@ -88,8 +87,6 @@ func _ready():
 	$Timer.one_shot = false
 	$Timer.start(1)
 	$Timer.paused = not game_running
-	
-	active_camera = get_viewport().get_camera_3d()
 
 
 ## Puase the game.

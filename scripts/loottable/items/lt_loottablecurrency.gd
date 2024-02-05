@@ -1,5 +1,5 @@
 class_name SKLTCurrency
-extends Resource
+extends SKLootTableItem
 
 
 @export var currency:StringName = &""
@@ -7,5 +7,5 @@ extends Resource
 @export_range(0, 100, 1, "or_greater") var amount_max:int = 10
 
 
-func resolve() -> Dictionary:
-	return {currency: amount_min if amount_max <= amount_min else randi_range(amount_min, amount_max)}
+func resolve() -> SKLootTable.LootTableResult:
+	return SKLootTable.LootTableResult.new([], {currency: amount_min if amount_max <= amount_min else randi_range(amount_min, amount_max)})
