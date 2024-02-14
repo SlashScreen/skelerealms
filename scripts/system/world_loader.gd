@@ -25,7 +25,7 @@ func _enter_tree() -> void:
 
 func _ready():
 	regex = RegEx.new()
-	regex.compile("([^\\/\n\\r]+).tscn") 
+	regex.compile("([^\\/\n\\r]+).t?scn") 
 	_cache_worlds(ProjectSettings.get_setting("skelerealms/worlds_path"))
 	GameInfo.is_loading = false
 

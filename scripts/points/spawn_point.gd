@@ -12,7 +12,7 @@ static var spawn_tracker: Dictionary # TODO: Save this
 
 
 func _ready() -> void:
-	if visible:
+	if is_visible_in_tree():
 		_roll()
 	else:
 		visibility_changed.connect(func(s:bool)->void: if s: _roll())

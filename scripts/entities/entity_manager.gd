@@ -13,7 +13,7 @@ var regex:RegEx
 
 func _ready():
 	regex = RegEx.new()
-	regex.compile("([^\\/\n\\r]+).tres")
+	regex.compile("([^\\/\n\\r]+).t?res")
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
 	instance = self
 	SkeleRealmsGlobal.entity_manager_loaded.emit()
@@ -63,7 +63,7 @@ func _cache_entities(path:String):
 			if dir.current_is_dir(): # if is directory, cache subdirectory
 				_cache_entities("%s/%s" % [path, file_name])
 			else: # if filename, cache filename
-				if '.tres.remap' in file_name:
+				if '.remap' in file_name:
 					file_name = file_name.trim_suffix('.remap')
 				var result = regex.search(file_name)
 				if result:

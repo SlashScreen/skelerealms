@@ -9,7 +9,7 @@ var regex:RegEx
 func _ready():
 	GameInfo.game_started.connect(func():
 		regex = RegEx.new()
-		regex.compile("([^\\/\n\\r]+).tres")
+		regex.compile("([^\\/\n\\r]+).t?res")
 		_cache_covens(ProjectSettings.get_setting("skelerealms/covens_path"))
 		)
 
@@ -26,7 +26,7 @@ func _cache_covens(path:String):
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			if '.tres.remap' in file_name:
+			if '.remap' in file_name:
 				file_name = file_name.trim_suffix('.remap')
 			if dir.current_is_dir(): # if is directory, cache subdirectory
 				_cache_covens("%s/%s" % [path, file_name])

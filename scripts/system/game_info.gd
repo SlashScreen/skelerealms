@@ -56,6 +56,11 @@ var world_origin:Node3D:
 		if world_origin == null:
 			world_origin = get_viewport().get_camera_3d()
 		return world_origin
+## The time between minutes, from 0 to 1.
+var time_fraction:float:
+	get:
+		return _internal_seconds / ProjectSettings.get_setting("skelerealms/seconds_per_minute")
+var _internal_seconds:float = 0.0
 
 signal pause
 signal unpause
@@ -165,6 +170,7 @@ func _on_timer_complete():
 	# Increment minute
 	if world_time[&"world_time"] % roundi(ProjectSettings.get_setting("skelerealms/seconds_per_minute")) == 0:
 		world_time[&"minute"] += 1
+		_internal_seconds = 0
 		minute_incremented.emit()
 	# Wrap minutes to hours
 	if world_time[&"minute"] > roundi(ProjectSettings.get_setting("skelerealms/minutes_per_hour")):
@@ -224,3 +230,15 @@ func reset_data() -> void: # this should never happen but just in case
 func start_game() -> void:
 	game_started.emit()
 	is_game_started = true
+
+
+func _process(delta: float) -> void:
+	if not paused:
+		_internal_seconds += delta
+
+
+func _progress_through_day() -> float:
+	var hour_progress = hour / ProjectSettings.get_setting("skelerealms/hours_per_day")
+	var minutes_progress = minute / (ProjectSettings.get_setting("skelerealms/minutes_per_hour") * ProjectSettings.get_setting("skelerealms/hours_per_day"))
+	var seconds_progress = time_fraction / (ProjectSettings.get_setting("skelerealms/minutes_per_hour") * ProjectSettings.get_setting("skelerealms/hours_per_day"))
+	return hour_progress + minutes_progress + seconds_progress
