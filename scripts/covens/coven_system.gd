@@ -9,7 +9,7 @@ var regex:RegEx
 func _ready():
 	GameInfo.game_started.connect(func():
 		regex = RegEx.new()
-		regex.compile("([^\\/\n\\r]+).t?res")
+		regex.compile("([^\\/\n\\r]+)\\.t?res")
 		_cache_covens(ProjectSettings.get_setting("skelerealms/covens_path"))
 		)
 

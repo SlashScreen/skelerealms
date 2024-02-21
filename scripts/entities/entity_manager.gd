@@ -2,18 +2,17 @@ class_name EntityManager
 extends Node
 ## Manages entities in the game.
 
-
 ## The instance of the entity manager.
-static var instance:EntityManager
+static var instance: EntityManager
 
-var entities:Dictionary = {}
-var disk_assets:Dictionary = {} # TODO: Figure out an alternative that isn't so memory heavy
-var regex:RegEx
+var entities: Dictionary = {}
+var disk_assets: Dictionary = {}  # TODO: Figure out an alternative that isn't so memory heavy
+var regex: RegEx
 
 
 func _ready():
 	regex = RegEx.new()
-	regex.compile("([^\\/\n\\r]+).t?res")
+	regex.compile("([^\\/\n\\r]+)\\.t?res")
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
 	instance = self
 	SkeleRealmsGlobal.entity_manager_loaded.emit()
@@ -25,49 +24,50 @@ func _ready():
 ## 2. Scans its children entities to see if it missed any (this step may be removed in the future) [br]
 ## 3. Attempts to load the entity from disk. [br]
 ## Failing all of these, it will return [code]none[/code].
-func get_entity(id:StringName) -> Entity:
+func get_entity(id: StringName) -> Entity:
 	# stage 1: attempt find in cache
 	if entities.has(id):
-		(entities[id] as Entity).reset_stale_timer() # FIXME: If another entity is carrying a reference to this entity, then we might break stuff by cleaning it up in this way?
+		(entities[id] as Entity).reset_stale_timer()  # FIXME: If another entity is carrying a reference to this entity, then we might break stuff by cleaning it up in this way?
 		return entities[id]
 	# stage 2: Check in save file
-	var potential_data = SaveSystem.entity_in_save(id) # chedk the save system
-	if potential_data.some(): # if found:
-		add_entity(ResourceLoader.load(disk_assets[id], "InstanceData")) # load default from disk
-		entities[id].load_data(potential_data.unwrap()) # and then load using the data blob we got from the save file
+	var potential_data = SaveSystem.entity_in_save(id)  # chedk the save system
+	if potential_data.some():  # if found:
+		add_entity(ResourceLoader.load(disk_assets[id], "InstanceData"))  # load default from disk
+		entities[id].load_data(potential_data.unwrap())  # and then load using the data blob we got from the save file
 		(entities[id] as Entity).reset_stale_timer()
 		return entities[id]
 	# stage 3: check on disk
 	if disk_assets.has(id):
 		add_entity(load(disk_assets[id]))
 		(entities[id] as Entity).reset_stale_timer()
-		return entities[id] # we added the entity in #add_entity
+		return entities[id]  # we added the entity in #add_entity
 
 	# Other than that, we've failed. Attempt to find the entity in the child count as a failsave, then return none.
 	return get_node_or_null(id as String)
 
 
-func get_disk_data_for_entity(id:StringName) -> InstanceData:
+func get_disk_data_for_entity(id: StringName) -> InstanceData:
 	if disk_assets.has(id):
 		return load(disk_assets[id])
 	else:
 		return null
 
 
-func _cache_entities(path:String):
+func _cache_entities(path: String):
 	var dir = DirAccess.open(path)
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			if dir.current_is_dir(): # if is directory, cache subdirectory
+			print(file_name)
+			if dir.current_is_dir():  # if is directory, cache subdirectory
 				_cache_entities("%s/%s" % [path, file_name])
-			else: # if filename, cache filename
-				if '.remap' in file_name:
-					file_name = file_name.trim_suffix('.remap')
+			else:  # if filename, cache filename
+				if ".remap" in file_name:
+					file_name = file_name.trim_suffix(".remap")
 				var result = regex.search(file_name)
 				if result:
-					disk_assets[result.get_string(1)] = "%s/%s" % [path, file_name] # TODO: Check if it's actually an InstanceData
+					disk_assets[result.get_string(1)] = "%s/%s" % [path, file_name]  # TODO: Check if it's actually an InstanceData
 			file_name = dir.get_next()
 		dir.list_dir_end()
 
@@ -76,15 +76,15 @@ func _cache_entities(path:String):
 
 
 ## add a new entity.
-func add_entity(res:InstanceData) -> Entity:
-	var new_entity = Entity.new(res) # make a new entity
+func add_entity(res: InstanceData) -> Entity:
+	var new_entity = Entity.new(res)  # make a new entity
 	# add new entity to self, and the dictionary
 	entities[res.ref_id] = new_entity
 	add_child(new_entity)
 	return new_entity
 
 
-func _add_entity_raw(e:Entity) -> Entity:
+func _add_entity_raw(e: Entity) -> Entity:
 	entities[e.name] = e
 	add_child(e)
 	return e
@@ -94,12 +94,15 @@ func _add_entity_raw(e:Entity) -> Entity:
 func _cleanup_stale_entities():
 	# Get all children
 	for c in get_children():
-		if (c as Entity).stale_timer >= ProjectSettings.get_setting("skelerealms/entity_cleanup_timer"): # If stale timer is beyond threshold
-			remove_entity(c.name) # remove
+		if (
+			(c as Entity).stale_timer
+			>= ProjectSettings.get_setting("skelerealms/entity_cleanup_timer")
+		):  # If stale timer is beyond threshold
+			remove_entity(c.name)  # remove
 
 
 ## Remove entity from the game.
-func remove_entity(rid:StringName) -> void:
+func remove_entity(rid: StringName) -> void:
 	if entities.has(rid):
 		entities[rid].queue_free()
 		entities.erase(rid)
