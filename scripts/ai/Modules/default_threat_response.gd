@@ -270,3 +270,7 @@ func _determine_threat(e:Entity) -> int:
 func _clean_up() -> void:
 	if vigilant_thread:
 		vigilant_thread.wait_to_finish()
+
+
+func get_type() -> String:
+	return "DefaultThreatResponseModule"

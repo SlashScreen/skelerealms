@@ -14,3 +14,7 @@ func react(crime:Crime, pos:Vector3) -> void:
 		_npc.printe("Witnessed crime.")
 		CrimeMaster.add_crime(crime, _npc.parent_entity.name)
 		_npc.crime_witnessed.emit()
+
+
+func get_type() -> String:
+	return "DefaultCrimeReportModule"

@@ -23,6 +23,10 @@ func _clean_up() -> void:
 	return
 
 
+func get_type() -> String:
+	return "AIModule"
+
+
 ## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
 func printe(text:String) -> void:
 	_npc.printe(text)

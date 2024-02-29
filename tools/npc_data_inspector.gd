@@ -22,28 +22,31 @@ var prefab_path:String:
 		prefab_path = val
 		$Prefab.set_path_label(val)
 
-var editing_data:NPCData
+var editing_data:NPCInstance
+var win:Window
 
 
 func refresh_class_list() -> void:
 	mod_class_selection.clear()
-	var inherited:PackedStringArray = ClassDB.get_inheriters_from_class(&"AIModule")
-	for i:String in inherited:
-		mod_class_selection.add_item(i)
+	var inherited:Array = SKToolPlugin.find_classes_that_inherit(&"AIModule")
+	for d:Dictionary in inherited:
+		mod_class_selection.add_item(d.class)
+		mod_class_selection.set_item_metadata(mod_class_selection.item_count - 1, d.path)
 
 
 func refresh_goap_list() -> void:
 	goap_class_selection.clear()
-	var inherited:PackedStringArray = ClassDB.get_inheriters_from_class(&"GOAPBehavior")
-	for i:String in inherited:
-		goap_class_selection.add_item(i)
+	var inherited:Array = SKToolPlugin.find_classes_that_inherit(&"GOAPBehavior")
+	for d:Dictionary in inherited:
+		goap_class_selection.add_item(d.class)
+		goap_class_selection.set_item_metadata(goap_class_selection.item_count - 1, d.path)
 
 
 func _ready() -> void:
 	# Refresh
 	refresh_class_list()
 	refresh_goap_list()
-	$Prefab.texture = null
+	$Prefab.clear()
 	# Modules
 	load_module_file.files_selected.connect(func(paths:PackedStringArray) -> void:
 		for path:String in paths:
@@ -51,8 +54,11 @@ func _ready() -> void:
 		update_ai_modules()
 		)
 	add_module.pressed.connect(func() -> void:
-		var n:AIModule = ClassDB.instantiate(mod_class_selection.get_item_text(mod_class_selection.selected))
+		if mod_class_selection.get_item_text(mod_class_selection.selected) == "":
+			return
+		var n:AIModule = load(mod_class_selection.get_selected_metadata()).new()
 		add_module_to_list(n)
+		update_ai_modules()
 		)
 	load_module_button.pressed.connect(load_module_file.popup_centered.bind())
 	# Prefab
@@ -67,19 +73,38 @@ func _ready() -> void:
 		update_goap_behaviors()
 		)
 	add_goap.pressed.connect(func() -> void:
-		var n:GOAPBehavior = ClassDB.instantiate(goap_class_selection.get_item_text(goap_class_selection.selected))
+		if goap_class_selection.get_item_text(goap_class_selection.selected) == "":
+			return
+		var n:GOAPBehavior = load(goap_class_selection.get_selected_metadata()).new()
 		add_goap_to_list(n)
+		update_goap_behaviors()
 		)
 	load_goap_button.pressed.connect(load_goap_file.popup_centered.bind())
 
 
+func edit(o: NPCInstance, w:Window) -> void:
+	await ready
+	editing_data = o
+	w.title = o.ref_id
+	win = w
+	_load_res()
+
+
+func _load_res() -> void:
+	%RefID.text = editing_data.ref_id
+	for g:GOAPBehavior in editing_data.npc_data.goap_actions:
+		add_goap_to_list(g)
+	for a:AIModule in editing_data.npc_data.modules:
+		add_module_to_list(a)
+
+
 func add_module_to_list(mod:AIModule) -> void:
-	var i:int = module_list.add_item(mod.name)
+	var i:int = module_list.add_item(mod.get_type())
 	module_list.set_item_metadata(i, mod)
 
 
 func add_goap_to_list(goap:GOAPBehavior) -> void:
-	var i:int = goap_list.add_item(goap.name)
+	var i:int = goap_list.add_item(goap.id)
 	goap_list.set_item_metadata(i, goap)
 
 
@@ -87,15 +112,20 @@ func update_ai_modules() -> void:
 	var output:Array[AIModule] = []
 	for i:int in range(goap_list.item_count):
 		output.append(goap_list.get_item_metadata(i))
-	editing_data.modules = output
+	editing_data.npc_data.modules = output
 
 
 func update_goap_behaviors() -> void:
 	var output:Array[GOAPBehavior] = []
 	for i:int in range(goap_list.item_count):
 		output.append(goap_list.get_item_metadata(i))
-	editing_data.goap_actions = output
+	editing_data.npc_data.goap_actions = output
 
 
 func update_prefab() -> void:
 	editing_data.prefab = load(prefab_path)
+
+
+func _on_ref_id_text_submitted(new_text: String) -> void:
+	editing_data.ref_id = new_text
+	win.title = new_text

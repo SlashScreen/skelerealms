@@ -11,3 +11,7 @@ func on_interact(refID:StringName) -> void:
 	DialogueHooks.start_dialogue(_npc.data.start_dialogue_node, [_npc.parent_entity.name, refID])
 	_npc.start_dialogue.emit()
 	_npc._busy = true
+
+
+func get_type() -> String:
+	return "DefaultInteractResponseModule"

@@ -78,3 +78,7 @@ func process_damage(info:DamageInfo) -> void:
 		_npc.hit_by.emit(info.offender)
 	
 	damage_received.emit()
+
+
+func get_type() -> String:
+	return "DefaultDamageModule"

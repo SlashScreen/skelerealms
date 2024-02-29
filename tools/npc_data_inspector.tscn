@@ -19,35 +19,56 @@ layout_mode = 2
 [node name="panels" type="HBoxContainer" parent="NPC"]
 layout_mode = 2
 
-[node name="Flags" type="GridContainer" parent="NPC/panels"]
+[node name="VBoxContainer" type="VBoxContainer" parent="NPC/panels"]
+layout_mode = 2
+
+[node name="Flags" type="GridContainer" parent="NPC/panels/VBoxContainer"]
 layout_mode = 2
 columns = 2
 
-[node name="Essential" type="CheckBox" parent="NPC/panels/Flags"]
+[node name="Essential" type="CheckBox" parent="NPC/panels/VBoxContainer/Flags"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "essential"
 
-[node name="Ghost" type="CheckBox" parent="NPC/panels/Flags"]
+[node name="Ghost" type="CheckBox" parent="NPC/panels/VBoxContainer/Flags"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "ghost"
 
-[node name="Invulnerable" type="CheckBox" parent="NPC/panels/Flags"]
+[node name="Invulnerable" type="CheckBox" parent="NPC/panels/VBoxContainer/Flags"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "invulnerable"
 
-[node name="Unique" type="CheckBox" parent="NPC/panels/Flags"]
+[node name="Unique" type="CheckBox" parent="NPC/panels/VBoxContainer/Flags"]
+unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "unique"
 
-[node name="StealthMeter" type="CheckBox" parent="NPC/panels/Flags"]
+[node name="StealthMeter" type="CheckBox" parent="NPC/panels/VBoxContainer/Flags"]
+unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "affects stealth meter"
 
-[node name="Interactive" type="CheckBox" parent="NPC/panels/Flags"]
+[node name="Interactive" type="CheckBox" parent="NPC/panels/VBoxContainer/Flags"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "interactive"
+
+[node name="HSeparator" type="HSeparator" parent="NPC/panels/VBoxContainer"]
+layout_mode = 2
+
+[node name="InstanceData" type="Label" parent="NPC/panels/VBoxContainer"]
+layout_mode = 2
+text = "Instance-specific Data"
+
+[node name="RefID" type="LineEdit" parent="NPC/panels/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "RefID"
 
 [node name="AIModule" type="PanelContainer" parent="NPC/panels"]
 layout_mode = 2
@@ -80,7 +101,7 @@ title = "Open File(s)"
 size = Vector2i(312, 159)
 ok_button_text = "Open"
 file_mode = 1
-filters = PackedStringArray(".tres", ".res")
+filters = PackedStringArray("*.tres", "*.res")
 
 [node name="ItemList" type="ItemList" parent="NPC/panels/AIModule/VBoxContainer"]
 layout_mode = 2
@@ -117,7 +138,7 @@ title = "Open File(s)"
 size = Vector2i(312, 159)
 ok_button_text = "Open"
 file_mode = 1
-filters = PackedStringArray(".tres", ".res")
+filters = PackedStringArray("*.tres", "*.res")
 
 [node name="ItemList" type="ItemList" parent="NPC/panels/GOAPModules/VBoxContainer"]
 layout_mode = 2
@@ -150,6 +171,9 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="NPC/panels/PanelContainer/VBox"]
+layout_mode = 2
 
 [node name="Relationships" type="VBoxContainer" parent="NPC/panels/PanelContainer/VBox"]
 layout_mode = 2
@@ -195,3 +219,5 @@ layout_mode = 2
 [node name="Schedule" parent="." instance=ExtResource("4_fq8sx")]
 visible = false
 layout_mode = 2
+
+[connection signal="text_submitted" from="NPC/panels/VBoxContainer/RefID" to="." method="_on_ref_id_text_submitted"]
