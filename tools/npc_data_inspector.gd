@@ -96,6 +96,24 @@ func _load_res() -> void:
 		add_goap_to_list(g)
 	for a:AIModule in editing_data.npc_data.modules:
 		add_module_to_list(a)
+	# Flags
+	# i hate my life
+	%Essential.button_pressed = editing_data.npc_data.essential
+	%Essential.toggled.connect(func(s:bool) -> void: editing_data.npc_data.essential = s)
+	%Ghost.button_pressed = editing_data.npc_data.ghost
+	%Ghost.toggled.connect(func(s:bool) -> void: editing_data.npc_data.ghost = s)
+	%Invulnerable.button_pressed = editing_data.npc_data.invulnerable
+	%Invulnerable.toggled.connect(func(s:bool) -> void: editing_data.npc_data.invulnerable = s)
+	%Unique.button_pressed = editing_data.npc_data.unique
+	%Unique.toggled.connect(func(s:bool) -> void: editing_data.npc_data.unique = s)
+	%StealthMeter.button_pressed = editing_data.npc_data.affects_stealth_meter
+	%StealthMeter.toggled.connect(func(s:bool) -> void: editing_data.npc_data.affects_stealth_meter = s)
+	%Interactive.button_pressed = editing_data.npc_data.interactive
+	%Interactive.toggled.connect(func(s:bool) -> void: editing_data.npc_data.interactive = s)
+	# Relationships
+	%DefaultOpinion.value = editing_data.npc_data.default_player_opinion
+	%DefaultOpinion.value_changed.connect(func(v:float)->void: editing_data.npc_data.default_player_opinion = roundi(v))
+	# TODO: Load relationships to list
 
 
 func add_module_to_list(mod:AIModule) -> void:
