@@ -26,8 +26,6 @@ class_name NPCData
 @export var unique:bool = true
 ## Whether this NPC affects the stealth meter when it sees you.
 @export var affects_stealth_meter:bool = true
-## Dialogue node name to start when interacted. 
-@export var start_dialogue_node:String
 ## Whether you can interact with this NPC.
 @export var interactive:bool = true
 ## NPC relationships.
@@ -35,11 +33,7 @@ class_name NPCData
 
 @export_category("AI")
 ## AI Modules.
-@export var modules:Array[AIModule] = [
-		DefaultThreatResponseModule.new(),
-		DefaultInteractResponseModule.new(),
-		DefaultDamageModule.new()
-	]
+@export var modules:Array[AIModule] = []
 ## GOAP Actions.
 @export var goap_actions:Array[GOAPBehavior] = []
 ## The loot table of this kind of NPC.

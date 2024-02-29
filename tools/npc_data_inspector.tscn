@@ -1,0 +1,197 @@
+[gd_scene load_steps=5 format=3 uid="uid://muytdxx0rc5u"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/tools/npc_data_inspector.gd" id="1_x05bx"]
+[ext_resource type="PackedScene" uid="uid://bsj34wkkfoi3p" path="res://addons/skelerealms/tools/prefab_selector.tscn" id="2_ok2v4"]
+[ext_resource type="PackedScene" uid="uid://cqdiw8t17nqug" path="res://addons/skelerealms/tools/loot_table_inspector.tscn" id="3_vmo81"]
+[ext_resource type="PackedScene" uid="uid://slj5y768s6qx" path="res://addons/skelerealms/tools/schedule_editor.tscn" id="4_fq8sx"]
+
+[node name="NPCDataInspector" type="TabContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_x05bx")
+
+[node name="NPC" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="panels" type="HBoxContainer" parent="NPC"]
+layout_mode = 2
+
+[node name="Flags" type="GridContainer" parent="NPC/panels"]
+layout_mode = 2
+columns = 2
+
+[node name="Essential" type="CheckBox" parent="NPC/panels/Flags"]
+layout_mode = 2
+text = "essential"
+
+[node name="Ghost" type="CheckBox" parent="NPC/panels/Flags"]
+layout_mode = 2
+text = "ghost"
+
+[node name="Invulnerable" type="CheckBox" parent="NPC/panels/Flags"]
+layout_mode = 2
+text = "invulnerable"
+
+[node name="Unique" type="CheckBox" parent="NPC/panels/Flags"]
+layout_mode = 2
+button_pressed = true
+text = "unique"
+
+[node name="StealthMeter" type="CheckBox" parent="NPC/panels/Flags"]
+layout_mode = 2
+button_pressed = true
+text = "affects stealth meter"
+
+[node name="Interactive" type="CheckBox" parent="NPC/panels/Flags"]
+layout_mode = 2
+text = "interactive"
+
+[node name="AIModule" type="PanelContainer" parent="NPC/panels"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NPC/panels/AIModule"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NPC/panels/AIModule/VBoxContainer"]
+layout_mode = 2
+text = "AI Modules"
+
+[node name="New" type="HBoxContainer" parent="NPC/panels/AIModule/VBoxContainer"]
+layout_mode = 2
+
+[node name="ModuleSelection" type="OptionButton" parent="NPC/panels/AIModule/VBoxContainer/New"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Add" type="Button" parent="NPC/panels/AIModule/VBoxContainer/New"]
+layout_mode = 2
+text = "Add"
+
+[node name="LoadModule" type="Button" parent="NPC/panels/AIModule/VBoxContainer"]
+layout_mode = 2
+text = "Add AI Module from disk"
+
+[node name="FileDialog" type="FileDialog" parent="NPC/panels/AIModule/VBoxContainer/LoadModule"]
+title = "Open File(s)"
+size = Vector2i(312, 159)
+ok_button_text = "Open"
+file_mode = 1
+filters = PackedStringArray(".tres", ".res")
+
+[node name="ItemList" type="ItemList" parent="NPC/panels/AIModule/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GOAPModules" type="PanelContainer" parent="NPC/panels"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NPC/panels/GOAPModules"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NPC/panels/GOAPModules/VBoxContainer"]
+layout_mode = 2
+text = "GOAP Behaviors"
+
+[node name="New" type="HBoxContainer" parent="NPC/panels/GOAPModules/VBoxContainer"]
+layout_mode = 2
+
+[node name="GoapSelection" type="OptionButton" parent="NPC/panels/GOAPModules/VBoxContainer/New"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Add" type="Button" parent="NPC/panels/GOAPModules/VBoxContainer/New"]
+layout_mode = 2
+text = "Add"
+
+[node name="LoadGoap" type="Button" parent="NPC/panels/GOAPModules/VBoxContainer"]
+layout_mode = 2
+text = "Add GOAP behavior from disk"
+
+[node name="FileDialog" type="FileDialog" parent="NPC/panels/GOAPModules/VBoxContainer/LoadGoap"]
+title = "Open File(s)"
+size = Vector2i(312, 159)
+ok_button_text = "Open"
+file_mode = 1
+filters = PackedStringArray(".tres", ".res")
+
+[node name="ItemList" type="ItemList" parent="NPC/panels/GOAPModules/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="NPC/panels"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBox" type="VBoxContainer" parent="NPC/panels/PanelContainer"]
+layout_mode = 2
+
+[node name="Covens" type="VBoxContainer" parent="NPC/panels/PanelContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="NPC/panels/PanelContainer/VBox/Covens"]
+layout_mode = 2
+text = "Covens"
+
+[node name="Button" type="Button" parent="NPC/panels/PanelContainer/VBox/Covens"]
+layout_mode = 2
+text = "Add Coven Rank"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NPC/panels/PanelContainer/VBox/Covens"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NPC/panels/PanelContainer/VBox/Covens/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Relationships" type="VBoxContainer" parent="NPC/panels/PanelContainer/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="NPC/panels/PanelContainer/VBox/Relationships"]
+layout_mode = 2
+text = "Relationships"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NPC/panels/PanelContainer/VBox/Relationships"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="NPC/panels/PanelContainer/VBox/Relationships/HBoxContainer"]
+layout_mode = 2
+text = "Default Player Opinion"
+
+[node name="SpinBox" type="SpinBox" parent="NPC/panels/PanelContainer/VBox/Relationships/HBoxContainer"]
+layout_mode = 2
+min_value = -100.0
+rounded = true
+
+[node name="Button" type="Button" parent="NPC/panels/PanelContainer/VBox/Relationships"]
+layout_mode = 2
+text = "Add Relationship"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="NPC/panels/PanelContainer/VBox/Relationships"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NPC/panels/PanelContainer/VBox/Relationships/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Prefab" parent="." instance=ExtResource("2_ok2v4")]
+visible = false
+layout_mode = 2
+
+[node name="Loot Table" parent="." instance=ExtResource("3_vmo81")]
+visible = false
+layout_mode = 2
+
+[node name="Schedule" parent="." instance=ExtResource("4_fq8sx")]
+visible = false
+layout_mode = 2

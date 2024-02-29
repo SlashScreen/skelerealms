@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://dvudb1s4sw5hs"]
+
+[node name="CovenRankDataEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Rank"
+
+[node name="SpinBox" type="SpinBox" parent="Panel/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="Coven" type="PanelContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/Coven"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/Coven/VBoxContainer"]
+layout_mode = 2
+text = "Coven (Drag from filesystem to load)"
+
+[node name="Button" type="Button" parent="Panel/VBoxContainer/Coven/VBoxContainer"]
+layout_mode = 2
+text = "Open Coven Editor"

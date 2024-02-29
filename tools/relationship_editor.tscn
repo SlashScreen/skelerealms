@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://dk1jvw0c01kwe"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/tools/relationship_editor.gd" id="1_ihapx"]
+
+[node name="RelationshipEditor" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ihapx")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Other" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Other"]
+layout_mode = 2
+text = "Other Person"
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Other"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Role" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Role"]
+layout_mode = 2
+text = "Role"
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Role"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Type" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Type"]
+layout_mode = 2
+text = "Type"
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer/Type"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Remove"
