@@ -1,9 +1,84 @@
-[gd_scene format=3 uid="uid://slj5y768s6qx"]
+[gd_scene load_steps=5 format=3 uid="uid://slj5y768s6qx"]
 
-[node name="ScheduleEditor" type="Control"]
-layout_mode = 3
+[ext_resource type="Script" path="res://addons/skelerealms/tools/scheduledraghandle.gd" id="1_223ar"]
+[ext_resource type="Script" path="res://addons/skelerealms/tools/schedule_editor.gd" id="1_gl0yl"]
+[ext_resource type="Script" path="res://addons/skelerealms/tools/schedule_box.gd" id="2_rblsh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8y1y4"]
+bg_color = Color(0.196078, 0.54902, 0.580392, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+expand_margin_top = 30.0
+expand_margin_bottom = 30.0
+shadow_size = 3
+shadow_offset = Vector2(3.44, 6.495)
+
+[node name="ScheduleEditor" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_gl0yl")
+
+[node name="VSplitContainer" type="VSplitContainer" parent="."]
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="VSplitContainer"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VSplitContainer/Control2"]
+layout_mode = 2
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 576.0
+offset_bottom = 320.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_8y1y4")
+script = ExtResource("2_rblsh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VSplitContainer/Control2/PanelContainer"]
+layout_mode = 2
+
+[node name="BeginningPoint" type="Control" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 10
+script = ExtResource("1_223ar")
+
+[node name="VSeparator" type="VSeparator" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer/BeginningPoint"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 4.0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EndPoint" type="Control" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 10
+script = ExtResource("1_223ar")
+
+[node name="VSeparator" type="VSeparator" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer/EndPoint"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="dragged" from="VSplitContainer/Control2/PanelContainer/HBoxContainer/BeginningPoint" to="VSplitContainer/Control2/PanelContainer" method="_on_beginning_point_dragged"]
+[connection signal="dragged" from="VSplitContainer/Control2/PanelContainer/HBoxContainer/EndPoint" to="VSplitContainer/Control2/PanelContainer" method="_on_end_point_dragged"]

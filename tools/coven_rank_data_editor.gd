@@ -1,5 +1,5 @@
 @tool
-extends Control
+extends PanelContainer
 
 
 const COVEN_EDITOR = preload("coven_editor.tscn")
@@ -15,9 +15,9 @@ func edit(c:CovenRankData) -> void:
 
 
 func _load() -> void:
-	$Panel/HBoxContainer/VBoxContainer/HBoxContainer/SpinBox.value = editing.rank
+	$HBoxContainer/VBoxContainer/HBoxContainer/SpinBox.value = editing.rank
 	if not editing.coven == null:
-		$Panel/HBoxContainer/VBoxContainer/Coven/VBoxContainer/Label.text = editing.coven.resource_path
+		$HBoxContainer/VBoxContainer/Coven/VBoxContainer/Label.text = editing.coven.resource_path
 
 
 func open_coven_editor() -> void:
