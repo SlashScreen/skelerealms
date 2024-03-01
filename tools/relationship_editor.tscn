@@ -24,7 +24,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Other Person"
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Other"]
+[node name="OtherEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Other"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -35,7 +35,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Role"
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Role"]
+[node name="RoleEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Role"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -53,3 +53,8 @@ size_flags_horizontal = 3
 [node name="Button" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 text = "Remove"
+
+[connection signal="text_submitted" from="HBoxContainer/VBoxContainer/Other/OtherEdit" to="." method="_on_other_edit_text_submitted"]
+[connection signal="text_submitted" from="HBoxContainer/VBoxContainer/Role/RoleEdit" to="." method="_on_role_edit_text_submitted"]
+[connection signal="item_selected" from="HBoxContainer/VBoxContainer/Type/OptionButton" to="." method="_on_option_button_item_selected"]
+[connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_button_pressed"]
