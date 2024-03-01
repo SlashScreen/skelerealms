@@ -2,8 +2,13 @@
 extends PanelContainer
 
 
-@onready var internal_pos:int = position.x
+const TRACK_WIDTH = 140
 
+@export var internal_pos:int = position.x
+
+
+func _ready() -> void:
+	internal_pos = position.x
 
 
 func _on_beginning_point_dragged(offset: Variant) -> void:
@@ -19,4 +24,4 @@ func _process(_delta: float) -> void:
 
 
 func switch_track(to:int) -> void:
-	return
+	position.y = TRACK_WIDTH * to

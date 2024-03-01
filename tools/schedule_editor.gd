@@ -2,18 +2,39 @@
 extends PanelContainer
 
 
+const TRACK_COUNT = 3
+const Span = preload("span.gd")
+
 @onready var timeline:Control = $ScrollContainer/HBoxContainer
 var scroll_value:int
-var tracks:Array[Dictionary] = [] # Dictionaries are Control:Span
+@export var tracks:Array[Dictionary] = [] # Dictionaries are Control:Span
+var track_index:Dictionary = {}
+
+
+func _ready() -> void:
+	for i:int in range(TRACK_COUNT):
+		tracks.append({})
 
 
 func _process(_delta: float) -> void:
 	scroll_value = timeline.position.x
+	_update_tracks()
 
 
 func _update_tracks() -> void:
+	_update_boxes()
 	_squash()
 	_promote()
+
+
+func _update_boxes() -> void:
+	var boxes:Array = $Container.get_children().map(func(n:Node) -> Control: return n.get_child(0))
+	for b:Control in boxes:
+		if track_index.has(b):
+			tracks[track_index[b]][b].sync(b.get_global_rect())
+		else:
+			tracks[0][b] = Span.new(b.get_global_rect())
+			b.switch_track(0)
 
 
 func _squash() -> void:
@@ -21,7 +42,7 @@ func _squash() -> void:
 	# For every track, check against items on bottom track. If no collisions, move it downwards
 	# TODO: Handle Overlaps on bottom level?
 	var did_move:int
-	for track in range(tracks.size(), 1, -1):
+	for track in range(tracks.size() - 1, 0, -1):
 		var cd:Dictionary = tracks[track]
 		var bd:Dictionary = tracks[track - 1]
 		var to_move:Array = []
@@ -36,7 +57,9 @@ func _squash() -> void:
 				to_move.append(event)
 		# Finalize movement
 		for e in to_move:
-			cd[e].switch_track(track - 1)
+			print("squashing")
+			e.switch_track(track - 1)
+			track_index[e] = track - 1 
 			bd[e] = cd[e]
 			cd.erase(e)
 		did_move = max(did_move, to_move.size())
@@ -70,38 +93,12 @@ func _promote() -> void:
 				to_move.append(event)
 		# Finalize movement
 		for e in to_move:
-			cd[e].switch_track(track + 1)
+			print("promoting")
+			e.switch_track(track + 1)
+			track_index[e] = track + 1 
 			ad[e] = cd[e]
 			cd.erase(e)
 		did_move = max(did_move, to_move.size())
 	
 	if did_move > 0:
 		_promote()
-
-
-class Span:
-	extends Object
-	
-	
-	var start: float
-	var end: float 
-	var size:
-		get:
-			return end - start
-	
-	
-	func overlaps(other: Span) -> bool: 
-		return contains_point(other.start) or contains_point(other.end) or encloses(other) or other.encloses(self)
-	
-	
-	func contains_point(pt:float) -> bool:
-		return start <= pt and pt <= end
-	
-	
-	func encloses(other: Span) -> bool:
-		return start <= other.start and end >= other.end
-	
-	
-	func _init(r:Rect2):
-		start = r.position.x
-		end = r.end.x
