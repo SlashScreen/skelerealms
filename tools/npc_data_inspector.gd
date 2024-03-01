@@ -161,7 +161,6 @@ func add_relationship(r:Relationship) -> void:
 
 func add_coven(c:CovenRankData) -> void: 
 	var new_crd:CovenRankEditorClass = COVEN_RANK_EDITOR.instantiate()
-	#print(JSON.stringify(new_crd.get_method_list(), "\t"))
 	new_crd.edit(c)
 	new_crd.delete_requested.connect(func() -> void:
 		new_crd.queue_free()
