@@ -33,48 +33,54 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("4_0h8dh")
 
-[node name="ScheduleBoxControl" type="Control" parent="."]
+[node name="Container" type="Control" parent="."]
 layout_mode = 2
+
+[node name="ScheduleBoxControl" type="Control" parent="Container"]
+layout_mode = 2
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
 mouse_filter = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="ScheduleBoxControl"]
+[node name="PanelContainer" type="PanelContainer" parent="Container/ScheduleBoxControl"]
 layout_mode = 2
 offset_left = 64.0
 offset_top = 64.0
 offset_right = 576.0
-offset_bottom = 320.0
+offset_bottom = 192.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_8y1y4")
 script = ExtResource("2_rblsh")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ScheduleBoxControl/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Container/ScheduleBoxControl/PanelContainer"]
 layout_mode = 2
 
-[node name="BeginningPoint" type="Control" parent="ScheduleBoxControl/PanelContainer/HBoxContainer"]
+[node name="BeginningPoint" type="Control" parent="Container/ScheduleBoxControl/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 mouse_default_cursor_shape = 10
 script = ExtResource("1_223ar")
 
-[node name="VSeparator" type="VSeparator" parent="ScheduleBoxControl/PanelContainer/HBoxContainer/BeginningPoint"]
+[node name="VSeparator" type="VSeparator" parent="Container/ScheduleBoxControl/PanelContainer/HBoxContainer/BeginningPoint"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 4.0
 grow_vertical = 2
 
-[node name="Control" type="Control" parent="ScheduleBoxControl/PanelContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="Container/ScheduleBoxControl/PanelContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="EndPoint" type="Control" parent="ScheduleBoxControl/PanelContainer/HBoxContainer"]
+[node name="EndPoint" type="Control" parent="Container/ScheduleBoxControl/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 mouse_default_cursor_shape = 10
 script = ExtResource("1_223ar")
 
-[node name="VSeparator" type="VSeparator" parent="ScheduleBoxControl/PanelContainer/HBoxContainer/EndPoint"]
+[node name="VSeparator" type="VSeparator" parent="Container/ScheduleBoxControl/PanelContainer/HBoxContainer/EndPoint"]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -84,5 +90,65 @@ offset_left = -4.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[connection signal="dragged" from="ScheduleBoxControl/PanelContainer/HBoxContainer/BeginningPoint" to="ScheduleBoxControl/PanelContainer" method="_on_beginning_point_dragged"]
-[connection signal="dragged" from="ScheduleBoxControl/PanelContainer/HBoxContainer/EndPoint" to="ScheduleBoxControl/PanelContainer" method="_on_end_point_dragged"]
+[node name="MarginContainer" type="MarginContainer" parent="Container/ScheduleBoxControl/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="Controls" type="HBoxContainer" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Event Type"
+
+[node name="LineEdit" type="LineEdit" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Name"
+
+[node name="Button" type="Button" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Open in Inspector"
+
+[node name="From" type="VBoxContainer" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls/From"]
+layout_mode = 2
+text = "From"
+
+[node name="Hour" type="SpinBox" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls/From"]
+layout_mode = 2
+prefix = "Hour"
+
+[node name="Minute" type="SpinBox" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls/From"]
+layout_mode = 2
+prefix = "Minute"
+
+[node name="To" type="VBoxContainer" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls/To"]
+layout_mode = 2
+text = "To
+"
+
+[node name="Hour" type="SpinBox" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls/To"]
+layout_mode = 2
+prefix = "Hour"
+
+[node name="Minute" type="SpinBox" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls/To"]
+layout_mode = 2
+prefix = "Minute"
+
+[node name="Remove" type="Button" parent="Container/ScheduleBoxControl/PanelContainer/MarginContainer/Controls"]
+layout_mode = 2
+text = "Remove"
+
+[connection signal="dragged" from="Container/ScheduleBoxControl/PanelContainer/HBoxContainer/BeginningPoint" to="Container/ScheduleBoxControl/PanelContainer" method="_on_beginning_point_dragged"]
+[connection signal="dragged" from="Container/ScheduleBoxControl/PanelContainer/HBoxContainer/EndPoint" to="Container/ScheduleBoxControl/PanelContainer" method="_on_end_point_dragged"]
