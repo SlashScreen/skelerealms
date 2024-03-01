@@ -46,9 +46,14 @@ func _squash() -> void:
 		var cd:Dictionary = tracks[track]
 		var bd:Dictionary = tracks[track - 1]
 		var to_move:Array = []
+		var bdkeys:Array = bd.keys()
+		bdkeys.sort_custom(func(a:Control, b:Control) -> bool: 
+			return bd[a].center > bd[b].center
+			)
 		for event in cd:
 			var valid:bool = true
-			for obstacle in bd:
+			
+			for obstacle in bdkeys:
 				# if any obstacle on track below blocks this, stop looking
 				if cd[event].overlaps(bd[obstacle]):
 					valid = false
@@ -57,9 +62,8 @@ func _squash() -> void:
 				to_move.append(event)
 		# Finalize movement
 		for e in to_move:
-			print("squashing")
 			e.switch_track(track - 1)
-			track_index[e] = track - 1 
+			track_index[e] = track - 1
 			bd[e] = cd[e]
 			cd.erase(e)
 		did_move = max(did_move, to_move.size())
@@ -78,9 +82,14 @@ func _promote() -> void:
 		var cd:Dictionary = tracks[track]
 		var ad:Dictionary = tracks[track + 1]
 		var to_move:Array = []
-		for event in cd:
+		var cdkeys:Array = cd.keys()
+		cdkeys.sort_custom(func(a:Control, b:Control) -> bool: 
+			return cd[a].center > cd[b].center
+			)
+		for event in cdkeys:
 			var valid:bool = false
-			for obstacle in cd:
+			
+			for obstacle in cdkeys:
 				if obstacle == event:
 					continue
 				if to_move.has(obstacle): # ignore ones we are already moving
@@ -93,7 +102,6 @@ func _promote() -> void:
 				to_move.append(event)
 		# Finalize movement
 		for e in to_move:
-			print("promoting")
 			e.switch_track(track + 1)
 			track_index[e] = track + 1 
 			ad[e] = cd[e]

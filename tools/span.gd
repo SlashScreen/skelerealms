@@ -7,6 +7,9 @@ var end: float
 var size:
 	get:
 		return end - start
+var center:int:
+	get:
+		return roundi((start + end) / 2)
 
 
 func overlaps(other: Object) -> bool: 

@@ -24,11 +24,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gl0yl")
 tracks = Array[Dictionary]([{
-Object(PanelContainer,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(0, 0),"layout_direction":0,"layout_mode":2,"anchors_preset":0,"anchor_left":0.0,"anchor_top":0.0,"anchor_right":0.0,"anchor_bottom":0.0,"offset_left":600.0,"offset_top":0.0,"offset_right":1112.0,"offset_bottom":128.0,"grow_horizontal":1,"grow_vertical":1,"rotation":0.0,"scale":Vector2(1, 1),"pivot_offset":Vector2(0, 0),"size_flags_horizontal":3,"size_flags_vertical":3,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":0,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":null,"theme_type_variation":&"","theme_override_styles/panel":SubResource("StyleBoxFlat_8y1y4"),"script":ExtResource("2_rblsh"),"internal_pos":600)
-: Object(Object,"script":Resource("res://addons/skelerealms/tools/span.gd"),"start":600.0,"end":1112.0,"size":512.0)
-,
 Object(PanelContainer,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(0, 0),"layout_direction":0,"layout_mode":2,"anchors_preset":0,"anchor_left":0.0,"anchor_top":0.0,"anchor_right":0.0,"anchor_bottom":0.0,"offset_left":64.0,"offset_top":0.0,"offset_right":576.0,"offset_bottom":128.0,"grow_horizontal":1,"grow_vertical":1,"rotation":0.0,"scale":Vector2(1, 1),"pivot_offset":Vector2(0, 0),"size_flags_horizontal":3,"size_flags_vertical":3,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":0,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":null,"theme_type_variation":&"","theme_override_styles/panel":SubResource("StyleBoxFlat_8y1y4"),"script":ExtResource("2_rblsh"),"internal_pos":64)
-: Object(Object,"script":Resource("res://addons/skelerealms/tools/span.gd"),"start":64.0,"end":576.0,"size":512.0)
+: Object(Object,"script":Resource("res://addons/skelerealms/tools/span.gd"),"start":64.0,"end":576.0,"size":512.0,"center":320)
+,
+Object(PanelContainer,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"clip_contents":false,"custom_minimum_size":Vector2(0, 0),"layout_direction":0,"layout_mode":2,"anchors_preset":0,"anchor_left":0.0,"anchor_top":0.0,"anchor_right":0.0,"anchor_bottom":0.0,"offset_left":580.0,"offset_top":0.0,"offset_right":1092.0,"offset_bottom":128.0,"grow_horizontal":1,"grow_vertical":1,"rotation":0.0,"scale":Vector2(1, 1),"pivot_offset":Vector2(0, 0),"size_flags_horizontal":3,"size_flags_vertical":3,"size_flags_stretch_ratio":1.0,"auto_translate":true,"localize_numeral_system":true,"tooltip_text":"","focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"mouse_filter":0,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"theme":null,"theme_type_variation":&"","theme_override_styles/panel":SubResource("StyleBoxFlat_8y1y4"),"script":ExtResource("2_rblsh"),"internal_pos":580)
+: Object(Object,"script":Resource("res://addons/skelerealms/tools/span.gd"),"start":580.0,"end":1092.0,"size":512.0,"center":836)
 
 }, {}, {}])
 
@@ -167,14 +167,14 @@ mouse_filter = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="Container/ScheduleBoxControl2"]
 layout_mode = 2
-offset_left = 600.0
-offset_right = 1112.0
+offset_left = 580.0
+offset_right = 1092.0
 offset_bottom = 128.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_8y1y4")
 script = ExtResource("2_rblsh")
-internal_pos = 600
+internal_pos = 580
 
 [node name="MarginContainer" type="MarginContainer" parent="Container/ScheduleBoxControl2/PanelContainer"]
 layout_mode = 2
