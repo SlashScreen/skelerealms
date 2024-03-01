@@ -3,10 +3,11 @@ extends Control
 
 
 var dragging:bool
+var editing:ScheduleEvent
 signal dragged(offset)
 
 
-func _input(event: InputEvent) -> void: # i don't know why _gui_input didn't work ... 
+func _gui_input(event: InputEvent) -> void:
 	if not visible:
 		return
 	if event is InputEventMouseButton:

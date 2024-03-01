@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://slj5y768s6qx"]
+[gd_scene load_steps=6 format=3 uid="uid://slj5y768s6qx"]
 
 [ext_resource type="Script" path="res://addons/skelerealms/tools/scheduledraghandle.gd" id="1_223ar"]
 [ext_resource type="Script" path="res://addons/skelerealms/tools/schedule_editor.gd" id="1_gl0yl"]
 [ext_resource type="Script" path="res://addons/skelerealms/tools/schedule_box.gd" id="2_rblsh"]
+[ext_resource type="Script" path="res://addons/skelerealms/tools/schedule_markers.gd" id="4_0h8dh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8y1y4"]
 bg_color = Color(0.196078, 0.54902, 0.580392, 1)
@@ -23,13 +24,20 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gl0yl")
 
-[node name="VSplitContainer" type="VSplitContainer" parent="."]
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 2
 
-[node name="Control2" type="Control" parent="VSplitContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("4_0h8dh")
 
-[node name="PanelContainer" type="PanelContainer" parent="VSplitContainer/Control2"]
+[node name="ScheduleBoxControl" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="ScheduleBoxControl"]
 layout_mode = 2
 offset_left = 64.0
 offset_top = 64.0
@@ -40,33 +48,33 @@ size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_8y1y4")
 script = ExtResource("2_rblsh")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VSplitContainer/Control2/PanelContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScheduleBoxControl/PanelContainer"]
 layout_mode = 2
 
-[node name="BeginningPoint" type="Control" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer"]
+[node name="BeginningPoint" type="Control" parent="ScheduleBoxControl/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 mouse_default_cursor_shape = 10
 script = ExtResource("1_223ar")
 
-[node name="VSeparator" type="VSeparator" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer/BeginningPoint"]
+[node name="VSeparator" type="VSeparator" parent="ScheduleBoxControl/PanelContainer/HBoxContainer/BeginningPoint"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 4.0
 grow_vertical = 2
 
-[node name="Control" type="Control" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="ScheduleBoxControl/PanelContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="EndPoint" type="Control" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer"]
+[node name="EndPoint" type="Control" parent="ScheduleBoxControl/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 mouse_default_cursor_shape = 10
 script = ExtResource("1_223ar")
 
-[node name="VSeparator" type="VSeparator" parent="VSplitContainer/Control2/PanelContainer/HBoxContainer/EndPoint"]
+[node name="VSeparator" type="VSeparator" parent="ScheduleBoxControl/PanelContainer/HBoxContainer/EndPoint"]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -76,9 +84,5 @@ offset_left = -4.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="Control" type="Control" parent="VSplitContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[connection signal="dragged" from="VSplitContainer/Control2/PanelContainer/HBoxContainer/BeginningPoint" to="VSplitContainer/Control2/PanelContainer" method="_on_beginning_point_dragged"]
-[connection signal="dragged" from="VSplitContainer/Control2/PanelContainer/HBoxContainer/EndPoint" to="VSplitContainer/Control2/PanelContainer" method="_on_end_point_dragged"]
+[connection signal="dragged" from="ScheduleBoxControl/PanelContainer/HBoxContainer/BeginningPoint" to="ScheduleBoxControl/PanelContainer" method="_on_beginning_point_dragged"]
+[connection signal="dragged" from="ScheduleBoxControl/PanelContainer/HBoxContainer/EndPoint" to="ScheduleBoxControl/PanelContainer" method="_on_end_point_dragged"]
