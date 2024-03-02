@@ -4,16 +4,21 @@ extends PanelContainer
 
 const TRACK_COUNT = 3
 const Span = preload("span.gd")
+const BOX_CONTROL = preload("schedule_box_control.tscn")
 
 @onready var timeline:Control = $ScrollContainer/HBoxContainer
 var scroll_value:int
-@export var tracks:Array[Dictionary] = [] # Dictionaries are Control:Span
+var tracks:Array[Dictionary] = [] # Dictionaries are Control:Span
 var track_index:Dictionary = {}
+var timeline_width:int
+var editing:Schedule
 
 
 func _ready() -> void:
+	tracks.resize(3)
 	for i:int in range(TRACK_COUNT):
-		tracks.append({})
+		tracks[i] = {}
+	timeline_width = timeline.size.x
 
 
 func _process(_delta: float) -> void:
@@ -28,13 +33,19 @@ func _update_tracks() -> void:
 
 
 func _update_boxes() -> void:
-	var boxes:Array = $Container.get_children().map(func(n:Node) -> Control: return n.get_child(0))
+	var boxes:Array = %Container.get_children().map(func(n:Node) -> Control: return n.get_child(0))
 	for b:Control in boxes:
 		if track_index.has(b):
 			tracks[track_index[b]][b].sync(b.get_global_rect())
 		else:
 			tracks[0][b] = Span.new(b.get_global_rect())
+			track_index[b] = 0
 			b.switch_track(0)
+	# Cleanup
+	for b:Control in track_index:
+		if not boxes.has(b):
+			tracks[track_index[b]].erase(b)
+			track_index.erase(b)
 
 
 func _squash() -> void:
@@ -110,3 +121,33 @@ func _promote() -> void:
 	
 	if did_move > 0:
 		_promote()
+
+
+func get_time_from_position(pos:int) -> Dictionary:
+	var minute:int = ((pos % timeline.HOUR_SEPARATION) / (timeline.HOUR_SEPARATION as float)) * ProjectSettings.get_setting("skelerealms/minutes_per_hour")
+	var hour:int =  floori(pos / (timeline.HOUR_SEPARATION as float))
+	return {
+		&"hour": hour,
+		&"minute": minute
+	}
+
+
+func position_from_time(d:Dictionary) -> int:
+	var i:int = d.hour * timeline.HOUR_SEPARATION
+	i += floori((d.minute / (ProjectSettings.get_setting("skelerealms/minutes_per_hour") as float)) * timeline.HOUR_SEPARATION)
+	return i
+
+
+func snap_to_minute(pos:int) -> int:
+	var fac:int = timeline.size.x / (ProjectSettings.get_setting("skelerealms/minutes_per_hour") * ProjectSettings.get_setting("skelerealms/hours_per_day"))
+	return roundi(pos / (fac as float)) * fac 
+
+
+func edit(s:Schedule) -> void:
+	editing = s
+	for c:Node in %Container.get_children():
+		c.queue_free()
+	for e:ScheduleEvent in s.events:
+		var b:Control = BOX_CONTROL.instantiate()
+		b.get_child(0).edit(b)
+		%Container.add_child(b)

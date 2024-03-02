@@ -1,0 +1,106 @@
+[gd_scene load_steps=4 format=3 uid="uid://jbh33qql3r7c"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/tools/schedule_box.gd" id="1_fnsnl"]
+[ext_resource type="Script" path="res://addons/skelerealms/tools/scheduledraghandle.gd" id="2_1adky"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8y1y4"]
+bg_color = Color(0.196078, 0.54902, 0.580392, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+expand_margin_top = 30.0
+expand_margin_bottom = 30.0
+shadow_size = 3
+shadow_offset = Vector2(3.44, 6.495)
+
+[node name="ScheduleBoxControl" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+mouse_filter = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 576.0
+offset_bottom = 192.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_8y1y4")
+script = ExtResource("1_fnsnl")
+internal_pos = 64
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="Controls" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/Controls"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Event Type"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/MarginContainer/Controls/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Name"
+
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/Controls/VBoxContainer"]
+layout_mode = 2
+text = "Open in Inspector"
+
+[node name="Control" type="Control" parent="PanelContainer/MarginContainer/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Remove" type="Button" parent="PanelContainer/MarginContainer/Controls"]
+layout_mode = 2
+text = "Remove"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BeginningPoint" type="Control" parent="PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 10
+script = ExtResource("2_1adky")
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/HBoxContainer/BeginningPoint"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 4.0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="EndPoint" type="Control" parent="PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 10
+script = ExtResource("2_1adky")
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/HBoxContainer/EndPoint"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[connection signal="dragged" from="PanelContainer/HBoxContainer/BeginningPoint" to="PanelContainer" method="_on_beginning_point_dragged"]
+[connection signal="dragged" from="PanelContainer/HBoxContainer/EndPoint" to="PanelContainer" method="_on_end_point_dragged"]
