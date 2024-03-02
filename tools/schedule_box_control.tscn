@@ -25,7 +25,7 @@ mouse_filter = 2
 layout_mode = 2
 offset_left = 64.0
 offset_top = 64.0
-offset_right = 319.0
+offset_right = 180.0
 offset_bottom = 192.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -38,23 +38,17 @@ layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_right = 15
 
-[node name="Controls" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="Controls" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/Controls"]
-layout_mode = 2
-
-[node name="LineEdit" type="LineEdit" parent="PanelContainer/MarginContainer/Controls/VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/MarginContainer/Controls"]
 layout_mode = 2
 placeholder_text = "Name"
 
-[node name="Button" type="Button" parent="PanelContainer/MarginContainer/Controls/VBoxContainer"]
+[node name="Button" type="Button" parent="PanelContainer/MarginContainer/Controls"]
 layout_mode = 2
-text = "Open in Inspector"
-
-[node name="Control" type="Control" parent="PanelContainer/MarginContainer/Controls"]
-layout_mode = 2
-size_flags_horizontal = 3
+text = "Open in
+ Inspector"
 
 [node name="Remove" type="Button" parent="PanelContainer/MarginContainer/Controls"]
 layout_mode = 2
@@ -98,8 +92,8 @@ offset_left = -4.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[connection signal="text_submitted" from="PanelContainer/MarginContainer/Controls/VBoxContainer/LineEdit" to="PanelContainer" method="_on_line_edit_text_submitted"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/Controls/VBoxContainer/Button" to="PanelContainer" method="_on_button_pressed"]
+[connection signal="text_submitted" from="PanelContainer/MarginContainer/Controls/LineEdit" to="PanelContainer" method="_on_line_edit_text_submitted"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/Controls/Button" to="PanelContainer" method="_on_button_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/Controls/Remove" to="PanelContainer" method="_on_remove_pressed"]
 [connection signal="dragged" from="PanelContainer/HBoxContainer/BeginningPoint" to="PanelContainer" method="_on_beginning_point_dragged"]
 [connection signal="dragged" from="PanelContainer/HBoxContainer/EndPoint" to="PanelContainer" method="_on_end_point_dragged"]

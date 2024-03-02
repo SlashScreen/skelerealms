@@ -55,7 +55,7 @@ func edit(s:ScheduleEvent, e:Control) -> void:
 		&"hour": s.to.hour,
 		&"minute": s.to.minute,
 	}) - internal_pos
-	$MarginContainer/Controls/VBoxContainer/LineEdit.text = editing.name
+	$MarginContainer/Controls/LineEdit.text = editing.name
 
 
 func _on_line_edit_text_submitted(new_text: String) -> void:
