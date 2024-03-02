@@ -7,9 +7,9 @@ const TRACK_OFFSET = 64
 
 @export var internal_pos:int = position.x
 var editing:ScheduleEvent
-var editor:Control:
-	get:
-		return owner.owner
+var editor:Control
+
+signal delete_requested
 
 
 func _ready() -> void:
@@ -29,6 +29,8 @@ func _on_end_point_dragged(offset: Variant) -> void:
 
 
 func _process(_delta: float) -> void:
+	if editor == null:
+		return
 	position.x = editor.snap_to_minute(editor.scroll_value + internal_pos)
 	var start:Dictionary = editor.get_time_from_position(internal_pos)
 	var end:Dictionary = editor.get_time_from_position(internal_pos + size.x)
@@ -42,8 +44,9 @@ func switch_track(to:int) -> void:
 	position.y = TRACK_OFFSET + TRACK_WIDTH * to
 
 
-func edit(s:ScheduleEvent) -> void:
+func edit(s:ScheduleEvent, e:Control) -> void:
 	editing = s
+	editor = e
 	internal_pos = editor.position_from_time({
 		&"hour": s.from.hour,
 		&"minute": s.from.minute,
@@ -52,3 +55,16 @@ func edit(s:ScheduleEvent) -> void:
 		&"hour": s.to.hour,
 		&"minute": s.to.minute,
 	}) - internal_pos
+	$MarginContainer/Controls/VBoxContainer/LineEdit.text = editing.name
+
+
+func _on_line_edit_text_submitted(new_text: String) -> void:
+	editing.name = new_text
+
+
+func _on_button_pressed() -> void:
+	EditorInterface.edit_resource(editing)
+
+
+func _on_remove_pressed() -> void:
+	delete_requested.emit()

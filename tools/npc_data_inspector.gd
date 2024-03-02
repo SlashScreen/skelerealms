@@ -94,6 +94,7 @@ func _ready() -> void:
 		add_coven(CovenRankData.new())
 		update_coven_ranks()
 		)
+	
 
 
 func edit(o: NPCInstance, w:Window) -> void:
@@ -136,6 +137,9 @@ func _load_res() -> void:
 	# Covens
 	for crd:CovenRankData in editing_data.npc_data.covens:
 		add_coven(crd)
+	# Schedule
+	$Schedule.edit(editing_data.npc_data.schedule)
+	
 
 
 func add_module_to_list(mod:AIModule) -> void:
@@ -203,3 +207,7 @@ func _on_ref_id_text_submitted(new_text: String) -> void:
 
 func _on_base_id_text_submitted(new_text: String) -> void:
 	editing_data.npc_data.id = new_text
+
+
+func _on_schedule_update_event_array(arr: Array[ScheduleEvent]) -> void:
+	editing_data.npc_data.schedule = arr

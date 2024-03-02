@@ -7,7 +7,7 @@ class_name NPCData
 ## NPC's model. Expects the root to be a [NPCPuppet].
 @export var prefab: PackedScene
 ## Schedule events for this NPC to follow.
-@export var schedule:Array[ScheduleEvent]
+@export var schedule:Array[ScheduleEvent] # TODO: Schedule
 ## [Coven]s this NPC is a part of, and their default rank.
 @export var covens:Array[CovenRankData] = []
 ## What the default opinion of the player is.

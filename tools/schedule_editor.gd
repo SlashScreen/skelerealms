@@ -11,7 +11,9 @@ var scroll_value:int
 var tracks:Array[Dictionary] = [] # Dictionaries are Control:Span
 var track_index:Dictionary = {}
 var timeline_width:int
-var editing:Schedule
+var editing:Array[ScheduleEvent]
+
+signal update_event_array(arr:Array[ScheduleEvent])
 
 
 func _ready() -> void:
@@ -19,6 +21,20 @@ func _ready() -> void:
 	for i:int in range(TRACK_COUNT):
 		tracks[i] = {}
 	timeline_width = timeline.size.x
+	var op:OptionButton = $VBoxContainer/HBoxContainer/OptionButton
+	op.clear()
+	var inherited:Array = SKToolPlugin.find_classes_that_inherit(&"ScheduleEvent")
+	for d:Dictionary in inherited:
+		op.add_item(d.class)
+		op.set_item_metadata(op.item_count - 1, d.path)
+	$VBoxContainer/HBoxContainer/Button.pressed.connect(func() -> void:
+		var n:ScheduleEvent = load(op.get_selected_metadata()).new()
+		n.from = Timestamp.new()
+		n.to = Timestamp.new()
+		editing.append(n)
+		add_box(n)
+		update_event_array.emit(editing)
+		)
 
 
 func _process(_delta: float) -> void:
@@ -43,7 +59,7 @@ func _update_boxes() -> void:
 			b.switch_track(0)
 	# Cleanup
 	for b:Control in track_index:
-		if not boxes.has(b):
+		if not boxes.has(b) or b == null:
 			tracks[track_index[b]].erase(b)
 			track_index.erase(b)
 
@@ -143,11 +159,22 @@ func snap_to_minute(pos:int) -> int:
 	return roundi(pos / (fac as float)) * fac 
 
 
-func edit(s:Schedule) -> void:
+func edit(s:Array[ScheduleEvent]) -> void:
 	editing = s
 	for c:Node in %Container.get_children():
 		c.queue_free()
-	for e:ScheduleEvent in s.events:
-		var b:Control = BOX_CONTROL.instantiate()
-		b.get_child(0).edit(b)
-		%Container.add_child(b)
+	for e:ScheduleEvent in s:
+		add_box(e)
+
+
+func add_box(e:ScheduleEvent) -> void:
+	var b:Control = BOX_CONTROL.instantiate()
+	b.get_child(0).delete_requested.connect(func() -> void:
+		tracks[track_index[b.get_child(0)]].erase(b.get_child(0))
+		track_index.erase(b.get_child(0))
+		editing.remove_at(editing.find(e))
+		update_event_array.emit(editing)
+		b.queue_free()
+		)
+	%Container.add_child(b)
+	b.get_child(0).edit(e, self)
