@@ -5,7 +5,8 @@ extends PanelContainer
 const TRACK_WIDTH = 140
 const TRACK_OFFSET = 64
 
-@export var internal_pos:int = position.x
+var internal_pos:int
+var internal_size:int
 var editing:ScheduleEvent
 var editor:Control
 
@@ -14,6 +15,7 @@ signal delete_requested
 
 func _ready() -> void:
 	internal_pos = position.x
+	internal_size = size.x
 	if editing == null:
 		editing = ScheduleEvent.new()
 		editing.from = Timestamp.new()
@@ -22,18 +24,22 @@ func _ready() -> void:
 
 func _on_beginning_point_dragged(offset: Variant) -> void:
 	internal_pos += offset.x
+	position.x = editor.snap_to_hour(editor.snap_to_minute(editor.scroll_value + internal_pos))
 
 
 func _on_end_point_dragged(offset: Variant) -> void:
-	size.x += offset.x
+	internal_size += offset.x
+	size.x = editor.snap_to_hour(editor.snap_to_minute(position.x + internal_size)) - position.x
 
 
 func _process(_delta: float) -> void:
 	if editor == null:
 		return
-	position.x = editor.snap_to_minute(editor.scroll_value + internal_pos)
-	var start:Dictionary = editor.get_time_from_position(internal_pos)
-	var end:Dictionary = editor.get_time_from_position(internal_pos + size.x)
+	
+	position.x = editor.snap_to_hour(editor.snap_to_minute(editor.scroll_value + internal_pos))
+	
+	var start:Dictionary = editor.get_time_from_position(position.x)
+	var end:Dictionary = editor.get_time_from_position(position.x + size.x)
 	editing.from.hour = start.hour
 	editing.from.minute = start.minute
 	editing.to.hour = end.hour

@@ -5,6 +5,7 @@ extends PanelContainer
 const TRACK_COUNT = 3
 const Span = preload("span.gd")
 const BOX_CONTROL = preload("schedule_box_control.tscn")
+const SNAP_DIST = 12
 
 @onready var timeline:Control = $ScrollContainer/HBoxContainer
 var scroll_value:int
@@ -156,7 +157,16 @@ func position_from_time(d:Dictionary) -> int:
 
 func snap_to_minute(pos:int) -> int:
 	var fac:int = timeline.size.x / (ProjectSettings.get_setting("skelerealms/minutes_per_hour") * ProjectSettings.get_setting("skelerealms/hours_per_day"))
-	return roundi(pos / (fac as float)) * fac 
+	return pos
+
+
+func snap_to_hour(pos:int) -> int:
+	var nearest_hour:int = roundi(pos / timeline.HOUR_SEPARATION) * timeline.HOUR_SEPARATION
+	var dist:int = abs(nearest_hour - pos)
+	if dist <= SNAP_DIST:
+		return nearest_hour
+	else:
+		return pos
 
 
 func edit(s:Array[ScheduleEvent]) -> void:
