@@ -46,6 +46,7 @@ size_flags_vertical = 3
 
 [node name="ItemList" type="ItemList" parent="HBoxContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2
+allow_reselect = true
 
 [node name="InspectionRoot" type="PanelContainer" parent="HBoxContainer"]
 unique_name_in_owner = true
@@ -56,3 +57,4 @@ size_flags_stretch_ratio = 3.33
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Controls/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Controls/Add" to="." method="_on_add_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Controls/Load" to="." method="_on_load_pressed"]
+[connection signal="item_selected" from="HBoxContainer/VBoxContainer/ScrollContainer/ItemList" to="." method="_on_item_list_item_selected"]

@@ -18,7 +18,9 @@ signal table_updated(src:Object, tbl:Array[SKLootTableItem])
 
 
 func edit(lt:SKLootTableItem) -> void:
-	pass
+	var n:Control = class_to_editor[path_to_class[lt.get_script().resource_path]].instantiate()
+	inspector_root.add_child(n)
+	n.edit(lt)
 
 
 func inspect(source:Object, table:Array[SKLootTableItem]) -> void:
@@ -63,3 +65,9 @@ func _on_add_pressed() -> void:
 
 func _on_load_pressed() -> void:
 	pass # Replace with function body.
+
+
+func _on_item_list_item_selected(index: int) -> void:
+	var data:SKLootTableItem = item_list.get_item_metadata(index)
+	_clear_inpector()
+	edit(data)
