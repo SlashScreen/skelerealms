@@ -1,5 +1,5 @@
 @tool
-extends Object
+extends RefCounted
 
 
 var start: float

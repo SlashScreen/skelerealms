@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2dv48krtiqnn"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/tools/loot_table_inspectors/lt_item_on_condition_expression.gd" id="1_mnxyk"]
+
+[node name="LTItemOnConditionExpression" type="PanelContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_mnxyk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Loot Table Condition"
+
+[node name="CodeEdit" type="CodeEdit" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+placeholder_text = "Script..."
+
+[node name="Inspect" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Inspect Items"
+
+[connection signal="text_changed" from="VBoxContainer/CodeEdit" to="." method="_on_code_edit_text_changed"]
+[connection signal="pressed" from="VBoxContainer/Inspect" to="." method="_on_inspect_pressed"]

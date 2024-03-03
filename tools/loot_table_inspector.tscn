@@ -1,17 +1,58 @@
-[gd_scene format=3 uid="uid://cqdiw8t17nqug"]
+[gd_scene load_steps=2 format=3 uid="uid://cqdiw8t17nqug"]
 
-[node name="LootTableInspector" type="Control"]
-layout_mode = 3
+[ext_resource type="Script" path="res://addons/skelerealms/tools/loot_table_inspector.gd" id="1_wwf4a"]
+
+[node name="LootTableInspector" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_wwf4a")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Controls" type="HFlowContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="HBoxContainer/VBoxContainer/Controls"]
+layout_mode = 2
+text = "< - Back"
+
+[node name="ClassSelector" type="OptionButton" parent="HBoxContainer/VBoxContainer/Controls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Add" type="Button" parent="HBoxContainer/VBoxContainer/Controls"]
+layout_mode = 2
+text = "Add"
+
+[node name="Load" type="Button" parent="HBoxContainer/VBoxContainer/Controls"]
+layout_mode = 2
+text = "Add from File"
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ItemList" type="ItemList" parent="HBoxContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="InspectionRoot" type="PanelContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.33
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Controls/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Controls/Add" to="." method="_on_add_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Controls/Load" to="." method="_on_load_pressed"]
