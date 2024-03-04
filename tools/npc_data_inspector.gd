@@ -108,6 +108,8 @@ func edit(o: NPCInstance, w:Window) -> void:
 func _load_res() -> void:
 	if editing_data.npc_data == null:
 		editing_data.npc_data = NPCData.new()
+	if editing_data.npc_data.loot_table == null:
+		editing_data.npc_data.loot_table = SKLootTable.new()
 	
 	%RefID.text = editing_data.ref_id
 	%BaseID.text = editing_data.npc_data.id
@@ -139,7 +141,8 @@ func _load_res() -> void:
 		add_coven(crd)
 	# Schedule
 	$Schedule.edit(editing_data.npc_data.schedule)
-	
+	# Loot table
+	$"Loot Table".inspect(self, editing_data.npc_data.loot_table.items)
 
 
 func add_module_to_list(mod:AIModule) -> void:
@@ -211,3 +214,9 @@ func _on_base_id_text_submitted(new_text: String) -> void:
 
 func _on_schedule_update_event_array(arr: Array[ScheduleEvent]) -> void:
 	editing_data.npc_data.schedule = arr
+
+
+func _on_loot_table_table_updated(src: Object, tbl: Array[SKLootTableItem]) -> void:
+	if not src == self: 
+		return
+	editing_data.npc_data.loot_table.items = tbl

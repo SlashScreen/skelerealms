@@ -6,6 +6,7 @@ extends PanelContainer
 @onready var class_list:OptionButton = $HBoxContainer/VBoxContainer/Controls/ClassSelector
 @onready var item_list:ItemList = $HBoxContainer/VBoxContainer/ScrollContainer/ItemList
 @onready var inspector_root:Control = %InspectionRoot
+@onready var fd:FileDialog = $FileDialog
 var source_stack:Array = []
 var table_stack:Array = []
 var working_table:Array[SKLootTableItem]:
@@ -17,10 +18,21 @@ var path_to_class:Dictionary = {}
 signal table_updated(src:Object, tbl:Array[SKLootTableItem])
 
 
+func _ready() -> void:
+	fd.files_selected.connect(func(fs:PackedStringArray) -> void:
+		for s:String in fs:
+			var r:SKLootTableItem = load(s)
+			if r:
+				_add_item(r)
+			_update_source()
+		)
+	_update_class_list()
+
+
 func edit(lt:SKLootTableItem) -> void:
 	var n:Control = class_to_editor[path_to_class[lt.get_script().resource_path]].instantiate()
 	inspector_root.add_child(n)
-	n.edit(lt)
+	n.edit(lt, self)
 
 
 func inspect(source:Object, table:Array[SKLootTableItem]) -> void:
@@ -32,7 +44,14 @@ func inspect(source:Object, table:Array[SKLootTableItem]) -> void:
 
 
 func render(table:Array[SKLootTableItem]) -> void:
-	return
+	item_list.clear()
+	for i:SKLootTableItem in table:
+		_add_item(i)
+
+
+func _add_item(sk:SKLootTableItem) -> void:
+	var i:int = item_list.add_item("Item")
+	item_list.set_item_metadata(i, sk)
 
 
 func _update_back_button() -> void:
@@ -40,7 +59,12 @@ func _update_back_button() -> void:
 
 
 func _update_class_list() -> void:
-	return
+	class_list.clear()
+	var inherited:Array = SKToolPlugin.find_classes_that_inherit(&"SKLootTableItem")
+	for d:Dictionary in inherited:
+		class_list.add_item(d.class)
+		class_list.set_item_metadata(class_list.item_count - 1, d.path)
+		path_to_class[d.path] = d.class
 
 
 func _update_source() -> void:
@@ -60,14 +84,27 @@ func _clear_inpector() -> void:
 
 
 func _on_add_pressed() -> void:
-	pass # Replace with function body.
+	print(class_list.selected)
+	print(class_list.get_item_metadata(class_list.selected))
+	_add_item(load(class_list.get_item_metadata(class_list.selected)).new())
 
 
 func _on_load_pressed() -> void:
-	pass # Replace with function body.
+	fd.popup_centered()
 
 
 func _on_item_list_item_selected(index: int) -> void:
 	var data:SKLootTableItem = item_list.get_item_metadata(index)
 	_clear_inpector()
 	edit(data)
+
+
+func _on_remove_pressed() -> void:
+	if not item_list.is_anything_selected():
+		return
+	var i:int = item_list.get_selected_items()[0]
+	var x:SKLootTableItem = item_list.get_item_metadata(i)
+	item_list.remove_item(i)
+	working_table.erase(x)
+	_clear_inpector()
+	_update_source()

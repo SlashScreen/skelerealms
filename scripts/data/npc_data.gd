@@ -37,4 +37,4 @@ class_name NPCData
 ## GOAP Actions.
 @export var goap_actions:Array[GOAPBehavior] = []
 ## The loot table of this kind of NPC.
-@export var loot_table:LootTable
+@export var loot_table:SKLootTable

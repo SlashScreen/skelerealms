@@ -3,10 +3,12 @@ extends PanelContainer
 
 
 var editing:SKLTCurrency
+var inspector:Control
 
 
-func edit(e:SKLTCurrency) -> void:
+func edit(e:SKLTCurrency, i:Control) -> void:
 	editing = e
+	inspector = i
 	$VBoxContainer/LineEdit.text = String(e.currency)
 	$VBoxContainer/HBoxContainer/Min.value = e.amount_min
 	$VBoxContainer/HBoxContainer/Max.value = e.amount_max

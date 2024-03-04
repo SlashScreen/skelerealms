@@ -29,6 +29,8 @@ text = "Open Item Inspector"
 [node name="Path" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 
+[node name="FileDialog" type="FileDialog" parent="."]
+
 [connection signal="pressed" from="VBoxContainer/Open" to="." method="_on_open_pressed"]
 [connection signal="pressed" from="VBoxContainer/Create" to="." method="_on_create_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_button_pressed"]

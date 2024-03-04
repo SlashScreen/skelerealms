@@ -2,24 +2,33 @@
 extends PanelContainer
 
 
+@onready var fd:FileDialog = $FileDialog
 var editing:SKLTItemChance
+var inspector:Control
 
 
-func edit(e:SKLTItem) -> void:
+func edit(e:SKLTItemChance, i:Control) -> void:
+	editing = e
+	inspector = i
 	$VBoxContainer/Path.text = e.resource_path
+	fd.file_selected.connect(func(p:String) -> void:
+		var n:ItemData = load(p)
+		if n:
+			editing.item = n
+		)
 
 
 func _on_open_pressed() -> void:
-	pass # Replace with function body.
+	fd.show()
 
 
 func _on_create_pressed() -> void:
-	pass # Replace with function body.
+	editing.item = ItemData.new()
 
 
 func _on_inspect_pressed() -> void:
-	pass # Replace with function body.
+	return
 
 
 func _on_h_slider_value_changed(value: float) -> void:
-	pass # Replace with function body.
+	editing.chance = value

@@ -39,6 +39,14 @@ text = "Chance"
 [node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+filters = PackedStringArray("*.res", "*.tres")
 
 [connection signal="pressed" from="VBoxContainer/Open" to="." method="_on_open_pressed"]
 [connection signal="pressed" from="VBoxContainer/Create" to="." method="_on_create_pressed"]

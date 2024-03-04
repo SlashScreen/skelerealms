@@ -263,4 +263,5 @@ layout_mode = 2
 
 [connection signal="text_submitted" from="NPC/panels/VBoxContainer/BaseID" to="." method="_on_base_id_text_submitted"]
 [connection signal="text_submitted" from="NPC/panels/VBoxContainer/RefID" to="." method="_on_ref_id_text_submitted"]
+[connection signal="table_updated" from="Loot Table" to="." method="_on_loot_table_table_updated"]
 [connection signal="update_event_array" from="Schedule" to="." method="_on_schedule_update_event_array"]
