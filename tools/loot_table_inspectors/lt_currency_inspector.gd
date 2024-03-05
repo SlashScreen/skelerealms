@@ -11,7 +11,7 @@ func edit(e:SKLTCurrency, i:Control) -> void:
 	inspector = i
 	$VBoxContainer/LineEdit.text = String(e.currency)
 	$VBoxContainer/HBoxContainer/Min.value = e.amount_min
-	$VBoxContainer/HBoxContainer/Max.value = e.amount_max
+	$VBoxContainer/HBoxContainer2/Max.value = e.amount_max
 
 
 func _on_line_edit_text_submitted(new_text: String) -> void:
