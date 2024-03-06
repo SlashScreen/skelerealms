@@ -143,6 +143,9 @@ func _load_res() -> void:
 	$Schedule.edit(editing_data.npc_data.schedule)
 	# Loot table
 	$"Loot Table".inspect(self, editing_data.npc_data.loot_table.items)
+	# Prefab
+	if not editing_data.npc_data.prefab == null:
+		$Prefab.set_to_scene(editing_data.npc_data.resource_path)
 
 
 func add_module_to_list(mod:AIModule) -> void:
@@ -200,7 +203,10 @@ func update_coven_ranks() -> void:
 
 
 func update_prefab() -> void:
-	editing_data.prefab = load(prefab_path)
+	if prefab_path == "":
+		editing_data.prefab = null
+	else:
+		editing_data.prefab = load(prefab_path)
 
 
 func _on_ref_id_text_submitted(new_text: String) -> void:

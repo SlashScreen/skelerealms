@@ -34,5 +34,10 @@ grow_vertical = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_jyaw7")
 
+[node name="Clear" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Clear"
+
 [connection signal="prefab_set" from="VBoxContainer/PrefabTarget" to="." method="_on_prefab_target_prefab_set"]
 [connection signal="scene_set" from="VBoxContainer/PrefabTarget" to="." method="_on_prefab_target_scene_set"]
+[connection signal="pressed" from="VBoxContainer/Clear" to="." method="_on_clear_pressed"]

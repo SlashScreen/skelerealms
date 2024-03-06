@@ -62,6 +62,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Tags"
 
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Tag"
+
 [node name="AddTag" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Add Tag"
@@ -80,15 +84,15 @@ text = "Components"
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 
-[node name="Add" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="AddComponent" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
 layout_mode = 2
 text = "Add"
 
-[node name="Open" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="OpenComponent" type="Button" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
 layout_mode = 2
-text = "Open"
+text = "Load From File"
 
-[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="ComponentsList" type="OptionButton" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
 layout_mode = 2
 
 [node name="Components" type="VBoxContainer" parent="HBoxContainer/VBoxContainer2"]
@@ -109,5 +113,21 @@ layout_mode = 2
 layout_mode = 2
 text = "Hand Item (Optional)"
 
-[node name="Prefab2" parent="HBoxContainer/VBoxContainer3" instance=ExtResource("1_luwau")]
+[node name="HeldItem" parent="HBoxContainer/VBoxContainer3" instance=ExtResource("1_luwau")]
 layout_mode = 2
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open File(s)"
+ok_button_text = "Open"
+file_mode = 1
+filters = PackedStringArray("*.res", "*.tres")
+
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer/HBoxContainer/Weight" to="." method="_on_weight_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer/HBoxContainer2/Worth" to="." method="_on_worth_value_changed"]
+[connection signal="toggled" from="HBoxContainer/VBoxContainer/HBoxContainer3/Stack" to="." method="_on_stack_toggled"]
+[connection signal="text_submitted" from="HBoxContainer/VBoxContainer/BaseID" to="." method="_on_base_id_text_submitted"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/VBoxContainer/AddTag" to="." method="_on_add_tag_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer2/HBoxContainer/AddComponent" to="." method="_on_add_component_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer2/HBoxContainer/OpenComponent" to="." method="_on_open_component_pressed"]
+[connection signal="prefab_set" from="HBoxContainer/VBoxContainer3/Prefab" to="." method="_on_prefab_prefab_set"]
+[connection signal="prefab_set" from="HBoxContainer/VBoxContainer3/HeldItem" to="." method="_on_held_item_prefab_set"]

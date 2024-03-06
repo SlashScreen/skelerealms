@@ -2,10 +2,8 @@
 extends TextureRect
 
 
-var scene:String:
-	set(val):
-		scene = val
-		scene_set.emit(val)
+var scene:String
+
 signal prefab_set(path:String)
 signal scene_set(s: String)
 
@@ -24,7 +22,17 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 	EditorInterface.get_resource_previewer().queue_resource_preview(data.files[0], self, &"get_thumb", null)
 
 
+func set_thumb(path:String) -> void:
+	EditorInterface.get_resource_previewer().queue_resource_preview(path, self, &"_silent_set_thumb", null)
+
+
+func _silent_set_thumb(path:String, _preview:Texture2D, thumb:Texture2D, _ud:Variant) -> void:
+	scene = path
+	texture = thumb
+
+
 func get_thumb(path:String, _preview:Texture2D, thumb:Texture2D, _ud:Variant) -> void:
 	scene = path
+	scene_set.emit(path)
 	texture = thumb
 	prefab_set.emit(path)
