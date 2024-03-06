@@ -26,13 +26,14 @@ func set_thumb(path:String) -> void:
 	EditorInterface.get_resource_previewer().queue_resource_preview(path, self, &"_silent_set_thumb", null)
 
 
-func _silent_set_thumb(path:String, _preview:Texture2D, thumb:Texture2D, _ud:Variant) -> void:
+func _silent_set_thumb(path:String, preview:Texture2D, _thumb:Texture2D, _ud:Variant) -> void:
+	print(preview)
 	scene = path
-	texture = thumb
+	texture = preview
 
 
-func get_thumb(path:String, _preview:Texture2D, thumb:Texture2D, _ud:Variant) -> void:
+func get_thumb(path:String, preview:Texture2D, _thumb:Texture2D, _ud:Variant) -> void:
 	scene = path
 	scene_set.emit(path)
-	texture = thumb
+	texture = preview
 	prefab_set.emit(path)

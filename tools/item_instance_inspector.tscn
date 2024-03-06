@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5jgisju3kt32"]
+
+[ext_resource type="PackedScene" uid="uid://ljmha04rl7i3" path="res://addons/skelerealms/tools/instance_inspector_widget.tscn" id="1_hastx"]
+[ext_resource type="PackedScene" uid="uid://dfxye68yntvkf" path="res://addons/skelerealms/tools/item_data_inspector.tscn" id="1_j4l7y"]
+[ext_resource type="Script" path="res://addons/skelerealms/tools/item_instance_inspector.gd" id="1_ywurn"]
+
+[node name="ItemInstanceInspector" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ywurn")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HBoxContainer" parent="VBoxContainer" instance=ExtResource("1_hastx")]
+layout_mode = 2
+
+[node name="ItemDataInspector" parent="VBoxContainer" instance=ExtResource("1_j4l7y")]
+layout_mode = 2
+size_flags_vertical = 3

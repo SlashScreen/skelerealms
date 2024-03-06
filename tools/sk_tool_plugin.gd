@@ -2,7 +2,7 @@ class_name SKToolPlugin
 extends EditorInspectorPlugin
 
 
-const NPC_INSTANCE_EDITOR = preload("npc_data_inspector.tscn")
+const NPC_INSTANCE_EDITOR = preload("npc_instance_inspector.tscn")
 
 
 func _can_handle(object: Object) -> bool:

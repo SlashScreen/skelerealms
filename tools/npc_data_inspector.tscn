@@ -64,18 +64,6 @@ unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "BaseID"
 
-[node name="HSeparator" type="HSeparator" parent="NPC/panels/VBoxContainer"]
-layout_mode = 2
-
-[node name="InstanceData" type="Label" parent="NPC/panels/VBoxContainer"]
-layout_mode = 2
-text = "Instance-specific Data"
-
-[node name="RefID" type="LineEdit" parent="NPC/panels/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-placeholder_text = "RefID"
-
 [node name="AIModule" type="PanelContainer" parent="NPC/panels"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -262,6 +250,5 @@ visible = false
 layout_mode = 2
 
 [connection signal="text_submitted" from="NPC/panels/VBoxContainer/BaseID" to="." method="_on_base_id_text_submitted"]
-[connection signal="text_submitted" from="NPC/panels/VBoxContainer/RefID" to="." method="_on_ref_id_text_submitted"]
 [connection signal="table_updated" from="Loot Table" to="." method="_on_loot_table_table_updated"]
 [connection signal="update_event_array" from="Schedule" to="." method="_on_schedule_update_event_array"]

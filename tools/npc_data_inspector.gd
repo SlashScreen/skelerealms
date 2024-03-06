@@ -26,7 +26,7 @@ var prefab_path:String:
 		prefab_path = val
 		$Prefab.set_path_label(val)
 
-var editing_data:NPCInstance
+var editing_data:NPCData
 var win:Window
 
 
@@ -94,10 +94,9 @@ func _ready() -> void:
 		add_coven(CovenRankData.new())
 		update_coven_ranks()
 		)
-	
 
 
-func edit(o: NPCInstance, w:Window) -> void:
+func edit(o: NPCData, w:Window) -> void:
 	await ready
 	editing_data = o
 	w.title = o.ref_id
@@ -106,46 +105,45 @@ func edit(o: NPCInstance, w:Window) -> void:
 
 
 func _load_res() -> void:
-	if editing_data.npc_data == null:
-		editing_data.npc_data = NPCData.new()
-	if editing_data.npc_data.loot_table == null:
-		editing_data.npc_data.loot_table = SKLootTable.new()
+	if editing_data == null:
+		editing_data = NPCData.new()
+	if editing_data.loot_table == null:
+		editing_data.loot_table = SKLootTable.new()
 	
-	%RefID.text = editing_data.ref_id
-	%BaseID.text = editing_data.npc_data.id
-	for g:GOAPBehavior in editing_data.npc_data.goap_actions:
+	%BaseID.text = editing_data.id
+	for g:GOAPBehavior in editing_data.goap_actions:
 		add_goap_to_list(g)
-	for a:AIModule in editing_data.npc_data.modules:
+	for a:AIModule in editing_data.modules:
 		add_module_to_list(a)
 	# Flags
 	# i hate my life
-	%Essential.button_pressed = editing_data.npc_data.essential
-	%Essential.toggled.connect(func(s:bool) -> void: editing_data.npc_data.essential = s)
-	%Ghost.button_pressed = editing_data.npc_data.ghost
-	%Ghost.toggled.connect(func(s:bool) -> void: editing_data.npc_data.ghost = s)
-	%Invulnerable.button_pressed = editing_data.npc_data.invulnerable
-	%Invulnerable.toggled.connect(func(s:bool) -> void: editing_data.npc_data.invulnerable = s)
-	%Unique.button_pressed = editing_data.npc_data.unique
-	%Unique.toggled.connect(func(s:bool) -> void: editing_data.npc_data.unique = s)
-	%StealthMeter.button_pressed = editing_data.npc_data.affects_stealth_meter
-	%StealthMeter.toggled.connect(func(s:bool) -> void: editing_data.npc_data.affects_stealth_meter = s)
-	%Interactive.button_pressed = editing_data.npc_data.interactive
-	%Interactive.toggled.connect(func(s:bool) -> void: editing_data.npc_data.interactive = s)
+	%Essential.button_pressed = editing_data.essential
+	%Essential.toggled.connect(func(s:bool) -> void: editing_data.essential = s)
+	%Ghost.button_pressed = editing_data.ghost
+	%Ghost.toggled.connect(func(s:bool) -> void: editing_data.ghost = s)
+	%Invulnerable.button_pressed = editing_data.invulnerable
+	%Invulnerable.toggled.connect(func(s:bool) -> void: editing_data.invulnerable = s)
+	%Unique.button_pressed = editing_data.unique
+	%Unique.toggled.connect(func(s:bool) -> void: editing_data.unique = s)
+	%StealthMeter.button_pressed = editing_data.affects_stealth_meter
+	%StealthMeter.toggled.connect(func(s:bool) -> void: editing_data.affects_stealth_meter = s)
+	%Interactive.button_pressed = editing_data.interactive
+	%Interactive.toggled.connect(func(s:bool) -> void: editing_data.interactive = s)
 	# Relationships
-	%DefaultOpinion.value = editing_data.npc_data.default_player_opinion
-	%DefaultOpinion.value_changed.connect(func(v:float)->void: editing_data.npc_data.default_player_opinion = roundi(v))
-	for r:Relationship in editing_data.npc_data.relationships:
+	%DefaultOpinion.value = editing_data.default_player_opinion
+	%DefaultOpinion.value_changed.connect(func(v:float)->void: editing_data.default_player_opinion = roundi(v))
+	for r:Relationship in editing_data.relationships:
 		add_relationship(r)
 	# Covens
-	for crd:CovenRankData in editing_data.npc_data.covens:
+	for crd:CovenRankData in editing_data.covens:
 		add_coven(crd)
 	# Schedule
-	$Schedule.edit(editing_data.npc_data.schedule)
+	$Schedule.edit(editing_data.schedule)
 	# Loot table
-	$"Loot Table".inspect(self, editing_data.npc_data.loot_table.items)
+	$"Loot Table".inspect(self, editing_data.loot_table.items)
 	# Prefab
-	if not editing_data.npc_data.prefab == null:
-		$Prefab.set_to_scene(editing_data.npc_data.resource_path)
+	if not editing_data.prefab == null:
+		$Prefab.set_to_scene(editing_data.prefab.resource_path)
 
 
 func add_module_to_list(mod:AIModule) -> void:
@@ -184,22 +182,22 @@ func update_ai_modules() -> void:
 	var output:Array[AIModule] = []
 	for i:int in range(goap_list.item_count):
 		output.append(goap_list.get_item_metadata(i))
-	editing_data.npc_data.modules = output
+	editing_data.modules = output
 
 
 func update_goap_behaviors() -> void:
 	var output:Array[GOAPBehavior] = []
 	for i:int in range(goap_list.item_count):
 		output.append(goap_list.get_item_metadata(i))
-	editing_data.npc_data.goap_actions = output
+	editing_data.goap_actions = output
 
 
 func update_relationships() -> void:
-	editing_data.npc_data.relationships = relationship_list.get_children().map(func(n:Node) -> Relationship: return n.editing)
+	editing_data.relationships = relationship_list.get_children().map(func(n:Node) -> Relationship: return n.editing)
 
 
 func update_coven_ranks() -> void:
-	editing_data.npc_data.covens = covens_list.get_children().map(func(n:Node) -> CovenRankData: return n.editing)
+	editing_data.covens = covens_list.get_children().map(func(n:Node) -> CovenRankData: return n.editing)
 
 
 func update_prefab() -> void:
@@ -209,20 +207,15 @@ func update_prefab() -> void:
 		editing_data.prefab = load(prefab_path)
 
 
-func _on_ref_id_text_submitted(new_text: String) -> void:
-	editing_data.ref_id = new_text
-	win.title = new_text
-
-
 func _on_base_id_text_submitted(new_text: String) -> void:
-	editing_data.npc_data.id = new_text
+	editing_data.id = new_text
 
 
 func _on_schedule_update_event_array(arr: Array[ScheduleEvent]) -> void:
-	editing_data.npc_data.schedule = arr
+	editing_data.schedule = arr
 
 
 func _on_loot_table_table_updated(src: Object, tbl: Array[SKLootTableItem]) -> void:
 	if not src == self: 
 		return
-	editing_data.npc_data.loot_table.items = tbl
+	editing_data.loot_table.items = tbl

@@ -2,8 +2,8 @@ class_name InstanceData
 extends Resource
 ## The base class for an instance of an NPC, item, Etc.
 
-@export var ref_id:String
-@export var world:String
+@export var ref_id:StringName
+@export var world:StringName
 @export var position:Vector3
 ## Custom script for a [ScriptComponent] that can optionally override the base data's script for this instance only.
 @export var override_custom_script:Script
