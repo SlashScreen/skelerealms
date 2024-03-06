@@ -2,7 +2,12 @@ class_name SKToolPlugin
 extends EditorInspectorPlugin
 
 
-const NPC_INSTANCE_EDITOR = preload("npc_instance_inspector.tscn")
+const EDITORS:Dictionary = {
+	&"NpcInstance": preload("npc_instance_inspector.tscn"),
+	&"ItemInstance": preload("item_instance_inspector.tscn"),
+	&"NpcData": preload("npc_data_inspector.tscn"),
+	&"ItemData": preload("item_data_inspector.tscn"),
+}
 
 
 func _can_handle(object: Object) -> bool:
@@ -22,7 +27,7 @@ func _open_window(object: Object) -> void:
 	w.position = EditorInterface.get_base_control().size / 2 - (EditorInterface.get_base_control().size / 4)
 	w.min_size = EditorInterface.get_base_control().size / 2
 	if object is NPCInstance:
-		var n:Node = NPC_INSTANCE_EDITOR.instantiate()
+		var n:Node = EDITORS.NpcInstance.instantiate()
 		w.add_child(n)
 		n.edit(object, w)
 	EditorInterface.get_base_control().add_child(w)

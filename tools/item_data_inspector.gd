@@ -17,6 +17,11 @@ func _ready() -> void:
 			_add_component_to_list(n)
 			editing.components.append(n)
 		)
+	class_list.clear()
+	var inherited:Array = SKToolPlugin.find_classes_that_inherit(&"ItemDataComponent")
+	for d:Dictionary in inherited:
+		class_list.add_item(d.class)
+		class_list.set_item_metadata(class_list.item_count - 1, d.path)
 
 
 func edit(e:ItemData) -> void:
