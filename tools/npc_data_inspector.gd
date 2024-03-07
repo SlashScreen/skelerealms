@@ -4,7 +4,6 @@ extends Control
 
 const RELATIONSHIP_EDITOR = preload("relationship_editor.tscn")
 const COVEN_RANK_EDITOR = preload("coven_rank_data_editor.tscn")
-const CovenRankEditorClass = preload("coven_rank_data_editor.gd")
 
 @onready var add_module:Button = $NPC/panels/AIModule/VBoxContainer/New/Add
 @onready var load_module_button:Button = $NPC/panels/AIModule/VBoxContainer/LoadModule
@@ -27,7 +26,6 @@ var prefab_path:String:
 		$Prefab.set_path_label(val)
 
 var editing_data:NPCData
-var win:Window
 
 
 func refresh_class_list() -> void:
@@ -96,11 +94,9 @@ func _ready() -> void:
 		)
 
 
-func edit(o: NPCData, w:Window) -> void:
+func edit(o: NPCData) -> void:
 	await ready
 	editing_data = o
-	w.title = o.ref_id
-	win = w
 	_load_res()
 
 
@@ -147,7 +143,7 @@ func _load_res() -> void:
 
 
 func add_module_to_list(mod:AIModule) -> void:
-	var i:int = module_list.add_item(mod.get_type())
+	var i:int = module_list.add_item(mod.resource_path)
 	module_list.set_item_metadata(i, mod)
 
 
@@ -168,7 +164,7 @@ func add_relationship(r:Relationship) -> void:
 
 
 func add_coven(c:CovenRankData) -> void: 
-	var new_crd:CovenRankEditorClass = COVEN_RANK_EDITOR.instantiate()
+	var new_crd:Node = COVEN_RANK_EDITOR.instantiate()
 	new_crd.edit(c)
 	new_crd.delete_requested.connect(func() -> void:
 		new_crd.queue_free()

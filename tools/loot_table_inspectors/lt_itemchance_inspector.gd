@@ -27,7 +27,7 @@ func _on_create_pressed() -> void:
 
 
 func _on_inspect_pressed() -> void:
-	return
+	SKToolPlugin.instance._open_window(editing.item) 
 
 
 func _on_h_slider_value_changed(value: float) -> void:

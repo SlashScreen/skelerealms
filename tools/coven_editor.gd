@@ -29,14 +29,17 @@ func _on_add_rank_pressed() -> void:
 		return
 	rank_list.add_item(rn.text)
 	rn.clear()
+	_update_rank_list()
 
 
 func _on_remove_rank_pressed() -> void:
 	if rank_list.is_anything_selected():
 		rank_list.remove_item(rank_list.get_selected_items()[0])
+		_update_rank_list()
 
 
 func _update_rank_list() -> void:
+	editing.ranks.clear()
 	for i:int in rank_list.item_count:
 		editing.ranks[i] = rank_list.get_item_text(i)
 

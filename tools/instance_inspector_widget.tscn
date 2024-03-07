@@ -19,10 +19,12 @@ script = ExtResource("1_7o5m0")
 [node name="RefID" type="LineEdit" parent="."]
 layout_mode = 2
 placeholder_text = "RefID"
+expand_to_text_length = true
 
 [node name="World" type="LineEdit" parent="."]
 layout_mode = 2
 placeholder_text = "World"
+expand_to_text_length = true
 
 [node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 2

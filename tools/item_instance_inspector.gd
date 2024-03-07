@@ -1,5 +1,5 @@
+@tool
 extends PanelContainer
-
 
 
 var editing: ItemInstance

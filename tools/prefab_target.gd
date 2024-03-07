@@ -27,7 +27,6 @@ func set_thumb(path:String) -> void:
 
 
 func _silent_set_thumb(path:String, preview:Texture2D, _thumb:Texture2D, _ud:Variant) -> void:
-	print(preview)
 	scene = path
 	texture = preview
 

@@ -27,4 +27,4 @@ func _on_create_pressed() -> void:
 
 
 func _on_button_pressed() -> void:
-	pass # Replace with function body.
+	SKToolPlugin.instance._open_window(editing.item) 
