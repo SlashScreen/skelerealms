@@ -8,14 +8,19 @@ static var instance: EntityManager
 var entities: Dictionary = {}
 var disk_assets: Dictionary = {}  # TODO: Figure out an alternative that isn't so memory heavy
 var regex: RegEx
+@export var config:SKConfig
+
+
+func _init() -> void:
+	instance = self
 
 
 func _ready():
 	regex = RegEx.new()
 	regex.compile("([^\\/\n\\r]+)\\.t?res")
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
-	instance = self
 	SkeleRealmsGlobal.entity_manager_loaded.emit()
+	config.compile()
 
 
 ## Gets an entity in the game. [br]
@@ -59,7 +64,6 @@ func _cache_entities(path: String):
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name != "":
-			print(file_name)
 			if dir.current_is_dir():  # if is directory, cache subdirectory
 				_cache_entities("%s/%s" % [path, file_name])
 			else:  # if filename, cache filename

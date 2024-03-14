@@ -13,7 +13,7 @@ func edit(e:SKLTXOfItem, i:Control) -> void:
 	$VBoxContainer/HBoxContainer2/Max.value = e.x_max
 	inspector.table_updated.connect(func(o:Object, tbl:Array[SKLootTableItem]) -> void: 
 		if o == self:
-			editing.items = tbl
+			editing.items.items = tbl
 		)
 
 

@@ -3,7 +3,7 @@ extends SKLootTableItem
 
 
 @export_multiline var condition:String = ""
-@export var items:Array[SKLootTableItem] = []
+@export var items:SKLootTable
 
 
 func resolve() -> SKLootTable.LootTableResult:
@@ -11,7 +11,7 @@ func resolve() -> SKLootTable.LootTableResult:
 		return SKLootTable.LootTableResult.new()
 	
 	var o:SKLootTable.LootTableResult = SKLootTable.LootTableResult.new()
-	for i:SKLootTableItem in items:
+	for i:SKLootTableItem in items.items:
 		o.concat(i.resolve())
 	return o
 

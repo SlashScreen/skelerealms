@@ -28,7 +28,6 @@ var in_scene: bool:
 		if !in_scene && val: # if was not in scene and now is
 			entered_scene.emit()
 		in_scene = val
-var conditions:Array[StringName] = []
 
 
 ## Emitted when an entity enters a scene.

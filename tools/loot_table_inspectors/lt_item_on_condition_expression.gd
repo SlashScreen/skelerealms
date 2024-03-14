@@ -13,7 +13,7 @@ func edit(e:SKLTOnCondition, i:Control) -> void:
 	ce.text = e.condition
 	inspector.table_updated.connect(func(o:Object, tbl:Array[SKLootTableItem]) -> void: 
 		if o == self:
-			editing.items = tbl
+			editing.items.items = tbl
 		)
 
 

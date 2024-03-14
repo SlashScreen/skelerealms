@@ -35,12 +35,12 @@ func edit(lt:SKLootTableItem) -> void:
 	n.edit(lt, self)
 
 
-func inspect(source:Object, table:Array[SKLootTableItem]) -> void:
+func inspect(source:Object, table:SKLootTable) -> void:
 	if not source == null:
 		source_stack.push_back(source)
 	_update_back_button()
-	table_stack.push_back(table.duplicate())
-	render(working_table)
+	table_stack.push_back(table.items.duplicate())
+	render(table_stack.back())
 
 
 func render(table:Array[SKLootTableItem]) -> void:

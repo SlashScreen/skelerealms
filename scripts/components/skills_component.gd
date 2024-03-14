@@ -6,39 +6,21 @@ extends EntityComponent
 
 ## The skills of this Entity.
 ## It is in a dictionary so you can add, remove, and customize at will.
-var skills:Dictionary = {
-	&"short_blade" : 0,
-	&"long_blade" : 0,
-	&"blunt" : 0,
-	&"block" : 0,
-	&"litheness" : 0,
-	&"barter" : 10,
-	&"speech" : 0,
-	&"alchemy" : 0,
-	&"unarmed" : 0,
-}:
+@onready var skills:Dictionary = EntityManager.instance.config.skills.duplicate():
 	get:
 		return skills
 	set(val):
 		skills = val
 		dirty = true
-## The level of this entity/character. If not set manually, it will return a sum of all skills. If set manually, it will return the level set.
-## It may seem like an odd choice to do it this way. In my own application of Skelerelams, I'm planning for levels to be calculated the sum way.
-## However, not everyone will want to do it this way, so I allowed a more traditional approach as well. [br]
-## Set it to -1 to restore summing behavior, if you so choose.
-var level:int = -1:
-	get:
-		if level == -1:
-			return skills.values().reduce(func(sum, next): return sum + next)
-		else:
-			return level
-	set(val):
-		level = val
-		if not val == -1:
-			_manually_set_level = true
-		dirty = true
+## Character level of this character
+var level:int = 0
 ## Used to determine how to save levels.
 var _manually_set_level = false
+var skill_xp:Dictionary = {}
+var character_xp:int = 0
+
+signal skill_levelled_up(skill:StringName, new_level:int)
+signal character_levelled_up(new_level:int)
 
 
 func _init() -> void:
@@ -67,3 +49,26 @@ func gather_debug_info() -> String:
 """ % [
 	JSON.stringify(skills, '\t').indent("\t\t")
 ]
+
+
+func add_skill_xp(skill:StringName, amount:int) -> void:
+	if not skills.has(skill):
+		push_warning("Entity %s has no skill %s." % [parent_entity.name, skill])
+		return 
+	skill_xp[skill] += amount
+	var target:int = EntityManager.instance.config.compute_skill(skills[skill])
+	if target == -1:
+		return
+	if skill_xp[skill] >= target:
+		skills[skill] += 1
+		skill_levelled_up.emit(skill, skills[skill])
+
+
+func add_character_xp(amount:int) -> void:
+	character_xp += amount
+	var target:int = EntityManager.instance.config.compute_character(level)
+	if target == -1:
+		return
+	if character_xp >= amount:
+		level += 1
+		character_levelled_up.emit(level)

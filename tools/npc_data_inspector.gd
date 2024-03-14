@@ -24,7 +24,6 @@ var prefab_path:String:
 	set(val):
 		prefab_path = val
 		$Prefab.set_path_label(val)
-
 var editing_data:NPCData
 
 
@@ -97,10 +96,7 @@ func _ready() -> void:
 func edit(o: NPCData) -> void:
 	await ready
 	editing_data = o
-	_load_res()
-
-
-func _load_res() -> void:
+	
 	if editing_data == null:
 		editing_data = NPCData.new()
 	if editing_data.loot_table == null:
@@ -136,7 +132,7 @@ func _load_res() -> void:
 	# Schedule
 	$Schedule.edit(editing_data.schedule)
 	# Loot table
-	$"Loot Table".inspect(self, editing_data.loot_table.items)
+	$"Loot Table".inspect(self, editing_data.loot_table)
 	# Prefab
 	if not editing_data.prefab == null:
 		$Prefab.set_to_scene(editing_data.prefab.resource_path)

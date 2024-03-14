@@ -20,7 +20,8 @@ func _init() -> void:
 func _can_handle(object: Object) -> bool:
 	return object is InstanceData\
 		or object is RefData\
-		or object is Coven
+		or object is Coven\
+		or object is SKLootTable
 
 
 func _parse_begin(object: Object) -> void:
@@ -54,6 +55,12 @@ func _open_window(object: Object) -> void:
 		var n:Node = EDITORS.Coven.instantiate()
 		w.add_child(n)
 		n.edit(object)
+	elif object is ChestInstance:
+		#open_loot_inspector((object as ChestInstance).loot_table)
+		return
+	elif object is SKLootTable:
+		open_loot_inspector((object as SKLootTable).items)
+		return
 	else:
 		return
 	EditorInterface.get_base_control().add_child(w)

@@ -4,7 +4,7 @@ extends SKLootTableItem
 
 @export_range(0, 100, 1, "or_greater") var x_min:int = 1
 @export_range(0, 100, 1, "or_greater") var x_max:int = 0
-@export var items: Array[SKLootTableItem] = []
+@export var items: SKLootTable
 
 
 func resolve() -> SKLootTable.LootTableResult:
@@ -15,7 +15,7 @@ func resolve() -> SKLootTable.LootTableResult:
 	var output:SKLootTable.LootTableResult = SKLootTable.LootTableResult.new()
 	var i:int = 0
 	while output.size() < x:
-		output.concat(items[i].resolve())
+		output.concat(items.items[i].resolve())
 		i += 1
 		if i >= items.size():
 			i = 0
