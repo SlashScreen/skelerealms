@@ -156,10 +156,10 @@ func reset_stale_timer() -> void:
 	stale_timer = 0
 
 
-func broadcast_message(msg:String) -> void:
+func broadcast_message(msg:String, args:Array = []) -> void:
 	for c in get_children():
 		if c.has_method(msg):
-			c.call(msg)
+			c.call(msg, args)
 
 
 func dialogue_command(command:String, args:Array) -> void:

@@ -7,6 +7,8 @@ extends Node
 var quest_engine:QuestEngine
 ## World states for the GOAP system.
 var world_states:Dictionary
+## Status effects registered in the game.
+var status_effects:Dictionary = {}
 
 ## Called when the [EntityManager] has finished loading.
 signal entity_manager_loaded
@@ -90,3 +92,7 @@ func _walk_for_component(n:Node, component_type:String, wo_check:Callable) -> No
 		return dc
 	
 	return null
+
+
+func register_effect(what:String, script:GDScript) -> void:
+	status_effects[what] = script

@@ -2,8 +2,12 @@ class_name SKConfig
 extends Resource
 
 
+## Default skills for [class SkillsComponent]s.
 @export var skills:Dictionary = {}
+## Default attributes for [class AttributesComponent]s.
 @export var attributes:Dictionary = {}
+## Status effects that will be registered when the game starts.
+@export var status_effects:Array[StatusEffect] = []
 ## The formula for determining the amount of XP needed for a skill to level up, in GDScript. The given skill level is the current skill level, 
 ## and the formula's result (int) is the XP needed to raise to the next level.
 ## Inputs: skill_level (int)
