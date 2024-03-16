@@ -1,8 +1,5 @@
-class_name EffectsComponent
-extends EntityComponent
-
-
-## This component governs active effects on this entity. 
+class_name EffectsObject
+extends Node
 
 
 var host:StatusEffectHost
@@ -11,7 +8,7 @@ var host:StatusEffectHost
 func _ready() -> void:
 	host = StatusEffectHost.new()
 	add_child(host)
-	host.message_broadcast.connect(parent_entity.broadcast_message.bind())
+	#host.message_broadcast.connect(parent_entity.broadcast_message.bind())
 
 
 func add_effect(what:StringName) -> void:

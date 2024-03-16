@@ -23,15 +23,15 @@ extends Resource
 
 
 ## Called every frame as the effect is active.
-func on_update(delta:float, target: EffectsComponent) -> void:
+func on_update(delta:float, target: StatusEffectHost) -> void:
 	pass
 
 
 ## Called when the effect first begins.
-func on_start_effect(target: EffectsComponent) -> void:
+func on_start_effect(target: StatusEffectHost) -> void:
 	pass
 
 
 ## Called when the effect ends.
-func on_end_effect(target: EffectsComponent) -> void:
+func on_end_effect(target: StatusEffectHost) -> void:
 	pass

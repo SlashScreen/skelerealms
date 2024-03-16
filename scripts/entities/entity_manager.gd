@@ -21,6 +21,8 @@ func _ready():
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
 	SkeleRealmsGlobal.entity_manager_loaded.emit()
 	config.compile()
+	for se:StatusEffect in config.status_effects:
+		SkeleRealmsGlobal.register_effect(se.name ,se.get_script())
 
 
 ## Gets an entity in the game. [br]
