@@ -19,7 +19,7 @@ func add_effect(what:StringName) -> void:
 		return
 	
 	if SkeleRealmsGlobal.status_effects.has(what):
-		var ne:StatusEffect = (SkeleRealmsGlobal.status_effects[what] as GDScript).new()
+		var ne:StatusEffect = (SkeleRealmsGlobal.status_effects[what] as StatusEffect).duplicate()
 		# Check incompatibilities
 		for x:StringName in ne.incompatible:
 			if effects.has(x):

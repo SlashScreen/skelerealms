@@ -94,5 +94,5 @@ func _walk_for_component(n:Node, component_type:String, wo_check:Callable) -> No
 	return null
 
 
-func register_effect(what:String, script:GDScript) -> void:
-	status_effects[what] = script
+func register_effect(what:String, eff:StatusEffect) -> void:
+	status_effects[what] = eff

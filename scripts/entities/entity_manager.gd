@@ -22,7 +22,7 @@ func _ready():
 	SkeleRealmsGlobal.entity_manager_loaded.emit()
 	config.compile()
 	for se:StatusEffect in config.status_effects:
-		SkeleRealmsGlobal.register_effect(se.name ,se.get_script())
+		SkeleRealmsGlobal.register_effect(se.name, se)
 
 
 ## Gets an entity in the game. [br]
