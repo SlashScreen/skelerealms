@@ -8,6 +8,10 @@ extends EntityComponent
 var host:StatusEffectHost
 
 
+func _init() -> void:
+	name = "EffectsComponent"
+
+
 func _ready() -> void:
 	host = StatusEffectHost.new()
 	add_child(host)

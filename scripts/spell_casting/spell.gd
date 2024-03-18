@@ -12,7 +12,7 @@ extends Resource
 ## You can pack it all in here so you don't have to use load(), but you can still do that if you want to.
 @export var spell_assets:Dictionary
 ## An array of spell effects we can apply to something we hit.
-@export var spell_effects:Array[SpellEffect]
+@export var spell_effects:Array[StringName]
 ## Whether being hit by this spell is to be considered an attack.
 @export var aggressive:bool = false
 ## The spell caster.

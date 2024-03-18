@@ -3,12 +3,10 @@ extends EntityComponent
 ## Allows entities to be hit with spells, and keeps track of any applied spell effects.
 
 
-var active_effects:Array[SpellEffect] = []
+var status_effect:EffectsComponent
 
 
 signal hit_with_spell(spell:Spell)
-signal added_effect(effect:SpellEffect)
-signal removed_effect(effect:SpellEffect)
 
 
 ## Hit this entity with a spell. Doesn't actually do anything apart from emit [signal hit_with_spell]. To apply effects, you can do that on the [Spell] side.
@@ -20,22 +18,13 @@ func _init() -> void:
 	name = "SpellTargetComponent"
 
 
-func _process(delta: float) -> void:
-	# update all effects
-	for eff in active_effects:
-		eff.on_update(delta)
+func _entity_ready() -> void:
+	status_effect = parent_entity.get_component(&"EffectsComponent")
 
 
-## Duplicates an initializes a new spell effect. Returns the new effect.
-func add_effect(effect:SpellEffect) -> SpellEffect:
-	var eff = effect.duplicate(true)
-	eff.apply(self) # bind to this
-	active_effects.append(eff)
-	eff.on_start_effect() # callback
-	return eff
+func add_effect(effect:StringName) -> void:
+	status_effect.add_effect(effect)
 
 
-## Dispel an effect.
-func remove_effect(eff:SpellEffect) -> void:
-	eff.on_end_effect()
-	active_effects.erase(eff)
+func remove_effect(eff:StringName) -> void:
+	status_effect.remove_effect(eff)
