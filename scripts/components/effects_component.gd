@@ -18,6 +18,7 @@ func _ready() -> void:
 	host.message_broadcast.connect(parent_entity.broadcast_message.bind())
 
 
+## Pass-through for [method StatusEffectHost.add_effect].
 func add_effect(what:StringName) -> void:
 	host.add_effect(what)
 

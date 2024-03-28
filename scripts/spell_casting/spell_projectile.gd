@@ -1,5 +1,5 @@
 class_name SpellProjectile
-extends Area3D
+extends RigidBody3D
 ## A special script for projectiles: provides a callback when it hits an object.
 
 

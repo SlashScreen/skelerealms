@@ -2,6 +2,10 @@ class_name SKConfig
 extends Resource
 
 
+## This resource is needed to configure some Skelerealms behavior without changing code in the addon scripts itself.
+## This should be given to an [class EntityManager] to be used.
+
+
 ## Default skills for [class SkillsComponent]s.
 @export var skills:Dictionary = {}
 ## Default attributes for [class AttributesComponent]s.
@@ -18,7 +22,9 @@ extends Resource
 ## Imputs: character_level (int)
 ## Outputs: int
 @export_multiline var character_xp_formula:String
+## The compiled skill xp check expression.
 var compiled_skill:Expression
+## The compiles character xp check expression.
 var compiled_character:Expression
 
 
@@ -35,6 +41,7 @@ func compile() -> void:
 		push_error("Character level expression compilation failed: ", compiled_character.get_error_text(), " - Check your SKConfig resource.")
 
 
+## Compute the skill xp needed to level up.
 func compute_skill(level: int) -> int:
 	var res:Variant = compiled_skill.execute([level])
 	if compiled_skill.has_execute_failed():
@@ -46,6 +53,7 @@ func compute_skill(level: int) -> int:
 	return res as int
 
 
+## Compute the character xp needed to level up.
 func compute_character(level: int) -> int:
 	var res:Variant = compiled_character.execute([level])
 	if compiled_character.has_execute_failed():

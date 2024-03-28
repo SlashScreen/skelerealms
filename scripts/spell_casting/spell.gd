@@ -78,7 +78,7 @@ func _find_spell_targets_in_range(pos:Vector3, radius:float, ignore_self:bool = 
 
 ## Apply a spell effect to an object.
 ## Only works if target is of type [SpellTargetComponent] or [SpellTargetObject].
-func _apply_spell_effect_to(target, effect:SpellEffect):
+func _apply_spell_effect_to(target, effect:StringName):
 	# return early if invalid object
 	if not target is SpellTargetComponent and not target is SpellTargetObject:
 		return

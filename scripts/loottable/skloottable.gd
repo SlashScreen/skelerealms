@@ -2,6 +2,9 @@ class_name SKLootTable
 extends Resource
 
 
+## This is a loot table. It can resolve into a collection of items and currencies.
+
+
 @export var items:Array[SKLootTableItem] = []
 
 

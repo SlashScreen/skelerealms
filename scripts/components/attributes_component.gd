@@ -5,6 +5,7 @@ extends EntityComponent
 
 ## The attributes of this Entity.
 ## It is in a dictionary so you can add, remove, and customize at will.
+## On startup, it will clone the list in the [member EntityManager.config] singleton.
 @onready var attributes:Dictionary = EntityManager.instance.config.attributes.duplicate():
 	get:
 		return attributes

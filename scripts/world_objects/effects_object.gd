@@ -2,6 +2,11 @@ class_name EffectsObject
 extends SKWorldObject
 
 
+## This is a vessel for [class StatusEffectHost], intended to give statuseffects to non-entity objects.
+## For example, you could add this and a [class DamageableObject] to a wooden box, and if the box is set
+## on fire, it will turn to ash.
+
+
 var host:StatusEffectHost
 
 
