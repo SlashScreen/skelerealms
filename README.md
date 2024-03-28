@@ -1,4 +1,5 @@
 # Skelerealms - An open world RPG framework for Godot 4.1+
+## Please note that active development is under the git submodule -> [here](https://github.com/SlashScreen/skelerealms-submodule)
 
 Skelerealms is a work-in-progress framework for creating open world RPGs, like The Elder Scrolls series.  
 Skelerealms is made to be modular and extensible, and easy to hook into for actual gameplay.  
