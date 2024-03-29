@@ -39,7 +39,6 @@ func load_world(wid:String) -> void:
 		return
 	
 	GameInfo.console_unfreeze()
-	GDShell.ui_handler.visible = false
 	begin_world_loading.emit()
 	GameInfo.game_loading.emit(wid)
 	GameInfo.is_loading = true
