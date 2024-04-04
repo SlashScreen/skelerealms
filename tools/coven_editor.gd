@@ -8,10 +8,11 @@ var editing:Coven
 
 func edit(c:Coven) -> void: 
 	editing = c
-	$HBoxContainer/VBoxContainer/GridContainer/Hidden.pressed = c.hidden_from_player
-	$HBoxContainer/VBoxContainer/GridContainer/IgnoreOthers.pressed = c.ignore_crimes_against_others
-	$HBoxContainer/VBoxContainer/GridContainer/IgnoreMembers.pressed = c.ignore_crimes_against_members
-	$HBoxContainer/VBoxContainer/GridContainer/TrackCrime.pressed = c.track_crime
+	$HBoxContainer/VBoxContainer/GridContainer/Hidden.button_pressed = c.hidden_from_player
+	$HBoxContainer/VBoxContainer/GridContainer/IgnoreOthers.button_pressed = c.ignore_crimes_against_others
+	$HBoxContainer/VBoxContainer/GridContainer/IgnoreMembers.button_pressed = c.ignore_crimes_against_members
+	$HBoxContainer/VBoxContainer/GridContainer/TrackCrime.button_pressed = c.track_crime
+	rank_list = $HBoxContainer/VBoxContainer/Ranks
 	for r:int in c.ranks:
 		rank_list.add_item(c.ranks[r])
 	for o:StringName in c.other_coven_opinions:
@@ -78,3 +79,7 @@ func _add_opinion_to_list(c:StringName, o:int) -> void:
 	container.add_child(rb)
 	
 	$HBoxContainer/VBoxContainer2/Opinions.add_child(container)
+
+
+func _on_line_edit_text_changed(new_text: String) -> void:
+	editing.coven_id = new_text

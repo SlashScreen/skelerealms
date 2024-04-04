@@ -28,6 +28,8 @@ func receive_message(_msg:StringName, _args:Array = []) -> void:
 
 
 func _collect_neighbors() -> void:
+	if get_parent() == null:
+		return
 	_neighbors.clear()
 	if get_parent() is SKWorldObject:
 		_neighbors.append(get_parent())
