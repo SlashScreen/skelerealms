@@ -44,12 +44,13 @@ func _ready() -> void:
 		npc_component.entered_combat.connect(draw_weapons.bind())
 		npc_component.left_combat.connect(lower_weapons.bind())
 		
-		hands_manager.weapons_drawn = npc_component.in_combat
-		for h in hands_manager.hands:
-			if npc_component.in_combat:
-				hands_manager.get_hand(h).show()
-			else:
-				hands_manager.get_hand(h).hide()
+		if hands_manager:
+			hands_manager.weapons_drawn = npc_component.in_combat
+			for h in hands_manager.hands:
+				if npc_component.in_combat:
+					hands_manager.get_hand(h).show()
+				else:
+					hands_manager.get_hand(h).hide()
 	else:
 		push_warning("NPC Puppet not a child of an entity with an NPCComponent. Perception turned off.")
 
@@ -87,14 +88,15 @@ func continue_nav() -> void:
 
 
 func _physics_process(delta) -> void:
+	
 	if npc_component:
 		eyes.try_perception()
-	
+
 	if navigation_agent.is_navigation_finished() or movement_paused:
-		animator.set_value(&"walk_speed", 0)
+		if animator: animator.set_value(&"walk_speed", 0)
 		return
 	
-	animator.set_value(&"walk_speed", movement_speed) # In-game, moves at a brisk pace
+	if animator: animator.set_value(&"walk_speed", movement_speed) # In-game, moves at a brisk pace
 	
 	var current_agent_position: Vector3 = global_transform.origin
 	var next_path_position: Vector3 = navigation_agent.get_next_path_position()
