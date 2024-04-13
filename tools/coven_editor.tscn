@@ -85,6 +85,7 @@ text = "Add"
 layout_mode = 2
 size_flags_vertical = 3
 
+[connection signal="text_changed" from="HBoxContainer/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_changed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/GridContainer/Hidden" to="." method="_on_hidden_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/GridContainer/IgnoreOthers" to="." method="_on_ignore_others_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/GridContainer/IgnoreMembers" to="." method="_on_ignore_members_pressed"]

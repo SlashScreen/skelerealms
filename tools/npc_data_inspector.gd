@@ -139,7 +139,7 @@ func edit(o: NPCData) -> void:
 
 
 func add_module_to_list(mod:AIModule) -> void:
-	var i:int = module_list.add_item(mod.resource_path)
+	var i:int = module_list.add_item(mod.get_type())
 	module_list.set_item_metadata(i, mod)
 
 
@@ -172,8 +172,8 @@ func add_coven(c:CovenRankData) -> void:
 
 func update_ai_modules() -> void:
 	var output:Array[AIModule] = []
-	for i:int in range(goap_list.item_count):
-		output.append(goap_list.get_item_metadata(i))
+	for i:int in range(module_list.item_count):
+		output.append(module_list.get_item_metadata(i))
 	editing_data.modules = output
 
 
