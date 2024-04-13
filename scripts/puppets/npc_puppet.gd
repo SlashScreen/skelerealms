@@ -3,7 +3,6 @@ extends CharacterBody3D
 ## Puppet "brain" for an NPC.
 
 
-@export var animator: AnimationController
 @onready var movement_target_position: Vector3 = position # No world because this agent only works in the scene.
 var eyes:EyesPerception
 var npc_component:NPCComponent
@@ -20,11 +19,6 @@ signal change_position(Vector3)
 var movement_paused:bool = false
 ## The navigation agent.
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
-var hands_manager:HandsManager:
-	get:
-		if hands_manager == null:
-			hands_manager = %HandsManager
-		return hands_manager
 
 
 # Called when the node enters the scene tree for the first time.
@@ -43,13 +37,7 @@ func _ready() -> void:
 		
 		npc_component.entered_combat.connect(draw_weapons.bind())
 		npc_component.left_combat.connect(lower_weapons.bind())
-		
-		hands_manager.weapons_drawn = npc_component.in_combat
-		for h in hands_manager.hands:
-			if npc_component.in_combat:
-				hands_manager.get_hand(h).show()
-			else:
-				hands_manager.get_hand(h).hide()
+
 	else:
 		push_warning("NPC Puppet not a child of an entity with an NPCComponent. Perception turned off.")
 
@@ -90,23 +78,7 @@ func _physics_process(delta) -> void:
 	if npc_component:
 		eyes.try_perception()
 	
-	if navigation_agent.is_navigation_finished() or movement_paused:
-		animator.set_value(&"walk_speed", 0)
-		return
-	
-	animator.set_value(&"walk_speed", movement_speed) # In-game, moves at a brisk pace
-	
-	var current_agent_position: Vector3 = global_transform.origin
-	var next_path_position: Vector3 = navigation_agent.get_next_path_position()
-	
-	var new_direction: Vector3 = next_path_position - current_agent_position # Calculate direction to point in
-	if not new_direction.length() == 0:
-		look_at(position + Vector3(new_direction.normalized().x, 0, new_direction.normalized().z))
-	var new_velocity = (new_direction.normalized() * movement_speed) if animator == null \
-						else (quaternion * -(animator.root_motion_callback.call() / delta))
-	
-	set_velocity(new_velocity)
-	move_and_slide()
+	npc_component.puppet_request_move.emit(self)
 
 
 func _process(delta) -> void:
@@ -115,9 +87,8 @@ func _process(delta) -> void:
 
 
 func draw_weapons() -> void:
-	hands_manager.raise_weapons.emit()
+	npc_component.puppet_request_raise_weapons.emit(self)
 
 
 func lower_weapons() -> void:
-	puppeteer.printe("Lowering weapons.")
-	hands_manager.lower_weapons.emit()
+	npc_component.puppet_request_lower_weapons.emit(self)
