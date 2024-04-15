@@ -50,6 +50,7 @@ var _busy:bool:
 			elif not val and _puppet:
 				_puppet.continue_nav()
 			_busy = val
+var ai_modules:Array[AIModule] = []
 #* Private
 ## Navigator.
 var _nav_component:NavigatorComponent
@@ -124,6 +125,9 @@ signal removed_from_conversation
 ## Signal emitted when a crime is witnessed
 signal crime_witnessed 
 signal updated(delta:float)
+signal puppet_request_move(puppet:NPCPuppet)
+signal puppet_request_raise_weapons(puppet:NPCPuppet)
+signal puppet_request_lower_weapons(puppet:NPCPuppet)
 
 
 ## Shorthand to get an npc component for an entity by ID.
@@ -159,8 +163,10 @@ func _ready():
 	
 	# Initialize all AI Modules
 	for module in data.modules:
-		module.link(self)
-		module._initialize()
+		var n:AIModule = module.duplicate()
+		n.link(self)
+		n._initialize()
+		ai_modules.append(n)
 	# FIXME: Parent entity can be instantiated called BEFORE this.
 
 
@@ -221,7 +227,7 @@ func _process(delta):
 
 
 func _exit_tree() -> void:
-	for m in data.modules:
+	for m in ai_modules:
 		m._clean_up()
 
 

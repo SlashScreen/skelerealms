@@ -10,12 +10,12 @@ var offender:String
 ## The different kinds of damage.
 var damage_effects:Dictionary
 ## Optional spell effects.
-var spell_effects:Array[SpellEffect] = []
+var spell_effects:Array[StringName] = []
 ## Optional extra info.
 var info:Dictionary = {}
 
 
-func _init(offender:String, damage_effects:Dictionary, spell_effects:Array[SpellEffect] = [], info:Dictionary = {}) -> void:
+func _init(offender:String, damage_effects:Dictionary, spell_effects:Array[StringName] = [], info:Dictionary = {}) -> void:
 	self.offender = offender
 	self.damage_effects = damage_effects
 	self.spell_effects = spell_effects
