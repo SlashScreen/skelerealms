@@ -8,6 +8,10 @@ var door_jump_plugin = DoorJumpPlugin.new(self)
 var world_thing_plugin = WorldObjectPlugin.new()
 var point_gizmo = PointGizmo.new()
 var tool_editor = SKToolPlugin.new()
+var prototype_editor = PrototypePlugin.new()
+
+var fd:EditorFileDialog
+var p:Prototype
 
 
 func _enter_tree():
@@ -18,6 +22,7 @@ func _enter_tree():
 	add_inspector_plugin(door_jump_plugin)
 	add_inspector_plugin(world_thing_plugin)
 	add_inspector_plugin(tool_editor)
+	add_inspector_plugin(prototype_editor)
 	# autoload
 	add_autoload_singleton("SkeleRealmsGlobal", "res://addons/skelerealms/scripts/sk_global.gd")
 	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/covens/coven_system.gd")
@@ -26,6 +31,14 @@ func _enter_tree():
 	add_autoload_singleton("CrimeMaster", "res://addons/skelerealms/scripts/crime/crime_master.gd")
 	add_autoload_singleton("DialogueHooks", "res://addons/skelerealms/scripts/system/dialogue_hooks.gd")
 	add_autoload_singleton("DeviceNetwork", "res://addons/skelerealms/scripts/misc/device_network.gd")
+	# else
+	fd = EditorFileDialog.new()
+	fd.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
+	fd.filters = PackedStringArray(["*.tres", "*.res"])
+	# TODO: Modes
+	EditorInterface.get_base_control().add_child(fd)
+	prototype_editor.inspect.connect(instantiate_prototype.bind())
+	fd.file_selected.connect(finish_instantiate.bind())
 
 
 func _exit_tree():
@@ -36,6 +49,7 @@ func _exit_tree():
 	remove_inspector_plugin(door_jump_plugin)
 	remove_inspector_plugin(world_thing_plugin)
 	remove_inspector_plugin(tool_editor)
+	remove_import_plugin(prototype_editor)
 	# autoload
 	remove_autoload_singleton("SkeleRealmsGlobal")
 	remove_autoload_singleton("CovenSystem")
@@ -86,3 +100,16 @@ func _disable_plugin() -> void:
 	ProjectSettings.set_setting("skelerealms/covens_path", null)
 	ProjectSettings.set_setting("skelerealms/doors_path", null)
 	ProjectSettings.set_setting("skelerealms/networks_path", null)
+
+
+func instantiate_prototype(object:Prototype) -> void:
+	fd.popup_centered()
+	p = object
+
+
+func finish_instantiate(path:String) -> void:
+	var slashes:Array = path.split("/")
+	var dots = slashes[slashes.size() - 1].split(".")
+	var n:String = dots[0]
+	# Could do a regex but whatever
+	p.instantiate_prototype(path, n)
