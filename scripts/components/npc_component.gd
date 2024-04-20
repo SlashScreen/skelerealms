@@ -162,7 +162,10 @@ func _ready():
 	super._ready()
 	
 	# Initialize all AI Modules
-	for module in data.modules:
+	var modules:Array[AIModule] = []
+	for group: AIModuleGroup in data.ai_modules:
+		modules.append_array(group.modules)
+	for module:AIModule in modules:
 		var n:AIModule = module.duplicate()
 		n.link(self)
 		n._initialize()
@@ -181,7 +184,7 @@ func _entity_ready() -> void:
 	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
 
 	# goap setup
-	_goap_component.setup(data.goap_actions)
+	_goap_component.setup(data.goap_behaviors)
 
 	# sync nav agent
 	_puppet_component.spawned_puppet.connect(func(x:Node):

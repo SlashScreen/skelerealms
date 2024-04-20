@@ -33,8 +33,8 @@ class_name NPCData
 
 @export_category("AI")
 ## AI Modules.
-@export var modules:Array[AIModule] = []
+@export var ai_modules:Array[AIModuleGroup]
 ## GOAP Actions.
-@export var goap_actions:Array[GOAPBehavior] = []
+@export var goap_behaviors:Array[GOAPBehaviorGroup]
 ## The loot table of this kind of NPC.
 @export var loot_table:SKLootTable

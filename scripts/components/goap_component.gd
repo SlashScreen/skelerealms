@@ -24,8 +24,13 @@ func _init() -> void:
 	add_child(_timer)
 
 
-func setup(behaviors:Array[GOAPBehavior]) -> void:
-	for b in behaviors:
+func setup(behavior_groups:Array[GOAPBehaviorGroup]) -> void:
+	var behaviors:Array[GOAPBehavior] = []
+	
+	for g:GOAPBehaviorGroup in behavior_groups:
+		behaviors.append_array(g.behaviors)
+	
+	for b:GOAPBehavior in behaviors:
 		var new_behavior = b.duplicate(true)
 		new_behavior.entity = get_parent()
 		new_behavior.parent_goap = self

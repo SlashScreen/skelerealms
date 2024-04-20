@@ -7,7 +7,7 @@ extends Resource
 
 
 func instantiate_prototype(path:String, base_id: String) -> void:
-	if data == null:
+	if data == null: 
 		return
 	var n:RefData = data.duplicate()
 	n.id = base_id
