@@ -182,10 +182,10 @@ func _entity_ready() -> void:
 	# Behavior planner.
 	_goap_component = $"../GOAPComponent" as GOAPComponent
 	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
-
+	
 	# goap setup
 	_goap_component.setup(data.goap_behaviors)
-
+	
 	# sync nav agent
 	_puppet_component.spawned_puppet.connect(func(x:Node):
 		_puppet = x as NPCPuppet
@@ -195,11 +195,11 @@ func _entity_ready() -> void:
 		_puppet = null
 		_goap_component._agent = null
 		)
-
+	
 	# misc setup
 	_interactive_component.interactible = data.interactive # TODO: Or instance override
 	_interactive_component.translation_callback = get_translated_name.bind()
-
+	
 	GameInfo.minute_incremented.connect(_calculate_new_schedule.bind())
 
 
