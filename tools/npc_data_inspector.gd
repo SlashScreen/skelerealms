@@ -7,13 +7,13 @@ const COVEN_RANK_EDITOR = preload("coven_rank_data_editor.tscn")
 
 @onready var add_module:Button = $NPC/panels/AIModule/VBoxContainer/New/Add
 @onready var load_module_button:Button = $NPC/panels/AIModule/VBoxContainer/LoadModule
-@onready var load_module_file:FileDialog = $NPC/panels/AIModule/VBoxContainer/LoadModule/FileDialog
+@onready var load_module_file:FileDialog = $NPC/panels/AIModule/VBoxContainer/New/LoadModule
 @onready var module_list:ItemList = $NPC/panels/AIModule/VBoxContainer/ItemList
 @onready var mod_class_selection:OptionButton = $NPC/panels/AIModule/VBoxContainer/New/ModuleSelection
 
 @onready var goap_class_selection:OptionButton = $NPC/panels/GOAPModules/VBoxContainer/New/GoapSelection
 @onready var add_goap:Button = $NPC/panels/GOAPModules/VBoxContainer/New/Add
-@onready var load_goap_button:Button = $NPC/panels/GOAPModules/VBoxContainer/LoadGoap
+@onready var load_goap_button:Button = $NPC/panels/GOAPModules/VBoxContainer/New/LoadGoap
 @onready var load_goap_file:FileDialog = $NPC/panels/GOAPModules/VBoxContainer/LoadGoap/FileDialog
 @onready var goap_list:ItemList = $NPC/panels/GOAPModules/VBoxContainer/ItemList
 
@@ -55,9 +55,7 @@ func _ready() -> void:
 		update_ai_modules()
 		)
 	add_module.pressed.connect(func() -> void:
-		if mod_class_selection.get_item_text(mod_class_selection.selected) == "":
-			return
-		var n:AIModule = load(mod_class_selection.get_selected_metadata()).new()
+		var n:AIModuleGroup = AIModuleGroup.new()
 		add_module_to_list(n)
 		update_ai_modules()
 		)
@@ -74,9 +72,7 @@ func _ready() -> void:
 		update_goap_behaviors()
 		)
 	add_goap.pressed.connect(func() -> void:
-		if goap_class_selection.get_item_text(goap_class_selection.selected) == "":
-			return
-		var n:GOAPBehavior = load(goap_class_selection.get_selected_metadata()).new()
+		var n:GOAPBehaviorGroup = GOAPBehaviorGroup.new()
 		add_goap_to_list(n)
 		update_goap_behaviors()
 		)
@@ -103,9 +99,9 @@ func edit(o: NPCData) -> void:
 		editing_data.loot_table = SKLootTable.new()
 	
 	%BaseID.text = editing_data.id
-	for g:GOAPBehavior in editing_data.goap_actions:
+	for g:GOAPBehaviorGroup in editing_data.goap_behaviors:
 		add_goap_to_list(g)
-	for a:AIModule in editing_data.modules:
+	for a:AIModuleGroup in editing_data.ai_modules:
 		add_module_to_list(a)
 	# Flags
 	# i hate my life
@@ -138,13 +134,24 @@ func edit(o: NPCData) -> void:
 		$Prefab.set_to_scene(editing_data.prefab.resource_path)
 
 
-func add_module_to_list(mod:AIModule) -> void:
-	var i:int = module_list.add_item(mod.get_type())
+func add_module_to_list(mod:AIModuleGroup) -> void:
+	var s:String = ""
+	for i:int in range(min(mod.modules.size(), 3)):
+		s += mod.modules[i].get_type() + ", "
+	if mod.modules.size() > 3:
+		s += "..."
+	
+	var i:int = module_list.add_item(s)
 	module_list.set_item_metadata(i, mod)
 
 
-func add_goap_to_list(goap:GOAPBehavior) -> void:
-	var i:int = goap_list.add_item(goap.id)
+func add_goap_to_list(goap:GOAPBehaviorGroup) -> void:
+	var s:String = ""
+	for i:int in range(min(goap.behaviors.size(), 3)):
+		s += goap.behaviors[i].id + ", "
+	if goap.behaviors.size() > 3:
+		s += "..."
+	var i:int = goap_list.add_item(s)
 	goap_list.set_item_metadata(i, goap)
 
 

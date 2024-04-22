@@ -175,11 +175,11 @@ func _ready():
 
 func _entity_ready() -> void:
 	_nav_component = $"../NavigatorComponent" as NavigatorComponent
-## Puppet manager component.
+	# Puppet manager component.
 	_puppet_component = $"../PuppetSpawnerComponent" as PuppetSpawnerComponent
-## Interactive component.
+	# Interactive component.
 	_interactive_component = $"../InteractiveComponent" as InteractiveComponent
-## Behavior planner.
+	# Behavior planner.
 	_goap_component = $"../GOAPComponent" as GOAPComponent
 	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
 
