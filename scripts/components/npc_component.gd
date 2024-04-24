@@ -15,7 +15,7 @@ const THREATENING_ENTITY_TYPES = [
 #* Export
 ## Base data for this NPC.
 @export var data: NPCData
-#* Public.
+#* Public
 var player_opinion:int
 var visibility_threshold:float = 0.3
 ## Stores data of interest for GOAP to access.
@@ -538,7 +538,7 @@ func get_translated_name() -> String:
 
 ## Current simulation level for an NPC.
 enum SimulationLevel {
-	FULL, # When the actor is in the scene.
-	GRANULAR, # When the actor is outside of the scene. Will still follow a schedule and go from point to point, but will not walk around using the navmesh, interact with things in the world, or do anything that involves the puppet.
+	FULL, ## When the actor is in the scene.
+	GRANULAR, ## When the actor is outside of the scene. Will still follow a schedule and go from point to point, but will not walk around using the navmesh, interact with things in the world, or do anything that involves the puppet.
 	NONE, ## When the actor is outside of the simulation distance. It will not do anything.
 }
