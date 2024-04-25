@@ -6,15 +6,15 @@ const RELATIONSHIP_EDITOR = preload("relationship_editor.tscn")
 const COVEN_RANK_EDITOR = preload("coven_rank_data_editor.tscn")
 
 @onready var add_module:Button = $NPC/panels/AIModule/VBoxContainer/New/Add
-@onready var load_module_button:Button = $NPC/panels/AIModule/VBoxContainer/LoadModule
-@onready var load_module_file:FileDialog = $NPC/panels/AIModule/VBoxContainer/New/LoadModule
+@onready var load_module_button:Button = $NPC/panels/AIModule/VBoxContainer/New/LoadModule
+@onready var load_module_file:FileDialog = $NPC/panels/AIModule/VBoxContainer/New/LoadModule/FileDialog
 @onready var module_list:ItemList = $NPC/panels/AIModule/VBoxContainer/ItemList
 @onready var mod_class_selection:OptionButton = $NPC/panels/AIModule/VBoxContainer/New/ModuleSelection
 
 @onready var goap_class_selection:OptionButton = $NPC/panels/GOAPModules/VBoxContainer/New/GoapSelection
 @onready var add_goap:Button = $NPC/panels/GOAPModules/VBoxContainer/New/Add
 @onready var load_goap_button:Button = $NPC/panels/GOAPModules/VBoxContainer/New/LoadGoap
-@onready var load_goap_file:FileDialog = $NPC/panels/GOAPModules/VBoxContainer/LoadGoap/FileDialog
+@onready var load_goap_file:FileDialog = $NPC/panels/GOAPModules/VBoxContainer/New/LoadGoap/FileDialog
 @onready var goap_list:ItemList = $NPC/panels/GOAPModules/VBoxContainer/ItemList
 
 @onready var relationship_list:Control = $NPC/panels/PanelContainer/VBox/Relationships/ScrollContainer/VBoxContainer

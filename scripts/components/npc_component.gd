@@ -170,6 +170,7 @@ func _ready():
 		n.link(self)
 		n._initialize()
 		ai_modules.append(n)
+	print(ai_modules)
 	# FIXME: Parent entity can be instantiated called BEFORE this.
 
 

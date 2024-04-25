@@ -1,3 +1,4 @@
+@tool
 class_name AIModule
 extends Resource
 ## Base class for AI Packages for NPCs.
