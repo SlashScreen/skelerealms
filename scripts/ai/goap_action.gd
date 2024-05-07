@@ -24,7 +24,7 @@ var running:bool:
 var parent_goap:GOAPComponent:
 	get: 
 		return goap_behavior.parent_goap
-var entity:Entity:
+var entity:SKEntity:
 	get: 
 		return goap_behavior.entity
 

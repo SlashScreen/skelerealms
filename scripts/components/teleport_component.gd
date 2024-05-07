@@ -1,5 +1,5 @@
 class_name TeleportComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Allows an entity to warp.
 
 

@@ -1,5 +1,5 @@
 class_name ViewDirectionComponent
-extends EntityComponent
+extends SKEntityComponent
 
 
 var view_rot:Vector3 = Vector3.FORWARD

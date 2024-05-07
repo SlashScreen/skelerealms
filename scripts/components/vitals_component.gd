@@ -1,5 +1,5 @@
 class_name VitalsComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Component keeping check of the main 3 attributes of an entity - health, stamina, and magica.
 
 # TODO: This is for player only, make a generalized one 

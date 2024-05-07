@@ -1,5 +1,5 @@
 class_name DamageableComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Allows an entity to be damaged.
 
 

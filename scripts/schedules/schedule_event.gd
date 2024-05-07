@@ -16,7 +16,7 @@ func get_event_location() -> NavPoint:
 	return null
 
 
-func satisfied_at_location(e:Entity) -> bool:
+func satisfied_at_location(e:SKEntity) -> bool:
 	return true
 
 func on_event_started() -> void:

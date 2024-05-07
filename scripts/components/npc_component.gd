@@ -1,5 +1,5 @@
 class_name NPCComponent
-extends EntityComponent
+extends SKEntityComponent
 ## The brain for an NPC. Handles AI behavior, scheduling, combat, dialogue interactions.
 ## The component itself is a blank slate, being comprised largely of state trackers and utility functions, and will likely do nothing without an [AIModule] to determine its behavior.
 ## It also has aobut a million signals that AI modules, the GOAP system, animation controllers, dialogue systems, etc. can hook into. Think of them as an API.
@@ -132,7 +132,7 @@ signal puppet_request_lower_weapons(puppet:NPCPuppet)
 
 ## Shorthand to get an npc component for an entity by ID.
 static func get_npc_component(id:StringName) -> NPCComponent:
-	var eop = EntityManager.instance.get_entity(id)
+	var eop = SKEntityManager.instance.get_entity(id)
 	if not eop:
 		return null
 	var icop = eop.get_component("NPCComponent")
@@ -170,7 +170,6 @@ func _ready():
 		n.link(self)
 		n._initialize()
 		ai_modules.append(n)
-	print(ai_modules)
 	# FIXME: Parent entity can be instantiated called BEFORE this.
 
 
@@ -392,9 +391,9 @@ func perception_forget(who:String) -> void:
 func get_remembered_items() -> Array[String]:
 	return _perception_memory.keys()\
 			.filter(func(p:String):
-				var e = EntityManager.instance.get_entity(p)
+				var e = SKEntityManager.instance.get_entity(p)
 				if e.some():
-					return not (e.unwrap as Entity).get_component("ItemComponent") == null
+					return not (e.unwrap as SKEntity).get_component("ItemComponent") == null
 				return false
 				)
 
@@ -470,7 +469,7 @@ func get_relationship_with(ref_id:String) -> Option:
 
 ## Determines the opinion of some entity. See the tutorial in the class docs for a more in-depth look at NPC opinions.
 func determine_opinion_of(id:StringName) -> float:
-	var e:Entity = EntityManager.instance.get_entity(id)
+	var e:SKEntity = SKEntityManager.instance.get_entity(id)
 
 	if not THREATENING_ENTITY_TYPES.any(func(x:String): return not e.get_component(x) == null): # if it doesn't have any components that are marked as threatening, return neutral.
 		return 0

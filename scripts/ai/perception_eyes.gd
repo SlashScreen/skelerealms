@@ -89,7 +89,7 @@ func get_thing_under_sight(pt:NavPoint) -> PerceptionData:
 
 ## Looks for a specific entity, and returns with the data. Null if not found.
 func look_for_entity(refID:StringName) -> PerceptionData:
-	var entity = EntityManager.instance.get_entity(refID)
+	var entity = SKEntityManager.instance.get_entity(refID)
 	if entity:
 		var pt = NavPoint.new(entity.world, entity.position)
 		var res = await get_thing_under_sight(pt)
@@ -133,8 +133,8 @@ func try_perception() -> void:
 func _find_ref_id(n:Node) -> String:
 	var check:Node = n.get_parent()
 	while check.get_parent():
-		if check is Entity:
-			return (check as Entity).name
+		if check is SKEntity:
+			return (check as SKEntity).name
 		check = check.get_parent()
 	return ""
 

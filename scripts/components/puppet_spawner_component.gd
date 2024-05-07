@@ -1,5 +1,5 @@
 class_name PuppetSpawnerComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Manages spawning and despawning of puppets.
 
 ## The puppet node.
@@ -23,9 +23,9 @@ func _ready():
 ## Spawn a new puppet.
 func spawn(data:PackedScene):
 	var n = data.instantiate()
+	add_child(n)
 	(n as Node3D).set_position(parent_entity.position)
 	puppet = n
-	add_child(n)
 	spawned_puppet.emit(puppet)
 	printe("spawned at %s : %s" % [parent_entity.world, parent_entity.position])
 

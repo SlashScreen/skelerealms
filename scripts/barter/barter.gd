@@ -87,13 +87,13 @@ func accept_barter(selling_modifier:float, buying_modifier:float, currency: Stri
 	#? Could optimize
 	for item in current_transaction.selling:
 		# Move from customer to vendor.
-		EntityManager.instance\
+		SKEntityManager.instance\
 			.get_entity(item)\
 			.get_component("ItemComponent")\
 			.move_to_inventory(current_transaction.vendor.parent_entity.name)
 	for item in current_transaction.buying:
 		# Move from vendor to customer.
-		EntityManager.instance\
+		SKEntityManager.instance\
 			.get_entity(item)\
 			.get_component("ItemComponent")\
 			.move_to_inventory(current_transaction.customer.parent_entity.name)
@@ -106,7 +106,7 @@ func accept_barter(selling_modifier:float, buying_modifier:float, currency: Stri
 
 ## Determine whether a shop will accept an item or not.
 func shop_will_accept_iten(shop:ShopInstance, item:StringName) -> bool:
-	var ic:ItemComponent = EntityManager.instance.get_entity(item).get_component("ItemComponent")
+	var ic:ItemComponent = SKEntityManager.instance.get_entity(item).get_component("ItemComponent")
 	
 	if not shop.whitelist.is_empty():
 		if not ic.data.tags.any(func(tag): return shop.whitelist.has(tag)): # if no tags in whitelist

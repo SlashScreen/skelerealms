@@ -1,5 +1,5 @@
 class_name InteractiveComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Handles interactions on an entity
 
 ## Emitted when this entity is interacted with.

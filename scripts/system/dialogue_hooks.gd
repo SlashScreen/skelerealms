@@ -40,13 +40,13 @@ signal participant_removed(who:StringName)
 func _ready() -> void:
 	# bind the npc adding and removing methods to this signal as well.
 	participant_added.connect(func(who:StringName):
-		Option.wrap(EntityManager.instance.get_entity(who))\
-		.bind(func(e:Entity): return Option.wrap(e.get_component("NPCComponent")))\
+		Option.wrap(SKEntityManager.instance.get_entity(who))\
+		.bind(func(e:SKEntity): return Option.wrap(e.get_component("NPCComponent")))\
 		.bind(func(npc:NPCComponent): npc.add_to_conversation())
 	)
 	participant_removed.connect(func(who:StringName):
-		Option.wrap(EntityManager.instance.get_entity(who))\
-		.bind(func(e:Entity): return Option.wrap(e.get_component("NPCComponent")))\
+		Option.wrap(SKEntityManager.instance.get_entity(who))\
+		.bind(func(e:SKEntity): return Option.wrap(e.get_component("NPCComponent")))\
 		.bind(func(npc:NPCComponent): npc.remove_from_conversation())
 	)
 
@@ -118,6 +118,6 @@ func update_dialogue_cache(dialogue_node:String = "", participants:Array[StringN
 
 ## Send a command to an entity without having to do monkey business trying to find it.
 func send_command_to_entity(ref_id:StringName, command:String, args:Array) -> void:
-	var e = EntityManager.instance.get_entity(ref_id)
+	var e = SKEntityManager.instance.get_entity(ref_id)
 	if e:
 		e.dialogue_command(command, args)

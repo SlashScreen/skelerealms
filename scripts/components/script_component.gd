@@ -1,12 +1,12 @@
 class_name ScriptComponent
-extends EntityComponent
+extends SKEntityComponent
 ## This class can be bound to any entity and acts as a way to make ad-hoc components, to fill the role Papyrus plays in Creation Kit.
 ## To create a script for this, simply extend this class, and add it to the [RefData] or [InstanceData] of the appropriate object. 
 ## If you want to add a custom script to a world object instead, you can.... write a normal script...
 
 
 ## Stores references to all components of this entity, save for this one.
-## Dictionary layout is "ComponentType" : EntityComponent.
+## Dictionary layout is "ComponentType" : SKEntityComponent.
 ## This is declared in _ready(), so be careful when overriding.
 var _components:Dictionary = {}
 

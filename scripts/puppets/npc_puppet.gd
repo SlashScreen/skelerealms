@@ -25,7 +25,7 @@ var movement_paused:bool = false
 func _ready() -> void:
 	call_deferred("_actor_setup")
 	add_to_group("perception_target")
-	change_position.connect((get_parent().get_parent() as Entity)._on_set_position.bind())
+	change_position.connect((get_parent().get_parent() as SKEntity)._on_set_position.bind())
 	eyes = $EyesPerception
 	puppeteer = $"../../".get_component("PuppetSpawnerComponent")
 	npc_component = $"../../".get_component("NPCComponent")

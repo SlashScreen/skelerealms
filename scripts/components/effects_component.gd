@@ -1,5 +1,5 @@
 class_name EffectsComponent
-extends EntityComponent
+extends SKEntityComponent
 
 
 ## This component governs active effects on this entity. 

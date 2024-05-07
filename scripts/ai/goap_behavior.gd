@@ -10,7 +10,7 @@ extends Resource
 ## Whether this objective is actively being worked on
 var running:bool = false
 var parent_goap:GOAPComponent
-var entity:Entity
+var entity:SKEntity
 
 
 func is_achievable_given(state:Dictionary) -> bool:

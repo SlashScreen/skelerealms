@@ -1,12 +1,12 @@
 class_name SkillsComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Component holding the skills of this entity. 
 ## Examples in Skyrim would be Destruction, Sneak, Alteration, Smithing.
 
 
-## The skills of this Entity.
+## The skills of this SKEntity.
 ## It is in a dictionary so you can add, remove, and customize at will.
-@onready var skills:Dictionary = EntityManager.instance.config.skills.duplicate():
+@onready var skills:Dictionary = SKEntityManager.instance.config.skills.duplicate():
 	get:
 		return skills
 	set(val):
@@ -53,10 +53,10 @@ func gather_debug_info() -> String:
 
 func add_skill_xp(skill:StringName, amount:int) -> void:
 	if not skills.has(skill):
-		push_warning("Entity %s has no skill %s." % [parent_entity.name, skill])
+		push_warning("SKEntity %s has no skill %s." % [parent_entity.name, skill])
 		return 
 	skill_xp[skill] += amount
-	var target:int = EntityManager.instance.config.compute_skill(skills[skill])
+	var target:int = SKEntityManager.instance.config.compute_skill(skills[skill])
 	if target == -1:
 		return
 	if skill_xp[skill] >= target:
@@ -66,7 +66,7 @@ func add_skill_xp(skill:StringName, amount:int) -> void:
 
 func add_character_xp(amount:int) -> void:
 	character_xp += amount
-	var target:int = EntityManager.instance.config.compute_character(level)
+	var target:int = SKEntityManager.instance.config.compute_character(level)
 	if target == -1:
 		return
 	if character_xp >= amount:

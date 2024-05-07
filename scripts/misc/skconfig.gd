@@ -3,7 +3,7 @@ extends Resource
 
 
 ## This resource is needed to configure some Skelerealms behavior without changing code in the addon scripts itself.
-## This should be given to an [class EntityManager] to be used.
+## This should be given to an [class SKEntityManager] to be used.
 
 
 ## Default skills for [class SkillsComponent]s.

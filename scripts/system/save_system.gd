@@ -63,12 +63,12 @@ func load_game(path:String):
 	var save_data:Dictionary = _deserialize(data_blob) # parse data
 
 	# Reset to default state if it doesn't have an entry in the save data
-	for e in EntityManager.instance.entities:
+	for e in SKEntityManager.instance.entities:
 		if not save_data["entity_data"].has(e):
-			EntityManager.instance.entities[e].reset_data()
+			SKEntityManager.instance.entities[e].reset_data()
 	# load entity data - loop through all data, get entity (spawning it if it isn't there), call load
 	for data in save_data["entity_data"]:
-		EntityManager.instance.get_entity(data).load_data(save_data["entity_data"][data])
+		SKEntityManager.instance.get_entity(data).load_data(save_data["entity_data"][data])
 
 	# load game info data
 	for si in get_tree().get_nodes_in_group("savegame_gameinfo"):

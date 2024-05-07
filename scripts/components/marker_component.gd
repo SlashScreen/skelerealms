@@ -1,5 +1,5 @@
 class_name MarkerComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Component tag for [WorldMarker]s.
 
 

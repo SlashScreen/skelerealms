@@ -26,7 +26,7 @@ func total_transaction(selling_modifier:float, buying_modifier:float) -> int:
 	# Total selling amount and add
 	total += selling.reduce(
 		func(accum: int, item:String):
-			return accum + roundi(( EntityManager.instance.get_entity(item)\
+			return accum + roundi(( SKEntityManager.instance.get_entity(item)\
 				.get_component("ItemComponent")\
 				as ItemComponent)\
 				.data\
@@ -36,7 +36,7 @@ func total_transaction(selling_modifier:float, buying_modifier:float) -> int:
 	# Total selling amount and subtract
 	total -= buying.reduce(
 		func(accum: int, item:String):
-			return accum + roundi(( EntityManager.instance.get_entity(item)\
+			return accum + roundi(( SKEntityManager.instance.get_entity(item)\
 				.get_component("ItemComponent")\
 				as ItemComponent)\
 				.data\

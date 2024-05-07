@@ -1,6 +1,6 @@
-class_name Entity
+class_name SKEntity
 extends Node
-## An entity for the pseudo-ecs. Contains [EntityComponent]s.
+## An entity for the pseudo-ecs. Contains [SKEntityComponent]s.
 ## These allow constructs such as NPCs and Items to persist even when not in the scene.
 
 
@@ -11,7 +11,7 @@ extends Node
 ## Rotation of this Enitiy.
 @export var rotation:Quaternion = Quaternion.IDENTITY
 ## An internal timer of how long this entity has gone without being modified or referenced.
-## One it's beyond a certain point, the [EntityManager] will mark it for cleanup after a save.
+## One it's beyond a certain point, the [SKEntityManager] will mark it for cleanup after a save.
 var stale_timer:float
 ## This is used to prevent items from spawning, even if they are supposed to be in scene.
 ## For example, items in invcentories should not spawn despite technically being "in the scene".
@@ -34,7 +34,7 @@ var in_scene: bool:
 signal left_scene
 ## Emitted when an entity leaves a scene.
 signal entered_scene
-## This signal is emitted when all components have been added once [EntityManager.add_entity] is called.
+## This signal is emitted when all components have been added once [SKEntityManager.add_entity] is called.
 ## Await this when you want to connect with other nodes.
 signal instantiated
 
@@ -56,7 +56,7 @@ func _init(res:InstanceData = null) -> void:
 	for n in new_nodes: # add all components to entity
 		add_child(n)
 		n.owner = self
-		(n as EntityComponent).parent_entity = self
+		(n as SKEntityComponent).parent_entity = self
 
 	# call entity ready
 	instantiated.emit()
@@ -106,7 +106,7 @@ func _on_set_rotation(q:Quaternion) -> void:
 ## Example: [codeblock]
 ## (e.get_component("NPCComponent") as NPCComponent).kill()
 ## [/codeblock]
-func get_component(type:String) -> EntityComponent:
+func get_component(type:String) -> SKEntityComponent:
 	var n = get_node_or_null(type)
 	return n
 
@@ -117,7 +117,7 @@ func has_component(type:String) -> bool:
 	return not x == null
 
 
-func add_component(c:EntityComponent) -> void:
+func add_component(c:SKEntityComponent) -> void:
 	add_child(c)
 
 
@@ -129,8 +129,8 @@ func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If no
 			"generated" = generated
 		}
 	}
-	for c in get_children().filter(func(x:EntityComponent): return x.dirty): # filter to get dirty acomponents
-		data["components"][c.name] = ((c as EntityComponent).save())
+	for c in get_children().filter(func(x:SKEntityComponent): return x.dirty): # filter to get dirty acomponents
+		data["components"][c.name] = ((c as SKEntityComponent).save())
 	return data
 
 
@@ -141,13 +141,13 @@ func load_data(data:Dictionary) -> void:
 
 	# loop through all saved components and call load
 	for d in data["components"]:
-		(get_node(d) as EntityComponent).load_data(data[d])
+		(get_node(d) as SKEntityComponent).load_data(data[d])
 	pass
 
 
 func reset_data() -> void:
 	# TODO: Figure out how to reset entities that are generated at runtime. oh boy that's gonna be fun.
-	var i = EntityManager.instance.get_disk_data_for_entity(name)
+	var i = SKEntityManager.instance.get_disk_data_for_entity(name)
 	if i:
 		_init(i)
 
@@ -170,8 +170,8 @@ func dialogue_command(command:String, args:Array) -> void:
 func gather_debug_info() -> Array[String]:
 	var info: Array[String] = []
 	info.push_back("""
-[b]Entity[/b]
-	Entity RefID: %s
+[b]SKEntity[/b]
+	SKEntity RefID: %s
 	World: %s
 	Position: x%s y%s z%s
 	Rotation: x%s y%s z%s w%s
@@ -190,7 +190,7 @@ func gather_debug_info() -> Array[String]:
 ])
 	
 	for c in get_children():
-		var i:String = (c as EntityComponent).gather_debug_info()
+		var i:String = (c as SKEntityComponent).gather_debug_info()
 		if not i.is_empty():
 			info.push_back(i)
 	

@@ -10,17 +10,17 @@ var world_states:Dictionary
 ## Status effects registered in the game.
 var status_effects:Dictionary = {}
 
-## Called when the [EntityManager] has finished loading.
+## Called when the [SKEntityManager] has finished loading.
 signal entity_manager_loaded
 ## When a chest (or other inventory) is opened.
 signal inventory_opened(id:StringName)
 
 
 ## Attempts to find an entity in the tree above a node. Returns null if none found. Automatically takes account of reparented puppets.
-func get_entity_in_tree(child:Node) -> Entity:
+func get_entity_in_tree(child:Node) -> SKEntity:
 	var checking = child
 	while not checking.get_parent() == null:
-		if checking is Entity:
+		if checking is SKEntity:
 			return checking
 		
 		# Check if puppet and getting puppeteer

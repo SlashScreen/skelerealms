@@ -8,8 +8,8 @@ extends InstanceData
 @export var unique_items: Array[ItemInstance] = []
 
 
-func get_archetype_components() -> Array[EntityComponent]:
-	var components:Array[EntityComponent] = []
+func get_archetype_components() -> Array[SKEntityComponent]:
+	var components:Array[SKEntityComponent] = []
 	# Add new components
 	components.append(NPCComponent.new(npc_data))
 	components.append(InteractiveComponent.new())

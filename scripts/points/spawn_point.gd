@@ -42,16 +42,16 @@ func spawn() -> void:
 	
 	# add that shiz
 	spawn_tracker[generate_id()] = true
-	var e = EntityManager.instance.add_entity(npci)
+	var e = SKEntityManager.instance.add_entity(npci)
 	e.rotation = quaternion
 	e.generated = true
 	if despawn_when_exit_scene:
-		e.left_scene.connect(func() -> void: EntityManager.instance.remove_entity(e.name))
+		e.left_scene.connect(func() -> void: SKEntityManager.instance.remove_entity(e.name))
 	
 	# resolve loot table
 	if t.loot_table:
 		for i in t.loot_table.resolve_table_to_instances():
-			var ie = EntityManager.instance.add_entity(i) # Add entity
+			var ie = SKEntityManager.instance.add_entity(i) # Add entity
 			(e.get_component("ItemComponent") as ItemComponent).contained_inventory = e.name # set contained inventory
 
 

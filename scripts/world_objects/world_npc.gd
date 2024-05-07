@@ -15,5 +15,5 @@ func _ready():
 
 
 func _spawn():
-	var e = EntityManager.instance.get_entity(instance.ref_id) # calling get_entity will cause the enity manager to start tracking this instance, if it isn't already.
+	var e = SKEntityManager.instance.get_entity(instance.ref_id) # calling get_entity will cause the enity manager to start tracking this instance, if it isn't already.
 	queue_free()

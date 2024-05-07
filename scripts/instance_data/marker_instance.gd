@@ -5,5 +5,5 @@ extends InstanceData
 @export var rotation:Quaternion
 
 
-func get_archetype_components() -> Array[EntityComponent]:
+func get_archetype_components() -> Array[SKEntityComponent]:
 	return [MarkerComponent.new(rotation)]

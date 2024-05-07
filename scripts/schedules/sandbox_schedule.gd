@@ -26,7 +26,7 @@ func get_event_location() -> NavPoint:
 	return NavPoint.new(location_world, location_position)
 
 
-func satisfied_at_location(e:Entity) -> bool:
+func satisfied_at_location(e:SKEntity) -> bool:
 	# if we dont need to be at location, return true by default
 	if not be_at_location:
 		return true

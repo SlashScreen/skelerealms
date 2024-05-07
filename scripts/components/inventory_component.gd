@@ -1,5 +1,5 @@
 class_name InventoryComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Keeps track of an inventory.
 
 ## The RefIDs of the items in the inventory.
@@ -28,7 +28,7 @@ func _ready() -> void:
 
 ## Add an item to the inventory.
 func add_to_inventory(id:String):
-	var e = EntityManager.instance.get_entity(id)
+	var e = SKEntityManager.instance.get_entity(id)
 	if e:
 		var ic = e.get_component("ItemComponent")
 		if ic:
@@ -74,7 +74,7 @@ func _clamp_money(currency:StringName):
 func count_item_by_data(data_id:String) -> int:
 	var amount: int = 0
 	for i in inventory:
-		var ic:ItemComponent = EntityManager.instance.get_entity(i).get_component("ItemComponent")
+		var ic:ItemComponent = SKEntityManager.instance.get_entity(i).get_component("ItemComponent")
 		if ic.data.id == data_id:
 			amount += 1
 	return amount

@@ -10,8 +10,8 @@ extends InstanceData
 @export var quest_item:bool = false
 
 
-func get_archetype_components() -> Array[EntityComponent]:
-	var components:Array[EntityComponent] = []
+func get_archetype_components() -> Array[SKEntityComponent]:
+	var components:Array[SKEntityComponent] = []
 	# set up item component
 	var item_component = ItemComponent.new()
 	item_component.data = item_data

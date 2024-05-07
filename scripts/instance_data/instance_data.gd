@@ -12,7 +12,7 @@ extends Resource
 ## Get all of the entitiy components associated with this type of entity.
 ## Override this and create the components this needs.
 ## Example: An item instance should have, say, [ItemComponent], [InteractiveComponent], [PuppetComponent].
-func get_archetype_components() -> Array[EntityComponent]:
+func get_archetype_components() -> Array[SKEntityComponent]:
 	return []
 
 

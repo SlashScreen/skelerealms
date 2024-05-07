@@ -1,5 +1,5 @@
 class_name ChestComponent
-extends EntityComponent
+extends SKEntityComponent
 
 
 ## Optionally refreshing inventories.
@@ -35,7 +35,7 @@ func _check_should_restore() -> void:
 func clear() -> void:
 	var ic:InventoryComponent = parent_entity.get_component("InventoryComponent")
 	for i:StringName in ic.inventory:
-		EntityManager.instance.remove_entity(i)
+		SKEntityManager.instance.remove_entity(i)
 	ic.inventory.clear() # Doing this instead of the remove item function since looping and removing stuff is bad and I don't need the signal
 	ic.currencies.clear()
 
@@ -51,7 +51,7 @@ func reroll() -> void:
 		item.item_owner = owner_id
 		item.ref_id = preload("res://addons/skelerealms/scripts/vendor/uuid.gd").v4()
 		
-		var e:Entity = EntityManager.instance.add_entity(item)
+		var e:SKEntity = SKEntityManager.instance.add_entity(item)
 		ic.add_to_inventory(e.name)
 	
 	ic.currencies = res.currencies

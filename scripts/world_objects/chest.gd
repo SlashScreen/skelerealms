@@ -10,7 +10,7 @@ signal opened_inventory
 
 
 func _ready():
-	EntityManager.instance.get_entity(instance.ref_id) # bring the chest instance into the world
+	SKEntityManager.instance.get_entity(instance.ref_id) # bring the chest instance into the world
 	on_interact.connect(func(_id): try_open_inventory())
 
 

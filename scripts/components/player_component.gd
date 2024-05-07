@@ -1,5 +1,5 @@
 class_name PlayerComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Player component.
 
 

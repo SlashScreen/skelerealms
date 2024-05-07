@@ -1,5 +1,5 @@
 class_name ItemComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Keeps track of item data
 
 
@@ -36,11 +36,12 @@ var item_owner:StringName = NONE:
 			# TODO: Determine using worth and owner relationships
 			$"../InteractiveComponent".interact_verb = "STEAL"
 var stolen:bool ## If this has been stolen or not.
+var durability:float ## This item's durability, if your game has condition/durability mechanics like Fallout or Morrowind.
 
 
 ## Shorthand to get an item component for an entity by ID.
 static func get_item_component(id:StringName) -> ItemComponent:
-	var eop = EntityManager.instance.get_entity(id)
+	var eop = SKEntityManager.instance.get_entity(id)
 	if not eop:
 		return null
 	var icop = eop.get_component("ItemComponent")
@@ -89,15 +90,15 @@ func _despawn():
 
 func _process(delta):
 	if in_inventory:
-		parent_entity.position = EntityManager.instance.get_entity(contained_inventory).position
-		parent_entity.world = EntityManager.instance.get_entity(contained_inventory).world
+		parent_entity.position = SKEntityManager.instance.get_entity(contained_inventory).position
+		parent_entity.world = SKEntityManager.instance.get_entity(contained_inventory).world
 
 
 ## Move this to another inventory. Adds and removes the item from the inventories.
 func move_to_inventory(refID:StringName):
 	# remove from inventory if we are in one
 	if in_inventory:
-		EntityManager.instance\
+		SKEntityManager.instance\
 			.get_entity(contained_inventory)\
 			.get_component("InventoryComponent")\
 			.remove_from_inventory(parent_entity.name)
@@ -108,7 +109,7 @@ func move_to_inventory(refID:StringName):
 		return
 	
 	# add to new inventory
-	EntityManager.instance\
+	SKEntityManager.instance\
 		.get_entity(refID)\
 		.get_component("InventoryComponent")\
 		.add_to_inventory(parent_entity.name)
@@ -121,12 +122,12 @@ func move_to_inventory(refID:StringName):
 
 ## Drop this on the ground.
 func drop():
-	var e:Entity = EntityManager.instance.get_entity(contained_inventory)
+	var e:SKEntity = SKEntityManager.instance.get_entity(contained_inventory)
 	var drop_dir:Quaternion = e.rotation
 	print(drop_dir.get_euler().normalized() * DROP_DISTANCE)
 	# This whole bit is genericizing dropping the item in front of the player. It's meant to be used with the player, it should work with anything with a puppet.
 	if in_inventory:
-		EntityManager.instance.get_entity(contained_inventory)\
+		SKEntityManager.instance.get_entity(contained_inventory)\
 			.get_component(&"InventoryComponent")\
 			.remove_from_inventory(parent_entity.name)
 

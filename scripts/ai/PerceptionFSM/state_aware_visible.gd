@@ -4,7 +4,7 @@ extends FSMState
 
 
 var _npc:NPCComponent
-var e:Entity
+var e:SKEntity
 
 
 func _get_state_name() -> String:
@@ -23,4 +23,4 @@ func update(delta:float) -> void:
 
 
 func enter(msg:Dictionary = {}) -> void:
-	e = EntityManager.instance.get_entity((state_machine as PerceptionFSM_Machine).tracked)
+	e = SKEntityManager.instance.get_entity((state_machine as PerceptionFSM_Machine).tracked)

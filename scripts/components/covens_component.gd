@@ -1,6 +1,6 @@
 class_name CovensComponent
-extends EntityComponent
-## Allows an Entity to be part of a [Coven].
+extends SKEntityComponent
+## Allows an SKEntity to be part of a [Coven].
 ## Covens in this context are analagous to Bethesda games' Factions- groups of NPCs that behave in a similar way.
 ## Coven membership is also reflected in groups that the entity is in.
 

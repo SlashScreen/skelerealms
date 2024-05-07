@@ -1,5 +1,5 @@
 class_name GOAPComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Planner for [GOAPAction]s that creates action sequences to complete a set of [Objective]s.
 
 

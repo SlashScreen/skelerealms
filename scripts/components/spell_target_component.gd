@@ -1,5 +1,5 @@
 class_name SpellTargetComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Allows entities to be hit with spells, and keeps track of any applied spell effects.
 
 

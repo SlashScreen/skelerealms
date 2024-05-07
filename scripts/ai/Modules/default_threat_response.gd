@@ -48,7 +48,7 @@ var pull_out_of_thread = false
 
 func _initialize() -> void:
 	_npc.perception_transition.connect(_handle_perception_info.bind())
-	_npc.hit_by.connect(func(who): _aggress(EntityManager.instance.get_entity(who)))
+	_npc.hit_by.connect(func(who): _aggress(SKEntityManager.instance.get_entity(who)))
 
 
 func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionFSM_Machine) -> void:
@@ -73,7 +73,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 			if below_attack_threshold: # if attack threshold or frenzied
 				if not _npc.in_combat:
 					_npc.printe("start vigilance")
-					var e = EntityManager.instance.get_entity(what)
+					var e = SKEntityManager.instance.get_entity(what)
 
 					# attack immediately if frenzied
 					if aggression == 3:
@@ -103,7 +103,7 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 
 
 ## Will keep watch until the entity is out of range. TODO: Visibility?
-func _stay_vigilant(e:Entity) -> void:
+func _stay_vigilant(e:SKEntity) -> void:
 	# may need to change the order of this, im not sure where to put it yet
 	if _npc.in_combat: # don't react if already in combat
 		_add_enemy(e)
@@ -150,7 +150,7 @@ func _stay_vigilant(e:Entity) -> void:
 			return
 
 
-func _begin_attack(e:Entity) -> void:
+func _begin_attack(e:SKEntity) -> void:
 	# figure out response to confrontation
 	print("beginning attack")
 	match aggression:
@@ -168,7 +168,7 @@ func _begin_attack(e:Entity) -> void:
 			# This will begin combat, because NPCs have a recurring goal where all enemies must be dead
 
 
-func _add_enemy(e:Entity) -> void:
+func _add_enemy(e:SKEntity) -> void:
 	if _npc.goap_memory.has("enemies"):
 		if not _npc.goap_memory["enemies"].has(e.name):
 			print("Adding enemy %s" % e.name)
@@ -179,7 +179,7 @@ func _add_enemy(e:Entity) -> void:
 		_npc._goap_component.interrupt() # interrupt current task if entering combat
 
 
-func _warn(e:Entity) -> void:
+func _warn(e:SKEntity) -> void:
 	# Issue warning to entity
 	print("warning!")
 	_npc.warning.emit(e.name)
@@ -196,7 +196,7 @@ func _enter_vigilant_stance() -> void:
 	print("enter vigilant stance")
 
 
-func _flee(e:Entity) -> void:
+func _flee(e:SKEntity) -> void:
 	# tell GOAP to flee from enemies
 	print("flee")
 	_npc.add_objective({"flee_from_enemies" : true}, true, 10)
@@ -204,7 +204,7 @@ func _flee(e:Entity) -> void:
 
 
 ## Response to being hit.
-func _aggress(e:Entity) -> void:
+func _aggress(e:SKEntity) -> void:
 	# "Coward", "Cautious", "Average", "Brave", "Foolhardy"
 	# TODO: Friendly fire
 	var threat = _determine_threat(e)
@@ -244,7 +244,7 @@ func _aggress(e:Entity) -> void:
 ## 1: Stronger [br]
 ## 2: Significantly stronger [br]
 ## See [constant THREAT_LEVEL_WEAKER_INTERVAL], [constant THREAT_LEVEL_GREATER_INTERVAL], [constant THREAT_LEVEL_MUCH_GREATER_INTERVAL]
-func _determine_threat(e:Entity) -> int:
+func _determine_threat(e:SKEntity) -> int:
 	var e_sc = e.get_component("SkillsComponent")
 	# if no skills component associated with the entity, default is 0
 	if not e_sc.some():

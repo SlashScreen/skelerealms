@@ -1,12 +1,12 @@
 class_name AttributesComponent
-extends EntityComponent
-## Holds the attributes of an Entity, such as the D&D abilities - Charisma, Dexterity, etc.
+extends SKEntityComponent
+## Holds the attributes of an SKEntity, such as the D&D abilities - Charisma, Dexterity, etc.
 
 
-## The attributes of this Entity.
+## The attributes of this SKEntity.
 ## It is in a dictionary so you can add, remove, and customize at will.
-## On startup, it will clone the list in the [member EntityManager.config] singleton.
-@onready var attributes:Dictionary = EntityManager.instance.config.attributes.duplicate():
+## On startup, it will clone the list in the [member SKEntityManager.config] singleton.
+@onready var attributes:Dictionary = SKEntityManager.instance.config.attributes.duplicate():
 	get:
 		return attributes
 	set(val):

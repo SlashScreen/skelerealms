@@ -147,13 +147,6 @@ func toggle_console_freeze() -> void:
 		console_freeze()
 
 
-func _input(event):
-	if Input.is_action_just_pressed("ui_cancel"):
-		toggle_pause()
-	#if Input.is_action_just_pressed("gdshell_toggle_ui"):
-	#	toggle_console_freeze()
-
-
 func toggle_pause():
 	if not is_game_started:
 		return

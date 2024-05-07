@@ -1,7 +1,7 @@
 class_name PerceptionEars
 extends CollisionShape3D
 ## Add to something to make it be able to hear.
-## Isn't an [EntityComponent], so can be added to anything.
+## Isn't an [SKEntityComponent], so can be added to anything.
 ## Be sure to add a shape.
 
 

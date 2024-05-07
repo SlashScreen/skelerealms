@@ -1,5 +1,5 @@
 class_name NavigatorComponent
-extends EntityComponent
+extends SKEntityComponent
 ## Handles finding paths through the granular navigation system. See [NavigationMaster].
 
 

@@ -9,7 +9,7 @@ extends InstanceData
 var current_inventory:Array[String]
 
 
-func get_archetype_components() -> Array[EntityComponent]:
+func get_archetype_components() -> Array[SKEntityComponent]:
 	return [
 		InventoryComponent.new(),
 		ChestComponent.new(owner_id, loot_table, reset_time_minutes)

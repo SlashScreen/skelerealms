@@ -21,7 +21,7 @@ func _ready():
 # You could also override #interact, instead of binding to signal.
 func _handle_teleport_request(id:String):
 	print("teleporting %s to world %s at position %s" % [id, dest_world, dest_pos])
-	var teleportee = EntityManager.instance.get_entity(id) # get an entity
+	var teleportee = SKEntityManager.instance.get_entity(id) # get an entity
 	if teleportee: # if there is a valid object
 		var tc = teleportee.get_component("TeleportComponent")  # Try to get a teleport component
 		if tc:

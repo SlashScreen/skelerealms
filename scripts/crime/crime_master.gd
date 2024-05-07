@@ -56,7 +56,7 @@ func _process_crime_queue() -> void:
 			if crime.victim == "":
 				continue
 		# add crime to covens
-			var cc = EntityManager.instance.get_entity(crime.victim).get_component("CovensComponent")
+			var cc = SKEntityManager.instance.get_entity(crime.victim).get_component("CovensComponent")
 			if cc:
 				for coven in (cc as CovensComponent).covens:
 					## Skip if doesn't track crime

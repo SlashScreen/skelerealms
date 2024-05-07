@@ -1,5 +1,5 @@
 class_name EquipmentComponent
-extends EntityComponent
+extends SKEntityComponent
 
 
 var equipment_slot:Dictionary
@@ -18,7 +18,7 @@ func _ready() -> void:
 
 func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> bool:
 	# Get component
-	var e = EntityManager.instance.get_entity(item)
+	var e = SKEntityManager.instance.get_entity(item)
 	if not e:
 		return false
 	# Get item component
