@@ -502,9 +502,19 @@ func determine_opinion_of(id:StringName) -> float:
 	if _opinions.has(id) and not _opinions[id] == 0:
 		opinions.append(_opinions[id])
 		opinion_total += self_modifier # avoid 1 * self_modifier because that's an identity function so we can just do self_modifier
-	
+	print("Considering: ", opinions)
 	# Return weighted average
-	return opinions.reduce(func(sum, next): return sum + next, 0) / (1 if opinion_total == 0 else opinion_total)
+	match data.opinion_mode:
+		0:
+			var o:Variant = opinions.min()
+			return 0.0 if o == null else o
+		1:
+			var o:Variant = opinions.max()
+			return 0.0 if o == null else o
+		2:
+			return opinions.reduce(func(sum, next): return sum + next, 0) / (1 if opinion_total == 0 else opinion_total)
+		_:
+			return 0.0
 
 
 func gather_debug_info() -> String:
