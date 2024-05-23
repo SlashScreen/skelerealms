@@ -24,20 +24,7 @@ func _init() -> void:
 	add_child(_timer)
 
 
-func setup(behavior_groups:Array[GOAPBehaviorGroup]) -> void:
-	var behaviors:Array[GOAPBehavior] = []
-	
-	for g:GOAPBehaviorGroup in behavior_groups:
-		behaviors.append_array(g.behaviors)
-	
-	for b:GOAPBehavior in behaviors:
-		var new_behavior = b.duplicate(true)
-		new_behavior.entity = get_parent()
-		new_behavior.parent_goap = self
-		add_child(GOAPAction.new(new_behavior))
-
-
-func _process(delta):
+func _process(delta:float) -> void:
 	if GameInfo.is_loading:
 		return
 	# if we are set to rebuild our plan

@@ -3,7 +3,11 @@ extends SKLootTableItem
 
 
 @export_multiline var condition:String = ""
-@export var items:SKLootTable
+var items:SKLootTable
+
+
+func _ready() -> void:
+	items = get_child(0)
 
 
 func resolve() -> SKLootTable.LootTableResult:

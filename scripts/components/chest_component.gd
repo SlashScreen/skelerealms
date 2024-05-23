@@ -5,10 +5,10 @@ extends SKEntityComponent
 ## Optionally refreshing inventories.
 
 
-@export var loot_table:SKLootTable
+@onready var loot_table:SKLootTable = get_child(0)
 @export_range(0, 100, 1, "or_greater") var reset_time_minutes:int ## How long it takes to refresh this chest, in in-game minutes. 0 will not refresh.
 var looted_time:Timestamp
-var owner_id:StringName
+@export var owner_id:StringName
 
 
 func _init(oid:StringName = &"", lt:SKLootTable = null, rt:int = -1) -> void:

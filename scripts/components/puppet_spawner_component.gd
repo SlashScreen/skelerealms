@@ -2,6 +2,8 @@ class_name PuppetSpawnerComponent
 extends SKEntityComponent
 ## Manages spawning and despawning of puppets.
 
+
+var prefab: PackedScene
 ## The puppet node.
 var puppet:Node 
 
@@ -18,11 +20,24 @@ func _ready():
 	# brute force getting the puppet for the player if it already exists.
 	if get_child_count() > 0:
 		puppet = get_child(0)
+		if not parent_entity.in_scene:
+			var ps: PackedScene = PackedScene.new()
+			ps.pack(get_child(0))
+			prefab = ps
+			despawn()
+
+
+func _on_enter_scene() -> void:
+	spawn()
+
+
+func _on_exit_scene() -> void:
+	despawn()
 
 
 ## Spawn a new puppet.
-func spawn(data:PackedScene):
-	var n = data.instantiate()
+func spawn():
+	var n = prefab.instantiate()
 	add_child(n)
 	(n as Node3D).set_position(parent_entity.position)
 	puppet = n

@@ -1,5 +1,5 @@
 class_name SKLootTableItem
-extends Resource
+extends Node
 
 
 func resolve() -> SKLootTable.LootTableResult:

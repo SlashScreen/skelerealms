@@ -4,20 +4,17 @@ extends Node
 ## These allow constructs such as NPCs and Items to persist even when not in the scene.
 
 
-## The world this entity is in.
-@export var world: String
-## Position within the world it's in.
-@export var position:Vector3
-## Rotation of this Enitiy.
-@export var rotation:Quaternion = Quaternion.IDENTITY
+@export var form_id: StringName = SKIDGenerator.generate_id() ## This is what *kind* of entity it is. For example, Item "awesome_sword" has a form ID of "iron_sword".
+@export var world: String ## The world this entity is in.
+@export var position:Vector3 ## Position within the world it's in.
+@export var rotation:Quaternion = Quaternion.IDENTITY ## Rotation of this Enitiy.
+@export var unique:bool = true ## Whether this is the only 
 ## An internal timer of how long this entity has gone without being modified or referenced.
 ## One it's beyond a certain point, the [SKEntityManager] will mark it for cleanup after a save.
 var stale_timer:float
 ## This is used to prevent items from spawning, even if they are supposed to be in scene.
 ## For example, items in invcentories should not spawn despite technically being "in the scene".
 var supress_spawning:bool
-## FLag telling if this was created dynamically (eg. [class SpawnPoint]).
-var generated:bool
 ## Whether this entity is in the scene or not.
 var in_scene: bool:
 	get:
@@ -126,7 +123,7 @@ func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If no
 		"entity_data": {
 			"world" = world,
 			"position" = position,
-			"generated" = generated
+			"unique" = unique
 		}
 	}
 	for c in get_children().filter(func(x:SKEntityComponent): return x.dirty): # filter to get dirty acomponents
@@ -137,7 +134,7 @@ func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If no
 func load_data(data:Dictionary) -> void:
 	world = data["entity_data"]["world"]
 	position = JSON.parse_string(data["entity_data"]["position"])
-	generated = JSON.parse_string(data["entity_data"]["generated"])
+	unique = JSON.parse_string(data["entity_data"]["unique"])
 
 	# loop through all saved components and call load
 	for d in data["components"]:

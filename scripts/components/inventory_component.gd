@@ -2,8 +2,8 @@ class_name InventoryComponent
 extends SKEntityComponent
 ## Keeps track of an inventory.
 
-## The RefIDs of the items in the inventory.
-var inventory: PackedStringArray
+## The RefIDs of the items in the inventory. Put any unique items in here.
+@export var inventory: PackedStringArray
 ## The amount of cash moneys.
 var currencies = {}
 

@@ -4,7 +4,11 @@ extends SKLootTableItem
 
 @export_range(0, 100, 1, "or_greater") var x_min:int = 1
 @export_range(0, 100, 1, "or_greater") var x_max:int = 0
-@export var items: SKLootTable
+var items: SKLootTable
+
+
+func _ready() -> void:
+	items = get_child(0)
 
 
 func resolve() -> SKLootTable.LootTableResult:
