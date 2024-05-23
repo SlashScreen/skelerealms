@@ -46,7 +46,7 @@ var vigilant_thread:Thread
 var pull_out_of_thread = false
 
 
-func _initialize() -> void:
+func _ready() -> void:
 	_npc.perception_transition.connect(_handle_perception_info.bind())
 	_npc.hit_by.connect(func(who): _aggress(SKEntityManager.instance.get_entity(who)))
 
@@ -188,7 +188,6 @@ func _warn(e:SKEntity) -> void:
 func _enter_normal_state() -> void:
 	# undo vigilant stance
 	print("exit vigilant stance")
-	return
 
 
 func _enter_vigilant_stance() -> void:

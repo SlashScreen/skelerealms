@@ -17,7 +17,7 @@ func _init() -> void:
 
 func _ready():
 	regex = RegEx.new()
-	regex.compile("([^\\/\n\\r]+)\\.t?res")
+	regex.compile("([^\\/\n\\r]+)\\.t?scn")
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
 	SkeleRealmsGlobal.entity_manager_loaded.emit()
 	config.compile()
@@ -39,13 +39,13 @@ func get_entity(id: StringName) -> SKEntity:
 	# stage 2: Check in save file
 	var potential_data = SaveSystem.entity_in_save(id)  # chedk the save system
 	if potential_data.some():  # if found:
-		add_entity(ResourceLoader.load(disk_assets[id], "InstanceData"))  # load default from disk
+		add_entity_from_scene(ResourceLoader.load(disk_assets[id]))  # load default from disk
 		entities[id].load_data(potential_data.unwrap())  # and then load using the data blob we got from the save file
 		(entities[id] as SKEntity).reset_stale_timer()
 		return entities[id]
 	# stage 3: check on disk
 	if disk_assets.has(id):
-		add_entity(load(disk_assets[id]))
+		add_entity_from_scene(load(disk_assets[id]))
 		(entities[id] as SKEntity).reset_stale_timer()
 		return entities[id]  # we added the entity in #add_entity
 
@@ -114,7 +114,7 @@ func remove_entity(rid: StringName) -> void:
 		entities.erase(rid)
 
 
-func spawn_entity_from_scene(scene:PackedScene) -> void:
+func add_entity_from_scene(scene:PackedScene) -> void:
 	var e:SKEntity = scene.instantiate()
 	if not e.unique:
 		var valid: bool = false 

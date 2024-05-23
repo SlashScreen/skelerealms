@@ -26,7 +26,7 @@ func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> b
 	if not ic:
 		return false
 	# Get equippable data component
-	var ec = (ic as ItemComponent).data.get_component("EquippableDataComponent")
+	var ec = (ic as ItemComponent).get_component("EquippableDataComponent")
 	if not ec:
 		return false
 	# Check slot validity

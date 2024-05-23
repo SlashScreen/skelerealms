@@ -1,4 +1,6 @@
+@tool
 class_name SKIDGenerator
+extends RefCounted
 
 
 const CHARACTERS: String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"

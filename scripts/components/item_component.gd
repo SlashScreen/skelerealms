@@ -6,8 +6,7 @@ extends SKEntityComponent
 const DROP_DISTANCE:float = 2
 const NONE:StringName = &""
 
-## The data blob this item has.
-@export var data: ItemData
+
 ## What inventory this item is in.
 var contained_inventory: StringName = NONE:
 	get:
@@ -37,6 +36,7 @@ var item_owner:StringName = NONE:
 			$"../InteractiveComponent".interact_verb = "STEAL"
 var stolen:bool ## If this has been stolen or not.
 var durability:float ## This item's durability, if your game has condition/durability mechanics like Fallout or Morrowind.
+@onready var psc:PuppetSpawnerComponent = parent_entity.get_component("PuppetSpawnerComponent")
 
 
 ## Shorthand to get an item component for an entity by ID.
@@ -71,23 +71,6 @@ func _entity_ready() -> void:
 		$"../InteractiveComponent".interact_verb = "STEAL"
 
 
-func _on_enter_scene():
-	_spawn()
-
-
-func _spawn():
-	$"../PuppetSpawnerComponent".spawn(data.prefab)
-	($"../PuppetSpawnerComponent".get_child(0) as ItemPuppet).quaternion = parent_entity.rotation # TODO: This doesn't work.
-
-
-func _on_exit_scene():
-	_despawn()
-
-
-func _despawn():
-	$"../PuppetSpawnerComponent".despawn()
-
-
 func _process(delta):
 	if in_inventory:
 		parent_entity.position = SKEntityManager.instance.get_entity(contained_inventory).position
@@ -117,7 +100,7 @@ func move_to_inventory(refID:StringName):
 	contained_inventory = refID
 	
 	if in_inventory:
-		_despawn()
+		psc.despawn()
 
 
 ## Drop this on the ground.
@@ -132,7 +115,6 @@ func drop():
 			.remove_from_inventory(parent_entity.name)
 
 	# raycast in front of puppet if possible to do wall check
-	var psc = e.get_component("PuppetSpawnerComponent")
 	if e.in_scene and psc:
 		print("has puppet component, in scene")
 		if psc.puppet:
@@ -150,20 +132,20 @@ func drop():
 				print("didn't hit anything")
 				parent_entity.position = to
 				contained_inventory = NONE
-				_spawn() # Should check if we are in scene, although nothing should drop in the Ether
+				psc.spawn()
 				return
 			else:
 				# if hit something, spawn at hit position
 				print(res)
 				parent_entity.position = res["position"] # TODO: Compensate for item size
 				contained_inventory = NONE
-				_spawn() # Should check if we are in scene, although nothing should drop in the Ether
+				psc.spawn()
 				return
 
 	parent_entity.position = parent_entity.position + Vector3(0, 1.5, 0)
 
 	contained_inventory = NONE
-	_spawn() # Should check if we are in scene, although nothing should drop in the Ether
+	psc.spawn()
 
 
 ## Interact with this item. Called from [InteractiveComponent].
@@ -185,6 +167,20 @@ func allow() -> void:
 	item_owner = &"";
 
 
+## Whether it has a component type. [code]c[/code] is the name of the component type, like "HoldableDataComponent".
+func has_component(c:String) -> bool:
+	return get_children().any(func(x:ItemDataComponent): return x.get_type() == c)
+
+
+## Gets the first component of a type. [code]c[/code] is the name of the component type, like "HoldableDataComponent".
+func get_component(c:String) -> ItemDataComponent:
+	var valid_components = get_children().filter(func(x:ItemDataComponent): return x.get_type() == c)
+	if valid_components.is_empty():
+		return null
+	else:
+		return valid_components[0]
+
+
 func save() -> Dictionary:
 	return {
 		"contained_inventory" = contained_inventory,
@@ -200,7 +196,7 @@ func load_data(data:Dictionary):
 func get_translated_name() -> String:
 	var t = tr(parent_entity.name)
 	if t == parent_entity.name:
-		return tr(data.id)
+		return tr(parent_entity.form_id)
 	else :
 		return t
 
