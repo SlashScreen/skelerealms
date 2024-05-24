@@ -30,3 +30,22 @@ func get_archetype_components() -> Array[SKEntityComponent]:
 		components.append(ScriptComponent.new(npc_data.custom_script))
 	
 	return components
+
+
+func convert_to_scene() -> PackedScene:
+	var ps := PackedScene.new()
+	
+	var e := SKEntity.new()
+	e.name = ref_id
+	InstanceData._transfer_properties(self, e)
+	
+	for c:SKEntityComponent in get_archetype_components():
+		InstanceData._transfer_properties(npc_data, c)
+		if c is PuppetSpawnerComponent:
+			c.add_child(npc_data.prefab.instantiate())
+		e.add_child(c)
+		c.owner = e
+	
+	ps.pack(e)
+	
+	return ps
