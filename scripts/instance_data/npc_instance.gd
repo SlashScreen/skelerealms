@@ -11,7 +11,7 @@ extends InstanceData
 func get_archetype_components() -> Array[SKEntityComponent]:
 	var components:Array[SKEntityComponent] = []
 	# Add new components
-	components.append(NPCComponent.new(npc_data))
+	components.append(NPCComponent.new())
 	components.append(InteractiveComponent.new())
 	components.append(PuppetSpawnerComponent.new())
 	components.append(TeleportComponent.new())

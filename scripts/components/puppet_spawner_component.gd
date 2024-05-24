@@ -1,3 +1,4 @@
+@tool
 class_name PuppetSpawnerComponent
 extends SKEntityComponent
 ## Manages spawning and despawning of puppets.
@@ -16,6 +17,8 @@ func _init() -> void:
 
 
 func _ready():
+	if Engine.is_editor_hint():
+		return
 	super._ready()
 	# brute force getting the puppet for the player if it already exists.
 	if get_child_count() > 0:
@@ -25,6 +28,10 @@ func _ready():
 			ps.pack(get_child(0))
 			prefab = ps
 			despawn()
+
+
+func get_world_entity_preview() -> Node:
+	return get_child(0)
 
 
 func _on_enter_scene() -> void:

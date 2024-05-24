@@ -32,11 +32,3 @@ class_name NPCData
 @export var interactive:bool = true
 ## NPC relationships.
 @export var relationships:Array[Relationship]
-
-@export_category("AI")
-## AI Modules.
-@export var ai_modules:Array[AIModuleGroup]
-## GOAP Actions.
-@export var goap_behaviors:Array[GOAPBehaviorGroup]
-## The loot table of this kind of NPC.
-@export var loot_table:SKLootTable

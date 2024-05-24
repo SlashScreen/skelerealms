@@ -11,12 +11,6 @@ var looted_time:Timestamp
 @export var owner_id:StringName
 
 
-func _init(oid:StringName = &"", lt:SKLootTable = null, rt:int = -1) -> void:
-	owner_id = oid
-	loot_table = lt
-	reset_time_minutes = rt
-
-
 func _ready() -> void:
 	reroll()
 	if reset_time_minutes > 0:

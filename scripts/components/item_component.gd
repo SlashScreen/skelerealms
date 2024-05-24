@@ -8,7 +8,7 @@ const NONE:StringName = &""
 
 
 ## What inventory this item is in.
-var contained_inventory: StringName = NONE:
+@export var contained_inventory: StringName = NONE:
 	get:
 		return contained_inventory
 	set(val):
@@ -16,13 +16,13 @@ var contained_inventory: StringName = NONE:
 		if parent_entity:
 			parent_entity.supress_spawning = not contained_inventory == NONE # prevent spawning if item is in inventory
 ## Whether this item is in inventory or not.
-var in_inventory:bool:
+@export var in_inventory:bool:
 	get:
 		return not contained_inventory == NONE
 ## If this is a quest item.
-var quest_item:bool
+@export var quest_item:bool
 ## If this item is "owned" by someone.
-var item_owner:StringName = NONE:
+@export var item_owner:StringName = NONE:
 	get:
 		return item_owner
 	set(val):
@@ -106,7 +106,7 @@ func move_to_inventory(refID:StringName):
 ## Drop this on the ground.
 func drop():
 	var e:SKEntity = SKEntityManager.instance.get_entity(contained_inventory)
-	var drop_dir:Quaternion = e.rotation
+	var drop_dir:Quaternion = e.quaternion
 	print(drop_dir.get_euler().normalized() * DROP_DISTANCE)
 	# This whole bit is genericizing dropping the item in front of the player. It's meant to be used with the player, it should work with anything with a puppet.
 	if in_inventory:

@@ -13,4 +13,4 @@ func _init(rot:Quaternion) -> void:
 
 func _ready() -> void:
 	super._ready()
-	parent_entity.rotation = rotation
+	parent_entity.quaternion = rotation

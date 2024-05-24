@@ -32,7 +32,7 @@ func set_entity_position(pos:Vector3):
 
 
 func set_entity_rotation(q:Quaternion) -> void:
-	parent_entity.rotation = q
+	parent_entity.quaternion = q
 
 
 func _process(delta):
