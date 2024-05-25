@@ -1,4 +1,3 @@
-class_name WorldItemGizmo
 extends EditorNode3DGizmoPlugin
 
 

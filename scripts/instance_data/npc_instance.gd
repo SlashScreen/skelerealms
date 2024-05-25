@@ -1,3 +1,4 @@
+@tool
 class_name NPCInstance
 extends InstanceData
 ## An instance of [NPCData] in the world
@@ -39,13 +40,16 @@ func convert_to_scene() -> PackedScene:
 	e.name = ref_id
 	InstanceData._transfer_properties(self, e)
 	
-	for c:SKEntityComponent in get_archetype_components():
+	var components := get_archetype_components()
+	for c:SKEntityComponent in components:
 		InstanceData._transfer_properties(npc_data, c)
-		if c is PuppetSpawnerComponent:
-			c.add_child(npc_data.prefab.instantiate())
 		e.add_child(c)
 		c.owner = e
+		if c is PuppetSpawnerComponent:
+			var p := npc_data.prefab.instantiate()
+			c.add_child(p)
+			p.owner = e
 	
 	ps.pack(e)
-	
+	e.queue_free()
 	return ps

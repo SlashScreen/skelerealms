@@ -3,12 +3,6 @@ class_name SKWorldEntity
 extends Marker3D
 
 
-# TODO: How to sync position??
-
-@export var sync_position:bool = false:
-	set(val):
-		if val:
-			_sync()
 @export var entity:PackedScene:
 	set(val):
 		entity = val 

@@ -23,11 +23,6 @@ func _ready():
 	# brute force getting the puppet for the player if it already exists.
 	if get_child_count() > 0:
 		puppet = get_child(0)
-		if not parent_entity.in_scene:
-			var ps: PackedScene = PackedScene.new()
-			ps.pack(get_child(0))
-			prefab = ps
-			despawn()
 
 
 func get_world_entity_preview() -> Node:
@@ -44,9 +39,16 @@ func _on_exit_scene() -> void:
 
 ## Spawn a new puppet.
 func spawn():
-	var n = prefab.instantiate()
-	add_child(n)
-	(n as Node3D).set_position(parent_entity.position)
+	var n:Node3D
+	if not prefab and get_child_count() > 0:
+		var ps: PackedScene = PackedScene.new()
+		ps.pack(get_child(0))
+		prefab = ps
+		n = get_child(0)
+	else:
+		n = prefab.instantiate()
+		add_child(n)
+	n.set_position(parent_entity.position)
 	puppet = n
 	spawned_puppet.emit(puppet)
 	printe("spawned at %s : %s" % [parent_entity.world, parent_entity.position])
@@ -55,6 +57,11 @@ func spawn():
 ## Despawn a puppet.
 func despawn():
 	printe("despawned.")
+	if not prefab:
+		var ps: PackedScene = PackedScene.new()
+		ps.pack(get_child(0))
+		prefab = ps
+	
 	for n in get_children():
 		n.queue_free()
 	puppet = null

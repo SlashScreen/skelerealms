@@ -164,6 +164,10 @@ static func get_npc_component(id:StringName) -> NPCComponent:
 #* ### OVERRIDES
 
 
+func _init() -> void:
+	name = "NPCComponent"
+
+
 func _ready():
 	super._ready()
 	

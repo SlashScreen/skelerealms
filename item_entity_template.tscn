@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://bt1x4w2k7dhvf"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/entities/entity.gd" id="1_mtgwt"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/item_component.gd" id="2_yi40p"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/interactive_component.gd" id="3_lvppr"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/puppet_spawner_component.gd" id="4_nkg75"]
+
+[node name="npc_item_entity" type="Node"]
+script = ExtResource("1_mtgwt")
+
+[node name="ItemComponent" type="Node" parent="."]
+script = ExtResource("2_yi40p")
+
+[node name="InteractiveComponent" type="Node" parent="."]
+script = ExtResource("3_lvppr")
+
+[node name="PuppetSpawnerComponent" type="Node" parent="."]
+script = ExtResource("4_nkg75")

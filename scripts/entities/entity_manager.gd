@@ -81,13 +81,13 @@ func _cache_entities(path: String):
 		print("An error occurred when trying to access the path.")
 
 
-## add a new entity.
-func add_entity(res: InstanceData) -> SKEntity:
-	var new_entity = SKEntity.new(res)  # make a new entity
+# add a new entity.
+#func add_entity(res: InstanceData) -> SKEntity:
+	#var new_entity = SKEntity.new(res)  # make a new entity
 	# add new entity to self, and the dictionary
-	entities[res.ref_id] = new_entity
-	add_child(new_entity)
-	return new_entity
+	#entities[res.ref_id] = new_entity
+	#add_child(new_entity)
+	#return new_entity
 
 
 func _add_entity_raw(e: SKEntity) -> SKEntity:
@@ -116,6 +116,9 @@ func remove_entity(rid: StringName) -> void:
 
 func add_entity_from_scene(scene:PackedScene) -> void:
 	var e:SKEntity = scene.instantiate()
+	if not e:
+		push_error("Scene at path %s isn't a valid entity." % scene.resource_path)
+	
 	if not e.unique:
 		var valid: bool = false 
 		var new_id: String = ""
@@ -123,5 +126,4 @@ func add_entity_from_scene(scene:PackedScene) -> void:
 			new_id = SKIDGenerator.generate_id()
 			valid = not entities.has(new_id)
 		e.name = new_id
-	push_error("Scene at path %s isn't a valid entity." % scene.resource_path)
 	_add_entity_raw(e)

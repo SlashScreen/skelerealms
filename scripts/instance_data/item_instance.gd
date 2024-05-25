@@ -1,3 +1,4 @@
+@tool
 class_name ItemInstance
 extends InstanceData
 ## A single instance of an [ItemData] in the world.
@@ -14,7 +15,6 @@ func get_archetype_components() -> Array[SKEntityComponent]:
 	var components:Array[SKEntityComponent] = []
 	# set up item component
 	var item_component = ItemComponent.new()
-	item_component.data = item_data
 	item_component.contained_inventory = contained_inventory
 	item_component.name = "ItemComponent" # be sure to name them
 	item_component.quest_item = quest_item
@@ -34,16 +34,18 @@ func convert_to_scene() -> PackedScene:
 	var ps := PackedScene.new()
 	
 	var e := SKEntity.new()
-	e.name = ref_id
+	e.name = item_data.id
 	InstanceData._transfer_properties(self, e)
 	
 	for c:SKEntityComponent in get_archetype_components():
-		InstanceData._transfer_properties(item_data, c)
-		InstanceData._transfer_properties(self, c)
-		if c is PuppetSpawnerComponent:
-			c.add_child(item_data.prefab.instantiate())
+		#InstanceData._transfer_properties(item_data, c)
+		#InstanceData._transfer_properties(self, c)
 		e.add_child(c)
 		c.owner = e
+		if c is PuppetSpawnerComponent:
+			var p := item_data.prefab.instantiate()
+			c.add_child(p)
+			p.owner = e
 	
 	ps.pack(e)
 	

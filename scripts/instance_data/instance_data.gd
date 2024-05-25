@@ -1,3 +1,4 @@
+@tool
 class_name InstanceData
 extends Resource
 ## The base class for an instance of an NPC, item, Etc.
@@ -30,5 +31,7 @@ static func _transfer_properties(from:Object, to:Object) -> void:
 	var to_p:Array[Dictionary] = to.get_property_list()
 	
 	for d:Dictionary in from_p:
+		if d.name == &"script":
+			continue
 		if to_p.any(func(x:Dictionary) -> bool: return d.name == x.name):
 			to.set(d.name, from.get(d.name))
