@@ -114,7 +114,7 @@ func remove_entity(rid: StringName) -> void:
 		entities.erase(rid)
 
 
-func add_entity_from_scene(scene:PackedScene) -> void:
+func add_entity_from_scene(scene:PackedScene) -> SKEntity:
 	var e:SKEntity = scene.instantiate()
 	if not e:
 		push_error("Scene at path %s isn't a valid entity." % scene.resource_path)
@@ -126,4 +126,4 @@ func add_entity_from_scene(scene:PackedScene) -> void:
 			new_id = SKIDGenerator.generate_id()
 			valid = not entities.has(new_id)
 		e.name = new_id
-	_add_entity_raw(e)
+	return _add_entity_raw(e)

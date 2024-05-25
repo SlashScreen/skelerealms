@@ -46,6 +46,9 @@ func spawn():
 		prefab = ps
 		n = get_child(0)
 	else:
+		if not prefab:
+			printe("Failed spawning: no prefab.")
+			return
 		n = prefab.instantiate()
 		add_child(n)
 	n.set_position(parent_entity.position)

@@ -2,7 +2,7 @@ class_name NPCTemplateOption
 extends Resource
 
 
-@export var template:NPCData
+@export var template:PackedScene
 @export_range(0, 1) var chance:float = 1
 
 

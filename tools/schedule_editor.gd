@@ -24,7 +24,7 @@ func _ready() -> void:
 	timeline_width = timeline.size.x
 	var op:OptionButton = $VBoxContainer/HBoxContainer/OptionButton
 	op.clear()
-	var inherited:Array = SKToolPlugin.find_classes_that_inherit(&"ScheduleEvent")
+	var inherited:Array = find_classes_that_inherit(&"ScheduleEvent")
 	for d:Dictionary in inherited:
 		op.add_item(d.class)
 		op.set_item_metadata(op.item_count - 1, d.path)
@@ -188,3 +188,8 @@ func add_box(e:ScheduleEvent) -> void:
 		)
 	%Container.add_child(b)
 	b.get_child(0).edit(e, self)
+
+
+static func find_classes_that_inherit(what:StringName) -> Array:
+	return ProjectSettings.get_global_class_list()\
+		.filter(func(d:Dictionary)->bool: return d.base == what)

@@ -1,4 +1,3 @@
-class_name PointGizmo
 extends EditorNode3DGizmoPlugin
 
 
@@ -15,7 +14,7 @@ func _init() -> void:
 
 func _has_gizmo(for_node_3d) -> bool:
 	match for_node_3d.get_script():
-		WorldMarker, NPCSpawnPoint, IdlePoint:
+		NPCSpawnPoint, IdlePoint:
 			return true
 		_:
 			return false

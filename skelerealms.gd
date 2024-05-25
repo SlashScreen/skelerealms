@@ -5,11 +5,17 @@ extends EditorPlugin
 const DoorJumpPlugin = preload("res://addons/skelerealms/tools/door_connect.gd")
 const ConversionPlugin = preload("res://addons/skelerealms/tools/resource_conversion_plugin.gd")
 const WorldEntityPlugin = preload("res://addons/skelerealms/tools/world_entity_plugin.gd")
+const PointGizmo = preload("res://addons/skelerealms/tools/point_gizmo.gd")
+const ScheduleEditorPlugin = preload("res://addons/skelerealms/tools/schedule_editor_plugin.gd")
 
 var door_jump_plugin := DoorJumpPlugin.new(self)
 var conversion := ConversionPlugin.new()
 var we_plugin := WorldEntityPlugin.new()
 var point_gizmo := PointGizmo.new()
+var se_plugin := ScheduleEditorPlugin.new()
+
+var se_w: Window
+var se: Control
 
 
 func _enter_tree():
@@ -18,6 +24,7 @@ func _enter_tree():
 	add_inspector_plugin(door_jump_plugin)
 	add_inspector_plugin(conversion)
 	add_inspector_plugin(we_plugin)
+	add_inspector_plugin(se_plugin)
 	# autoload
 	add_autoload_singleton("SkeleRealmsGlobal", "res://addons/skelerealms/scripts/sk_global.gd")
 	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/covens/coven_system.gd")
@@ -26,6 +33,17 @@ func _enter_tree():
 	add_autoload_singleton("CrimeMaster", "res://addons/skelerealms/scripts/crime/crime_master.gd")
 	add_autoload_singleton("DialogueHooks", "res://addons/skelerealms/scripts/system/dialogue_hooks.gd")
 	add_autoload_singleton("DeviceNetwork", "res://addons/skelerealms/scripts/misc/device_network.gd")
+	
+	se_w = Window.new()
+	se = ScheduleEditorPlugin.ScheduleEditor.instantiate()
+	se_w.add_child(se)
+	EditorInterface.get_base_control().add_child(se_w)
+	se_w.hide()
+	
+	se_plugin.request_open.connect(func(events:Array[ScheduleEvent]) -> void:
+		se.edit(events)
+		se_w.popup_centered(Vector2i(1920, 1080))
+		)
 
 
 func _exit_tree():
@@ -34,6 +52,7 @@ func _exit_tree():
 	remove_inspector_plugin(door_jump_plugin)
 	remove_inspector_plugin(conversion)
 	remove_inspector_plugin(we_plugin)
+	remove_inspector_plugin(se_plugin)
 	# autoload
 	remove_autoload_singleton("SkeleRealmsGlobal")
 	remove_autoload_singleton("CovenSystem")
@@ -42,6 +61,8 @@ func _exit_tree():
 	remove_autoload_singleton("CrimeMaster")
 	remove_autoload_singleton("DialogueHooks")
 	remove_autoload_singleton("DeviceNetwork")
+	
+	se_w.queue_free()
 
 
 func _enable_plugin() -> void:

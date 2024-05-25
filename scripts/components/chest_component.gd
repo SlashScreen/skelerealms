@@ -38,14 +38,8 @@ func reroll() -> void:
 	var ic:InventoryComponent = parent_entity.get_component("InventoryComponent")
 	var res: Dictionary = loot_table.resolve()
 	
-	for id:ItemData in res.items:
-		var item: ItemInstance = ItemInstance.new()
-		item.item_data = id
-		item.contained_inventory = String(parent_entity.name)
-		item.item_owner = owner_id
-		item.ref_id = preload("res://addons/skelerealms/scripts/vendor/uuid.gd").v4()
-		
-		var e:SKEntity = SKEntityManager.instance.add_entity(item)
+	for id:PackedScene in res.items:
+		var e:SKEntity = SKEntityManager.instance.add_entity(id)
 		ic.add_to_inventory(e.name)
 	
 	ic.currencies = res.currencies
