@@ -1,4 +1,4 @@
-class_name ElementGroup
+class_name SKElementGroup
 extends Node
 
 

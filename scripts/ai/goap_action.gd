@@ -2,19 +2,16 @@ class_name GOAPAction
 extends Node
 
 
-@export var id:StringName
-@export var prerequisites:Dictionary
-@export var effects:Dictionary
-@export var cost:float = 1
-@export var duration:float
+var cost:float = 1.0
 ## Whether this objective is actively being worked on
 var running:bool = false
 var parent_goap:GOAPComponent
 var entity:SKEntity
+var duration: float
 
 
 func is_achievable_given(state:Dictionary) -> bool:
-	return state.has_all(prerequisites.keys())
+	return state.has_all(get_prerequisites().keys())
 
 
 func is_achievable() -> bool:
@@ -39,3 +36,15 @@ func is_target_reached(agent:NavigationAgent3D) -> bool:
 
 func interrupt() -> void:
 	return
+
+
+func get_prerequisites() -> Dictionary:
+	return {}
+
+
+func get_effects() -> Dictionary:
+	return {}
+
+
+func get_id() -> StringName:
+	return &""

@@ -1,4 +1,3 @@
-class_name DefaultDamageModule
 extends AIModule
 ## Example implementation of a damage processing AI Module.
 

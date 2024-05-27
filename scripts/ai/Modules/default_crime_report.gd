@@ -1,4 +1,3 @@
-class_name DefaultCrimeReportModule
 extends AIModule
 
 

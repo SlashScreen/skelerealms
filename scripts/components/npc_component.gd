@@ -1,3 +1,4 @@
+@tool
 class_name NPCComponent
 extends SKEntityComponent
 ## The brain for an NPC. Handles AI behavior, scheduling, combat, dialogue interactions.
@@ -169,6 +170,9 @@ func _init() -> void:
 
 
 func _ready():
+	if Engine.is_editor_hint():
+		return 
+	
 	super._ready()
 	
 	# Initialize all AI Modules
@@ -181,14 +185,14 @@ func _ready():
 
 
 func _entity_ready() -> void:
-	_nav_component = $"../NavigatorComponent" as NavigatorComponent
+	_nav_component = parent_entity.get_component("NavigatorComponent") as NavigatorComponent
 	# Puppet manager component.
-	_puppet_component = $"../PuppetSpawnerComponent" as PuppetSpawnerComponent
+	_puppet_component = parent_entity.get_component("PuppetSpawnerComponent") as PuppetSpawnerComponent
 	# Interactive component.
-	_interactive_component = $"../InteractiveComponent" as InteractiveComponent
+	_interactive_component = parent_entity.get_component("InteractiveComponent") as InteractiveComponent
 	# Behavior planner.
-	_goap_component = $"../GOAPComponent" as GOAPComponent
-	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
+	_goap_component = parent_entity.get_component("GOAPComponent") as GOAPComponent
+	_interactive_component.interacted.connect(func(x:String): interacted.emit(x))
 	
 	# sync nav agent
 	_puppet_component.spawned_puppet.connect(func(x:Node):
@@ -199,7 +203,15 @@ func _entity_ready() -> void:
 		_puppet = null
 		_goap_component._agent = null
 		)
-	
+	# schedule
+	var s := get_node_or_null("Schedule")
+	if s:
+		_schedule = s
+	else:
+		var n := Schedule.new()
+		n.name = "Schedule"
+		add_child(n)
+		_schedule = n
 	# misc setup
 	_interactive_component.translation_callback = get_translated_name.bind()
 	
@@ -215,6 +227,8 @@ func _on_exit_scene():
 
 
 func _process(delta):
+	if Engine.is_editor_hint():
+		return
 	#* Section 1: Path following
 	# If in scene, use navmesh agent.
 	if _current_target_point:
@@ -228,6 +242,15 @@ func _process(delta):
 			parent_entity.position = parent_entity.position.move_toward(_current_target_point.position, delta * _walk_speed) # move towards position
 
 	updated.emit(delta)
+
+
+func get_dependencies() -> Array[String]:
+	return [
+		"InteractiveComponent",
+		"PuppetSpawnerComponent",
+		"NavigatorComponent",
+		"GOAPComponent",
+	]
 
 
 func _exit_tree() -> void:
