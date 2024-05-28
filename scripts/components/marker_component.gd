@@ -7,7 +7,7 @@ extends SKEntityComponent
 var rotation:Quaternion
 
 
-func _init(rot:Quaternion) -> void:
+func _init(rot:Quaternion = Quaternion.IDENTITY) -> void:
 	name = "MarkerComponent"
 	rotation = rot
 

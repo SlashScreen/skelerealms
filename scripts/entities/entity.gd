@@ -52,6 +52,7 @@ func _ready():
 
 func _enter_tree() -> void:
 	if Engine.is_editor_hint():
+		print(scene_file_path)
 		return
 	if not get_parent() is SKEntityManager:
 		queue_free()
