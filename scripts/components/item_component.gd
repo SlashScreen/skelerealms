@@ -1,3 +1,4 @@
+@tool
 class_name ItemComponent
 extends SKEntityComponent
 ## Keeps track of item data
@@ -30,13 +31,14 @@ const NONE:StringName = &""
 		if get_parent() == null: #stops this from being called while setting up
 			return
 		if val == &"":
-			$"../InteractiveComponent".interact_verb = "TAKE"
+			inv.interact_verb = "TAKE"
 		else:
 			# TODO: Determine using worth and owner relationships
-			$"../InteractiveComponent".interact_verb = "STEAL"
+			inv.interact_verb = "STEAL"
 var stolen:bool ## If this has been stolen or not.
 var durability:float ## This item's durability, if your game has condition/durability mechanics like Fallout or Morrowind.
-@onready var psc:PuppetSpawnerComponent = parent_entity.get_component("PuppetSpawnerComponent")
+var psc:PuppetSpawnerComponent
+var inv:InteractiveComponent
 
 
 ## Shorthand to get an item component for an entity by ID.
@@ -56,22 +58,28 @@ func _init() -> void:
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	super._ready()
 	if parent_entity:
 			parent_entity.supress_spawning = in_inventory
+	psc = parent_entity.get_component("PuppetSpawnerComponent")
+	inv = parent_entity.get_component("InteractiveComponent")
 
 
 func _entity_ready() -> void:
-	$"../InteractiveComponent".interacted.connect(interact.bind())
-	$"../InteractiveComponent".translation_callback = get_translated_name.bind()
+	inv.interacted.connect(interact.bind())
+	inv.translation_callback = get_translated_name.bind()
 	if item_owner == &"":
-		$"../InteractiveComponent".interact_verb = "TAKE"
+		inv.interact_verb = "TAKE"
 	else:
 		# TODO: Determine using worth and owner relationships
-		$"../InteractiveComponent".interact_verb = "STEAL"
+		inv.interact_verb = "STEAL"
 
 
 func _process(delta):
+	if Engine.is_editor_hint():
+		return
 	if in_inventory:
 		parent_entity.position = SKEntityManager.instance.get_entity(contained_inventory).position
 		parent_entity.world = SKEntityManager.instance.get_entity(contained_inventory).world
@@ -211,4 +219,11 @@ func gather_debug_info() -> String:
 		contained_inventory if in_inventory else "None",
 		item_owner,
 		quest_item
+	]
+
+
+func get_dependencies() -> Array[String]:
+	return [
+		"PuppetSpawnerComponent",
+		"InteractiveComponent"
 	]

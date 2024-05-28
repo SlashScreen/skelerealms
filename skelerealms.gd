@@ -84,6 +84,11 @@ func _enable_plugin() -> void:
 	ProjectSettings.set_setting("skelerealms/covens_path", "res://covens")
 	ProjectSettings.set_setting("skelerealms/doors_path", "res://doors")
 	ProjectSettings.set_setting("skelerealms/networks_path", "res://networks")
+	
+	ProjectSettings.set_setting("skelerealms/entity_archetypes", PackedStringArray([
+		"res://addons/skelerealms/npc_entity_template.tscn",
+		"res://addons/skelerealms/item_entity_template.tscn"
+	]))
 
 
 func _disable_plugin() -> void:
@@ -105,3 +110,5 @@ func _disable_plugin() -> void:
 	ProjectSettings.set_setting("skelerealms/covens_path", null)
 	ProjectSettings.set_setting("skelerealms/doors_path", null)
 	ProjectSettings.set_setting("skelerealms/networks_path", null)
+	
+	ProjectSettings.set_setting("skelerealms/entity_archetypes", null)

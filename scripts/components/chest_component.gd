@@ -1,3 +1,4 @@
+@tool
 class_name ChestComponent
 extends SKEntityComponent
 
@@ -12,6 +13,8 @@ var looted_time:Timestamp
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	reroll()
 	if reset_time_minutes > 0:
 		GameInfo.minute_incremented.connect(_check_should_restore.bind())
@@ -41,5 +44,10 @@ func reroll() -> void:
 	for id:PackedScene in res.items:
 		var e:SKEntity = SKEntityManager.instance.add_entity(id)
 		ic.add_to_inventory(e.name)
-	
 	ic.currencies = res.currencies
+
+
+func get_dependencies() -> Array[String]:
+	return [
+		"InventoryComponent",
+	]
