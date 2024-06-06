@@ -159,11 +159,18 @@ func dialogue_command(command:String, args:Array) -> void:
 		c._try_dialogue_command(command, args)
 
 
+## Get a preview scene tree from this entity, if applicable. This is used for getting previews for [class SKWorldEntity].
 func get_world_entity_preview() -> Node:
 	for c:Node in get_children():
 		if c.has_method(&"get_world_entity_preview"):
 			return c.get_world_entity_preview()
 	return null
+
+
+## Call this when an entity is generated for the first time; eg. a non-unique Spider enemy is spawned.
+func generate() -> void:
+	for c:Node in get_children():
+		c.on_generate()
 
 
 func gather_debug_info() -> Array[String]:

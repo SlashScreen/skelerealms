@@ -36,18 +36,22 @@ func _on_exit_scene():
 	pass
 
 
+## Process a dialogue command given to the entity.
 func _try_dialogue_command(command:String, args:Array) -> void:
 	pass
 
 
+## Gather data to save.
 func save() -> Dictionary:
 	return {}
 
 
+## Load a data blob from the savegame system.
 func load_data(data:Dictionary):
 	pass
 
 
+## Gather and format any relevant info for a debug console or some other debugger.
 func gather_debug_info() -> String:
 	return ""
 
@@ -57,8 +61,14 @@ func printe(text:String) -> void:
 	parent_entity.printe(text)
 
 
+## Get the dependencies for this node, for error warnings. Dependencies are the class name as a string.
 func get_dependencies() -> Array[String]:
 	return []
+
+
+## Do any first-time setup needed for this component. For example, roll a loot table, randomize facial attributes, etc.
+func on_generate() -> void:
+	pass
 
 
 func _get_configuration_warnings() -> PackedStringArray:

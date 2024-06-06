@@ -39,15 +39,16 @@ func get_entity(id: StringName) -> SKEntity:
 	# stage 2: Check in save file
 	var potential_data = SaveSystem.entity_in_save(id)  # chedk the save system
 	if potential_data.some():  # if found:
-		add_entity_from_scene(ResourceLoader.load(disk_assets[id]))  # load default from disk
-		entities[id].load_data(potential_data.unwrap())  # and then load using the data blob we got from the save file
-		(entities[id] as SKEntity).reset_stale_timer()
-		return entities[id]
+		var e:SKEntity = add_entity_from_scene(ResourceLoader.load(disk_assets[id]))  # load default from disk
+		e.load_data(potential_data.unwrap())  # and then load using the data blob we got from the save file
+		e.reset_stale_timer()
+		return e
 	# stage 3: check on disk
 	if disk_assets.has(id):
-		add_entity_from_scene(load(disk_assets[id]))
-		(entities[id] as SKEntity).reset_stale_timer()
-		return entities[id]  # we added the entity in #add_entity
+		var e:SKEntity = add_entity_from_scene(ResourceLoader.load(disk_assets[id]))
+		e.generate() # generate, because the entity has never been seen before
+		e.reset_stale_timer()
+		return e 
 
 	# Other than that, we've failed. Attempt to find the entity in the child count as a failsave, then return none.
 	return get_node_or_null(id as String)
@@ -125,5 +126,6 @@ func add_entity_from_scene(scene:PackedScene) -> SKEntity:
 		while not valid:
 			new_id = SKIDGenerator.generate_id()
 			valid = not entities.has(new_id)
+			e.generate.call_deferred()
 		e.name = new_id
 	return _add_entity_raw(e)

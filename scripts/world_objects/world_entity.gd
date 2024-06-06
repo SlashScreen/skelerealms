@@ -21,6 +21,8 @@ func _ready() -> void:
 
 
 func _show_preview() -> void:
+	if not entity:
+		return
 	var e:SKEntity = entity.instantiate()
 	var n:Node = e.get_world_entity_preview().duplicate()
 	e.queue_free()

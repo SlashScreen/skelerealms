@@ -8,16 +8,20 @@ extends SKEntityComponent
 
 @onready var loot_table:SKLootTable = get_child(0)
 @export_range(0, 100, 1, "or_greater") var reset_time_minutes:int ## How long it takes to refresh this chest, in in-game minutes. 0 will not refresh.
-var looted_time:Timestamp
 @export var owner_id:StringName
+var looted_time:Timestamp
 
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	reroll()
 	if reset_time_minutes > 0:
 		GameInfo.minute_incremented.connect(_check_should_restore.bind())
+	# If none provided, just generate a dummy loot table that will do nothing.
+	if loot_table == null:
+		var nlt := SKLootTable.new()
+		add_child(nlt)
+		loot_table = nlt
 
 
 func _check_should_restore() -> void:
@@ -45,6 +49,10 @@ func reroll() -> void:
 		var e:SKEntity = SKEntityManager.instance.add_entity(id)
 		ic.add_to_inventory(e.name)
 	ic.currencies = res.currencies
+
+
+func on_generate() -> void:
+	reroll()
 
 
 func get_dependencies() -> Array[String]:
