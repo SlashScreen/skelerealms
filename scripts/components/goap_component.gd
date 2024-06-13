@@ -24,6 +24,13 @@ func _init() -> void:
 	add_child(_timer)
 
 
+func _ready() -> void:
+	for a:Node in get_children():
+		if a is GOAPAction:
+			a.entity = parent_entity
+			a.parent_goap = self
+
+
 func _process(delta:float) -> void:
 	if GameInfo.is_loading:
 		return
@@ -109,17 +116,17 @@ func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary
 	# 1) achievable
 	# 2) achievable given prerequisites
 	# 3) has not already had effects satisfied <- may cause issues
-	var achievable_actions = action_pool.filter(func(x): return x.is_achievable() and x.is_achievable_given(parent.states) and not parent.states.has_all(x.effects.keys()))
+	var achievable_actions = action_pool.filter(func(x:GOAPAction): return x.is_achievable() and x.is_achievable_given(parent.states) and not parent.states.has_all(x.get_effects().keys()))
 	achievable_actions.sort_custom(func(a,b): return a.cost < b.cost ) #Sort to resolve actions with least cost first.
 	
 	# due to the recursive nature of this function, we will be building branching paths from all of the actions until a valid path is found.
-	for action in achievable_actions:
+	for action:GOAPAction in achievable_actions:
 		# if we can achieve this action,
 		# duplicate our working set of states.
 		var current_state:Dictionary = parent.states.duplicate(true)
 		
 		# Continue to accumulate effects in state, for passing on to the next node.
-		current_state.merge(action.effects, true) # overwrite to keep the state up to date.
+		current_state.merge(action.get_effects(), true) # overwrite to keep the state up to date.
 			
 		# create a new child planner node, which will have an accumulation of all the previous costs.
 		# this will help us find the shortest path later.
@@ -149,7 +156,7 @@ func _goal_achieved(goal:Dictionary, current_state:Dictionary) -> bool:
 
 
 ## Invoke a callable in a set amount of time.
-func _invoke_in_time(f:Callable, time:float):
+func _invoke_in_time(f:Callable, time:float) -> void:
 	# Invoke immediately if no duration
 	if time == 0:
 		f.call()
@@ -171,7 +178,7 @@ func _clear_timer() -> void:
 
 
 ## Wrap up the running action.
-func _complete_current_action():
+func _complete_current_action() -> void:
 	_current_action.running = false
 	# if post perform fails, rebuild plan
 	if not _current_action.post_perform():

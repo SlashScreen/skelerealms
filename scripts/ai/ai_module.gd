@@ -15,6 +15,11 @@ func link(npc:NPCComponent) -> void:
 	self._npc = npc
 
 
+## The "ready" function if you depend on the NPC's variables.
+func initialize() -> void:
+	pass
+
+
 func _clean_up() -> void:
 	return
 

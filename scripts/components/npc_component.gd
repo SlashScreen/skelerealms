@@ -181,10 +181,7 @@ func _ready():
 		if not module is AIModule:
 			continue
 		modules.append(module)
-	# FIXME: Parent entity can be instantiated called BEFORE this.
 
-
-func _entity_ready() -> void:
 	_nav_component = parent_entity.get_component("NavigatorComponent") as NavigatorComponent
 	# Puppet manager component.
 	_puppet_component = parent_entity.get_component("PuppetSpawnerComponent") as PuppetSpawnerComponent
@@ -216,6 +213,8 @@ func _entity_ready() -> void:
 	_interactive_component.translation_callback = get_translated_name.bind()
 	
 	GameInfo.minute_incremented.connect(_calculate_new_schedule.bind())
+	for a:AIModule in modules:
+		a.initialize()
 
 
 func _on_enter_scene():

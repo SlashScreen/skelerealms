@@ -58,7 +58,10 @@ func gather_debug_info() -> String:
 
 ## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
 func printe(text:String) -> void:
-	parent_entity.printe(text)
+	if parent_entity:
+		parent_entity.printe(text)
+	else:
+		(get_parent() as SKEntity).printe(text)
 
 
 ## Get the dependencies for this node, for error warnings. Dependencies are the class name as a string.

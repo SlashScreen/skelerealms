@@ -16,7 +16,7 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	super._ready()
-	parent_entity.quaternion = rotation
+	parent_entity.rotation = rotation
 
 
 func get_world_entity_preview() -> Node:
