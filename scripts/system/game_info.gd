@@ -3,7 +3,7 @@ extends Node
 
 
 ## What world the player is in.
-@export var world: String = "init"
+@export var world: StringName = &"init"
 
 var is_loading:bool = false
 var paused:bool = false

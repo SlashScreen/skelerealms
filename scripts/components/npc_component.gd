@@ -525,7 +525,6 @@ func determine_opinion_of(id:StringName) -> float:
 	if npc_opinions.has(id) and not npc_opinions[id] == 0:
 		opinions.append(npc_opinions[id])
 		opinion_total += self_modifier # avoid 1 * self_modifier because that's an identity function so we can just do self_modifier
-	print("Considering: ", opinions)
 	# Return weighted average
 	match opinion_mode:
 		0:

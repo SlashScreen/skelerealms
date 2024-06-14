@@ -15,7 +15,6 @@ func _get_state_name() -> String:
 
 func on_ready() -> void:
 	_npc = owner as NPCComponent
-	print(_npc)
 
 
 func update(delta:float) -> void:
