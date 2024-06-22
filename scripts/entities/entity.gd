@@ -6,7 +6,10 @@ extends Node
 
 
 @export var form_id: StringName ## This is what [i]kind[/i] of entity it is. For example, Item "awesome_sword" has a form ID of "iron_sword".
-@export var world: String ## The world this entity is in.
+@export var world: String: ## The world this entity is in.
+	set(val):
+		world = val
+		printe("Setting world to %s" % val)
 @export var position:Vector3 ## The entity's position in the world it lives within.
 @export var rotation: Quaternion = Quaternion.IDENTITY ## The entity's rotation.
 @export var unique:bool = true ## Whether this is the only entity of this setup. Usually used for named NPCs and the like.
@@ -173,17 +176,19 @@ func generate() -> void:
 		c.on_generate()
 
 
-func gather_debug_info() -> Array[String]:
-	var info: Array[String] = []
+func gather_debug_info() -> PackedStringArray:
+	var info := PackedStringArray()
 	info.push_back("""
 [b]SKEntity[/b]
-	SKEntity RefID: %s
+	RefID: %s
+	FormID: %s
 	World: %s
 	Position: x%s y%s z%s
-	Rotation: x%s y%s z%s w%s
+	Rotation: x%s y%s z%s
 	In scene: %s
 """ % [
 	name,
+	form_id,
 	world,
 	position.x,
 	position.y,
@@ -202,6 +207,18 @@ func gather_debug_info() -> Array[String]:
 	return info
 
 
+func _to_string() -> String:
+	return "\n".join(gather_debug_info())
+
+
 ## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
 func printe(text:String) -> void:
-	print_rich("[b]%s[/b]: %s" % [name, text])
+	print_rich("[b]%s[/b]: %s\n%s" % [name, text, _format_stack_trace()])
+
+
+func _format_stack_trace() -> String:
+	var trace:Array = get_stack()
+	var output := "[indent]"
+	for d:Dictionary in trace:
+		output += "%s: %s line %d\n" % [d.function, d.source, d.line]
+	return output

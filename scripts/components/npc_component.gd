@@ -563,7 +563,10 @@ func gather_debug_info() -> String:
 func get_translated_name() -> String:
 	var t = tr(parent_entity.name)
 	if t == parent_entity.name:
-		return tr(parent_entity.form_id)
+		if parent_entity.form_id.is_empty():
+			return parent_entity.name
+		else:
+			return tr(parent_entity.form_id)
 	else:
 		return t
 

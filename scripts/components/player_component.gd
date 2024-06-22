@@ -36,7 +36,8 @@ func set_entity_rotation(q:Quaternion) -> void:
 
 
 func _process(delta):
-	parent_entity.world = GameInfo.world
+	if not parent_entity.world == GameInfo.world:
+		parent_entity.world = GameInfo.world
 	
 	if _set_up:
 		return
