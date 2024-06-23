@@ -112,6 +112,8 @@ func on_generate() -> void:
 	for id:PackedScene in res.items:
 		var e:SKEntity = SKEntityManager.instance.add_entity(id)
 		add_to_inventory(e.name)
+	for id:StringName in res.entities:
+		ic.add_to_inventory(id)
 	currencies = res.currencies
 
 

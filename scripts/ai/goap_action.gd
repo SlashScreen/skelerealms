@@ -2,11 +2,13 @@ class_name GOAPAction
 extends Node
 
 
+## The cost of this action when making a plan.
 var cost:float = 1.0
 ## Whether this objective is actively being worked on
 var running:bool = false
 var parent_goap:GOAPComponent
 var entity:SKEntity
+## The duration of this action.
 var duration: float
 
 

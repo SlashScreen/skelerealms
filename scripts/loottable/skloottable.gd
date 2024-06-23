@@ -23,16 +23,18 @@ func resolve() -> Dictionary:
 
 
 class LootTableResult:
-	extends Object
+	extends RefCounted
 	
 	
 	var items: Array[PackedScene] = []
 	var currencies: Dictionary = {}
+	var entities: Array[StringName] = []
 	
 	
-	func _init(i:Array[PackedScene] = [], c:Dictionary = {}) -> void:
+	func _init(i:Array[PackedScene] = [], c:Dictionary = {}, e:Array[StringName] = []) -> void:
 		items = i
 		currencies = c
+		entities = e
 	
 	
 	func concat(other:LootTableResult) -> void:
@@ -42,10 +44,14 @@ class LootTableResult:
 				currencies[c] += other.currencies[c]
 			else:
 				currencies[c] = other.currencies[c]
+		for id:StringName in other.entities:
+			if not entities.has(id):
+				entities.append(id)
 	
 	
 	func to_dict() -> Dictionary:
 		return {
 			&"items": items,
-			&"currencies": currencies
+			&"currencies": currencies,
+			&"entities": entities,
 		}

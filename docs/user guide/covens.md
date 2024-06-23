@@ -1,0 +1,3 @@
+# Covens
+
+Covens are Skelerealms' "Factions" system. The odd name is because the game I was making Skelerealms for before deciding to open-source it calls factions "covens", and I never bothered to change it. Covens are an optional system that determine some things about NPC behavior, particularly the crime tracking system and how NPCs determine the opinion they have of something. Many of the covens' attributes are self-explanatory and have further documentation in-editor, but I should add that covens are loaded at game start, and so should be placed in the covens folder in the plugin settings - by default `res://covens`. An entity is added to a coven by adding a `CovensComponent` and adding a `CovenRankData` resource. This may get reworked in the future.
