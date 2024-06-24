@@ -43,7 +43,9 @@ Skelerealms is designed in such a way where you can ignore or replace most of th
 
 ## How do I get started? 
 
+
 Visit the [documentation](docs/user%20guide/quick_start.md) for a quick start guide.
+
 
 ## What's the project status?
 
