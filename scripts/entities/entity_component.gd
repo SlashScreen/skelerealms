@@ -56,6 +56,10 @@ func gather_debug_info() -> String:
 	return ""
 
 
+func _to_string() -> String:
+	return gather_febug_info()
+
+
 ## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
 func printe(text:String) -> void:
 	if parent_entity:

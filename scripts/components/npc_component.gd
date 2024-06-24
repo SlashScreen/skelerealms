@@ -21,9 +21,9 @@ extends SKEntityComponent
 @export var affects_stealth_meter:bool = true
 ## Whether you can interact with this NPC.
 @export var interactive:bool = true
+@export_category("AI")
 ## NPC relationships.
 @export var relationships:Array[Relationship]
-@export_category("AI")
 ## Component types that the AI will looks for to determine threats. 
 @export var threatening_enemy_types = [
 	"NPCComponent",
