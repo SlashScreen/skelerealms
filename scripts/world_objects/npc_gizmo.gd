@@ -1,4 +1,3 @@
-class_name WorldNPCGizmo
 extends EditorNode3DGizmoPlugin
 
 

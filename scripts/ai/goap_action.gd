@@ -1,68 +1,52 @@
 class_name GOAPAction
 extends Node
-## Base class for GOAP actions.
 
 
-var prerequisites:Dictionary:
-	get: 
-		return goap_behavior.prerequisites
-var effects:Dictionary:
-	get: 
-		return goap_behavior.effects
-var cost:float:
-	get: 
-		return goap_behavior.cost
-var duration:float:
-	get: 
-		return goap_behavior.duration
+## The cost of this action when making a plan.
+var cost:float = 1.0
 ## Whether this objective is actively being worked on
-var running:bool:
-	get: 
-		return goap_behavior.running
-	set(val):
-		goap_behavior.running = val
-var parent_goap:GOAPComponent:
-	get: 
-		return goap_behavior.parent_goap
-var entity:SKEntity:
-	get: 
-		return goap_behavior.entity
-
-var goap_behavior:GOAPBehavior
-
-
-func _init(behavior:GOAPBehavior = null) -> void:
-	if behavior:
-		goap_behavior = behavior
-		name = behavior.id
+var running:bool = false
+var parent_goap:GOAPComponent
+var entity:SKEntity
+## The duration of this action.
+var duration: float
 
 
 func is_achievable_given(state:Dictionary) -> bool:
-	return goap_behavior.is_achievable_given(state)
+	return state.has_all(get_prerequisites().keys())
 
 
 func is_achievable() -> bool:
-	return goap_behavior.is_achievable()
+	return true
 
 
 func pre_perform() -> bool:
-	return goap_behavior.pre_perform()
+	return true
 
 
 func target_reached() -> bool:
-	return goap_behavior.target_reached()
+	return true
 
 
 func post_perform() -> bool:
-	return goap_behavior.post_perform()
+	return true
 
 
 func is_target_reached(agent:NavigationAgent3D) -> bool:
-	if not agent:
-		return true
-	return goap_behavior.is_target_reached(agent)
+	return agent.is_navigation_finished()
 
 
 func interrupt() -> void:
-	if goap_behavior:
-		goap_behavior.interrupt()
+	return
+
+
+func get_prerequisites() -> Dictionary:
+	return {}
+
+
+func get_effects() -> Dictionary:
+	return {}
+
+
+func get_id() -> StringName:
+	return &""

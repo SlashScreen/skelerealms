@@ -2,7 +2,7 @@ class_name SKLTItem
 extends SKLootTableItem
 
 
-@export var data:ItemData
+@export var data:PackedScene
 
 
 func resolve() -> SKLootTable.LootTableResult:

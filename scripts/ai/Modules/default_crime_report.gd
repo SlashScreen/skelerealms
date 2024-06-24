@@ -1,8 +1,7 @@
-class_name DefaultCrimeReportModule
 extends AIModule
 
 
-func _initialize() -> void:
+func _ready() -> void:
 	CrimeMaster.crime_committed.connect(react.bind())
 
 

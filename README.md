@@ -43,7 +43,9 @@ Skelerealms is designed in such a way where you can ignore or replace most of th
 
 ## How do I get started? 
 
-Visit the wiki for more details.
+
+Visit the [documentation](docs/user%20guide/quick_start.md) for a quick start guide.
+
 
 ## What's the project status?
 
@@ -59,3 +61,4 @@ Please note that the project is in an Alpha state, which means breaking changes 
     - Integrating NetworkGD.
 - 0.7
     - Redesigning the save game system.
+    - Polish cross-scene navigation.

@@ -1,4 +1,3 @@
-class_name DefaultInteractResponseModule # oh god this is getting java like
 extends AIModule
 
 

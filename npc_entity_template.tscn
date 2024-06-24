@@ -1,0 +1,70 @@
+[gd_scene load_steps=18 format=3 uid="uid://dade7o6bx8ja0"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/entities/entity.gd" id="1_1v31h"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/npc_component.gd" id="2_macfp"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/interactive_component.gd" id="3_peb1r"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/puppet_spawner_component.gd" id="4_27chb"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/teleport_component.gd" id="5_1ifxk"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/goap_component.gd" id="6_1ul7y"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/skills_component.gd" id="7_mnx3l"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/attributes_component.gd" id="8_vyu84"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/vitals_component.gd" id="9_efn20"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/spell_target_component.gd" id="10_12uph"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/covens_component.gd" id="11_5alr3"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/damageable_component.gd" id="12_oodnq"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/navigator_component.gd" id="13_yt8pj"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/view_direction_component.gd" id="14_2ecvo"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/equipment_component.gd" id="15_6i1jw"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/inventory_component.gd" id="16_27xpq"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/effects_component.gd" id="17_iewsa"]
+
+[node name="SKEntity" type="Node"]
+script = ExtResource("1_1v31h")
+
+[node name="NPCComponent" type="Node" parent="."]
+script = ExtResource("2_macfp")
+
+[node name="InteractiveComponent" type="Node" parent="."]
+script = ExtResource("3_peb1r")
+
+[node name="PuppetSpawnerComponent" type="Node" parent="."]
+script = ExtResource("4_27chb")
+
+[node name="TeleportComponent" type="Node" parent="."]
+script = ExtResource("5_1ifxk")
+
+[node name="GOAPComponent" type="Node" parent="."]
+script = ExtResource("6_1ul7y")
+
+[node name="SkillsComponent" type="Node" parent="."]
+script = ExtResource("7_mnx3l")
+
+[node name="AttributesComponent" type="Node" parent="."]
+script = ExtResource("8_vyu84")
+
+[node name="VitalsComponent" type="Node" parent="."]
+script = ExtResource("9_efn20")
+
+[node name="SpellTargetComponent" type="Node" parent="."]
+script = ExtResource("10_12uph")
+
+[node name="CovensComponent" type="Node" parent="."]
+script = ExtResource("11_5alr3")
+
+[node name="DamageableComponent" type="Node" parent="."]
+script = ExtResource("12_oodnq")
+
+[node name="NavigatorComponent" type="Node" parent="."]
+script = ExtResource("13_yt8pj")
+
+[node name="ViewDirectionComponent" type="Node" parent="."]
+script = ExtResource("14_2ecvo")
+
+[node name="EquipmentComponent" type="Node" parent="."]
+script = ExtResource("15_6i1jw")
+
+[node name="InventoryComponent" type="Node" parent="."]
+script = ExtResource("16_27xpq")
+
+[node name="EffectsComponent" type="Node" parent="."]
+script = ExtResource("17_iewsa")

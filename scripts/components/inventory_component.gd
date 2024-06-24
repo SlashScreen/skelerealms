@@ -1,9 +1,13 @@
 class_name InventoryComponent
 extends SKEntityComponent
-## Keeps track of an inventory.
 
-## The RefIDs of the items in the inventory.
-var inventory: PackedStringArray
+
+## Keeps track of an inventory and currencies.
+## If you add an [SKLootTable] node underneath, the loot table will be rolled upon generating. See [method SKEntityComponent.on_generate].
+
+
+## The RefIDs of the items in the inventory. Put any unique items in here.
+@export var inventory: PackedStringArray
 ## The amount of cash moneys.
 var currencies = {}
 
@@ -92,8 +96,25 @@ func get_items_that(fn: Callable) -> Array[StringName]:
 	return pt
 
 
-func get_items_of_base(id:String) -> Array[StringName]:
-	return get_items_that(func(x:StringName): return ItemComponent.get_item_component(x).data.id == id)
+func get_items_of_form(id:String) -> Array[StringName]:
+	return get_items_that(func(x:StringName): return ItemComponent.get_item_component(x).parent_entity.form_id == id)
+
+
+func on_generate() -> void:
+	if get_child_count() == 0:
+		return
+	var lt:SKLootTable = get_child(0) as SKLootTable
+	if not lt:
+		return
+	
+	var res: Dictionary = lt.resolve()
+	
+	for id:PackedScene in res.items:
+		var e:SKEntity = SKEntityManager.instance.add_entity(id)
+		add_to_inventory(e.name)
+	for id:StringName in res.entities:
+		ic.add_to_inventory(id)
+	currencies = res.currencies
 
 
 func gather_debug_info() -> String:

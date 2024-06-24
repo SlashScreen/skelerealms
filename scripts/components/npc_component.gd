@@ -1,3 +1,4 @@
+@tool
 class_name NPCComponent
 extends SKEntityComponent
 ## The brain for an NPC. Handles AI behavior, scheduling, combat, dialogue interactions.
@@ -7,14 +8,34 @@ extends SKEntityComponent
 ## @tutorial(In-depth view of opinion system): https://github.com/SlashScreen/skelerealms/wiki/NPCs#opinions-and-how-the-npc-determines-its-opinions
 
 
-const THREATENING_ENTITY_TYPES = [
+@export_category("Flags")
+## Whether this NPC is essential to the story, and them dying would screw things up.
+@export var essential:bool = true
+## Whether this NPC is a ghost.
+@export var ghost:bool
+## Whether this NPC can't take damage.
+@export var invulnerable:bool
+## Whether this NPC is unique.
+@export var unique:bool = true
+## Whether this NPC affects the stealth meter when it sees you.
+@export var affects_stealth_meter:bool = true
+## Whether you can interact with this NPC.
+@export var interactive:bool = true
+@export_category("AI")
+## NPC relationships.
+@export var relationships:Array[Relationship]
+## Component types that the AI will looks for to determine threats. 
+@export var threatening_enemy_types = [
 	"NPCComponent",
 	"PlayerComponent",
 ]
+## Opinions of entities. StringName:float
+@export var npc_opinions = {}
+## Loyalty of this NPC. Determines weights of opinion calculations.
+@export_enum("None", "Covens", "Self") var loyalty:int = 0
+## How the opinion of something is calculated.
+@export_enum("Minimum", "Maximum", "Average") var opinion_mode:int = 0
 
-#* Export
-## Base data for this NPC.
-@export var data: NPCData
 #* Public
 var player_opinion:int
 var visibility_threshold:float = 0.3
@@ -80,8 +101,7 @@ var _perception_memory:Dictionary = {}
 var _combat_target:String
 ## Navigation path.
 var _path:Array[NavPoint]
-## Opinions of entities
-var _opinions = {}
+
 
 
 ## Signal emitted when this NPC enters combat.
@@ -145,46 +165,31 @@ static func get_npc_component(id:StringName) -> NPCComponent:
 #* ### OVERRIDES
 
 
-func _init(d:NPCData) -> void:
-	data = d
+func _init() -> void:
 	name = "NPCComponent"
-	var s:Schedule = Schedule.new()
-	s.name = "Schedule"
-	s.events = data.schedule
-	add_child(s)
-	_schedule = s
-
-	# Set default player opinion
-	_opinions[&"Player"] = d.default_player_opinion
 
 
 func _ready():
+	if Engine.is_editor_hint():
+		return 
+	
 	super._ready()
 	
 	# Initialize all AI Modules
 	var modules:Array[AIModule] = []
-	for group: AIModuleGroup in data.ai_modules:
-		modules.append_array(group.modules)
-	for module:AIModule in modules:
-		var n:AIModule = module.duplicate()
-		n.link(self)
-		n._initialize()
-		ai_modules.append(n)
-	# FIXME: Parent entity can be instantiated called BEFORE this.
+	for module:Node in get_children():
+		if not module is AIModule:
+			continue
+		modules.append(module)
 
-
-func _entity_ready() -> void:
-	_nav_component = $"../NavigatorComponent" as NavigatorComponent
+	_nav_component = parent_entity.get_component("NavigatorComponent") as NavigatorComponent
 	# Puppet manager component.
-	_puppet_component = $"../PuppetSpawnerComponent" as PuppetSpawnerComponent
+	_puppet_component = parent_entity.get_component("PuppetSpawnerComponent") as PuppetSpawnerComponent
 	# Interactive component.
-	_interactive_component = $"../InteractiveComponent" as InteractiveComponent
+	_interactive_component = parent_entity.get_component("InteractiveComponent") as InteractiveComponent
 	# Behavior planner.
-	_goap_component = $"../GOAPComponent" as GOAPComponent
-	($"../InteractiveComponent" as InteractiveComponent).interacted.connect(func(x:String): interacted.emit(x))
-	
-	# goap setup
-	_goap_component.setup(data.goap_behaviors)
+	_goap_component = parent_entity.get_component("GOAPComponent") as GOAPComponent
+	_interactive_component.interacted.connect(func(x:String): interacted.emit(x))
 	
 	# sync nav agent
 	_puppet_component.spawned_puppet.connect(func(x:Node):
@@ -195,25 +200,34 @@ func _entity_ready() -> void:
 		_puppet = null
 		_goap_component._agent = null
 		)
-	
+	# schedule
+	var s := get_node_or_null("Schedule")
+	if s:
+		_schedule = s
+	else:
+		var n := Schedule.new()
+		n.name = "Schedule"
+		add_child(n)
+		_schedule = n
 	# misc setup
-	_interactive_component.interactible = data.interactive # TODO: Or instance override
 	_interactive_component.translation_callback = get_translated_name.bind()
 	
 	GameInfo.minute_incremented.connect(_calculate_new_schedule.bind())
+	for a:AIModule in modules:
+		a.initialize()
 
 
 func _on_enter_scene():
-	_puppet_component.spawn(data.prefab)
 	_sim_level = SimulationLevel.FULL
 
 
 func _on_exit_scene():
-	_puppet_component.despawn()
 	_sim_level = SimulationLevel.GRANULAR
 
 
 func _process(delta):
+	if Engine.is_editor_hint():
+		return
 	#* Section 1: Path following
 	# If in scene, use navmesh agent.
 	if _current_target_point:
@@ -227,6 +241,15 @@ func _process(delta):
 			parent_entity.position = parent_entity.position.move_toward(_current_target_point.position, delta * _walk_speed) # move towards position
 
 	updated.emit(delta)
+
+
+func get_dependencies() -> Array[String]:
+	return [
+		"InteractiveComponent",
+		"PuppetSpawnerComponent",
+		"NavigatorComponent",
+		"GOAPComponent",
+	]
 
 
 func _exit_tree() -> void:
@@ -453,7 +476,7 @@ func _calculate_new_schedule() -> void:
 
 ## Get a relationship this NPC has of [RelationshipType]. Pass in the type's key. Returns the relationship if found, none if none found.
 func get_relationship_of_type(key:String) -> Option:
-	var res = data.relationships.filter(func(r:Relationship): return r.relationship_type and r.relationship_type.relationship_key == key)
+	var res = relationships.filter(func(r:Relationship): return r.relationship_type and r.relationship_type.relationship_key == key)
 	if res.is_empty():
 		return Option.none()
 	return Option.from(res[0])
@@ -461,7 +484,7 @@ func get_relationship_of_type(key:String) -> Option:
 
 ## Gets this NPC's relationship with someone by ref id. Returns the relationship if found, none if none found.
 func get_relationship_with(ref_id:String) -> Option:
-	var res = data.relationships.filter(func(r:Relationship): return r.relationship_type and r.other_person == ref_id)
+	var res = relationships.filter(func(r:Relationship): return r.relationship_type and r.other_person == ref_id)
 	if res.is_empty():
 		return Option.none()
 	return Option.from(res[0])
@@ -471,7 +494,7 @@ func get_relationship_with(ref_id:String) -> Option:
 func determine_opinion_of(id:StringName) -> float:
 	var e:SKEntity = SKEntityManager.instance.get_entity(id)
 
-	if not THREATENING_ENTITY_TYPES.any(func(x:String): return not e.get_component(x) == null): # if it doesn't have any components that are marked as threatening, return neutral.
+	if not threatening_enemy_types.any(func(x:String): return not e.get_component(x) == null): # if it doesn't have any components that are marked as threatening, return neutral.
 		return 0
 
 	var e_cc = e.get_component("CovensComponent")
@@ -479,32 +502,41 @@ func determine_opinion_of(id:StringName) -> float:
 	var opinion_total = 0
 
 	# calculate modifiers
-	var covens_modifier = 2 if data.loyalty == 1 else 1 # if values covens, increase modifier
-	var self_modifier = 2 if data.loyalty == 2 else 1 # ditto
+	var covens_modifier = 2 if loyalty == 1 else 1 # if values covens, increase modifier
+	var self_modifier = 2 if loyalty == 2 else 1 # ditto
 
 	# if has other covens, compare against ours
 	if e_cc:
 		var covens = parent_entity.get_component("CovensComponent").covens
-		var coven_opinions_unfiltered = []
+		var covennpc_opinions_unfiltered = []
 		var e_covens_component = e_cc
 
 		# get all opinions
 		for coven in covens:
 			var c = CovenSystem.get_coven(coven)
 			# get the other coven opinions
-			coven_opinions_unfiltered.append_array(c.get_coven_opinions(e_covens_component.covens.keys())) # FIXME: Get this coven opinions on other
+			covennpc_opinions_unfiltered.append_array(c.get_covennpc_opinions(e_covens_component.covens.keys())) # FIXME: Get this coven opinions on other
 			# take crimes into account
 			opinions.append(CrimeMaster.max_crime_severity(id, coven) * -10) # sing opinion by -10 for each severity point
 
-		opinions.append_array(coven_opinions_unfiltered.filter(func(x:int): return not x == 0)) # filter out zeroes
+		opinions.append_array(covennpc_opinions_unfiltered.filter(func(x:int): return not x == 0)) # filter out zeroes
 		opinion_total += opinions.size() * covens_modifier # calculate total
 	# if has an opinion of the player, take into account
-	if _opinions.has(id) and not _opinions[id] == 0:
-		opinions.append(_opinions[id])
+	if npc_opinions.has(id) and not npc_opinions[id] == 0:
+		opinions.append(npc_opinions[id])
 		opinion_total += self_modifier # avoid 1 * self_modifier because that's an identity function so we can just do self_modifier
-	
 	# Return weighted average
-	return opinions.reduce(func(sum, next): return sum + next, 0) / (1 if opinion_total == 0 else opinion_total)
+	match opinion_mode:
+		0:
+			var o:Variant = opinions.min()
+			return 0.0 if o == null else o
+		1:
+			var o:Variant = opinions.max()
+			return 0.0 if o == null else o
+		2:
+			return opinions.reduce(func(sum, next): return sum + next, 0) / (1 if opinion_total == 0 else opinion_total)
+		_:
+			return 0.0
 
 
 func gather_debug_info() -> String:
@@ -531,7 +563,10 @@ func gather_debug_info() -> String:
 func get_translated_name() -> String:
 	var t = tr(parent_entity.name)
 	if t == parent_entity.name:
-		return tr(data.id)
+		if parent_entity.form_id.is_empty():
+			return parent_entity.name
+		else:
+			return tr(parent_entity.form_id)
 	else:
 		return t
 

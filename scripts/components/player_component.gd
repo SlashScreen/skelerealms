@@ -32,11 +32,12 @@ func set_entity_position(pos:Vector3):
 
 
 func set_entity_rotation(q:Quaternion) -> void:
-	parent_entity.rotation = q
+	parent_entity.quaternion = q
 
 
 func _process(delta):
-	parent_entity.world = GameInfo.world
+	if not parent_entity.world == GameInfo.world:
+		parent_entity.world = GameInfo.world
 	
 	if _set_up:
 		return

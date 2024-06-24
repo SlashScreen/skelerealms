@@ -1,4 +1,3 @@
-class_name DefaultThreatResponseModule # oh god this is getting java like
 extends AIModule
 
 
@@ -46,15 +45,13 @@ var vigilant_thread:Thread
 var pull_out_of_thread = false
 
 
-func _initialize() -> void:
+func _ready() -> void:
 	_npc.perception_transition.connect(_handle_perception_info.bind())
 	_npc.hit_by.connect(func(who): _aggress(SKEntityManager.instance.get_entity(who)))
 
 
 func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionFSM_Machine) -> void:
 	var opinion = _npc.determine_opinion_of(what)
-	_npc.printe("handling perception info on %s" % what)
-	_npc.printe("Opinion on %s: %s" % [what, opinion])
 	var below_attack_threshold = (opinion <= attack_threshold) or aggression == 3 # will be below attack threshold by default if frenzied
 
 	match transition:
@@ -188,7 +185,6 @@ func _warn(e:SKEntity) -> void:
 func _enter_normal_state() -> void:
 	# undo vigilant stance
 	print("exit vigilant stance")
-	return
 
 
 func _enter_vigilant_stance() -> void:

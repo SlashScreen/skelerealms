@@ -1,3 +1,4 @@
+@tool
 class_name ChestComponent
 extends SKEntityComponent
 
@@ -5,22 +6,22 @@ extends SKEntityComponent
 ## Optionally refreshing inventories.
 
 
-@export var loot_table:SKLootTable
+@onready var loot_table:SKLootTable = get_child(0)
 @export_range(0, 100, 1, "or_greater") var reset_time_minutes:int ## How long it takes to refresh this chest, in in-game minutes. 0 will not refresh.
+@export var owner_id:StringName
 var looted_time:Timestamp
-var owner_id:StringName
-
-
-func _init(oid:StringName = &"", lt:SKLootTable = null, rt:int = -1) -> void:
-	owner_id = oid
-	loot_table = lt
-	reset_time_minutes = rt
 
 
 func _ready() -> void:
-	reroll()
+	if Engine.is_editor_hint():
+		return
 	if reset_time_minutes > 0:
 		GameInfo.minute_incremented.connect(_check_should_restore.bind())
+	# If none provided, just generate a dummy loot table that will do nothing.
+	if loot_table == null:
+		var nlt := SKLootTable.new()
+		add_child(nlt)
+		loot_table = nlt
 
 
 func _check_should_restore() -> void:
@@ -44,14 +45,19 @@ func reroll() -> void:
 	var ic:InventoryComponent = parent_entity.get_component("InventoryComponent")
 	var res: Dictionary = loot_table.resolve()
 	
-	for id:ItemData in res.items:
-		var item: ItemInstance = ItemInstance.new()
-		item.item_data = id
-		item.contained_inventory = String(parent_entity.name)
-		item.item_owner = owner_id
-		item.ref_id = preload("res://addons/skelerealms/scripts/vendor/uuid.gd").v4()
-		
-		var e:SKEntity = SKEntityManager.instance.add_entity(item)
+	for id:PackedScene in res.items:
+		var e:SKEntity = SKEntityManager.instance.add_entity(id)
 		ic.add_to_inventory(e.name)
-	
+	for id:StringName in res.entities:
+		ic.add_to_inventory(id)
 	ic.currencies = res.currencies
+
+
+func on_generate() -> void:
+	reroll()
+
+
+func get_dependencies() -> Array[String]:
+	return [
+		"InventoryComponent",
+	]

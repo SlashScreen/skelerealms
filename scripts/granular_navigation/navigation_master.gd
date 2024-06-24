@@ -11,12 +11,14 @@ extends Node
 ## See project setting [code]skelerelams/granular_navigation_sim_distance[/code] to adjust how far away the actors have to be before they stop using this system and just stay idle.
 
 
+static var instance:NavMaster
 ## Dictionary of references to the roots of KD trees.
 var worlds:Dictionary = {}
 
 
 func _ready() -> void:
 	GameInfo.game_started.connect(load_all_networks.bind())
+	instance = self
 
 
 func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:

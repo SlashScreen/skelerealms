@@ -2,27 +2,29 @@
 extends EditorPlugin
 
 
-var item_gizmo_plugin = WorldItemGizmo.new()
-var npc_gizmo_plugin = WorldNPCGizmo.new()
-var door_jump_plugin = DoorJumpPlugin.new(self)
-var world_thing_plugin = WorldObjectPlugin.new()
-var point_gizmo = PointGizmo.new()
-var tool_editor = SKToolPlugin.new()
-var prototype_editor = PrototypePlugin.new()
+const DoorJumpPlugin = preload("res://addons/skelerealms/tools/door_connect.gd")
+const ConversionPlugin = preload("res://addons/skelerealms/tools/resource_conversion_plugin.gd")
+const WorldEntityPlugin = preload("res://addons/skelerealms/tools/world_entity_plugin.gd")
+const PointGizmo = preload("res://addons/skelerealms/tools/point_gizmo.gd")
+const ScheduleEditorPlugin = preload("res://addons/skelerealms/tools/schedule_editor_plugin.gd")
 
-var fd:EditorFileDialog
-var p:Prototype
+var door_jump_plugin := DoorJumpPlugin.new(self)
+var conversion := ConversionPlugin.new()
+var we_plugin := WorldEntityPlugin.new()
+var point_gizmo := PointGizmo.new()
+var se_plugin := ScheduleEditorPlugin.new()
+
+var se_w: Window
+var se: Control
 
 
 func _enter_tree():
 	# gizmos
-	add_node_3d_gizmo_plugin(item_gizmo_plugin)
-	add_node_3d_gizmo_plugin(npc_gizmo_plugin)
 	add_node_3d_gizmo_plugin(point_gizmo)
 	add_inspector_plugin(door_jump_plugin)
-	add_inspector_plugin(world_thing_plugin)
-	add_inspector_plugin(tool_editor)
-	add_inspector_plugin(prototype_editor)
+	add_inspector_plugin(conversion)
+	add_inspector_plugin(we_plugin)
+	add_inspector_plugin(se_plugin)
 	# autoload
 	add_autoload_singleton("SkeleRealmsGlobal", "res://addons/skelerealms/scripts/sk_global.gd")
 	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/covens/coven_system.gd")
@@ -31,25 +33,26 @@ func _enter_tree():
 	add_autoload_singleton("CrimeMaster", "res://addons/skelerealms/scripts/crime/crime_master.gd")
 	add_autoload_singleton("DialogueHooks", "res://addons/skelerealms/scripts/system/dialogue_hooks.gd")
 	add_autoload_singleton("DeviceNetwork", "res://addons/skelerealms/scripts/misc/device_network.gd")
-	# else
-	fd = EditorFileDialog.new()
-	fd.file_mode = EditorFileDialog.FILE_MODE_SAVE_FILE
-	fd.filters = PackedStringArray(["*.tres", "*.res"])
-	# TODO: Modes
-	EditorInterface.get_base_control().add_child(fd)
-	prototype_editor.inspect.connect(instantiate_prototype.bind())
-	fd.file_selected.connect(finish_instantiate.bind())
+	
+	se_w = Window.new()
+	se = ScheduleEditorPlugin.ScheduleEditor.instantiate()
+	se_w.add_child(se)
+	EditorInterface.get_base_control().add_child(se_w)
+	se_w.hide()
+	
+	se_plugin.request_open.connect(func(events:Array[ScheduleEvent]) -> void:
+		se.edit(events)
+		se_w.popup_centered(Vector2i(1920, 1080))
+		)
 
 
 func _exit_tree():
 	# gizmos
-	remove_node_3d_gizmo_plugin(item_gizmo_plugin)
-	remove_node_3d_gizmo_plugin(npc_gizmo_plugin)
 	remove_node_3d_gizmo_plugin(point_gizmo)
 	remove_inspector_plugin(door_jump_plugin)
-	remove_inspector_plugin(world_thing_plugin)
-	remove_inspector_plugin(tool_editor)
-	remove_import_plugin(prototype_editor)
+	remove_inspector_plugin(conversion)
+	remove_inspector_plugin(we_plugin)
+	remove_inspector_plugin(se_plugin)
 	# autoload
 	remove_autoload_singleton("SkeleRealmsGlobal")
 	remove_autoload_singleton("CovenSystem")
@@ -58,6 +61,8 @@ func _exit_tree():
 	remove_autoload_singleton("CrimeMaster")
 	remove_autoload_singleton("DialogueHooks")
 	remove_autoload_singleton("DeviceNetwork")
+	
+	se_w.queue_free()
 
 
 func _enable_plugin() -> void:
@@ -79,6 +84,11 @@ func _enable_plugin() -> void:
 	ProjectSettings.set_setting("skelerealms/covens_path", "res://covens")
 	ProjectSettings.set_setting("skelerealms/doors_path", "res://doors")
 	ProjectSettings.set_setting("skelerealms/networks_path", "res://networks")
+	
+	ProjectSettings.set_setting("skelerealms/entity_archetypes", PackedStringArray([
+		"res://addons/skelerealms/npc_entity_template.tscn",
+		"res://addons/skelerealms/item_entity_template.tscn"
+	]))
 
 
 func _disable_plugin() -> void:
@@ -100,16 +110,5 @@ func _disable_plugin() -> void:
 	ProjectSettings.set_setting("skelerealms/covens_path", null)
 	ProjectSettings.set_setting("skelerealms/doors_path", null)
 	ProjectSettings.set_setting("skelerealms/networks_path", null)
-
-
-func instantiate_prototype(object:Prototype) -> void:
-	fd.popup_centered()
-	p = object
-
-
-func finish_instantiate(path:String) -> void:
-	var slashes:Array = path.split("/")
-	var dots = slashes[slashes.size() - 1].split(".")
-	var n:String = dots[0]
-	# Could do a regex but whatever
-	p.instantiate_prototype(path, n)
+	
+	ProjectSettings.set_setting("skelerealms/entity_archetypes", null)

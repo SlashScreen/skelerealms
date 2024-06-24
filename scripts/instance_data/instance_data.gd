@@ -1,3 +1,4 @@
+@tool
 class_name InstanceData
 extends Resource
 ## The base class for an instance of an NPC, item, Etc.
@@ -19,3 +20,18 @@ func get_archetype_components() -> Array[SKEntityComponent]:
 ## I'm too tired to explain what this does, but it will return [member override_custom_script] if it isnt null, else it will return the original script.
 func _try_override_script(sc:Script) -> Script:
 	return sc if override_custom_script == null else override_custom_script
+
+
+func convert_to_scene() -> PackedScene:
+	return null
+
+
+static func _transfer_properties(from:Object, to:Object) -> void:
+	var from_p:Array[Dictionary] = from.get_property_list()
+	var to_p:Array[Dictionary] = to.get_property_list()
+	
+	for d:Dictionary in from_p:
+		if d.name == &"script":
+			continue
+		if to_p.any(func(x:Dictionary) -> bool: return d.name == x.name):
+			to.set(d.name, from.get(d.name))

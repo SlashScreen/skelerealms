@@ -1,4 +1,5 @@
 class_name NavPoint
+extends RefCounted
 ## Point in a world.
 
 

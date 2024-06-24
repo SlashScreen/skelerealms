@@ -3,8 +3,6 @@ extends Node
 ## It also has some important utility functions for working with entities.
 
 
-## Reference to the [QuestEngine].
-var quest_engine:QuestEngine
 ## World states for the GOAP system.
 var world_states:Dictionary
 ## Status effects registered in the game.

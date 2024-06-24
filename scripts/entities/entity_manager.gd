@@ -17,7 +17,7 @@ func _init() -> void:
 
 func _ready():
 	regex = RegEx.new()
-	regex.compile("([^\\/\n\\r]+)\\.t?res")
+	regex.compile("([^\\/\n\\r]+)\\.t?scn")
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
 	SkeleRealmsGlobal.entity_manager_loaded.emit()
 	config.compile()
@@ -39,15 +39,16 @@ func get_entity(id: StringName) -> SKEntity:
 	# stage 2: Check in save file
 	var potential_data = SaveSystem.entity_in_save(id)  # chedk the save system
 	if potential_data.some():  # if found:
-		add_entity(ResourceLoader.load(disk_assets[id], "InstanceData"))  # load default from disk
-		entities[id].load_data(potential_data.unwrap())  # and then load using the data blob we got from the save file
-		(entities[id] as SKEntity).reset_stale_timer()
-		return entities[id]
+		var e:SKEntity = add_entity_from_scene(ResourceLoader.load(disk_assets[id]))  # load default from disk
+		e.load_data(potential_data.unwrap())  # and then load using the data blob we got from the save file
+		e.reset_stale_timer()
+		return e
 	# stage 3: check on disk
 	if disk_assets.has(id):
-		add_entity(load(disk_assets[id]))
-		(entities[id] as SKEntity).reset_stale_timer()
-		return entities[id]  # we added the entity in #add_entity
+		var e:SKEntity = add_entity_from_scene(ResourceLoader.load(disk_assets[id]))
+		e.generate() # generate, because the entity has never been seen before
+		e.reset_stale_timer()
+		return e 
 
 	# Other than that, we've failed. Attempt to find the entity in the child count as a failsave, then return none.
 	return get_node_or_null(id as String)
@@ -81,13 +82,13 @@ func _cache_entities(path: String):
 		print("An error occurred when trying to access the path.")
 
 
-## add a new entity.
-func add_entity(res: InstanceData) -> SKEntity:
-	var new_entity = SKEntity.new(res)  # make a new entity
+# add a new entity.
+#func add_entity(res: InstanceData) -> SKEntity:
+	#var new_entity = SKEntity.new(res)  # make a new entity
 	# add new entity to self, and the dictionary
-	entities[res.ref_id] = new_entity
-	add_child(new_entity)
-	return new_entity
+	#entities[res.ref_id] = new_entity
+	#add_child(new_entity)
+	#return new_entity
 
 
 func _add_entity_raw(e: SKEntity) -> SKEntity:
@@ -112,3 +113,19 @@ func remove_entity(rid: StringName) -> void:
 	if entities.has(rid):
 		entities[rid].queue_free()
 		entities.erase(rid)
+
+
+func add_entity_from_scene(scene:PackedScene) -> SKEntity:
+	var e:SKEntity = scene.instantiate()
+	if not e:
+		push_error("Scene at path %s isn't a valid entity." % scene.resource_path)
+	
+	if not e.unique:
+		var valid: bool = false 
+		var new_id: String = ""
+		while not valid:
+			new_id = SKIDGenerator.generate_id()
+			valid = not entities.has(new_id)
+			e.generate.call_deferred()
+		e.name = new_id
+	return _add_entity_raw(e)

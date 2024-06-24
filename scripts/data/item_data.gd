@@ -22,19 +22,3 @@ extends RefData
 @export var stackable:bool
 ## Tags this item has.
 @export var tags:Array[StringName] = []
-## The components that describe this item.
-@export var components:Array[ItemDataComponent]
-
-
-## Whether it has a component type. [code]c[/code] is the name of the component type, like "HoldableDataComponent".
-func has_component(c:String) -> bool:
-	return components.any(func(x:ItemDataComponent): return x.get_type() == c)
-
-
-## Gets the first component of a type. [code]c[/code] is the name of the component type, like "HoldableDataComponent".
-func get_component(c:String) -> ItemDataComponent:
-	var valid_components = components.filter(func(x:ItemDataComponent): return x.get_type() == c)
-	if valid_components.is_empty():
-		return null
-	else:
-		return valid_components[0]

@@ -1,3 +1,4 @@
+@tool
 class_name NPCInstance
 extends InstanceData
 ## An instance of [NPCData] in the world
@@ -11,7 +12,7 @@ extends InstanceData
 func get_archetype_components() -> Array[SKEntityComponent]:
 	var components:Array[SKEntityComponent] = []
 	# Add new components
-	components.append(NPCComponent.new(npc_data))
+	components.append(NPCComponent.new())
 	components.append(InteractiveComponent.new())
 	components.append(PuppetSpawnerComponent.new())
 	components.append(TeleportComponent.new())
@@ -30,3 +31,25 @@ func get_archetype_components() -> Array[SKEntityComponent]:
 		components.append(ScriptComponent.new(npc_data.custom_script))
 	
 	return components
+
+
+func convert_to_scene() -> PackedScene:
+	var ps := PackedScene.new()
+	
+	var e := SKEntity.new()
+	e.name = ref_id
+	InstanceData._transfer_properties(self, e)
+	
+	var components := get_archetype_components()
+	for c:SKEntityComponent in components:
+		InstanceData._transfer_properties(npc_data, c)
+		e.add_child(c)
+		c.owner = e
+		if c is PuppetSpawnerComponent:
+			var p := npc_data.prefab.instantiate()
+			c.add_child(p)
+			p.owner = e
+	
+	ps.pack(e)
+	e.queue_free()
+	return ps

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bymqtmaatptgp"]
+
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/entities/entity.gd" id="1_rnn1t"]
+[ext_resource type="Script" path="res://addons/skelerealms/scripts/components/marker_component.gd" id="2_vcn76"]
+
+[node name="SKEntity" type="Node"]
+script = ExtResource("1_rnn1t")
+
+[node name="MarkerComponent" type="Node" parent="."]
+script = ExtResource("2_vcn76")

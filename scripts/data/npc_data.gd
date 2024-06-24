@@ -13,7 +13,9 @@ class_name NPCData
 ## What the default opinion of the player is.
 @export var default_player_opinion:int = 0
 ## Loyalty of this NPC. Determines weights of opinion calculations.
-@export_enum("None", "Covens", "Self") var loyalty = 0
+@export_enum("None", "Covens", "Self") var loyalty:int = 0
+## How the opinion of something is calculated.
+@export_enum("Minimum", "Maximum", "Average") var opinion_mode:int = 0
 
 @export_category("Flags")
 ## Whether this NPC is essential to the story, and them dying would screw things up.
@@ -30,11 +32,3 @@ class_name NPCData
 @export var interactive:bool = true
 ## NPC relationships.
 @export var relationships:Array[Relationship]
-
-@export_category("AI")
-## AI Modules.
-@export var ai_modules:Array[AIModuleGroup]
-## GOAP Actions.
-@export var goap_behaviors:Array[GOAPBehaviorGroup]
-## The loot table of this kind of NPC.
-@export var loot_table:SKLootTable

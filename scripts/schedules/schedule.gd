@@ -1,12 +1,14 @@
 class_name Schedule
 extends Node
+
+
 ## Keeps track of the schedule.
 ## Schedules are roughly analagous to Creation Kit's "AI packages", although limited to time slots.
 ## It is made up of [ScheduleEvent]s.
 ## To adjust NPC behavior under circumastances outside of keeping a schedule, see [GOAPComponent] and [ScheduleCondition].
 
 
-@export var events:Array[ScheduleEvent]
+@onready var events:Array[ScheduleEvent] = get_children()
 
 
 func find_schedule_activity_for_current_time() -> Option:

@@ -1,23 +1,24 @@
+@tool
 class_name SKEntity
 extends Node
 ## An entity for the pseudo-ecs. Contains [SKEntityComponent]s.
 ## These allow constructs such as NPCs and Items to persist even when not in the scene.
 
 
-## The world this entity is in.
-@export var world: String
-## Position within the world it's in.
-@export var position:Vector3
-## Rotation of this Enitiy.
-@export var rotation:Quaternion = Quaternion.IDENTITY
+@export var form_id: StringName ## This is what [i]kind[/i] of entity it is. For example, Item "awesome_sword" has a form ID of "iron_sword".
+@export var world: String: ## The world this entity is in.
+	set(val):
+		world = val
+		printe("Setting world to %s" % val)
+@export var position:Vector3 ## The entity's position in the world it lives within.
+@export var rotation: Quaternion = Quaternion.IDENTITY ## The entity's rotation.
+@export var unique:bool = true ## Whether this is the only entity of this setup. Usually used for named NPCs and the like.
 ## An internal timer of how long this entity has gone without being modified or referenced.
 ## One it's beyond a certain point, the [SKEntityManager] will mark it for cleanup after a save.
 var stale_timer:float
 ## This is used to prevent items from spawning, even if they are supposed to be in scene.
 ## For example, items in invcentories should not spawn despite technically being "in the scene".
 var supress_spawning:bool
-## FLag telling if this was created dynamically (eg. [class SpawnPoint]).
-var generated:bool
 ## Whether this entity is in the scene or not.
 var in_scene: bool:
 	get:
@@ -39,25 +40,7 @@ signal entered_scene
 signal instantiated
 
 
-func _init(res:InstanceData = null) -> void:
-	if not res:
-		return
-
-	var new_nodes = res.get_archetype_components() # Get the entity components
-	for c in get_children(): # if this entity already exists, get rid of the components. FIXME: This is inefficient.
-		c.queue_free()
-
-	name = res.ref_id # set its name to the instance refID
-	world = res.world
-	position = res.position
-	if not res.get("rotation") == null:
-		rotation = res.rotation
-
-	for n in new_nodes: # add all components to entity
-		add_child(n)
-		n.owner = self
-		(n as SKEntityComponent).parent_entity = self
-
+func _init() -> void:
 	# call entity ready
 	instantiated.emit()
 	for c in get_children():
@@ -65,11 +48,23 @@ func _init(res:InstanceData = null) -> void:
 
 
 func _ready():
+	if Engine.is_editor_hint():
+		return
 	add_to_group("savegame_entity")
+
+
+func _enter_tree() -> void:
+	if Engine.is_editor_hint():
+		print(scene_file_path)
+		return
+	if not get_parent() is SKEntityManager:
+		queue_free()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if Engine.is_editor_hint():
+		return
 	_should_be_in_scene()
 	# If we aren't in the scene, start counting up. Otherwise, we are still in the scene with the player and shouldn't depsawn.
 	if not in_scene:
@@ -126,7 +121,7 @@ func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If no
 		"entity_data": {
 			"world" = world,
 			"position" = position,
-			"generated" = generated
+			"unique" = unique
 		}
 	}
 	for c in get_children().filter(func(x:SKEntityComponent): return x.dirty): # filter to get dirty acomponents
@@ -137,7 +132,7 @@ func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If no
 func load_data(data:Dictionary) -> void:
 	world = data["entity_data"]["world"]
 	position = JSON.parse_string(data["entity_data"]["position"])
-	generated = JSON.parse_string(data["entity_data"]["generated"])
+	unique = JSON.parse_string(data["entity_data"]["unique"])
 
 	# loop through all saved components and call load
 	for d in data["components"]:
@@ -149,7 +144,7 @@ func reset_data() -> void:
 	# TODO: Figure out how to reset entities that are generated at runtime. oh boy that's gonna be fun.
 	var i = SKEntityManager.instance.get_disk_data_for_entity(name)
 	if i:
-		_init(i)
+		_init()
 
 
 func reset_stale_timer() -> void:
@@ -167,17 +162,33 @@ func dialogue_command(command:String, args:Array) -> void:
 		c._try_dialogue_command(command, args)
 
 
-func gather_debug_info() -> Array[String]:
-	var info: Array[String] = []
+## Get a preview scene tree from this entity, if applicable. This is used for getting previews for [class SKWorldEntity].
+func get_world_entity_preview() -> Node:
+	for c:Node in get_children():
+		if c.has_method(&"get_world_entity_preview"):
+			return c.get_world_entity_preview()
+	return null
+
+
+## Call this when an entity is generated for the first time; eg. a non-unique Spider enemy is spawned.
+func generate() -> void:
+	for c:Node in get_children():
+		c.on_generate()
+
+
+func gather_debug_info() -> PackedStringArray:
+	var info := PackedStringArray()
 	info.push_back("""
 [b]SKEntity[/b]
-	SKEntity RefID: %s
+	RefID: %s
+	FormID: %s
 	World: %s
 	Position: x%s y%s z%s
-	Rotation: x%s y%s z%s w%s
+	Rotation: x%s y%s z%s
 	In scene: %s
 """ % [
 	name,
+	form_id,
 	world,
 	position.x,
 	position.y,
@@ -185,7 +196,6 @@ func gather_debug_info() -> Array[String]:
 	rotation.x,
 	rotation.y,
 	rotation.z,
-	rotation.w,
 	in_scene
 ])
 	
@@ -197,6 +207,18 @@ func gather_debug_info() -> Array[String]:
 	return info
 
 
+func _to_string() -> String:
+	return "\n".join(gather_debug_info())
+
+
 ## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
 func printe(text:String) -> void:
-	print_rich("[b]%s[/b]: %s" % [name, text])
+	print_rich("[b]%s[/b]: %s\n%s" % [name, text, _format_stack_trace()])
+
+
+func _format_stack_trace() -> String:
+	var trace:Array = get_stack()
+	var output := "[indent]"
+	for d:Dictionary in trace:
+		output += "%s: %s line %d\n" % [d.function, d.source, d.line]
+	return output

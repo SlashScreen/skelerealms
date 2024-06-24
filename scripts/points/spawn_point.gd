@@ -2,7 +2,6 @@ class_name NPCSpawnPoint
 extends Node3D
 
 
-const UUID = preload("../vendor/uuid.gd")
 ## This is used for one-shot spawners; the unique ID of the spawner will be stored in here if it
 ## spawned its NPC. This is a hash set.
 static var spawn_tracker: Dictionary # TODO: Save this
@@ -29,20 +28,13 @@ func _roll() -> void:
 
 func spawn() -> void:
 	# set up entity
-	var t = resolve_templates()
+	var t := resolve_templates()
 	if t == null:
 		return
 	
-	var npci = NPCInstance.new()
-	npci.npc_data = t
-	npci.world = GameInfo.world
-	npci.position = position
-	var uuid:String = UUID.v4()
-	npci.ref_id = uuid
-	
 	# add that shiz
 	spawn_tracker[generate_id()] = true
-	var e = SKEntityManager.instance.add_entity(npci)
+	var e := SKEntityManager.instance.add_entity_from_scene(t)
 	e.rotation = quaternion
 	e.generated = true
 	if despawn_when_exit_scene:
@@ -65,7 +57,7 @@ func generate_id() -> int:
 
 
 ## Roll and select a template
-func resolve_templates() -> NPCData:
+func resolve_templates() -> PackedScene:
 	if templates.size() == 0:
 		push_warning("No templates to spawn from.")
 		return null
