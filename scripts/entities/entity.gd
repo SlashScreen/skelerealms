@@ -6,10 +6,7 @@ extends Node
 
 
 @export var form_id: StringName ## This is what [i]kind[/i] of entity it is. For example, Item "awesome_sword" has a form ID of "iron_sword".
-@export var world: String: ## The world this entity is in.
-	set(val):
-		world = val
-		printe("Setting world to %s" % val)
+@export var world: String ## The world this entity is in.
 @export var position:Vector3 ## The entity's position in the world it lives within.
 @export var rotation: Quaternion = Quaternion.IDENTITY ## The entity's rotation.
 @export var unique:bool = true ## Whether this is the only entity of this setup. Usually used for named NPCs and the like.
