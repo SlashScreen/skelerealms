@@ -54,13 +54,6 @@ func get_entity(id: StringName) -> SKEntity:
 	return get_node_or_null(id as String)
 
 
-func get_disk_data_for_entity(id: StringName) -> InstanceData:
-	if disk_assets.has(id):
-		return load(disk_assets[id])
-	else:
-		return null
-
-
 func _cache_entities(path: String):
 	var dir = DirAccess.open(path)
 	if dir:

@@ -18,13 +18,6 @@ signal added_money(amount:int)
 signal removed_money(amount:int)
 
 
-func _init(pre_inventory:Array[ItemInstance] = []) -> void:
-	name = "InventoryComponent"
-	# fill out inventory 
-	for i in pre_inventory:
-		add_to_inventory.bind(i.ref_id).call_deferred() # TODO: Make item inventory contained?
-
-
 func _ready() -> void:
 	added_to_inventory.connect(func(x): inventory_changed.emit())
 	removed_from_inventory.connect(func(x): inventory_changed.emit())
@@ -113,7 +106,7 @@ func on_generate() -> void:
 		var e:SKEntity = SKEntityManager.instance.add_entity(id)
 		add_to_inventory(e.name)
 	for id:StringName in res.entities:
-		ic.add_to_inventory(id)
+		add_to_inventory(id)
 	currencies = res.currencies
 
 

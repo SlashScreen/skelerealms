@@ -69,7 +69,7 @@ func _on_line_edit_text_submitted(new_text: String) -> void:
 
 
 func _on_button_pressed() -> void:
-	EditorInterface.edit_resource(editing)
+	return #EditorInterface.edit_resource(editing)
 
 
 func _on_remove_pressed() -> void:

@@ -29,8 +29,6 @@ func _redraw(gizmo: EditorNode3DGizmo) -> void:
 
 func get_mat_for_node(n:Node) -> String:
 	match n.get_script():
-		WorldMarker:
-			return "wm"
 		NPCSpawnPoint:
 			return "npc"
 		IdlePoint:

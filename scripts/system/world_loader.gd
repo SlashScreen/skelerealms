@@ -72,7 +72,6 @@ func _finish_load(w:PackedScene) -> void:
 	world_loading_ready.emit()
 	GameInfo.is_loading = false
 	print("World instantiated.")
-	QuestEngine.instance.register_quest_event("enter_location", {"filter":GameInfo.world})
 	GameInfo.game_loaded.emit()
 
 

@@ -20,12 +20,6 @@ func on_damage(info:DamageInfo) -> void:
 	(parent_entity.get_component("VitalsComponent") as VitalsComponent).change_health(-info.damage_effects[&"blunt"])
 
 
-func _entity_ready() -> void:
-	var ic:InventoryComponent = parent_entity.get_component("InventoryComponent")
-	ic.added_to_inventory.connect(func(id): QuestEngine.instance.register_quest_event("item_get", {"filter":id}))
-	ic.removed_from_inventory.connect(func(id): QuestEngine.instance.register_quest_event("item_get", {"filter":id}, true))
-
-
 ## Set the entity's position.
 func set_entity_position(pos:Vector3):
 	parent_entity.position = pos

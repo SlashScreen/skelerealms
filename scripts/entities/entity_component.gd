@@ -57,7 +57,7 @@ func gather_debug_info() -> String:
 
 
 func _to_string() -> String:
-	return gather_febug_info()
+	return gather_debug_info()
 
 
 ## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 

@@ -8,7 +8,7 @@ extends Node
 ## To adjust NPC behavior under circumastances outside of keeping a schedule, see [GOAPComponent] and [ScheduleCondition].
 
 
-@onready var events:Array[ScheduleEvent] = get_children()
+@onready var events:Array[ScheduleEvent] = get_children().map(func(n:Node) -> Node: return n as ScheduleEvent)
 
 
 func find_schedule_activity_for_current_time() -> Option:
