@@ -105,7 +105,8 @@ func accept_barter(selling_modifier:float, buying_modifier:float, currency: Stri
 
 
 ## Determine whether a shop will accept an item or not.
-func shop_will_accept_iten(shop:ShopInstance, item:StringName) -> bool:
+## NOTE: Broken right now.
+func shop_will_accept_item(shop:Resource, item:StringName) -> bool:
 	var ic:ItemComponent = SKEntityManager.instance.get_entity(item).get_component("ItemComponent")
 	
 	if not shop.whitelist.is_empty():
