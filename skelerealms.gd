@@ -6,6 +6,7 @@ const DoorJumpPlugin = preload("res://addons/skelerealms/tools/door_connect.gd")
 const WorldEntityPlugin = preload("res://addons/skelerealms/tools/world_entity_plugin.gd")
 const PointGizmo = preload("res://addons/skelerealms/tools/point_gizmo.gd")
 const ScheduleEditorPlugin = preload("res://addons/skelerealms/tools/schedule_editor_plugin.gd")
+const ConfigSyncPlugin = preload("res://addons/skelerealms/tools/config_sync_plugin.gd")
 
 ## Container we add the toolbar to
 const container = CONTAINER_SPATIAL_EDITOR_MENU
@@ -37,6 +38,7 @@ var door_jump_plugin := DoorJumpPlugin.new(self)
 var we_plugin := WorldEntityPlugin.new()
 var point_gizmo := PointGizmo.new()
 var se_plugin := ScheduleEditorPlugin.new()
+var cs_plugin := ConfigSyncPlugin.new()
 
 var se_w: Window
 var se: Control
@@ -48,6 +50,7 @@ func _enter_tree():
 	add_inspector_plugin(door_jump_plugin)
 	add_inspector_plugin(we_plugin)
 	add_inspector_plugin(se_plugin)
+	add_inspector_plugin(cs_plugin)
 	# autoload
 	add_autoload_singleton("SkeleRealmsGlobal", "res://addons/skelerealms/scripts/sk_global.gd")
 	add_autoload_singleton("CovenSystem", "res://addons/skelerealms/scripts/covens/coven_system.gd")
@@ -98,6 +101,7 @@ func _exit_tree():
 	remove_inspector_plugin(door_jump_plugin)
 	remove_inspector_plugin(we_plugin)
 	remove_inspector_plugin(se_plugin)
+	remove_inspector_plugin(cs_plugin)
 	# autoload
 	remove_autoload_singleton("SkeleRealmsGlobal")
 	remove_autoload_singleton("CovenSystem")
@@ -133,6 +137,8 @@ func _enable_plugin() -> void:
 	ProjectSettings.set_setting("skelerealms/doors_path", "res://doors")
 	ProjectSettings.set_setting("skelerealms/networks_path", "res://networks")
 	
+	ProjectSettings.set_setting("skelerealms/config_path", "res://sk_config.res")
+	
 	ProjectSettings.set_setting("skelerealms/entity_archetypes", PackedStringArray([
 		"res://addons/skelerealms/npc_entity_template.tscn",
 		"res://addons/skelerealms/item_entity_template.tscn"
@@ -160,7 +166,7 @@ func _disable_plugin() -> void:
 	ProjectSettings.set_setting("skelerealms/networks_path", null)
 	
 	ProjectSettings.set_setting("skelerealms/entity_archetypes", null)
-
+	ProjectSettings.set_setting("skelerealms/config_path", null)
 
 
 func _handles(object: Object) -> bool:

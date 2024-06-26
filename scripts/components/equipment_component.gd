@@ -4,8 +4,8 @@ extends SKEntityComponent
 
 var equipment_slot:Dictionary
 
-signal equipped(item:StringName, slot:EquipmentSlots.Slots)
-signal unequipped(item:StringName, slot:EquipmentSlots.Slots)
+signal equipped(item:StringName, slot:StringName)
+signal unequipped(item:StringName, slot:StringName)
 
 
 func _init() -> void:
@@ -16,7 +16,7 @@ func _ready() -> void:
 	super._ready()
 
 
-func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> bool:
+func equip(item:StringName, slot:StringName, silent:bool = false) -> bool:
 	# Get component
 	var e = SKEntityManager.instance.get_entity(item)
 	if not e:
@@ -42,7 +42,7 @@ func equip(item:StringName, slot:EquipmentSlots.Slots, silent:bool = false) -> b
 
 
 ## Unequip anything in a slot.
-func clear_slot(slot:EquipmentSlots.Slots, silent:bool = false) -> void:
+func clear_slot(slot:StringName, silent:bool = false) -> void:
 	if equipment_slot.has(slot):
 		var to_unequip = equipment_slot[slot]
 		equipment_slot[slot] = null
@@ -60,13 +60,13 @@ func unequip_item(item:StringName, silent:bool = false) -> void:
 			return
 
 
-func is_item_equipped(item:StringName, slot:EquipmentSlots.Slots) -> bool:
+func is_item_equipped(item:StringName, slot:StringName) -> bool:
 	if not equipment_slot.has(slot):
 		return false
 	return equipment_slot[slot] == item
 
 
-func is_slot_occupied(slot:EquipmentSlots.Slots) -> Option:
+func is_slot_occupied(slot:StringName) -> Option:
 	if equipment_slot.has(slot):
 		return Option.wrap(equipment_slot[slot])
 	else:

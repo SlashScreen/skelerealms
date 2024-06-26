@@ -1,3 +1,4 @@
+@tool
 extends Node
 ## A singleton that allows any script to access various important nodes without having to deal with scene scope.
 ## It also has some important utility functions for working with entities.
@@ -7,11 +8,40 @@ extends Node
 var world_states:Dictionary
 ## Status effects registered in the game.
 var status_effects:Dictionary = {}
+## The SKConfig resource. 
+var config:SKConfig 
 
 ## Called when the [SKEntityManager] has finished loading.
 signal entity_manager_loaded
 ## When a chest (or other inventory) is opened.
 signal inventory_opened(id:StringName)
+
+
+func _ready() -> void:
+	ProjectSettings.settings_changed.connect(_reload_config.bind())
+	_reload_config()
+
+
+func _reload_config() -> void:
+	var path:Variant = ProjectSettings.get_setting("skelerealms/config_path")
+	
+	if path == null:
+		return
+	if not path is String:
+		return
+	
+	if not ResourceLoader.exists(path):
+		config = null
+		return 
+	
+	config = ResourceLoader.load(path)
+	
+	if Engine.is_editor_hint():
+		return
+	
+	config.compile()
+	for se:StatusEffect in config.status_effects:
+		SkeleRealmsGlobal.register_effect(se.name, se)
 
 
 ## Attempts to find an entity in the tree above a node. Returns null if none found. Automatically takes account of reparented puppets.

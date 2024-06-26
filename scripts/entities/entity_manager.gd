@@ -8,7 +8,6 @@ static var instance: SKEntityManager
 var entities: Dictionary = {}
 var disk_assets: Dictionary = {}  # TODO: Figure out an alternative that isn't so memory heavy
 var regex: RegEx
-@export var config:SKConfig
 
 
 func _init() -> void:
@@ -20,9 +19,6 @@ func _ready():
 	regex.compile("([^\\/\n\\r]+)\\.t?scn")
 	_cache_entities(ProjectSettings.get_setting("skelerealms/entities_path"))
 	SkeleRealmsGlobal.entity_manager_loaded.emit()
-	config.compile()
-	for se:StatusEffect in config.status_effects:
-		SkeleRealmsGlobal.register_effect(se.name, se)
 
 
 ## Gets an entity in the game. [br]

@@ -1,3 +1,4 @@
+@tool
 class_name SKConfig
 extends Resource
 
@@ -6,6 +7,8 @@ extends Resource
 ## This should be given to an [class SKEntityManager] to be used.
 
 
+## The equipment slots available to the equipment.
+@export var equipment_slots:Array[StringName]
 ## Default skills for [class SkillsComponent]s.
 @export var skills:Dictionary = {}
 ## Default attributes for [class AttributesComponent]s.
@@ -19,7 +22,7 @@ extends Resource
 @export_multiline var skill_xp_formula:String
 ## The formula for determining the amount of XP needed for a character to level up, in GDScript. The given character level is the current character level, 
 ## and the formula's result (int) is the XP needed to raise to the next level
-## Imputs: character_level (int)
+## Inputs: character_level (int)
 ## Outputs: int
 @export_multiline var character_xp_formula:String
 ## The compiled skill xp check expression.

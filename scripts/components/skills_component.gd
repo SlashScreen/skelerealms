@@ -6,7 +6,7 @@ extends SKEntityComponent
 
 ## The skills of this SKEntity.
 ## It is in a dictionary so you can add, remove, and customize at will.
-@onready var skills:Dictionary = SKEntityManager.instance.config.skills.duplicate():
+@export var skills:Dictionary:
 	get:
 		return skills
 	set(val):
@@ -56,7 +56,7 @@ func add_skill_xp(skill:StringName, amount:int) -> void:
 		push_warning("SKEntity %s has no skill %s." % [parent_entity.name, skill])
 		return 
 	skill_xp[skill] += amount
-	var target:int = SKEntityManager.instance.config.compute_skill(skills[skill])
+	var target:int = SkeleRealmsGlobal.config.compute_skill(skills[skill])
 	if target == -1:
 		return
 	if skill_xp[skill] >= target:
@@ -66,7 +66,7 @@ func add_skill_xp(skill:StringName, amount:int) -> void:
 
 func add_character_xp(amount:int) -> void:
 	character_xp += amount
-	var target:int = SKEntityManager.instance.config.compute_character(level)
+	var target:int = SkeleRealmsGlobal.config.compute_character(level)
 	if target == -1:
 		return
 	if character_xp >= amount:

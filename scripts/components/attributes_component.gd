@@ -5,8 +5,7 @@ extends SKEntityComponent
 
 ## The attributes of this SKEntity.
 ## It is in a dictionary so you can add, remove, and customize at will.
-## On startup, it will clone the list in the [member SKEntityManager.config] singleton.
-@onready var attributes:Dictionary = SKEntityManager.instance.config.attributes.duplicate():
+@export var attributes:Dictionary:
 	get:
 		return attributes
 	set(val):
