@@ -372,6 +372,7 @@ func on_percieve_start(info:EyesPerception.PerceptionData) -> void:
 		# if we have it, then update the perception info
 		_perception_memory[info.object].visibility = info.visibility
 	else:
+		printe("Perceived start for %s" % info.object, false)
 		# if we don't, add new fsm
 		var fsm:PerceptionFSM_Machine = PerceptionFSM_Machine.new(info.object, info.visibility)
 		add_child(fsm)
@@ -405,6 +406,7 @@ func on_hear_audio(emitter:AudioEventEmitter) -> void:
 func perception_forget(who:String) -> void:
 	if not _perception_memory.has(who):
 		return
+	printe("Forgetting %s" % who)
 	var n:Node = _perception_memory[who]
 	_perception_memory.erase(who)
 	n.queue_free()

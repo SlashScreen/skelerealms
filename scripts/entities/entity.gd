@@ -209,13 +209,13 @@ func _to_string() -> String:
 
 
 ## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
-func printe(text:String) -> void:
-	print_rich("[b]%s[/b]: %s\n%s" % [name, text, _format_stack_trace()])
+func printe(text:String, show_stack:bool = true) -> void:
+	print_rich("[b]%s[/b]: %s\n%s" % [name, text, _format_stack_trace() if show_stack else ""])
 
 
 func _format_stack_trace() -> String:
 	var trace:Array = get_stack()
 	var output := "[indent]"
 	for d:Dictionary in trace:
-		output += "%s: %s line %d\n" % [d.function, d.source, d.line]
+		output += "%s: [url]%s:%d[/url]\n" % [d.function, d.source, d.line]
 	return output

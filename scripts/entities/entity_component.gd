@@ -61,11 +61,11 @@ func _to_string() -> String:
 
 
 ## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
-func printe(text:String) -> void:
+func printe(text:String, show_stack:bool = true) -> void:
 	if parent_entity:
-		parent_entity.printe(text)
+		parent_entity.printe(text, show_stack)
 	else:
-		(get_parent() as SKEntity).printe(text)
+		(get_parent() as SKEntity).printe(text, show_stack)
 
 
 ## Get the dependencies for this node, for error warnings. Dependencies are the class name as a string.

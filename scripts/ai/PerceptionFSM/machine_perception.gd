@@ -31,6 +31,10 @@ func _init(tracked_obj:String, vis:float) -> void:
 	visibility = vis
 
 
+func _ready() -> void:
+	print("Machine created")
+
+
 ## Remove this FSM from the system.
 func remove_fsm() -> void:
 	(get_parent() as NPCComponent).perception_forget(tracked)
