@@ -14,15 +14,15 @@ Skelerealms is designed in such a way where you can ignore or replace most of th
 - Inventory system
 - Equipment system
 - NPC AI
-    - Behavious
-    - GOAP AI System
-    - Basic perception
-    - Schedules
-    - Patrol paths
+	- Behavious
+	- GOAP AI System
+	- Basic perception
+	- Schedules
+	- Patrol paths
 - Tools to assist development
 - Composable design
-    - Components for entities
-    - Components for items
+	- Components for entities
+	- Components for items
 - Dungeon puzzle elements
 - Factions
 - Spells/Status Effects
@@ -55,10 +55,15 @@ Please note that the project is in an Alpha state, which means breaking changes 
 ## What's in store?
 
 - 0.6 (In Development)
-    - Redesigning the way entities are stored.
-    - Adding more tools.
-    - Writing more thorough documentation.
-    - Integrating NetworkGD.
+	- Redesigning the way entities are stored.
+	- Adding more tools.
+	- Writing more thorough documentation.
+	- Integrating NetworkGD.
 - 0.7
-    - Redesigning the save game system.
-    - Polish cross-scene navigation.
+	- Redesigning the save game system.
+	- Polish cross-scene navigation.
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=SlashScreen/skelerealms&type=Timeline&theme=dark)](https://star-history.com/#SlashScreen/skelerealms&Timeline)
