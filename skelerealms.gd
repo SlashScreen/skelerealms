@@ -57,7 +57,6 @@ func _enter_tree():
 	add_autoload_singleton("GameInfo", "res://addons/skelerealms/scripts/system/game_info.gd")
 	add_autoload_singleton("SaveSystem", "res://addons/skelerealms/scripts/system/save_system.gd")
 	add_autoload_singleton("CrimeMaster", "res://addons/skelerealms/scripts/crime/crime_master.gd")
-	add_autoload_singleton("DialogueHooks", "res://addons/skelerealms/scripts/system/dialogue_hooks.gd")
 	add_autoload_singleton("DeviceNetwork", "res://addons/skelerealms/scripts/misc/device_network.gd")
 	
 	se_w = Window.new()
@@ -108,7 +107,6 @@ func _exit_tree():
 	remove_autoload_singleton("GameInfo")
 	remove_autoload_singleton("SaveSystem")
 	remove_autoload_singleton("CrimeMaster")
-	remove_autoload_singleton("DialogueHooks")
 	remove_autoload_singleton("DeviceNetwork")
 
 	remove_control_from_container(container, utility)
