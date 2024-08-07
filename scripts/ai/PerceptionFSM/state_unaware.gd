@@ -21,6 +21,7 @@ func update(delta:float) -> void:
 	detection_timer += detection_speed * (state_machine as PerceptionFSM_Machine).visibility * delta
 	if detection_timer >= detection_timer_max:
 		state_machine.transition("AwareVisible")
+		return
 	if (state_machine as PerceptionFSM_Machine).visibility <= _npc.visibility_threshold:
 		(state_machine as PerceptionFSM_Machine).remove_fsm()
 

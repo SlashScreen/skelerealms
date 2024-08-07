@@ -60,18 +60,9 @@ var _current_target_point:NavPoint:
 			_puppet.set_movement_target(val.position)
 	get:
 		return _current_target_point
-## Whether this character is in dialogue or a cutscene or in combat. Will stop/continue the puppet's pathfinding if applicable (not in combat).
-var _busy:bool:
-		get:
-			return _busy or in_combat # is also busy if in combat
-		set(val):
-			printe("Set busy to %s" % val)
-			if val and _puppet:
-				_puppet.pause_nav()
-			elif not val and _puppet:
-				_puppet.continue_nav()
-			_busy = val
 var ai_modules:Array[AIModule] = []
+## Keeps track of entities and vision data. Used for stealth mechanics. Pattern is ref_id:StringName -> data:Variant.
+var perception_memory:Dictionary = {}
 #* Private
 ## Navigator.
 var _nav_component:NavigatorComponent
@@ -95,13 +86,21 @@ var _path_follow_end_distance:float = 1
 var _walk_speed:float = 1
 ## Puppet root node.
 var _puppet:NPCPuppet
-## References to FSMs keeping track of entites it has seen. Pattern is refID:String : machine:[PerceptionFSM_Machine].
-var _perception_memory:Dictionary = {}
 ## Target entity during combat.
 var _combat_target:String
 ## Navigation path.
 var _path:Array[NavPoint]
-
+## Whether this character is in dialogue or a cutscene or in combat. Will stop/continue the puppet's pathfinding if applicable (not in combat).
+var _busy:bool:
+		get:
+			return _busy or in_combat # is also busy if in combat
+		set(val):
+			printe("Set busy to %s" % val)
+			if val and _puppet:
+				_puppet.pause_nav()
+			elif not val and _puppet:
+				_puppet.continue_nav()
+			_busy = val
 
 
 ## Signal emitted when this NPC enters combat.
@@ -118,14 +117,12 @@ signal destination_reached
 signal schedule_updated(ev:ScheduleEvent)
 ## Signal emitted when this NPC enters dialogue.
 signal start_dialogue
-## Signal emitted when it warns an entity. Passes ref id of who it is warning.
-signal warning(ref_id:String)
+## Signal emitted when the awareness state changes on an entity. Used for stealth mechanics.
+signal awareness_State_changed(ref_id:String, state:int)
 ## Signal emitted when it wants to flee from an entity. Passes ref id of who it is warning.
 signal flee(ref_id:String)
 ## Signal emitted when it hears an audio event.
 signal heard_something(emitter:AudioEventEmitter)
-## Signal emitted when a perception state changes.
-signal perception_transition(what:StringName, transitioned_to:String, fsm:PerceptionFSM_Machine)
 ## Signal emitted when this NPC is interacted with.
 signal interacted(refID:String)
 ## Signal emitted when this NPC reacts to being hit by a friendly entity.
@@ -160,6 +157,18 @@ static func get_npc_component(id:StringName) -> NPCComponent:
 		return icop
 	else:
 		return null
+
+
+#* PERCPETION
+
+
+## Wrapper for stealth providers' get_visible_objects. Empty if there is no puppet. 
+## See the docs section on stealth providers for more info.
+func get_visible_objects() -> Dictionary:
+	if _puppet == null:
+		return {}
+	return _puppet.eyes.get_visible_objects()
+
 
 
 #* ### OVERRIDES
@@ -361,74 +370,6 @@ func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float
 ## Remove objectives that have a set of goals. Goals must match exactly.
 func remove_objective_by_goals(goals:Dictionary) -> void:
 	_goap_component.remove_objective_by_goals(goals)
-
-
-#* ### PERCEPTION
-
-
-## Callback for when percpetion begins
-func on_percieve_start(info:EyesPerception.PerceptionData) -> void:
-	if _perception_memory.has(info.object):
-		# if we have it, then update the perception info
-		_perception_memory[info.object].visibility = info.visibility
-	else:
-		printe("Perceived start for %s" % info.object, false)
-		# if we don't, add new fsm
-		var fsm:PerceptionFSM_Machine = PerceptionFSM_Machine.new(info.object, info.visibility)
-		add_child(fsm)
-		fsm.transitioned.connect(func(x:String): perception_transition.emit(info.object, x, fsm))
-		fsm.initial_state = "Unaware"
-		fsm.setup([
-			PerceptionFSM_Aware_Invisible.new(),
-			PerceptionFSM_Aware_Visible.new(),
-			PerceptionFSM_Lost.new(),
-			PerceptionFSM_Unaware.new(),
-		])
-		_perception_memory[info.object] = fsm
-
-
-# TODO: Special behavior for going through doors, since the "last seen position" would be at the door.
-# Perhaps if on perception end and in different world, force it through?
-#! What happpens when the puppet is despawned?
-## Callback for when something leaves sightline.
-func on_percieve_end(info:EyesPerception.PerceptionData) -> void:
-	if _perception_memory.has(info.object):
-		# if we have it, set perception to 0 (hidden)
-		_perception_memory[info.object].visibility = 0
-
-
-## Callback for when this npc hears a weird noise.
-func on_hear_audio(emitter:AudioEventEmitter) -> void:
-	heard_something.emit(emitter)
-
-
-## Forget an entity from the perception memory.
-func perception_forget(who:String) -> void:
-	if not _perception_memory.has(who):
-		return
-	printe("Forgetting %s" % who)
-	var n:Node = _perception_memory[who]
-	_perception_memory.erase(who)
-	n.queue_free()
-
-
-## Get all items this entity remembers seeing.
-func get_remembered_items() -> Array[String]:
-	return _perception_memory.keys()\
-			.filter(func(p:String):
-				var e = SKEntityManager.instance.get_entity(p)
-				if e.some():
-					return not (e.unwrap as SKEntity).get_component("ItemComponent") == null
-				return false
-				)
-
-
-func can_see_entity(id:StringName) -> bool:
-	if not parent_entity.in_scene:
-		return false
-	if not _perception_memory.has(id):
-		return false
-	return (_perception_memory[id] as PerceptionFSM_Machine).state._get_state_name() == "AwareVisible"
 
 
 #* ### SCHEDULE

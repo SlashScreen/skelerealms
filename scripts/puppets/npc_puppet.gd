@@ -4,7 +4,8 @@ extends CharacterBody3D
 
 
 @onready var movement_target_position: Vector3 = position # No world because this agent only works in the scene.
-var eyes:EyesPerception
+## This is a stealth provider. See the "Sealth Provider" article i nthe documentation for details.
+var eyes:Object 
 var npc_component:NPCComponent
 var puppeteer:PuppetSpawnerComponent
 var view_dir:ViewDirectionComponent
@@ -26,14 +27,11 @@ func _ready() -> void:
 	call_deferred("_actor_setup")
 	add_to_group("perception_target")
 	change_position.connect((get_parent().get_parent() as SKEntity)._on_set_position.bind())
-	eyes = $EyesPerception
 	puppeteer = $"../../".get_component("PuppetSpawnerComponent")
 	npc_component = $"../../".get_component("NPCComponent")
 	view_dir = $"../../".get_component("ViewDirectionComponent")
 	if npc_component:
 		puppeteer.printe("Connecting percieved event")
-		eyes.perceived.connect(npc_component.on_percieve_start.bind())
-		eyes.not_perceived.connect(npc_component.on_percieve_end.bind())
 		
 		npc_component.entered_combat.connect(draw_weapons.bind())
 		npc_component.left_combat.connect(lower_weapons.bind())
@@ -75,9 +73,6 @@ func continue_nav() -> void:
 
 
 func _physics_process(delta) -> void:
-	if npc_component:
-		eyes.try_perception()
-	
 	npc_component.puppet_request_move.emit(self)
 
 
