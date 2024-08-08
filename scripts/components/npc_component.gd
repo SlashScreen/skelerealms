@@ -118,7 +118,7 @@ signal schedule_updated(ev:ScheduleEvent)
 ## Signal emitted when this NPC enters dialogue.
 signal start_dialogue
 ## Signal emitted when the awareness state changes on an entity. Used for stealth mechanics.
-signal awareness_State_changed(ref_id:String, state:int)
+signal awareness_state_changed(ref_id:String, state:int)
 ## Signal emitted when it wants to flee from an entity. Passes ref id of who it is warning.
 signal flee(ref_id:String)
 ## Signal emitted when it hears an audio event.

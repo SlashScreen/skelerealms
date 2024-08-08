@@ -8,6 +8,8 @@ const THREAT_LEVEL_GREATER_INTERVAL = 1
 # How many levels greater to be considered "significantly stronger".
 const THREAT_LEVEL_MUCH_GREATER_INTERVAL = 5
 
+const StealthDetectorModule = preload("default_stealth_detection.gd")
+
 @export_category("Combat info")
 ## Will this actor initiate combat? [br]
 ## Peaceful: Will not initiate combat. [br]
@@ -41,29 +43,30 @@ const THREAT_LEVEL_MUCH_GREATER_INTERVAL = 5
 
 ## Thread for an NPC to keep watch when alerted
 var vigilant_thread:Thread
-## Set to true to stop [memer vigilant_thread]
+## Set to true to stop [member vigilant_thread]
 var pull_out_of_thread = false
 
 
 func _ready() -> void:
-	_npc.perception_transition.connect(_handle_perception_info.bind())
+	_npc.awareness_state_changed.connect(_handle_perception_info.bind())
 	_npc.hit_by.connect(func(who): _aggress(SKEntityManager.instance.get_entity(who)))
 
 
-func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionFSM_Machine) -> void:
+func _handle_perception_info(what:StringName, state:int) -> void:
 	var opinion = _npc.determine_opinion_of(what)
+	var last_seen:Vector3 = _npc.perception_memory[what].last_seen_position
 	var below_attack_threshold = (opinion <= attack_threshold) or aggression == 3 # will be below attack threshold by default if frenzied
 
-	match transition:
-		"AwareInvisible":
+	match state:
+		StealthDetectorModule.FSM.AWARE_INVISIBLE:
 			if aggression == 0: # if peaceful
 				return
 			# if threat, seek last known position
 			if below_attack_threshold:
 				_npc.printe("seek last known position")
-				_npc.goap_memory["last_seen_position"] = NavPoint.new(fsm.last_seen_world, fsm.last_seen_position) # commit to memory
+				_npc.goap_memory["last_seen_position"] = NavPoint.new(_npc.parent_entity.world, last_seen) # commit to memory
 				_npc.add_objective({"enemy_sought" = true}, true, 10) # add goal to seek position
-		"AwareVisible":
+		StealthDetectorModule.FSM.AWARE_VISIBLE:
 			if aggression == 0: # if peaceful
 				return
 
@@ -85,10 +88,10 @@ func _handle_perception_info(what:StringName, transition:String, fsm:PerceptionF
 					vigilant_thread.start(_stay_vigilant.bind(e))
 				else:
 					_npc.printe("needs to attack")
-		"Lost":
+		StealthDetectorModule.FSM.WARY:
 			# may be useless
 			return
-		"Unaware":
+		StealthDetectorModule.FSM.UNAWARE:
 			if aggression == 0: # if peaceful
 				return
 
