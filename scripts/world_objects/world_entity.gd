@@ -45,6 +45,4 @@ func _sync() -> void:
 	e.position = global_position
 	e.world = EditorInterface.get_edited_scene_root().name
 	
-	print(e.world)
-	
 	entity.pack(e)

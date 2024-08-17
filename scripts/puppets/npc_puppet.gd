@@ -5,7 +5,7 @@ extends CharacterBody3D
 
 @onready var movement_target_position: Vector3 = position # No world because this agent only works in the scene.
 ## This is a stealth provider. See the "Sealth Provider" article i nthe documentation for details.
-var eyes:Object 
+@export var eyes:Node 
 var npc_component:NPCComponent
 var puppeteer:PuppetSpawnerComponent
 var view_dir:ViewDirectionComponent

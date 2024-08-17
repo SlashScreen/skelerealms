@@ -1,14 +1,25 @@
-[gd_scene load_steps=6 format=3 uid="uid://dj6sa6ksct1xi"]
+[gd_scene load_steps=8 format=3 uid="uid://dj6sa6ksct1xi"]
 
-[ext_resource type="Script" path="res://addons/skelerealms/scripts/ai/perception_eyes.gd" id="2_fvcq2"]
 [ext_resource type="Script" path="res://addons/skelerealms/scripts/puppets/npc_puppet.gd" id="2_fw0xe"]
-[ext_resource type="PackedScene" uid="uid://itfouqmshnrx" path="res://addons/skelerealms/light_probe.tscn" id="3_64vvy"]
+[ext_resource type="Script" path="res://scripts/stealth/npc_eyes.gd" id="2_qscej"]
+[ext_resource type="Script" path="res://scripts/cone_shape_3d.gd" id="3_7cfmb"]
+[ext_resource type="PackedScene" uid="uid://wvu1t6men2oh" path="res://scripts/stealth/detector.tscn" id="4_midro"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_utii8"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_s5g5c"]
 
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_uo6sh"]
+points = PackedVector3Array(0, 0, 0, 24, 32, 0, 16.9706, 32, 16.9706, 1.46958e-15, 32, 24, -16.9706, 32, 16.9706, -24, 32, 2.93915e-15, -16.9706, 32, -16.9706, -4.40873e-15, 32, -24, 16.9706, 32, -16.9706)
+script = ExtResource("3_7cfmb")
+radius = 24.0
+height_multiplier = 1.0
+width_multiplier = 1.0
+height = 32.0
+resolution = 8
+
 [node name="CharacterBody3D" type="CharacterBody3D"]
+collision_mask = 17
 script = ExtResource("2_fw0xe")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -24,8 +35,13 @@ path_desired_distance = 0.5
 target_desired_distance = 0.5
 avoidance_enabled = true
 
-[node name="EyesPerception" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.534157)
-script = ExtResource("2_fvcq2")
+[node name="Eyes" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.44687, 0)
+collision_mask = 16
+script = ExtResource("2_qscej")
 
-[node name="Probe" parent="EyesPerception" instance=ExtResource("3_64vvy")]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Eyes"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_uo6sh")
+
+[node name="Detector" parent="Eyes" instance=ExtResource("4_midro")]

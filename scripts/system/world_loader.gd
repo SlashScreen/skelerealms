@@ -43,12 +43,15 @@ func load_world(wid:String) -> void:
 	GameInfo.game_loading.emit(wid)
 	GameInfo.is_loading = true
 	await get_tree().process_frame
+	print("processed frame. Unloading world...")
 	_unload_world()
 	# Spawn waiting thread
+	print("spawned waiting thread")
 	ResourceLoader.load_threaded_request(world_paths[wid], "PackedScene", true)
 	if load_check_thread.is_started(): 
 		load_check_thread.wait_to_finish()
 	load_check_thread = Thread.new()
+	print("Atarting thread")
 	load_check_thread.start(_load_check_thread.bind(world_paths[wid]))
 
 
@@ -57,10 +60,12 @@ func _load_check_thread(path:String) -> void:
 	# wait until done
 	var prog = []
 	var last_progress = 0
+	print("waiting for load to finish.")
 	while not ResourceLoader.load_threaded_get_status(path, prog) == ResourceLoader.THREAD_LOAD_LOADED:
 		if not last_progress == prog[0]:
 			(func(): load_scene_progess_updated.emit(prog[0])).call_deferred()
 		last_progress = prog[0]
+	print("Finishing up...")
 	_finish_load.call_deferred(ResourceLoader.load_threaded_get(path) as PackedScene)
 
 

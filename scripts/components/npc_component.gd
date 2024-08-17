@@ -159,7 +159,7 @@ static func get_npc_component(id:StringName) -> NPCComponent:
 		return null
 
 
-#* PERCPETION
+#region perception
 
 
 ## Wrapper for stealth providers' get_visible_objects. Empty if there is no puppet. 
@@ -167,11 +167,14 @@ static func get_npc_component(id:StringName) -> NPCComponent:
 func get_visible_objects() -> Dictionary:
 	if _puppet == null:
 		return {}
+	if _puppet.eyes == null:
+		return {}
 	return _puppet.eyes.get_visible_objects()
 
 
+#endregion perception
 
-#* ### OVERRIDES
+#region overrides
 
 
 func _init() -> void:
@@ -248,7 +251,26 @@ func _process(delta):
 				_next_point() # get next point
 				parent_entity.world = _current_target_point.world # set world
 			parent_entity.position = parent_entity.position.move_toward(_current_target_point.position, delta * _walk_speed) # move towards position
-
+	
+	if _puppet:
+		if _puppet.eyes:
+			var d:Dictionary = _puppet.eyes.get_visible_objects()
+			for obj:Object in d:
+				if obj is not Node:
+					continue
+				var e:SKEntity = SkeleRealmsGlobal.get_entity_in_tree(obj)
+				if not e:
+					continue 
+				
+				if perception_memory.has(e.name):
+					perception_memory[e.name][&"visibility"] = d[obj][&"visibility"]
+					perception_memory[e.name][&"last_seen_position"] = d[obj][&"last_seen_position"]
+				else:
+					perception_memory[e.name] = {
+						&"visibility": d[obj][&"visibility"],
+						&"last_seen_position": d[obj][&"last_seen_position"],
+					}
+	
 	updated.emit(delta)
 
 
@@ -266,7 +288,9 @@ func _exit_tree() -> void:
 		m._clean_up()
 
 
-#* ### DIALOGUE AND INTERACTIVITY
+#endregion overrides
+
+#region dialogue
 
 
 ## Make this NPC Leave dialogue.
@@ -292,7 +316,9 @@ func remove_from_conversation() -> void:
 	removed_from_conversation.emit()
 
 
-#* ### PATHFINDING
+#endregion dialogue
+
+#region pathfinding
 
 
 ## Calculate this NPC's path to a [NavPoint].
@@ -372,7 +398,9 @@ func remove_objective_by_goals(goals:Dictionary) -> void:
 	_goap_component.remove_objective_by_goals(goals)
 
 
-#* ### SCHEDULE
+#endregion pathfinding
+
+#region schedule
 
 
 ## Ask this NPC to go to its schedule point.
@@ -414,7 +442,9 @@ func _calculate_new_schedule() -> void:
 		schedule_updated.emit(null)
 
 
-#* ### MISC
+#endregion schedule 
+
+#region misc
 
 
 ## Get a relationship this NPC has of [RelationshipType]. Pass in the type's key. Returns the relationship if found, none if none found.
@@ -513,6 +543,7 @@ func get_translated_name() -> String:
 	else:
 		return t
 
+#endregion misc
 
 ## Current simulation level for an NPC.
 enum SimulationLevel {
