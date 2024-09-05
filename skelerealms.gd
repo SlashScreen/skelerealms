@@ -7,6 +7,7 @@ const WorldEntityPlugin = preload("res://addons/skelerealms/tools/world_entity_p
 const PointGizmo = preload("res://addons/skelerealms/tools/point_gizmo.gd")
 const ScheduleEditorPlugin = preload("res://addons/skelerealms/tools/schedule_editor_plugin.gd")
 const ConfigSyncPlugin = preload("res://addons/skelerealms/tools/config_sync_plugin.gd")
+const EditInWorldButton = preload("res://addons/skelerealms/tools/edit_button.gd")
 
 ## Container we add the toolbar to
 const container = CONTAINER_SPATIAL_EDITOR_MENU
@@ -39,6 +40,7 @@ var we_plugin := WorldEntityPlugin.new()
 var point_gizmo := PointGizmo.new()
 var se_plugin := ScheduleEditorPlugin.new()
 var cs_plugin := ConfigSyncPlugin.new()
+var edit_button := EditInWorldButton.new()
 
 var se_w: Window
 var se: Control
@@ -92,6 +94,9 @@ func _enter_tree():
 	# Gizmo
 	network_gizmo._plugin = self
 	add_node_3d_gizmo_plugin(network_gizmo)
+	
+	# Edit button
+	add_control_to_container(EditorPlugin.CONTAINER_TOOLBAR, edit_button)
 
 
 func _exit_tree():
@@ -113,6 +118,8 @@ func _exit_tree():
 	remove_node_3d_gizmo_plugin(network_gizmo)
 	
 	se_w.queue_free()
+	
+	edit_button.queue_free()
 
 
 func _enable_plugin() -> void:

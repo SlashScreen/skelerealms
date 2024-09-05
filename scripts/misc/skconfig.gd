@@ -7,6 +7,10 @@ extends Resource
 ## This should be given to an [class SKEntityManager] to be used.
 
 
+## The game's root. Contains the entity manager and world loader.
+@export var game_root:PackedScene
+## The default world the game root loads when none other is specified.
+@export var default_world:String
 ## The equipment slots available to the equipment.
 @export var equipment_slots:Array[StringName]
 ## Default skills for [class SkillsComponent]s.
