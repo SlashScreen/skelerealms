@@ -17,15 +17,6 @@ func _open_sock() -> void:
 		push_warning("Could not connect to Skelerealms play button.")
 
 
-func _push_spawn_data() -> void:
-	var data = {
-		"pos":spawn_position,
-		"world":spawn_world,
-	}
-	
-	sock.send_text(JSON.stringify(data))
-
-
 func _process(delta):
 	_listen()
 
@@ -37,19 +28,16 @@ func _ask_for_data() -> void:
 func _listen() -> void:
 	sock.poll()
 	var state = sock.get_connection_status()
-	if state == WebSocketPeer.STATE_OPEN:
+	if state == MultiplayerPeer.CONNECTION_CONNECTED:
 		while sock.get_available_packet_count():
-			_move_player(JSON.parse_string(sock.get_packet().get_string_from_utf8()))
+			_move_player.call_deferred(bytes_to_var(sock.get_packet()))
 			sock.close()
-	elif state == WebSocketPeer.STATE_CLOSING:
-		# Keep polling to achieve proper close.
-		pass
-	elif state == WebSocketPeer.STATE_CLOSED:
-		var code = sock.get_close_code()
-		var reason = sock.get_close_reason()
-		print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
-		set_process(false)
 
 
 func _move_player(data:Dictionary) -> void:
-	print("Got data: ", data)
+	for c:Node in get_children():
+		if c is SKEntityManager:
+			var tc:TeleportComponent = (c as SKEntityManager).get_entity(&"Player").get_component(&"TeleportComponent")
+			tc.teleport(data["world"], data["pos"])
+			GameInfo.start_game()
+	set_process(false)

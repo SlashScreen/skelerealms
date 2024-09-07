@@ -92,7 +92,8 @@ func _finish_load(w:PackedScene) -> void:
 
 
 func _unload_world():
-	remove_child(get_child(0))
+	if get_child_count() > 0:
+		remove_child(get_child(0))
 
 
 func _abort() -> void:

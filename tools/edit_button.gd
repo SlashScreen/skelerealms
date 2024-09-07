@@ -25,14 +25,14 @@ func _on_press() -> void:
 func _serve() -> void:
 	sock.poll()
 	var state := sock.get_connection_status()
-	if state == WebSocketPeer.STATE_OPEN:
+	if state == MultiplayerPeer.CONNECTION_CONNECTED:
 		while sock.get_available_packet_count():
 			if sock.get_packet() == PackedByteArray([1, 2, 3, 2, 1]):
 				_push_spawn_data()
-	elif state == WebSocketPeer.STATE_CLOSING:
+	elif state == MultiplayerPeer.CONNECTION_CONNECTING:
 		# Keep polling to achieve proper close.
 		pass
-	elif state == WebSocketPeer.STATE_CLOSED:
+	elif state == MultiplayerPeer.CONNECTION_DISCONNECTED:
 		var code = sock.get_close_code()
 		var reason = sock.get_close_reason()
 		#print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
@@ -45,10 +45,8 @@ func _open_sock() -> void:
 		push_warning("Could not start Skelerealms play button service.")
 		return
 	sock.peer_connected.connect(func(id:int) -> void: 
-		print("Connected to peer: %s" % id)
 		_push_spawn_data()
 		)
-	sock.peer_disconnected.connect(func(id:int) -> void: print("Peer disconnected: %d" % id))
 
 
 func _push_spawn_data() -> void:
@@ -56,7 +54,8 @@ func _push_spawn_data() -> void:
 		"pos":spawn_position,
 		"world":spawn_world,
 	}
-	sock.put_packet(JSON.stringify(data).to_ascii_buffer())
+	if not sock.put_packet(var_to_bytes(data)) == OK:
+		push_warning("Failed to send Skelerealms play button data.")
 
 
 func _process(delta):
