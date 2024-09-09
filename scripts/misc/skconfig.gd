@@ -11,6 +11,8 @@ extends Resource
 @export var game_root:PackedScene
 ## The default world the game root loads when none other is specified.
 @export var default_world:String
+## The default position for the player when the game first starts.
+@export var default_world_position:Vector3
 ## The equipment slots available to the equipment.
 @export var equipment_slots:Array[StringName]
 ## Default skills for [class SkillsComponent]s.
