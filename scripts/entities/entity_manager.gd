@@ -6,7 +6,7 @@ extends Node
 static var instance: SKEntityManager
 
 var entities: Dictionary[StringName, SKEntity] = {}
-var erased_entities: Array[StringName] = []
+var erased_entities: Dictionary[StringName, bool] = {}
 @onready var tag_tracker: SKTagTracker = (ResourceLoader.load(ProjectSettings.get_setting("skelerealms/config_path")) as SKConfig).tag_tracker
 
 
@@ -23,9 +23,12 @@ func _ready():
 ## 1. Tries to get the entity from its internal hash table of entities. [br]
 ## 2. Scans its children entities to see if it missed any (this step may be removed in the future) [br]
 ## 3. Attempts to load the entity from disk. [br]
-## Failing all of these, it will return [code]none[/code].
+## Failing all of these, it will return [code]null[/code].
+## If an entity is erased, meaning deleted from the game, it will also return [code]null[/code].
 func get_entity(id: StringName) -> SKEntity:
 	# stage 1: attempt find in cache
+	if erased_entities.has(id):
+		return null
 	if entities.has(id):
 		(entities[id] as SKEntity).reset_stale_timer()  # FIXME: If another entity is carrying a reference to this entity, then we might break stuff by cleaning it up in this way?
 		return entities[id]
@@ -75,7 +78,7 @@ func remove_entity(rid: StringName) -> void:
 	if entities.has(rid):
 		entities[rid].queue_free()
 		entities.erase(rid)
-		erased_entities.append(rid)
+		erased_entities[rid] = true
 
 
 func add_entity_from_scene(scene: PackedScene) -> SKEntity:
@@ -102,3 +105,8 @@ func get_entities_in_worlds() -> Dictionary[StringName, Array]:
 		var world: StringName = entities[rid].world
 		res.get_or_add(world, []).append(String(rid))
 	return res
+
+
+func on_new_world_entered(world: StringName) -> void:
+	# TODO: Touch IDs in save files
+	pass

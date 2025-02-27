@@ -3,6 +3,8 @@ extends Node
 ## World scene loader
 
 
+static var instance : WorldLoader
+
 var loading_path:String
 var last_load_progress := 0 
 @onready var tag_tracker: SKTagTracker = (ResourceLoader.load(ProjectSettings.get_setting("skelerealms/config_path")) as SKConfig).tag_tracker
@@ -19,6 +21,7 @@ signal load_scene_progess_updated(percent:int)
 
 
 func _enter_tree() -> void:
+	instance = self
 	if get_child_count() > 0:
 		GameInfo.world = get_child(0).name
 

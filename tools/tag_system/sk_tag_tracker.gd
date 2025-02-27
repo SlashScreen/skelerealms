@@ -104,6 +104,8 @@ func add_to_name_map(path: String, uid: int) -> void:
 
 
 func remove_from_name_map(uid: int) -> void:
+	if not name_map.has(uid):
+		return
 	var p_name: StringName = name_map[uid]
 	name_map.erase(uid)
 	reverse_name_map.erase(p_name)

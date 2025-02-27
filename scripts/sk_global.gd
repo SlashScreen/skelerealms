@@ -4,6 +4,8 @@ extends Node
 ## It also has some important utility functions for working with entities.
 
 
+const PriorityQueue = preload("res://addons/skelerealms/scripts/priority_queue.gd")
+
 ## World states for the GOAP system.
 var world_states:Dictionary
 ## Status effects registered in the game.
@@ -12,6 +14,8 @@ var status_effects:Dictionary = {}
 var config:SKConfig 
 ## The current character slot being played.
 var current_character: int = 0
+var think_queue := PriorityQueue.new()
+var game_time_elapsed : float
 
 ## Called when the [SKEntityManager] has finished loading.
 signal entity_manager_loaded
@@ -22,6 +26,11 @@ signal inventory_opened(id:StringName)
 func _ready() -> void:
 	ProjectSettings.settings_changed.connect(_reload_config.bind())
 	_reload_config()
+
+
+func _process(delta : float) -> void:
+	game_time_elapsed += delta
+	try_think()
 
 
 func _reload_config() -> void:
@@ -126,3 +135,18 @@ func _walk_for_component(n:Node, component_type:String, wo_check:Callable) -> No
 
 func register_effect(what:String, eff:StatusEffect) -> void:
 	status_effects[what] = eff
+
+
+func register_think(callback : Callable, time : float) -> void: 
+	think_queue.push(time, callback)
+
+
+func try_think() -> void:
+	if think_queue.is_empty():
+		return
+	
+	var node : PriorityQueue.PQNode = think_queue.peek() # O(1)
+	while game_time_elapsed >= node.priority:
+		node.value.call()
+		think_queue.pop()
+		node = think_queue.peek()

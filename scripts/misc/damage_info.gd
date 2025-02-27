@@ -6,16 +6,16 @@ extends RefCounted
 
 
 ## Who caused the damage?
-var offender:String
+var offender : String
 ## The different kinds of damage.
-var damage_effects:Dictionary
+var damage_effects : Dictionary[StringName, int]
 ## Optional spell effects.
-var spell_effects:Array[StringName] = []
+var spell_effects : Array[StringName] = []
 ## Optional extra info.
-var info:Dictionary = {}
+var info : Dictionary = {}
 
 
-func _init(offender:String, damage_effects:Dictionary, spell_effects:Array[StringName] = [], info:Dictionary = {}) -> void:
+func _init(offender : String, damage_effects : Dictionary, spell_effects : Array[StringName] = [], info : Dictionary = {}) -> void:
 	self.offender = offender
 	self.damage_effects = damage_effects
 	self.spell_effects = spell_effects

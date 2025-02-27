@@ -176,7 +176,7 @@ func allow() -> void:
 
 
 ## Whether it has a component type. [code]c[/code] is the name of the component type, like "HoldableDataComponent".
-func has_component(c:String) -> bool:
+func has_component(c : StringName) -> bool:
 	return get_children().any(func(x:ItemDataComponent): return x.get_type() == c)
 
 
