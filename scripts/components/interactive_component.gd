@@ -25,12 +25,13 @@ var interact_name:String:
 
 
 func _init() -> void:
-	name = "InteractiveComponent"
+	name = &"InteractiveComponent"
 
 ## Interact with this as the player.
 ## Shorthand for [codeblock] interact("Player") [/codeblock].
 func interact_by_player():
 	interacted.emit("Player")
+	print("Player interacted")
 
 ## Interact with this entity. Pass in the refID of the interactor.
 func interact(refID:String):

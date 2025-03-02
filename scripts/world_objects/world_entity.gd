@@ -19,7 +19,7 @@ func _ready() -> void:
 		_show_preview()
 	else:
 		if spawn_new_instance:
-			SKEntityManager.instance.add_entity_from_scene(entity)
+			SKEntityManager.instance.add_entity_from_scene_at_position(entity, global_position, quaternion, GameInfo.world)
 		else:
 			SKEntityManager.instance.get_entity(entity._bundled.names[0])
 

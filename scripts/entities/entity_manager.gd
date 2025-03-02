@@ -97,6 +97,14 @@ func add_entity_from_scene(scene: PackedScene) -> SKEntity:
 	return _add_entity_raw(e)
 
 
+## This is how you spawn new instances from entity in most cases.
+func add_entity_from_scene_at_position(scene : PackedScene, position : Vector3, rotation : Quaternion, world : StringName) -> void:
+	var e := add_entity_from_scene(scene)
+	e.position = position
+	e.rotation = rotation
+	e.world = world
+
+
 # TODO: Store this, so that when a world is loaded, we touch all the entities
 ## Generates a dictionary that maps worlds to a list of entity rids that are inside them.
 func get_entities_in_worlds() -> Dictionary[StringName, Array]:

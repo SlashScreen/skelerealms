@@ -23,8 +23,10 @@ var in_scene: bool:
 	set(val):
 		if in_scene && !val: # if was in scene and now not
 			left_scene.emit()
+			printe("left scene", false)
 		if !in_scene && val: # if was not in scene and now is
 			entered_scene.emit()
+			printe("entered scene", false)
 		in_scene = val
 
 

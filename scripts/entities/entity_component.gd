@@ -15,7 +15,6 @@ func _ready():
 	if Engine.is_editor_hint():
 		return 
 	
-	parent_entity = get_parent() as SKEntity
 	if not parent_entity.left_scene.is_connected(_on_exit_scene.bind()):
 		parent_entity.left_scene.connect(_on_exit_scene.bind())
 	if not parent_entity.entered_scene.is_connected(_on_enter_scene.bind()):

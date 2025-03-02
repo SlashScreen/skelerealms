@@ -51,6 +51,7 @@ func spawn():
 		n = prefab.instantiate()
 		add_child(n)
 	n.set_position(parent_entity.position)
+	n.rotation = parent_entity.rotation.get_euler()
 	puppet = n
 	spawned_puppet.emit(puppet)
 	printe("spawned at %s : %s" % [parent_entity.world, parent_entity.position])
