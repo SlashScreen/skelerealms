@@ -1,38 +1,37 @@
 @tool
 extends Node
-## A singleton that allows any script to access various important nodes without having to deal with scene scope.
-## It also has some important utility functions for working with entities.
-
+## A global singleton for the SkeleRealms addon that provides centralized access to game systems and utility functions.
+## Handles status effects, world states, configuration, and various entity-related operations.
 
 const PriorityQueue = preload("res://addons/skelerealms/scripts/priority_queue.gd")
 
-## World states for the GOAP system.
+## Dictionary of world states used by the GOAP AI system
 var world_states:Dictionary
-## Status effects registered in the game.
+## Dictionary of registered status effects that can be applied to entities
 var status_effects:Dictionary = {}
-## The SKConfig resource. 
+## The loaded SkeleRealms configuration resource
 var config:SKConfig 
-## The current character slot being played.
+## The currently active character slot number
 var current_character: int = 0
+## Queue for scheduling AI think operations
 var think_queue := PriorityQueue.new()
+## Total elapsed game time in seconds
 var game_time_elapsed : float
 
-## Called when the [SKEntityManager] has finished loading.
+## Emitted when the entity manager has completed loading all entities
 signal entity_manager_loaded
-## When a chest (or other inventory) is opened.
+## Emitted when an inventory container (chest, corpse, etc.) is opened
 signal inventory_opened(id:StringName)
-
 
 func _ready() -> void:
 	ProjectSettings.settings_changed.connect(_reload_config.bind())
 	_reload_config()
 
-
 func _process(delta : float) -> void:
 	game_time_elapsed += delta
 	try_think()
 
-
+## Reloads the SkeleRealms configuration from project settings
 func _reload_config() -> void:
 	var path:Variant = ProjectSettings.get_setting("skelerealms/config_path")
 	
@@ -54,8 +53,8 @@ func _reload_config() -> void:
 	for se:StatusEffect in config.status_effects:
 		SkeleRealmsGlobal.register_effect(se.name, se)
 
-
-## Attempts to find an entity in the tree above a node. Returns null if none found. Automatically takes account of reparented puppets.
+## Searches up the scene tree from a node to find its parent entity
+## Returns null if no entity is found
 func get_entity_in_tree(child:Node) -> SKEntity:
 	var checking = child
 	while not checking.get_parent() == null:
@@ -72,8 +71,7 @@ func get_entity_in_tree(child:Node) -> SKEntity:
 	
 	return null
 
-
-## Recursively get [RID]s of all children below this node if it is a [CollisionObject3D].
+## Gets an array of RIDs for all CollisionObject3D nodes in the given node's children
 func get_child_rids(child:Node) -> Array:
 	var output = []
 	
@@ -84,26 +82,19 @@ func get_child_rids(child:Node) -> Array:
 	
 	return output
 
-
-## Get any damageable node in parent chain or children 1 layer deep; either [DamageableObject] or [DamageableComponent]. Null if none found.
+## Finds the nearest damageable node (component or object) from the given node
 func get_damageable_node(n:Node) -> Node:
 	return _walk_for_component(n, "DamageableComponent", func(x:Node): return x is DamageableObject)
 
-
-## Get any interactible node in parent chain or children 1 layer deep; either [InteractiveObject] or [InteractiveComponent]. Null if none found.
+## Finds the nearest interactive node (component or object) from the given node
 func get_interactive_node(n:Node) -> Node:
 	return _walk_for_component(n, "InteractiveComponent", func(x:Node): return x is InteractiveObject)
 
-
-## Get any spell target node in parent chain or children 1 layer deep; either [SpellTargetObject] or [SpellTargetComponent]. Null if none found.
+## Finds the nearest spell target node (component or object) from the given node
 func get_spell_target_component(n:Node) -> Node:
 	return _walk_for_component(n, "SpellTargetComponent", func(x:Node): return x is SpellTargetObject)
 
-
-## Walks the tree in parent chain above or 1 layer of children below for a node that satisfies one of the following condition:
-## - Is an entity with a component of type component_type, returning the component
-## - Makes callable wo_check return true
-## See [method get_damageable_node] for a use case.
+## Internal helper that searches for components or world objects in the scene tree
 func _walk_for_component(n:Node, component_type:String, wo_check:Callable) -> Node:
 	# Check children
 	for c in n.get_children():
@@ -132,15 +123,15 @@ func _walk_for_component(n:Node, component_type:String, wo_check:Callable) -> No
 	
 	return null
 
-
+## Registers a new status effect that can be applied to entities
 func register_effect(what:String, eff:StatusEffect) -> void:
 	status_effects[what] = eff
 
-
+## Schedules an AI think operation to occur at a specific game time
 func register_think(callback : Callable, time : float) -> void: 
 	think_queue.push(time, callback)
 
-
+## Processes any pending AI think operations that are due to run
 func try_think() -> void:
 	if think_queue.is_empty():
 		return

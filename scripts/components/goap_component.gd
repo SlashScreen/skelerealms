@@ -1,22 +1,22 @@
 class_name GOAPComponent
 extends SKEntityComponent
-## Planner for [GOAPAction]s that creates action sequences to complete a set of [Objective]s.
+## Component that implements Goal-Oriented Action Planning (GOAP) for entity AI behavior.
+## Creates and executes sequences of actions to achieve specified objectives based on current world state.
 
+var agent_state:Dictionary = {}  ## Current state of the AI agent
+var objectives:Array[Objective] = []  ## List of objectives the agent is trying to achieve
+var action_queue:Array[GOAPAction] = []  ## Queue of actions planned to achieve the current objective
 
-var agent_state:Dictionary = {}
-var objectives:Array[Objective] = []
-var action_queue:Array[GOAPAction] = []
-
-var _current_action:GOAPAction
-var _current_objective:Objective
-var _agent:NavigationAgent3D
-var _invoked:bool
-var _timer:Timer
-var _rebuild_plan:bool
+var _current_action:GOAPAction  ## The action currently being executed
+var _current_objective:Objective  ## The objective currently being worked on
+var _agent:NavigationAgent3D  ## Navigation agent for pathfinding
+var _invoked:bool  ## Whether a timed action is currently in progress
+var _timer:Timer  ## Timer for action durations
+var _rebuild_plan:bool  ## Flag indicating if the action plan needs to be rebuilt
 
 
 func _init() -> void:
-	name = "GOAPComponent"
+	name = &"GOAPComponent"
 	# add timer
 	_timer = Timer.new()
 	_timer.name = "Timer"
@@ -46,7 +46,7 @@ func _process(delta:float) -> void:
 			# if we made a plan, stop sorting through objectives
 			if not action_queue.is_empty():
 				_pop_action()
-				_current_objective = o # logically, this should be uncommented. But commenting it before made things work but now it's broken? what a load of crap
+				_current_objective = o
 				_rebuild_plan = false
 				break
 	
@@ -74,6 +74,7 @@ func _process(delta:float) -> void:
 				_rebuild_plan = true
 
 
+## Starts execution of the next action in the queue
 func _pop_action() -> void:
 	_current_action = action_queue.pop_back()
 	_current_action.running = true
@@ -82,13 +83,17 @@ func _pop_action() -> void:
 		_rebuild_plan = true
 
 
-## Creates a plan to satisfy a set of goals from all child [GOAPAction]s.
+## Creates a plan to satisfy a set of goals using available actions
+## [param actions] List of available GOAPActions
+## [param goal] Dictionary of desired world states
+## [param world_states] Current world states
+## [returns] Array of GOAPActions that will achieve the goal, or empty if no plan found
 func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOAPAction]:
-	var action_pool:Array = actions.filter(func(a:GOAPAction): return a.is_achievable()) # get all of the actions currently achievable.
+	var action_pool:Array = actions.filter(func(a:GOAPAction): return a.is_achievable())
 	
-	var leaves:Array[PlannerNode] = [] # create an array keeping track of all of the possible nodes that could make up our path.
-	var start = PlannerNode.new(null, world_states, null, 0) # build the starting node.
-	var success = _build_graph(start, leaves, goal, action_pool) # try to find a path.
+	var leaves:Array[PlannerNode] = []
+	var start = PlannerNode.new(null, world_states, null, 0)
+	var success = _build_graph(start, leaves, goal, action_pool)
 	
 	if not success: # if we have not found a path, we have failed.
 		return []
@@ -99,7 +104,7 @@ func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOA
 	var new_plan:Array[GOAPAction] = [] # create the plan for the AI to use. This will be treated like a queue.
 	# walk back up the parent chain that the selected node has kept (sorta like a linked list) and build a queue from that.
 	var n = cheapest 
-	while not n.parent == null: # if it is null, we have reached the root node, since it will have no parents.
+	while not n.parent == null:
 		new_plan.push_back(n.action)
 		n = n.parent
 	
@@ -107,7 +112,12 @@ func _plan(actions:Array, goal:Dictionary, world_states:Dictionary) -> Array[GOA
 	return new_plan
 
 
-## Recursive method to try to find all possible action chains that could satisfy the goal.
+## Recursively builds a graph of possible action sequences to achieve the goal
+## [param parent] Parent node in the planning graph
+## [param leaves] Array to store valid goal-achieving paths
+## [param goal] Dictionary of desired world states
+## [param action_pool] Available actions for planning
+## [returns] Whether a valid path was found
 func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary, action_pool:Array) -> bool:
 	var found_path:bool = false
 	# FIXME: We need to be doing breadth first search
@@ -150,14 +160,18 @@ func _build_graph(parent:PlannerNode, leaves:Array[PlannerNode], goal:Dictionary
 	return found_path
 
 
-## Determine whether we have satisfied all goals in our state.
+## Checks if all goal states have been achieved
+## [param goal] Dictionary of desired world states
+## [param current_state] Current world states
+## [returns] Whether all goals are satisfied
 func _goal_achieved(goal:Dictionary, current_state:Dictionary) -> bool:
 	return current_state.has_all(goal.keys())
 
 
-## Invoke a callable in a set amount of time.
+## Schedules a function call after a delay
+## [param f] The function to call
+## [param time] Delay in seconds before calling
 func _invoke_in_time(f:Callable, time:float) -> void:
-	# Invoke immediately if no duration
 	if time == 0:
 		f.call()
 		return
@@ -165,28 +179,30 @@ func _invoke_in_time(f:Callable, time:float) -> void:
 	_invoked = true
 	_timer.start(time)
 	_timer.timeout.connect(func():
-		# disconnect all events
 		_clear_timer()
-		# call function
 		f.call()
 	)
 
 
+## Cleans up timer connections
 func _clear_timer() -> void:
 	for c in _timer.timeout.get_connections():
 		_timer.timeout.disconnect(c.callable)
 
 
-## Wrap up the running action.
+## Finalizes the current action and checks if plan needs to be rebuilt
 func _complete_current_action() -> void:
 	_current_action.running = false
-	# if post perform fails, rebuild plan
 	if not _current_action.post_perform():
 		_rebuild_plan = true
 	_invoked = false
 
 
-## Add an objective for this asgent to attempt to satisfy.
+## Adds a new objective for the agent to pursue
+## [param goals] Dictionary of desired world states
+## [param remove_after_satisfied] Whether to remove the objective once completed
+## [param priority] Priority level of the objective (higher numbers = higher priority)
+## [returns] The created Objective instance
 func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float) -> Objective:
 	var o = Objective.new(goals, remove_after_satisfied, priority)
 	objectives.append(o)
@@ -194,23 +210,29 @@ func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float
 	return o
 
 
+## Removes objectives that match the specified goals
+## [param goals] Dictionary of goal states to match for removal
 func remove_objective_by_goals(goals:Dictionary) -> void:
 	var to_remove = objectives.filter(func(x:Objective): return x.goals == goals)
 	for o in to_remove:
 		objectives.erase(o)
 
 
+## Forces the agent to rebuild its action plan
 func regenerate_plan() -> void:
 	_rebuild_plan = true
 
 
+## Interrupts the current action and forces a plan rebuild
 func interrupt() -> void:
 	if _current_action:
 		_current_action.interrupt()
-		_timer.stop() # cancel callback
+		_timer.stop()
 	regenerate_plan()
 
 
+## Generates a detailed debug string of the component's current state
+## [returns] Formatted string containing current objectives, actions, and timing information
 func gather_debug_info() -> String:
 	return """
 [b]GOAPComponent[/b]

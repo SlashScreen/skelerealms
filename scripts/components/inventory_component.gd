@@ -1,21 +1,16 @@
 class_name InventoryComponent
 extends SKEntityComponent
+## Component that manages an entity's inventory and currency system.
+## Supports automatic loot generation through SKLootTable child nodes.
 
+@export var inventory: PackedStringArray  ## Array of RefIDs for items in the inventory
+var currencies: Dictionary[StringName, int] = {}  ## Dictionary mapping currency types to their amounts
 
-## Keeps track of an inventory and currencies.
-## If you add an [SKLootTable] node underneath, the loot table will be rolled upon generating. See [method SKEntityComponent.on_generate].
-
-
-## The RefIDs of the items in the inventory. Put any unique items in here.
-@export var inventory: PackedStringArray
-## The amount of cash moneys.
-var currencies = {}
-
-signal added_to_inventory(id:String)
-signal removed_from_inventory(id:String)
-signal inventory_changed
-signal added_money(amount:int)
-signal removed_money(amount:int)
+signal added_to_inventory(id:String)  ## Emitted when an item is added to inventory
+signal removed_from_inventory(id:String)  ## Emitted when an item is removed from inventory
+signal inventory_changed  ## Emitted whenever the inventory contents change
+signal added_money(amount:int)  ## Emitted when currency is added
+signal removed_money(amount:int)  ## Emitted when currency is removed
 
 
 func _ready() -> void:
@@ -23,17 +18,19 @@ func _ready() -> void:
 	removed_from_inventory.connect(func(x): inventory_changed.emit())
 
 
-## Add an item to the inventory.
+## Adds an item to the inventory if it has a valid ItemComponent
+## [param id] The RefID of the item to add
 func add_to_inventory(id:String):
 	var e = SKEntityManager.instance.get_entity(id)
 	if e:
-		var ic = e.get_component("ItemComponent")
+		var ic = e.get_component(&"ItemComponent")
 		if ic:
 			inventory.append(id)
 			added_to_inventory.emit(id)
 
 
-## Remove an item from the inventory.
+## Removes an item from the inventory if it exists
+## [param id] The RefID of the item to remove
 func remove_from_inventory(id:String):
 	var index = inventory.find(id)
 	if index == -1: # catch if it doesnt have the item
@@ -42,7 +39,9 @@ func remove_from_inventory(id:String):
 	removed_from_inventory.emit(id)
 
 
-## Add an amount of snails to the inventory.
+## Adds currency to the inventory
+## [param amount] Amount of currency to add
+## [param currency] Type of currency to add
 func add_money(amount:int, currency:StringName):
 	added_money.emit(amount)
 	if currencies.has(currency):
@@ -52,7 +51,9 @@ func add_money(amount:int, currency:StringName):
 	_clamp_money(currency)
 
 
-## Remove some snails from the inventory.
+## Removes currency from the inventory
+## [param amount] Amount of currency to remove
+## [param currency] Type of currency to remove
 func remove_money(amount:int, currency:StringName):
 	removed_money.emit(amount)
 	if not currencies.has(currency):
@@ -62,25 +63,35 @@ func remove_money(amount:int, currency:StringName):
 	_clamp_money(currency)
 
 
-## Keeps the number of snails from going below 0.
+## Ensures currency amount never goes below zero
+## [param currency] Type of currency to clamp
 func _clamp_money(currency:StringName):
 	if currencies[currency] < 0:
 		currencies[currency] = 0
 
 
+## Counts how many items of a specific data type are in the inventory
+## [param data_id] The data ID to count
+## [returns] Number of matching items found
 func count_item_by_data(data_id:String) -> int:
 	var amount: int = 0
 	for i in inventory:
-		var ic:ItemComponent = SKEntityManager.instance.get_entity(i).get_component("ItemComponent")
+		var ic:ItemComponent = SKEntityManager.instance.get_entity(i).get_component(&"ItemComponent")
 		if ic.data.id == data_id:
 			amount += 1
 	return amount
 
 
+## Checks if a specific item exists in the inventory
+## [param ref_id] The RefID to check for
+## [returns] Whether the item exists in inventory
 func has_item(ref_id:String) -> bool:
 	return inventory.has(ref_id)
 
 
+## Returns items that satisfy a given condition
+## [param fn] Callable that takes a RefID and returns bool
+## [returns] Array of matching item RefIDs
 func get_items_that(fn: Callable) -> Array[StringName]:
 	var pt: Array[StringName] = []
 	for i in inventory:
@@ -89,10 +100,14 @@ func get_items_that(fn: Callable) -> Array[StringName]:
 	return pt
 
 
+## Returns all items of a specific form ID
+## [param id] The form ID to match
+## [returns] Array of matching item RefIDs
 func get_items_of_form(id:String) -> Array[StringName]:
 	return get_items_that(func(x:StringName): return ItemComponent.get_item_component(x).parent_entity.form_id == id)
 
 
+## Generates initial inventory contents from attached SKLootTable
 func on_generate() -> void:
 	if get_child_count() == 0:
 		return
@@ -110,6 +125,8 @@ func on_generate() -> void:
 	currencies = res.currencies
 
 
+## Generates a debug string showing inventory contents and currencies
+## [returns] Formatted string with inventory debug information
 func gather_debug_info() -> String:
 	return """
 [b]InventoryComponent[/b]

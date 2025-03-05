@@ -1,49 +1,49 @@
 class_name CovensComponent
 extends SKEntityComponent
-## Allows an SKEntity to be part of a [Coven].
-## Covens in this context are analagous to Bethesda games' Factions- groups of NPCs that behave in a similar way.
-## Coven membership is also reflected in groups that the entity is in.
+## Component that manages entity membership in [class Coven]s (factions).
+## Similar to faction systems in Bethesda games, covens group NPCs with similar behaviors and relationships.
 
-
-## IDs of covens this entity is a member of.
-## This dictionary is of type StringName:Int, where key is the coven, and int is the rank of this member.
-@export var covens:Dictionary
+@export var covens:Dictionary[StringName, int]  ## Dictionary mapping coven IDs to member ranks 
 
 
 func _init(coven_list:Array[CovenRankData] = []) -> void:
-	name = "CovensComponent"
+	name = &"CovensComponent"
 	if coven_list.is_empty():
 		return
 	# Load rank info
 	for crd in coven_list:
-		#printe("Adding to coven %s" % crd.coven.coven_id)
 		covens[crd.coven.coven_id] = crd.rank
 
 
 func _ready():
 	super._ready()
-	# Add corresponding covens.
+	# Add entity to coven groups
 	for c in covens:
 		parent_entity.add_to_group(c)
 
 
-## Add this entity to a coven.
+## Adds the entity to a coven with specified rank
+## [param coven] The coven ID to join
+## [param rank] The rank within the coven (default: 1)
 func add_to_coven(coven:StringName, rank:int = 1):
 	covens[coven] = 1
 	parent_entity.add_to_group(coven)
 
 
-## Remove this entity from the coven.
+## Removes the entity from a specified coven
+## [param coven] The coven ID to leave
 func remove_from_coven(coven:StringName):
 	covens.erase(coven)
 	parent_entity.remove_from_group(coven)
 
 
-## Whether the entity is in a coven or not.
+## Checks if the entity belongs to a specific coven. Returns true if entity is a member.
+## [param coven] The coven ID to check
 func is_in_coven(coven:StringName) -> bool:
 	return covens.has(coven)
 
 
-## Get this entity's rank in a coven. Returns 0 if they aren't in the coven.
+## Gets the entity's rank within a specific coven. Returns rank (0 if not a member).
+## [param coven] The coven ID to check
 func get_coven_rank(coven:StringName) -> int:
 	return covens[coven] if covens.has(coven) else 0

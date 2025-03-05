@@ -1,11 +1,9 @@
 class_name AttributesComponent
 extends SKEntityComponent
-## Holds the attributes of an SKEntity, such as the D&D abilities - Charisma, Dexterity, etc.
+## Component that manages entity attributes in a flexible, dictionary-based system.
+## Allows for custom attributes similar to RPG stats (Strength, Dexterity, etc.).
 
-
-## The attributes of this SKEntity.
-## It is in a dictionary so you can add, remove, and customize at will.
-@export var attributes:Dictionary:
+@export var attributes:Dictionary:  ## Dictionary storing attribute name-value pairs
 	get:
 		return attributes
 	set(val):
@@ -15,19 +13,25 @@ extends SKEntityComponent
 # I yearn for ruby just in general.
 
 func _init() -> void:
-	name = "AttributesComponent"
+	name = &"AttributesComponent"
 
 
+## Saves the current attributes state
+## [returns] Dictionary of current attributes
 func save() -> Dictionary:
 	dirty = false
 	return attributes
 
 
+## Loads attributes from saved data
+## [param data] Dictionary containing attribute data to load
 func load_data(data:Dictionary):
 	attributes = data
 	dirty = false
 
 
+## Generates a debug string showing all attributes and their values
+## [returns] Formatted string with attribute debug information
 func gather_debug_info() -> String:
 	return """
 [b]AttributesComponent[/b]

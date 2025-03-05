@@ -1,21 +1,18 @@
 class_name InteractiveComponent
 extends SKEntityComponent
-## Handles interactions on an entity
+## Component that allows an entity to be interacted with by players or other entities.
+## Provides customizable interaction text and translation support.
 
-## Emitted when this entity is interacted with.
+## Emitted when this entity is interacted with by another entity
 signal interacted(id:String)
 
-## Whether it can be interacted with.
+## Whether this entity can currently be interacted with
 @export var interactible:bool = true
-## What tooltip to display when the cursor hovers over this. The RefID is used as the object name.
+## The verb to display in the interaction tooltip (e.g. "OPEN", "TALK", etc.)
 @export var interact_verb:String = "INTERACT"
-## A callback (that returns String) that allows you to get a custom string for interact text rather than
-## using the RefID.
-## For example: If you dynamically created an NPC (eg. spawning is a Spider enemy), you could instead grab
-## a translated version of your handmade NPCData's ID rather than trying to translate a randomly generated
-## RefID.
+## Optional callback that returns a custom string for the interaction text
 var translation_callback:Callable
-## Gets the translated RefID, or, if applicable, whatever is returned by [member translation_callback]
+## The translated name to display in interaction prompts
 var interact_name:String:
 	get:
 		if not translation_callback.is_null():
@@ -27,12 +24,13 @@ var interact_name:String:
 func _init() -> void:
 	name = &"InteractiveComponent"
 
-## Interact with this as the player.
-## Shorthand for [codeblock] interact("Player") [/codeblock].
+## Simulates the player interacting with this entity
+## Shorthand for interact("Player")
 func interact_by_player():
 	interacted.emit("Player")
 	print("Player interacted")
 
-## Interact with this entity. Pass in the refID of the interactor.
+## Triggers an interaction with this entity from another entity
+## [param refID] The reference ID of the entity initiating the interaction
 func interact(refID:String):
 	interacted.emit(refID)

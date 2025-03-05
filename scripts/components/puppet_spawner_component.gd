@@ -1,14 +1,14 @@
 @tool
 class_name PuppetSpawnerComponent
 extends SKEntityComponent
-## Manages spawning and despawning of puppets.
+## Component that manages the spawning and despawning of physical puppet representations for entities in the world.
+## Handles the transition between granular and full simulation by creating and removing 3D models.
 
-var prefab: PackedScene
-## The puppet node.
-var puppet: Node
+var prefab: PackedScene  ## The scene to instantiate when spawning a new puppet
+var puppet: Node  ## The currently active puppet instance in the world
 
-signal spawned_puppet(puppet: Node)
-signal despawned_puppet
+signal spawned_puppet(puppet: Node)  ## Emitted when a new puppet is spawned into the world
+signal despawned_puppet  ## Emitted when the current puppet is removed from the world
 
 
 func _init() -> void:
@@ -36,7 +36,8 @@ func _on_exit_scene() -> void:
 	despawn()
 
 
-## Spawn a new puppet.
+## Creates and adds a new puppet instance to the world
+## If no prefab is set but a child exists, packs that child as the prefab
 func spawn():
 	var n: Node3D
 	if not prefab and get_child_count() > 0:
@@ -57,7 +58,8 @@ func spawn():
 	printe("spawned at %s : %s" % [parent_entity.world, parent_entity.position])
 
 
-## Despawn a puppet.
+## Removes the current puppet from the world
+## If no prefab is set, packs the current puppet as the prefab before removing
 func despawn():
 	printe("despawned.")
 	if not prefab:
@@ -71,7 +73,8 @@ func despawn():
 	despawned_puppet.emit()
 
 
-## Set the puppet's position.
+## Updates the puppet's position in the world
+## [param pos] The new world position for the puppet
 func set_puppet_position(pos: Vector3):
 	if not puppet == null:
 		(puppet as Node3D).position = pos

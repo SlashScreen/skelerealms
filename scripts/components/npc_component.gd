@@ -1,58 +1,70 @@
 @tool
 class_name NPCComponent
 extends SKEntityComponent
-## The brain for an NPC. Handles AI behavior, scheduling, combat, dialogue interactions.
-## The component itself is a blank slate, being comprised largely of state trackers and utility functions, and will likely do nothing without an [AIModule] to determine its behavior.
-## It also has aobut a million signals that AI modules, the GOAP system, animation controllers, dialogue systems, etc. can hook into. Think of them as an API.
-## @tutorial(In-depth look at the NPC system): https://github.com/SlashScreen/skelerealms/wiki/NPCs
-## @tutorial(In-depth view of opinion system): https://github.com/SlashScreen/skelerealms/wiki/NPCs#opinions-and-how-the-npc-determines-its-opinions
-
+## The brain for an NPC that handles AI behavior, scheduling, combat, and dialogue interactions.
+## This component provides the base functionality for NPCs, including opinion systems, combat states, and AI hooks.
+## Requires additional AI modules to define specific behaviors.
+##
+## For detailed information, see:
+## [url]https://github.com/SlashScreen/skelerealms/wiki/NPCs[/url]
+## [url]https://github.com/SlashScreen/skelerealms/wiki/NPCs#opinions-and-how-the-npc-determines-its-opinions[/url]
 
 @export_category("Flags")
-## Whether this NPC is essential to the story, and them dying would screw things up.
+## Whether this NPC is essential to the story and cannot be permanently killed
 @export var essential:bool = true
-## Whether this NPC is a ghost.
+## Whether this NPC is a ghost and has special interaction rules
 @export var ghost:bool
-## Whether this NPC can't take damage.
+## Whether this NPC is immune to all forms of damage
 @export var invulnerable:bool
-## Whether this NPC is unique.
+## Whether this NPC is a unique character rather than a generic NPC
 @export var unique:bool = true
-## Whether this NPC affects the stealth meter when it sees you.
+## Whether this NPC contributes to the player's stealth detection
 @export var affects_stealth_meter:bool = true
-## Whether you can interact with this NPC.
+## Whether this NPC can be interacted with through dialogue or other means
 @export var interactive:bool = true
+
 @export_category("AI")
-## NPC relationships.
+## Array of relationship definitions that determine how this NPC relates to others
 @export var relationships:Array[Relationship]
-## Component types that the AI will looks for to determine threats. 
+## List of component types that this NPC will consider as potential threats
 @export var threatening_enemy_types = [
 	"NPCComponent",
 	"PlayerComponent",
 ]
-## Opinions of entities. StringName:float
+## Dictionary mapping entity IDs to opinion values
 @export var npc_opinions = {}
-## Loyalty of this NPC. Determines weights of opinion calculations.
+## Determines how the NPC weighs different factors when calculating opinions
+## [br]0: No loyalty - purely individual opinions
+## [br]1: Coven loyalty - considers coven relationships
+## [br]2: Self loyalty - prioritizes self-interest
 @export_enum("None", "Covens", "Self") var loyalty:int = 0
-## How the opinion of something is calculated.
+## Method used to resolve multiple opinion values into a final opinion
+## [br]0: Use lowest opinion value
+## [br]1: Use highest opinion value
+## [br]2: Take average of all opinions
 @export_enum("Minimum", "Maximum", "Average") var opinion_mode:int = 0
 
-#* Public
+## The NPC's current opinion of the player
 var player_opinion:int
+## Minimum visibility level required for the NPC to detect entities
 var visibility_threshold:float = 0.3
-## Stores data of interest for GOAP to access.
+## Memory storage used by the GOAP AI system to track world state
 var goap_memory:Dictionary = {}
-#* Properties
+
+## Whether the NPC is currently in combat state
 var in_combat:bool:
 	get:
 		return in_combat
 	set(val):
-		if val and not in_combat: # these checks prevent spamming
+		if val and not in_combat:
 			printe("entering combat")
 			entered_combat.emit()
 		elif not val and in_combat:
 			printe("leaving combat")
 			left_combat.emit()
 		in_combat = val
+
+## Current navigation point the NPC is moving towards
 var _current_target_point:NavPoint:
 	set(val):
 		_current_target_point = val
@@ -60,94 +72,99 @@ var _current_target_point:NavPoint:
 			_puppet.set_movement_target(val.position)
 	get:
 		return _current_target_point
+
+## List of AI modules that control this NPC's behavior
 var ai_modules:Array[AIModule] = []
-## Keeps track of entities and vision data. Used for stealth mechanics. Pattern is ref_id:StringName -> data:Variant.
+## Dictionary storing information about entities the NPC has seen and their visibility status
 var perception_memory:Dictionary = {}
-#* Private
-## Navigator.
+
+## The NPC's navigation component for pathfinding
 var _nav_component:NavigatorComponent
-## Puppet manager component.
+## Component that manages the NPC's physical representation in the world
 var _puppet_component:PuppetSpawnerComponent
-## Interactive component.
+## Component that handles player interactions with this NPC
 var _interactive_component:InteractiveComponent
-## Behavior planner.
+## Component that handles GOAP-based AI planning
 var _goap_component:GOAPComponent
-## The schedule event the NPC is following, if applicable.
+## The current schedule event this NPC is following
 var _current_schedule_event:ScheduleEvent
-## Scheduler node.
+## The NPC's schedule of activities and behaviors
 var _schedule:Schedule
-## Simulation level of the npc.
+## Current simulation detail level for this NPC
 var _sim_level:SimulationLevel = SimulationLevel.FULL
-## Indexes of the doors in the current path. THis is important to keeo track of due to the nature of doors going between worlds.
+## Indices of doors along the NPC's current path for cross-world navigation
 var _doors_in_path:Array[int] = []
-## How close to a path marker the NPC must be to have reached it.
+## Distance threshold for considering a path point reached
 var _path_follow_end_distance:float = 1
-## Off-world navigation walk speed.
+## Movement speed when navigating between worlds
 var _walk_speed:float = 1
-## Puppet root node.
+## The NPC's physical puppet node in the world
 var _puppet:NPCPuppet
-## Target entity during combat.
+## Reference ID of the current combat target
 var _combat_target:String
-## Navigation path.
+## Current navigation path as array of points
 var _path:Array[NavPoint]
-## Whether this character is in dialogue or a cutscene or in combat. Will stop/continue the puppet's pathfinding if applicable (not in combat).
+
+## Whether the NPC is busy in dialogue/cutscene/combat
 var _busy:bool:
-		get:
-			return _busy or in_combat # is also busy if in combat
-		set(val):
-			printe("Set busy to %s" % val)
-			if val and _puppet:
-				_puppet.pause_nav()
-			elif not val and _puppet:
-				_puppet.continue_nav()
-			_busy = val
+	get:
+		return _busy or in_combat
+	set(val):
+		printe("Set busy to %s" % val)
+		if val and _puppet:
+			_puppet.pause_nav()
+		elif not val and _puppet:
+			_puppet.continue_nav()
+		_busy = val
 
-
-## Signal emitted when this NPC enters combat.
+## Emitted when the NPC enters combat state
 signal entered_combat
-## Signal emitted when this NPC leaved combat.
+## Emitted when the NPC leaves combat state
 signal left_combat
-## Signal emitted when it starts to see the player.
+## Emitted when the NPC first detects the player
 signal start_saw_player
-## Signal emitted when it stops seeing the player.
+## Emitted when the NPC loses sight of the player
 signal end_saw_player
-## Signal emitted when it reaches its target destination.
+## Emitted when the NPC reaches its current navigation target
 signal destination_reached
-## Signal emitted when its schedule has been updated.
+## Emitted when the NPC's schedule is updated with a new event
 signal schedule_updated(ev:ScheduleEvent)
-## Signal emitted when this NPC enters dialogue.
+## Emitted when the NPC enters a dialogue interaction
 signal start_dialogue
-## Signal emitted when the awareness state changes on an entity. Used for stealth mechanics.
+## Emitted when the NPC's awareness of an entity changes (for stealth)
 signal awareness_state_changed(ref_id:String, state:int)
-## Signal emitted when it wants to flee from an entity. Passes ref id of who it is warning.
+## Emitted when the NPC decides to flee from an entity
 signal flee(ref_id:String)
-## Signal emitted when it hears an audio event.
+## Emitted when the NPC detects an audio event in the world
 signal heard_something(emitter:AudioEventEmitter)
-## Signal emitted when this NPC is interacted with.
+## Emitted when a player or other entity interacts with this NPC
 signal interacted(refID:String)
-## Signal emitted when this NPC reacts to being hit by a friendly entity.
+## Emitted when the NPC is hit by a friendly entity
 signal friendly_fire_response
-## Signal emitted when the NPC wants to draw weapons.
+## Emitted when the NPC should draw its weapons
 signal draw_weapons
-## Signal emitted when the NPC wants to put away its weapons.
+## Emitted when the NPC should sheathe its weapons
 signal put_away_weapons
-## Signal emitted when the NPC is hit by somebody.
+## Emitted when the NPC takes damage from an entity
 signal hit_by(who:String)
-## Signal emitted when the NPC is hit with a particular damage effect - blunt, piercing, magic, etc.
+## Emitted when the NPC takes a specific type of damage
 signal damaged_with_effect(effect:StringName)
-## Signal emitted when the NPC is added to a conversation.
+## Emitted when the NPC joins a conversation
 signal added_to_conversation
-## Signal emitted when the NPC is removed from a conversation.
+## Emitted when the NPC leaves a conversation
 signal removed_from_conversation
-## Signal emitted when a crime is witnessed
-signal crime_witnessed 
+## Emitted when the NPC witnesses a crime being committed
+signal crime_witnessed
+## Emitted when the NPC updates its state
 signal updated(delta:float)
+## Emitted when the NPC's puppet requests to move
 signal puppet_request_move(puppet:NPCPuppet)
+## Emitted when the NPC's puppet requests to draw weapons
 signal puppet_request_raise_weapons(puppet:NPCPuppet)
+## Emitted when the NPC's puppet requests to sheathe weapons
 signal puppet_request_lower_weapons(puppet:NPCPuppet)
 
-
-## Shorthand to get an npc component for an entity by ID.
+## Returns the NPCComponent for an entity with the given ID, or null if not found
 static func get_npc_component(id:StringName) -> NPCComponent:
 	var eop = SKEntityManager.instance.get_entity(id)
 	if not eop:
@@ -162,8 +179,8 @@ static func get_npc_component(id:StringName) -> NPCComponent:
 #region perception
 
 
-## Wrapper for stealth providers' get_visible_objects. Empty if there is no puppet. 
-## See the docs section on stealth providers for more info.
+## Returns a dictionary of objects currently visible to this NPC through its puppet's vision system.
+## Returns an empty dictionary if the NPC has no puppet or vision system.
 func get_visible_objects() -> Dictionary:
 	if _puppet == null:
 		return {}
@@ -178,7 +195,7 @@ func get_visible_objects() -> Dictionary:
 
 
 func _init() -> void:
-	name = "NPCComponent"
+	name = &"NPCComponent"
 
 
 func _ready():
@@ -195,11 +212,8 @@ func _ready():
 		modules.append(module)
 
 	_nav_component = parent_entity.get_component("NavigatorComponent") as NavigatorComponent
-	# Puppet manager component.
 	_puppet_component = parent_entity.get_component("PuppetSpawnerComponent") as PuppetSpawnerComponent
-	# Interactive component.
 	_interactive_component = parent_entity.get_component("InteractiveComponent") as InteractiveComponent
-	# Behavior planner.
 	_goap_component = parent_entity.get_component("GOAPComponent") as GOAPComponent
 	_interactive_component.interacted.connect(func(x:String): interacted.emit(x))
 	
@@ -273,7 +287,7 @@ func _process(delta):
 	
 	updated.emit(delta)
 
-
+## Returns a list of required component dependencies for this NPC
 func get_dependencies() -> Array[String]:
 	return [
 		"InteractiveComponent",
@@ -287,18 +301,18 @@ func _exit_tree() -> void:
 	for m in ai_modules:
 		m._clean_up()
 
-
 #endregion overrides
 
 #region dialogue
 
 
-## Make this NPC Leave dialogue.
+## Makes the NPC exit from its current dialogue interaction
 func leave_dialogue() -> void:
 	_busy = false
 
 
-## Ask this NPC to interact with something.
+## Requests the NPC to interact with an entity by its reference ID
+## [param refID] The reference ID of the entity to interact with
 func interact_with(refID:String) -> void:
 	goap_memory["interact_target"] = refID
 	add_objective ( # Add goal to interact with an object.
@@ -308,10 +322,12 @@ func interact_with(refID:String) -> void:
 	)
 
 
+## Signals that the NPC has joined a conversation
 func add_to_conversation() -> void:
 	added_to_conversation.emit()
 
 
+## Signals that the NPC has left a conversation
 func remove_from_conversation() -> void:
 	removed_from_conversation.emit()
 
@@ -321,7 +337,8 @@ func remove_from_conversation() -> void:
 #region pathfinding
 
 
-## Calculate this NPC's path to a [NavPoint].
+## Calculates and sets a path for the NPC to follow to reach a destination
+## [param dest] The navigation point to pathfind to
 func set_destination(dest:NavPoint) -> void:
 	# Recalculate path
 	_path = _nav_component.calculate_path_to(dest)
@@ -337,7 +354,8 @@ func set_destination(dest:NavPoint) -> void:
 	_next_point()
 
 
-## Make the npc go to the next point in its path
+## Advances the NPC to the next point in its calculated path
+## Handles special cases for in-scene vs out-of-scene movement and door transitions
 func _next_point() -> void:
 	# return early if the path has no elements
 	if _path.size() == 0:
@@ -367,7 +385,10 @@ func _next_point() -> void:
 			return
 
 
-## Gets the length of a slice of the path in meters. Doors are considered to be 0 distance, since they are different sides of the same object, at least theoretically.
+## Calculates the total length of a path segment in meters
+## Doors are treated as having zero distance since they connect the same space
+## [param slice] Array of navigation points to measure
+## Returns: The total path length in meters
 func _get_path_length(slice:Array[NavPoint]) -> float:
 	if slice.size() < 2: # if 0 or 1 length is 0
 		return 0
@@ -376,24 +397,28 @@ func _get_path_length(slice:Array[NavPoint]) -> float:
 	for i in range(slice.size() - 1):
 		if slice[i].world == slice[i + 1].world:
 			accum += slice[i].position.distance_to(slice[i + 1].position)
-	# maybe square root everything after, and use distance_to_squared?
 	return accum
 
 
-## Pop the next path value. Also shifts [member _doors_in_path] to match that.
+## Removes and returns the next point in the path, updating door indices
+## Returns: The next navigation point in the path
 func _pop_path() -> NavPoint:
 	_doors_in_path = _doors_in_path\
 						.map(func(x:int): return x-1)\
-						.filter(func(x:int): return x >= 0) # shift doors forward and remove ines that have passed
-	return _path.pop_front() # may be reversed, i dont remember
+						.filter(func(x:int): return x >= 0)
+	return _path.pop_front()
 
 
-## Add a Goap objective.
+## Adds a new objective for the NPC's GOAP planner
+## [param goals] Dictionary of world states that define the objective
+## [param remove_after_satisfied] Whether to remove the objective once completed
+## [param priority] Priority level of this objective (higher = more important)
 func add_objective(goals:Dictionary, remove_after_satisfied:bool, priority:float):
 	_goap_component.add_objective(goals, remove_after_satisfied, priority)
 
 
-## Remove objectives that have a set of goals. Goals must match exactly.
+## Removes objectives that exactly match the given goal states
+## [param goals] Dictionary of goal states to match against
 func remove_objective_by_goals(goals:Dictionary) -> void:
 	_goap_component.remove_objective_by_goals(goals)
 
@@ -403,7 +428,8 @@ func remove_objective_by_goals(goals:Dictionary) -> void:
 #region schedule
 
 
-## Ask this NPC to go to its schedule point.
+## Directs the NPC to move to its current schedule location
+## Will not recalculate if already at the correct location
 func go_to_schedule_point() -> void:
 	# Resolve schedule
 	_calculate_new_schedule()
@@ -418,7 +444,8 @@ func go_to_schedule_point() -> void:
 		_current_target_point = loc
 
 
-## Get the current schedule for this NPC.
+## Updates the NPC's current schedule based on game time
+## Only processes if the NPC is being simulated
 func _calculate_new_schedule() -> void:
 	# Don't do this if we are not being simulated.
 	if _sim_level == SimulationLevel.NONE:
@@ -447,7 +474,9 @@ func _calculate_new_schedule() -> void:
 #region misc
 
 
-## Get a relationship this NPC has of [RelationshipType]. Pass in the type's key. Returns the relationship if found, none if none found.
+## Finds a relationship of the specified type in this NPC's relationships
+## [param key] The relationship type key to search for
+## Returns: Option containing the relationship if found, none if not found
 func get_relationship_of_type(key:String) -> Option:
 	var res = relationships.filter(func(r:Relationship): return r.relationship_type and r.relationship_type.relationship_key == key)
 	if res.is_empty():
@@ -455,7 +484,9 @@ func get_relationship_of_type(key:String) -> Option:
 	return Option.from(res[0])
 
 
-## Gets this NPC's relationship with someone by ref id. Returns the relationship if found, none if none found.
+## Finds this NPC's relationship with another entity
+## [param ref_id] The reference ID of the other entity
+## Returns: Option containing the relationship if found, none if not found
 func get_relationship_with(ref_id:String) -> Option:
 	var res = relationships.filter(func(r:Relationship): return r.relationship_type and r.other_person == ref_id)
 	if res.is_empty():
@@ -463,11 +494,17 @@ func get_relationship_with(ref_id:String) -> Option:
 	return Option.from(res[0])
 
 
-## Determines the opinion of some entity. See the tutorial in the class docs for a more in-depth look at NPC opinions.
+## Calculates this NPC's opinion of another entity based on various factors
+## Takes into account:
+## - Coven relationships and crimes
+## - Personal opinions
+## - Loyalty settings
+## [param id] The reference ID of the entity to evaluate
+## Returns: A float representing the opinion (-100 to 100)
 func determine_opinion_of(id:StringName) -> float:
 	var e:SKEntity = SKEntityManager.instance.get_entity(id)
 
-	if not threatening_enemy_types.any(func(x:String): return not e.get_component(x) == null): # if it doesn't have any components that are marked as threatening, return neutral.
+	if not threatening_enemy_types.any(func(x:String): return not e.get_component(x) == null):
 		return 0
 
 	var e_cc = e.get_component("CovensComponent")
@@ -475,8 +512,8 @@ func determine_opinion_of(id:StringName) -> float:
 	var opinion_total = 0
 
 	# calculate modifiers
-	var covens_modifier = 2 if loyalty == 1 else 1 # if values covens, increase modifier
-	var self_modifier = 2 if loyalty == 2 else 1 # ditto
+	var covens_modifier = 2 if loyalty == 1 else 1
+	var self_modifier = 2 if loyalty == 2 else 1
 
 	# if has other covens, compare against ours
 	if e_cc:
@@ -487,31 +524,32 @@ func determine_opinion_of(id:StringName) -> float:
 		# get all opinions
 		for coven in covens:
 			var c = CovenSystem.get_coven(coven)
-			# get the other coven opinions
-			covennpc_opinions_unfiltered.append_array(c.get_covennpc_opinions(e_covens_component.covens.keys())) # FIXME: Get this coven opinions on other
-			# take crimes into account
-			opinions.append(CrimeMaster.max_crime_severity(id, coven) * -10) # sing opinion by -10 for each severity point
+			covennpc_opinions_unfiltered.append_array(c.get_covennpc_opinions(e_covens_component.covens.keys()))
+			opinions.append(CrimeMaster.max_crime_severity(id, coven) * -10)
 
-		opinions.append_array(covennpc_opinions_unfiltered.filter(func(x:int): return not x == 0)) # filter out zeroes
-		opinion_total += opinions.size() * covens_modifier # calculate total
+		opinions.append_array(covennpc_opinions_unfiltered.filter(func(x:int): return not x == 0))
+		opinion_total += opinions.size() * covens_modifier
 	# if has an opinion of the player, take into account
 	if npc_opinions.has(id) and not npc_opinions[id] == 0:
 		opinions.append(npc_opinions[id])
-		opinion_total += self_modifier # avoid 1 * self_modifier because that's an identity function so we can just do self_modifier
-	# Return weighted average
+		opinion_total += self_modifier
+
+	# Return weighted average based on opinion mode
 	match opinion_mode:
-		0:
+		0: # Minimum
 			var o:Variant = opinions.min()
 			return 0.0 if o == null else o
-		1:
+		1: # Maximum
 			var o:Variant = opinions.max()
 			return 0.0 if o == null else o
-		2:
+		2: # Average
 			return opinions.reduce(func(sum, next): return sum + next, 0) / (1 if opinion_total == 0 else opinion_total)
 		_:
 			return 0.0
 
 
+## Gathers debug information about the NPC's current state
+## Returns: A formatted string containing current values of important variables
 func gather_debug_info() -> String:
 	return """
 [b]NPCComponent[/b]
@@ -533,6 +571,9 @@ func gather_debug_info() -> String:
 ]
 
 
+## Gets the translated name of this NPC
+## First tries to translate the entity name, then falls back to form_id translation
+## Returns: The translated name string
 func get_translated_name() -> String:
 	var t = tr(parent_entity.name)
 	if t == parent_entity.name:
@@ -545,9 +586,12 @@ func get_translated_name() -> String:
 
 #endregion misc
 
-## Current simulation level for an NPC.
+## Defines the different simulation detail levels for NPCs based on their distance from the player
 enum SimulationLevel {
-	FULL, ## When the actor is in the scene.
-	GRANULAR, ## When the actor is outside of the scene. Will still follow a schedule and go from point to point, but will not walk around using the navmesh, interact with things in the world, or do anything that involves the puppet.
-	NONE, ## When the actor is outside of the simulation distance. It will not do anything.
+	## NPC is in the active scene - full AI, physics, and animation
+	FULL,
+	## NPC is outside the active scene but within simulation range - simplified movement and behavior
+	GRANULAR,
+	## NPC is outside simulation range - completely inactive
+	NONE,
 }
