@@ -149,6 +149,7 @@ func toggle_console_freeze() -> void:
 
 func toggle_pause():
 	if not is_game_started:
+		print("not started")
 		return
 	
 	if paused:

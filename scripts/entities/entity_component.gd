@@ -1,14 +1,12 @@
 class_name SKEntityComponent 
 extends Node
-## A component that is within an [SKEntity].
-## Extend these to add functionality to an entity.
-## When inheriting, make sure to call super._ready() if overriding.
+## Base class for all entity components in the SkeleRealms system.
+## Components add functionality to entities through composition. Each component should
+## handle a specific aspect of entity behavior (e.g., inventory, vitals, equipment).
 
+@onready var parent_entity:SKEntity = get_parent() as SKEntity  ## Reference to the entity this component belongs to
+var dirty:bool = false  ## Whether this component has unsaved changes
 
-## Parent entity of this component.
-@onready var parent_entity:SKEntity = get_parent() as SKEntity
-## Whether this component should be saved.
-var dirty:bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -21,31 +19,36 @@ func _ready():
 		parent_entity.entered_scene.connect(_on_enter_scene.bind())
 
 
+## Called after the entity is fully initialized. Override to add component-specific setup.
 func _entity_ready() -> void:
 	pass
 
 
-## Called when the parent entity enters a scene. See [signal SKEntity.entered_scene].
+## Called when the parent entity enters a scene. Override to handle scene entry logic.
 func _on_enter_scene():
 	pass
 
 
-## Called when the parent entity exits a scene. See [signal SKEntity.left_scene].
+## Called when the parent entity exits a scene. Override to handle scene exit logic.
 func _on_exit_scene():
 	pass
 
 
-## Process a dialogue command given to the entity.
+## Processes a dialogue command sent to the entity. Override to handle component-specific commands.
+## [param command] The command string to process
+## [param args] Array of arguments for the command
 func _try_dialogue_command(command:String, args:Array) -> void:
 	pass
 
 
-## Gather data to save.
+## Serializes component state for saving. Override to add component-specific data.
+## Returns dictionary of data to save.
 func save() -> Dictionary:
 	return {}
 
 
-## Load a data blob from the savegame system.
+## Loads component state from saved data. Override to handle component-specific data.
+## [param data] Dictionary containing the saved component state
 func load_data(data:Dictionary):
 	pass
 
@@ -59,7 +62,9 @@ func _to_string() -> String:
 	return gather_debug_info()
 
 
-## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
+## Prints a rich text message to the console with entity context
+## [param text] The message to print
+## [param show_stack] Whether to include the stack trace
 func printe(text:String, show_stack:bool = true) -> void:
 	if parent_entity:
 		parent_entity.printe(text, show_stack)
@@ -67,16 +72,19 @@ func printe(text:String, show_stack:bool = true) -> void:
 		(get_parent() as SKEntity).printe(text, show_stack)
 
 
-## Get the dependencies for this node, for error warnings. Dependencies are the class name as a string.
+## Lists other components required by this component. Override to specify dependencies.
+## Returns array of required component class names.
 func get_dependencies() -> Array[String]:
 	return []
 
 
-## Do any first-time setup needed for this component. For example, roll a loot table, randomize facial attributes, etc.
+## Performs one-time initialization when the entity is first generated.
+## Override to add component-specific generation logic (e.g., randomization).
 func on_generate() -> void:
 	pass
 
 
+## Validates component setup and dependencies
 func _get_configuration_warnings() -> PackedStringArray:
 	var output := PackedStringArray()
 	

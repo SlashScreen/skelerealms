@@ -15,6 +15,7 @@ signal on_interact(id:String)
 
 
 func interact(id:String):
+	print("Emitting interact")
 	on_interact.emit(id)
 
 

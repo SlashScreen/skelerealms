@@ -1,42 +1,55 @@
 class_name NavMaster
 extends Node
-## This is the manager for the [b]Granular Navigation System[/b].
-## This is a singleton-like object that will find a path through the game's worlds. [br]
-## [b]Granular navigation System[/b][br]
-## This system is essentially a low-resolution navmesh that allows actors outside of the scene to continue walking around the worlds, so they will be where the player expects them to be.[br]
-## The granular navigation system is split up into "worlds", corresponding to the "worlds" of the game. These are roughly analagous to "cells" in Bethesda games.
-## Each [NavWorld] contains [NavNode]s as children that are laid out to match the physical space of a world.
-## When NPCs are offscreen, instead of using a navmesh, they will attempt to go to their destination by following these nodes.
-## This is done to improve performance. However, be sure not to have [i]too[/i] many entities using this at once, otherwise performance may suffer. 
-## See project setting [code]skelerelams/granular_navigation_sim_distance[/code] to adjust how far away the actors have to be before they stop using this system and just stay idle.
+## Master controller for the Granular Navigation System.
+## 
+## This singleton manages pathfinding across multiple game worlds using a low-resolution
+## navigation system. It allows NPCs to navigate when outside the active scene, ensuring
+## they reach expected locations without the overhead of full navmesh pathfinding.
+##
+## The system divides navigation into worlds (similar to cells in Bethesda games):
+## - Each [NavWorld] contains [NavNode]s arranged in a k-d tree
+## - Nodes represent key navigation points in the physical space
+## - NPCs use these points for pathfinding when off-screen
+## - Performance is balanced by [code]skelerealms/granular_navigation_sim_distance[/code]
+##
+## The k-d tree structure enables efficient spatial queries and pathfinding across worlds.
+## @deprecated: use [class CoarseNavSolver] instead.
+
+## Singleton instance of the navigation master
+static var instance: NavMaster
+
+## Dictionary mapping world names to their navigation world nodes
+## Key: World identifier
+## Value: [NavWorld] root node of the k-d tree
+var worlds: Dictionary = {}
 
 
-static var instance:NavMaster
-## Dictionary of references to the roots of KD trees.
-var worlds:Dictionary = {}
-
-
+## Initialize singleton and connect to game start event
 func _ready() -> void:
 	GameInfo.game_started.connect(load_all_networks.bind())
 	instance = self
 
 
-func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
-	var start_node:NavNode = nearest_point(start)
-	var end_node:NavNode = nearest_point(end)
+## Calculates a path between two navigation points using A* pathfinding
+## Handles cross-world pathfinding by adjusting heuristics
+## [param start] Starting navigation point
+## [param end] Target navigation point
+## Returns: Array of navigation points forming the path
+func calculate_path(start: NavPoint, end: NavPoint) -> Array[NavPoint]:
+	var start_node: NavNode = nearest_point(start)
+	var end_node: NavNode = nearest_point(end)
 	
-	var open_list:Array[NavNode] = [start_node]
-	var closed_list:Array[NavNode] = []
+	var open_list: Array[NavNode] = [start_node]
+	var closed_list: Array[NavNode] = []
 	
-	var g_score:Dictionary = {start_node:0}
-	var f_score:Dictionary = {start_node:_heuristic(start_node, end_node)}
-	var came_from:Dictionary = {}
+	var g_score: Dictionary = {start_node: 0}
+	var f_score: Dictionary = {start_node: _heuristic(start_node, end_node)}
+	var came_from: Dictionary = {}
 	
 	while not open_list.is_empty():
-		# sort to find lowest f score descending, pushing the lowest score to the end of the list.
-		# sorting descending is an optimization: popping from the front of a large array is slower, since it has to reindex everything.
-		open_list.sort_custom(func(a:NavNode, b:NavNode): 
-			# Lazy add heuristics to f_score
+		# Sort descending for efficient array operations
+		open_list.sort_custom(func(a: NavNode, b: NavNode): 
+			# Lazy evaluation of heuristics
 			if not f_score.has(a):
 				f_score[a] = _heuristic(a, end_node) + g_score[a]
 			if not f_score.has(b):
@@ -47,22 +60,18 @@ func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
 			else:
 				return f_score[a] > f_score[b]
 		)
-		var current:NavNode = open_list.pop_back() # pop from end of list to get lowest f value
+		var current: NavNode = open_list.pop_back()
 		
 		for c in current.connections:
-			# if connection already closed, skip
 			if closed_list.has(c):
 				continue
 			
-			came_from[c] = current # set path parent
+			came_from[c] = current
 			
-			# If connection is the end node, we found a path.
 			if c == end_node:
 				return _reconstruct_path(came_from, c)
 			
-			open_list.append(c) # add to current
-			
-			# update G score from previosu to 
+			open_list.append(c)
 			g_score[c] = g_score[current] + current.connections[c]
 		
 		closed_list.append(current)
@@ -70,65 +79,71 @@ func calculate_path(start:NavPoint, end:NavPoint) -> Array[NavPoint]:
 	return []
 
 
-func _reconstruct_path(came_from:Dictionary, current:NavNode) -> Array[NavPoint]:
-	# potential optimization: Push back and then reverse?
-	var path:Array[NavPoint] = [current.nav_point]
+## Reconstructs the path from the A* search results
+## [param came_from] Dictionary tracking the path
+## [param current] End node to trace back from
+## Returns: Array of navigation points forming the path
+func _reconstruct_path(came_from: Dictionary, current: NavNode) -> Array[NavPoint]:
+	var path: Array[NavPoint] = [current.nav_point]
 	while current in came_from:
 		path.push_front(came_from[current].nav_point)
 		current = came_from[current]
 	return path
 
 
-func _heuristic(a: NavNode, end:NavNode) -> float:
-	# doing the heuristic in this way turns the AStar into Dijkstra unless the nodes are in the same world.
-	# this is because, since the worlds are not really euclidean in relation to eachother, it's impossible to find accurate heuristic distances. So we just don't.
-	# if we find this too inaccurate, we could keep track of connections between worlds and calculate out heuristics by measuring from door to door. But that's hard.
+## Calculates the heuristic distance between two nodes
+## Uses a high penalty for cross-world paths to prefer same-world routes
+## [param a] Starting node
+## [param end] Target node
+## Returns: Heuristic distance value
+func _heuristic(a: NavNode, end: NavNode) -> float:
+	# High cost for cross-world paths since euclidean distance isn't meaningful
 	if not a.world == end.world:
 		return 1000
 	else:
-		# use squared as a small optimization
 		return a.position.distance_squared_to(end.position)
 
 
-# TODO: load and apply connections
-func _load():
-	pass
-
-
-## Recursive descent for the nearest point algorithm.
-func _walk_down(n:NavNode, goal:NavPoint, current_closest:NavNode) -> NavNode:
-	# set current closest to this if the distance to goal is smaller
-	if  n.position.distance_squared_to(goal.position) < current_closest.position.distance_squared_to(goal.position):
+## Recursively searches down the k-d tree for the nearest point
+## [param n] Current node in traversal
+## [param goal] Target point to find nearest to
+## [param current_closest] Current best match
+## Returns: Nearest node found in this branch
+func _walk_down(n: NavNode, goal: NavPoint, current_closest: NavNode) -> NavNode:
+	if n.position.distance_squared_to(goal.position) < current_closest.position.distance_squared_to(goal.position):
 		current_closest = n
-	# if no children, return current closest
+	
 	if not n.left_child and not n.right_child:
 		return current_closest
-	# make binary decision
-	var is_left:bool = goal.position[n.dimension] < n.position[n.dimension]
+	
+	var is_left: bool = goal.position[n.dimension] < n.position[n.dimension]
 	if is_left and n.left_child:
 		return _walk_down(n.left_child, goal, current_closest)
 	elif not is_left and n.right_child:
 		return _walk_down(n.right_child, goal, current_closest)
-	# if there's no child in the selected direction, return current closest
 	else:
 		return current_closest
 
 
-
-## Find the nav node closest to a given point.
-func nearest_point(pt:NavPoint) -> NavNode:
+## Finds the navigation node closest to a given point
+## Uses k-d tree traversal with backtracking to ensure optimal results
+## [param pt] The point to find the nearest node to
+## Returns: Nearest navigation node, or null if world not found
+func nearest_point(pt: NavPoint) -> NavNode:
 	if not worlds.has(pt.world):
 		return null
 	
 	var root = worlds[pt.world].get_child(0)
-	var current_closest:NavNode = root # root by default
-	# walk down initially
-	current_closest = _walk_down(root, pt, current_closest) # walk down the tree initially
-	#walk back up the tree, searching other branches if necessary
-	var walking_node:NavNode = current_closest
+	var current_closest: NavNode = root
+	
+	# Initial descent
+	current_closest = _walk_down(root, pt, current_closest)
+	
+	# Backtrack and check other branches
+	var walking_node: NavNode = current_closest
 	while walking_node.get_parent() is NavNode:
 		var p = walking_node.get_parent() as NavNode
-		# Recursively search the other side of the splitting hyperplane if the distance between the query point and the splitting hyperplane is less than the distance between the query point and the closest node found so far
+		# Check other branch if it might contain a closer point
 		if abs(p.position[p.dimension] - pt.position[p.dimension]) < walking_node.position.distance_to(current_closest.position):
 			if p.left_child == walking_node and p.right_child:
 				current_closest = _walk_down(p.right_child, pt, current_closest)
@@ -139,92 +154,94 @@ func nearest_point(pt:NavPoint) -> NavNode:
 	return current_closest
 
 
-func construct_tree(points:Array[NavPoint]):
-	# this constructs a KD tree.
-	
-	# 1) sort into worlds
-	var sorted_points:Dictionary = {}
+## Constructs k-d trees from a set of navigation points
+## Optimizes tree balance by selecting strategic median points
+## [param points] Array of navigation points to build trees from
+func construct_tree(points: Array[NavPoint]):
+	# Sort points by world
+	var sorted_points: Dictionary = {}
 	for n in points:
-		# if point world not already created:
 		if not sorted_points.has(n.world):
-			# create sort array
 			sorted_points[n.world] = []
-		sorted_points[n.world].append(n) # then append
-		
-	# 2) for each world, select median point from random selection of nodes and add to tree.
-	# the median is semi-important to try to make sure the tree isn't lopsided for faster and more accurate lookups.
+		sorted_points[n.world].append(n)
+	
+	# Initial tree construction with strategic medians
 	for w in sorted_points:
-		var median:NavPoint
-		# if >= 5 nodes in world, select random and find median
+		var median: NavPoint
 		if sorted_points[w].size() >= 5:
-			# select 5 random points
-			var selected:Array[NavPoint] = (func():
+			# Select median from random sample for large sets
+			var selected: Array[NavPoint] = (func():
 				var arr: Array[NavPoint] = []
 				for i in range(5):
 					arr.append(sorted_points[w].pick_random())
 				return arr
 			).call()
-			# Find median point
-			var middle_coords:Vector3 = selected.reduce(func(accum:Array, pt:NavPoint): # first we sum up the point coordinates
+			
+			var middle_coords: Vector3 = selected.reduce(func(accum: Array, pt: NavPoint):
 				accum[0] += pt.position.x
 				accum[1] += pt.position.y
 				accum[2] += pt.position.z
-			).reduce(func(accum:Vector3, num:float): # then we divide each component
-				accum[0] = num / 5
-				accum[1] = num / 5
-				accum[2] = num / 5
+				return accum
+			, [0,0,0]).reduce(func(accum: Vector3, num: float):
+				return Vector3(num/5, num/5, num/5)
 			)
-			# then we sort by distance to center point. using quared to avoid a sqrt. Sort descending.
-			selected.sort_custom(func(a:NavPoint, b:NavPoint): return middle_coords.distance_squared_to(a.position) > middle_coords.distance_squared_to(b.position))
+			
+			selected.sort_custom(func(a: NavPoint, b: NavPoint):
+				return middle_coords.distance_squared_to(a.position) > middle_coords.distance_squared_to(b.position)
+			)
 			median = selected.pop_back()
-		else: # else, accumulate all of them
+		else:
+			# Use true median for small sets
 			var arr_size = sorted_points[w].size()
-			var middle_coords:Vector3 = sorted_points[w].reduce(func(accum:Array, pt:NavPoint): # first we sum up the point coordinates
+			var middle_coords: Vector3 = sorted_points[w].reduce(func(accum: Array, pt: NavPoint):
 				accum[0] += pt.position.x
 				accum[1] += pt.position.y
 				accum[2] += pt.position.z
-			).reduce(func(accum:Vector3, num:float): # then we divide each component
-				accum[0] = num / arr_size
-				accum[1] = num / arr_size
-				accum[2] = num / arr_size
+				return accum
+			, [0,0,0]).reduce(func(accum: Vector3, num: float):
+				return Vector3(num/arr_size, num/arr_size, num/arr_size)
 			)
-			# then we sort by distance to center point. using quared to avoid a sqrt. Sort descending.
-			sorted_points[w].sort_custom(func(a:NavPoint, b:NavPoint): return middle_coords.distance_squared_to(a.position) > middle_coords.distance_squared_to(b.position))
+			
+			sorted_points[w].sort_custom(func(a: NavPoint, b: NavPoint):
+				return middle_coords.distance_squared_to(a.position) > middle_coords.distance_squared_to(b.position)
+			)
 			median = sorted_points[w].pop_back()
-		# add median
+		
 		add_point(median.world, median.position)
 	
-	# 3) for each world, add all the rest of the points, going by the median.
-	# A bit wasteful, maybe, As before, we want to keep the tree balanced.
+	# Add remaining points using dynamic median selection
 	for w in sorted_points:
-		var median:NavPoint
-		while not sorted_points[w].size() == 0: # while loop here, because 1) gdscript doesnt like you editing an array while looping through it, and we want to empty the array anyway
+		while not sorted_points[w].is_empty():
 			var arr_size = sorted_points[w].size()
-			var middle_coords:Vector3 = sorted_points[w].reduce(func(accum:Array, pt:NavPoint): # first we sum up the point coordinates
+			var middle_coords: Vector3 = sorted_points[w].reduce(func(accum: Array, pt: NavPoint):
 				accum[0] += pt.position.x
 				accum[1] += pt.position.y
 				accum[2] += pt.position.z
-			).reduce(func(accum:Vector3, num:float): # then we divide each component
-				accum[0] = num / arr_size
-				accum[1] = num / arr_size
-				accum[2] = num / arr_size
+				return accum
+			, [0,0,0]).reduce(func(accum: Vector3, num: float):
+				return Vector3(num/arr_size, num/arr_size, num/arr_size)
 			)
-			# then we sort by distance to center point. using quared to avoid a sqrt. Sort descending.
-			sorted_points[w].sort_custom(func(a:NavPoint, b:NavPoint): return middle_coords.distance_squared_to(a.position) > middle_coords.distance_squared_to(b.position))
-			median = sorted_points[w].pop_back()
-			# add median
+			
+			sorted_points[w].sort_custom(func(a: NavPoint, b: NavPoint):
+				return middle_coords.distance_squared_to(a.position) > middle_coords.distance_squared_to(b.position)
+			)
+			var median = sorted_points[w].pop_back()
 			add_point(median.world, median.position)
 	
-	# Cache references to trees
+	# Cache world references
 	for c in get_children():
 		worlds[c.name] = c as NavWorld
 
 
-## Add a point to the tree
-func add_point(world:String, pos:Vector3) -> NavNode:
+## Adds a navigation point to the appropriate world tree
+## Creates new world nodes as needed
+## [param world] World identifier
+## [param pos] Position to add
+## Returns: The created navigation node
+func add_point(world: String, pos: Vector3) -> NavNode:
 	print("Adding a point at %s in world %s" % [pos, world])
 	var world_node: NavWorld = get_node_or_null(world)
-	# Add world if it doesnt already exist
+	
 	if not world_node:
 		world_node = NavWorld.new()
 		world_node.world = world
@@ -235,7 +252,11 @@ func add_point(world:String, pos:Vector3) -> NavNode:
 	return world_node.add_point(pos)
 
 
-func connect_nodes(a:NavNode, b:NavNode, cost:float) -> void:
+## Creates a bidirectional connection between two navigation nodes
+## [param a] First node to connect
+## [param b] Second node to connect
+## [param cost] Cost of traversing this connection
+func connect_nodes(a: NavNode, b: NavNode, cost: float) -> void:
 	a.connect_nodes(b, cost)
 	b.connect_nodes(a, cost)
 

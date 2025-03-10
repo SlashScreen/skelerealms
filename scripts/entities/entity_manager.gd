@@ -1,13 +1,28 @@
 class_name SKEntityManager
 extends Node
-## Manages entities in the game.
+## Central manager for all entities in the SkeleRealms system.
+## Handles entity lifecycle (creation, loading, cleanup), persistence, and lookup.
+## Uses a cascading pattern for entity retrieval:
+## 1. Memory cache (active entities)
+## 2. Save file data
+## 3. Original resource on disk
 
-## The instance of the entity manager.
+
+## Singleton instance of the entity manager
 static var instance: SKEntityManager
 
+## Dictionary mapping entity IDs to their instances
 var entities: Dictionary[StringName, SKEntity] = {}
+
+## Tracks entities that have been permanently removed from the game
 var erased_entities: Dictionary[StringName, bool] = {}
+
+## Reference to the tag tracking system for entity resource management
 @onready var tag_tracker: SKTagTracker = (ResourceLoader.load(ProjectSettings.get_setting("skelerealms/config_path")) as SKConfig).tag_tracker
+
+
+signal entity_created(id: StringName)
+signal entity_erased(id: StringName)
 
 
 func _init() -> void:
@@ -18,69 +33,72 @@ func _ready():
 	SkeleRealmsGlobal.entity_manager_loaded.emit()
 
 
-## Gets an entity in the game. [br]
-## This system follows a cascading pattern, and attempts to get entities by following the following steps. It will execute each step, and if it fails to get an entity, it will move onto the next one. [br]
-## 1. Tries to get the entity from its internal hash table of entities. [br]
-## 2. Scans its children entities to see if it missed any (this step may be removed in the future) [br]
-## 3. Attempts to load the entity from disk. [br]
-## Failing all of these, it will return [code]null[/code].
-## If an entity is erased, meaning deleted from the game, it will also return [code]null[/code].
+## Retrieves an entity by its ID using a cascading lookup pattern:
+## 1. Checks active entities in memory
+## 2. Attempts to load from save file
+## 3. Creates new instance from disk resource
+## [param id] The unique identifier of the entity
+## Returns: The requested entity or null if not found/erased
 func get_entity(id: StringName) -> SKEntity:
-	# stage 1: attempt find in cache
+	# Check if entity was deleted
 	if erased_entities.has(id):
 		return null
+	
+	# Stage 1: Check memory cache
 	if entities.has(id):
 		(entities[id] as SKEntity).reset_stale_timer()  # FIXME: If another entity is carrying a reference to this entity, then we might break stuff by cleaning it up in this way?
 		return entities[id]
-	# stage 2: Check in save file
-	var potential_data = SaveSystem.entity_in_save(id)  # check the save system
-	if not potential_data.is_empty():  # if found:
-		var e: SKEntity = add_entity_from_scene(ResourceLoader.load(ResourceUID.get_id_path(tag_tracker.get_uid_for_name(id))))  # load default from disk
-		e.load_data(potential_data)  # and then load using the data blob we got from the save file
+	
+	# Stage 2: Check save file
+	var potential_data = SaveSystem.entity_in_save(id)
+	if not potential_data.is_empty():
+		var e: SKEntity = add_entity_from_scene(ResourceLoader.load(ResourceUID.get_id_path(tag_tracker.get_uid_for_name(id))))
+		e.load_data(potential_data)
 		e.reset_stale_timer()
 		return e
-	# stage 3: check on disk
+	
+	# Stage 3: Load from disk
 	if tag_tracker.is_name_entity(id):
 		var e: SKEntity = add_entity_from_scene(ResourceLoader.load(ResourceUID.get_id_path(tag_tracker.get_uid_for_name(id))))
-		e.generate()  # generate, because the entity has never been seen before
+		e.generate()
 		e.reset_stale_timer()
 		return e
 
-	# Other than that, we've failed. Attempt to find the entity in the child count as a failsave, then return none.
+	# Fallback: Check direct child nodes
 	return get_node_or_null(id as String)
 
 
-# add a new entity.
-#func add_entity(res: InstanceData) -> SKEntity:
-#var new_entity = SKEntity.new(res)  # make a new entity
-# add new entity to self, and the dictionary
-#entities[res.ref_id] = new_entity
-#add_child(new_entity)
-#return new_entity
-
-
+## Adds an entity instance to the manager
+## [param e] The entity to add
+## Returns: The added entity
 func _add_entity_raw(e: SKEntity) -> SKEntity:
 	entities[e.name] = e
 	add_child(e)
+	entity_created.emit(e.name)
 	return e
 
 
-## ONLY call after save!!!
+## Removes inactive entities that haven't been accessed for a while
+## Should ONLY be called after saving to prevent data loss
 func _cleanup_stale_entities():
-	# Get all children
 	for c in get_children():
-		if (c as SKEntity).stale_timer >= ProjectSettings.get_setting("skelerealms/entity_cleanup_timer"):  # If stale timer is beyond threshold
-			remove_entity(c.name)  # remove
+		if (c as SKEntity).stale_timer >= ProjectSettings.get_setting("skelerealms/entity_cleanup_timer"):
+			remove_entity(c.name)
 
 
-## Remove entity from the game.
+## Permanently removes an entity from the game
+## [param rid] The ID of the entity to remove
 func remove_entity(rid: StringName) -> void:
 	if entities.has(rid):
 		entities[rid].queue_free()
 		entities.erase(rid)
 		erased_entities[rid] = true
+		entity_erased.emit(rid)
 
-
+## Creates an entity instance from a scene resource
+## For non-unique entities, generates a new unique ID
+## [param scene] The scene resource containing the entity
+## Returns: The instantiated entity
 func add_entity_from_scene(scene: PackedScene) -> SKEntity:
 	var e: SKEntity = scene.instantiate()
 	if not e:
@@ -97,16 +115,21 @@ func add_entity_from_scene(scene: PackedScene) -> SKEntity:
 	return _add_entity_raw(e)
 
 
-## This is how you spawn new instances from entity in most cases.
-func add_entity_from_scene_at_position(scene : PackedScene, position : Vector3, rotation : Quaternion, world : StringName) -> void:
+## Creates and positions a new entity instance in the world
+## [param scene] The scene resource containing the entity
+## [param position] position to spawn at
+## [param rotation] Initial rotation
+## [param world] World identifier to spawn in
+func add_entity_from_scene_at_position(scene: PackedScene, position: Vector3, rotation: Quaternion, world: StringName) -> void:
 	var e := add_entity_from_scene(scene)
 	e.position = position
 	e.rotation = rotation
 	e.world = world
 
 
-# TODO: Store this, so that when a world is loaded, we touch all the entities
-## Generates a dictionary that maps worlds to a list of entity rids that are inside them.
+## Maps worlds to their contained entities
+## Returns: Dictionary mapping world IDs to arrays of entity IDs
+## TODO: Cache this mapping for faster world loading
 func get_entities_in_worlds() -> Dictionary[StringName, Array]:
 	var res: Dictionary[StringName, Array] = {}
 	for rid: StringName in entities:
@@ -115,6 +138,8 @@ func get_entities_in_worlds() -> Dictionary[StringName, Array]:
 	return res
 
 
+## Handles initialization when entering a new world
+## [param world] The world being entered
+## TODO: Load relevant entities from save files
 func on_new_world_entered(world: StringName) -> void:
-	# TODO: Touch IDs in save files
 	pass

@@ -24,13 +24,16 @@ var interact_name:String:
 func _init() -> void:
 	name = &"InteractiveComponent"
 
+
 ## Simulates the player interacting with this entity
 ## Shorthand for interact("Player")
 func interact_by_player():
 	interacted.emit("Player")
 	print("Player interacted")
 
+
 ## Triggers an interaction with this entity from another entity
 ## [param refID] The reference ID of the entity initiating the interaction
 func interact(refID:String):
+	print("Trying to emit")
 	interacted.emit(refID)

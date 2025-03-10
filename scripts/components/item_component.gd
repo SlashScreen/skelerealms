@@ -46,7 +46,7 @@ static func get_item_component(id:StringName) -> ItemComponent:
 	var eop = SKEntityManager.instance.get_entity(id)
 	if not eop:
 		return null
-	var icop = eop.get_component("ItemComponent")
+	var icop = eop.get_component(&"ItemComponent")
 	if icop:
 		return icop
 	else:
@@ -54,7 +54,7 @@ static func get_item_component(id:StringName) -> ItemComponent:
 
 
 func _init() -> void:
-	name = "ItemComponent"
+	name = &"ItemComponent"
 
 
 func _ready() -> void:
@@ -63,11 +63,8 @@ func _ready() -> void:
 	super._ready()
 	if parent_entity:
 			parent_entity.supress_spawning = in_inventory
-	psc = parent_entity.get_component("PuppetSpawnerComponent")
-	inv = parent_entity.get_component("InteractiveComponent")
-
-
-func _entity_ready() -> void:
+	psc = parent_entity.get_component(&"PuppetSpawnerComponent")
+	inv = parent_entity.get_component(&"InteractiveComponent")
 	inv.interacted.connect(interact.bind())
 	inv.translation_callback = get_translated_name.bind()
 	if item_owner == &"":
@@ -91,7 +88,7 @@ func move_to_inventory(refID:StringName):
 	if in_inventory:
 		SKEntityManager.instance\
 			.get_entity(contained_inventory)\
-			.get_component("InventoryComponent")\
+			.get_component(&"InventoryComponent")\
 			.remove_from_inventory(parent_entity.name)
 	
 	# drop if moved to inventory is empty
@@ -102,7 +99,7 @@ func move_to_inventory(refID:StringName):
 	# add to new inventory
 	SKEntityManager.instance\
 		.get_entity(refID)\
-		.get_component("InventoryComponent")\
+		.get_component(&"InventoryComponent")\
 		.add_to_inventory(parent_entity.name)
 	
 	contained_inventory = refID
@@ -157,7 +154,8 @@ func drop():
 
 
 ## Interact with this item. Called from [InteractiveComponent].
-func interact(interacted_refID):
+func interact(interacted_refID : String):
+	print("Taken by ", interacted_refID)
 	move_to_inventory(interacted_refID)
 	if not interacted_refID == item_owner and not item_owner == "":
 		printe("Stolen.")

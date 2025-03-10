@@ -1,46 +1,61 @@
 @tool
 class_name SKEntity
 extends Node
-## An entity for the pseudo-ecs. Contains [SKEntityComponent]s.
-## These allow constructs such as NPCs and Items to persist even when not in the scene.
+## Base class for all entities in the SkeleRealms system.
+## Entities are persistent objects that can exist in the game world, such as NPCs, items, or containers.
+## Each entity is composed of [SKEntityComponent]s that define its behavior and capabilities.
+## Entities persist even when not in the active scene and can be dynamically loaded/unloaded based on distance.
 
 
-@export var form_id: StringName ## This is what [i]kind[/i] of entity it is. For example, Item "awesome_sword" has a form ID of "iron_sword".
-@export var world: String ## The world this entity is in.
-@export var position:Vector3 ## The entity's position in the world it lives within.
-@export var rotation: Quaternion = Quaternion.IDENTITY ## The entity's rotation.
-@export var unique:bool = true ## Whether this is the only entity of this setup. Usually used for named NPCs and the like.
-## An internal timer of how long this entity has gone without being modified or referenced.
-## One it's beyond a certain point, the [SKEntityManager] will mark it for cleanup after a save.
+## The form ID defines what kind of entity this is (e.g., "iron_sword" for an iron sword item)
+@export var form_id: StringName
+
+## The world identifier where this entity exists
+@export var world: String
+
+## The entity's position within its world
+@export var position:Vector3
+
+## The entity's rotation in quaternion format
+@export var rotation: Quaternion = Quaternion.IDENTITY
+
+## Whether this is a unique entity (e.g., a named NPC) rather than a generic instance
+@export var unique:bool = true
+
+## Time elapsed since this entity was last modified or referenced
+## Used by [SKEntityManager] to determine when to clean up inactive entities after saving
 var stale_timer:float
-## This is used to prevent items from spawning, even if they are supposed to be in scene.
-## For example, items in invcentories should not spawn despite technically being "in the scene".
+
+## Controls whether the entity should spawn in the scene
+## Used to prevent spawning of items that are contained within other entities (e.g., inventory items)
 var supress_spawning:bool
-## Whether this entity is in the scene or not.
+
+## Whether the entity is currently in the active scene
 var in_scene: bool:
 	get:
 		return in_scene
 	set(val):
-		if in_scene && !val: # if was in scene and now not
+		if in_scene && !val: # Leaving scene
 			left_scene.emit()
 			printe("left scene", false)
-		if !in_scene && val: # if was not in scene and now is
+		if !in_scene && val: # Entering scene
 			entered_scene.emit()
 			printe("entered scene", false)
 		in_scene = val
 
 
-## Emitted when an entity enters a scene.
+## Emitted when the entity leaves the active scene
 signal left_scene
-## Emitted when an entity leaves a scene.
+
+## Emitted when the entity enters the active scene
 signal entered_scene
-## This signal is emitted when all components have been added once [SKEntityManager.add_entity] is called.
-## Await this when you want to connect with other nodes.
+
+## Emitted when all components have been added and the entity is fully initialized
+## Wait for this signal before connecting to other nodes or accessing components
 signal instantiated
 
 
 func _init() -> void:
-	# call entity ready
 	instantiated.emit()
 	for c in get_children():
 		c._entity_ready()
@@ -60,19 +75,21 @@ func _enter_tree() -> void:
 		queue_free()
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if Engine.is_editor_hint():
 		return
 	_should_be_in_scene()
-	# If we aren't in the scene, start counting up. Otherwise, we are still in the scene with the player and shouldn't depsawn.
+	# Update stale timer when not in scene
 	if not in_scene:
 		stale_timer += delta
 	else:
 		stale_timer = 0
 
 
-## Determine that this entity should be in scene
+## Determines if this entity should be loaded in the active scene based on:
+## - Whether spawning is suppressed
+## - If it's in the current world
+## - Distance from the world origin (actor fade distance)
 func _should_be_in_scene():
 	if supress_spawning:
 		in_scene = false
@@ -88,34 +105,44 @@ func _should_be_in_scene():
 	in_scene = true
 
 
+## Updates the entity's position
+## [param p] The new position vector
 func _on_set_position(p:Vector3):
 	position = p
 
 
+## Updates the entity's rotation
+## [param q] The new rotation quaternion
 func _on_set_rotation(q:Quaternion) -> void:
 	rotation = q
 
 
-## Gets a component by the string name.
+## Gets a component by its type name
+## [param type] The component type to retrieve (e.g., "NPCComponent")
+## Returns: The requested component or null if not found
 ## Example: [codeblock]
 ## (e.get_component("NPCComponent") as NPCComponent).kill()
 ## [/codeblock]
 func get_component(type:String) -> SKEntityComponent:
-	var n = get_node_or_null(type)
-	return n
+	return get_node_or_null(type)
 
 
-## Whether it has a component type or not. Useful for checking the capabilities of an entity.
+## Checks if the entity has a specific component type
+## [param type] The component type to check for
+## Returns: [code]true[/code] if the component exists
 func has_component(type:String) -> bool:
-	var x = get_component(type)
-	return not x == null
+	return get_component(type) != null
 
 
+## Adds a new component to this entity
+## [param c] The component to add
 func add_component(c:SKEntityComponent) -> void:
 	add_child(c)
 
 
-func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If not, save that as well. This will Theoretically allow for dynamic instances.
+## Serializes the entity's state for saving
+## Returns: Dictionary containing entity data and dirty component states
+func save() -> Dictionary:
 	var data:Dictionary = {
 		"entity_data": {
 			"world" = world,
@@ -128,40 +155,49 @@ func save() -> Dictionary: # TODO: Determine if instance is saved to disk. If no
 	return data
 
 
+## Loads entity state from saved data
+## [param data] Dictionary containing the saved entity state
 func load_data(data:Dictionary) -> void:
 	world = data["entity_data"]["world"]
 	position = JSON.parse_string(data["entity_data"]["position"])
 	unique = JSON.parse_string(data["entity_data"]["unique"])
 
-	# loop through all saved components and call load
 	for d in data["components"]:
 		(get_node(d) as SKEntityComponent).load_data(data[d])
-	pass
 
 
+## Resets the entity to its initial state
+## TODO: Handle runtime-generated entities
 func reset_data() -> void:
-	# TODO: Figure out how to reset entities that are generated at runtime. oh boy that's gonna be fun.
 	var i = SKEntityManager.instance.get_disk_data_for_entity(name)
 	if i:
 		_init()
 
 
+## Resets the stale timer, preventing cleanup
 func reset_stale_timer() -> void:
 	stale_timer = 0
 
 
+## Broadcasts a message to all components
+## [param msg] The message/method name to call
+## [param args] Arguments to pass to the method
 func broadcast_message(msg:String, args:Array = []) -> void:
 	for c in get_children():
 		if c.has_method(msg):
 			c.call(msg, args)
 
 
+## Sends a dialogue command to all components
+## [param command] The command to process
+## [param args] Arguments for the command
 func dialogue_command(command:String, args:Array) -> void:
 	for c in get_children():
 		c._try_dialogue_command(command, args)
 
 
-## Get a preview scene tree from this entity, if applicable. This is used for getting previews for [class SKWorldEntity].
+## Gets a preview scene for [SKWorldEntity] visualization
+## Returns: Preview node or null if none available
 func get_world_entity_preview() -> Node:
 	for c:Node in get_children():
 		if c.has_method(&"get_world_entity_preview"):
@@ -169,12 +205,15 @@ func get_world_entity_preview() -> Node:
 	return null
 
 
-## Call this when an entity is generated for the first time; eg. a non-unique Spider enemy is spawned.
+## Initializes a newly generated entity instance
+## Called when spawning non-unique entities (e.g., random enemies)
 func generate() -> void:
 	for c:Node in get_children():
 		c.on_generate()
 
 
+## Gathers debug information about the entity and its components
+## Returns: Array of strings containing formatted debug info
 func gather_debug_info() -> PackedStringArray:
 	var info := PackedStringArray()
 	info.push_back("""
@@ -206,15 +245,20 @@ func gather_debug_info() -> PackedStringArray:
 	return info
 
 
+## String representation of the entity, includes all debug info
 func _to_string() -> String:
 	return "\n".join(gather_debug_info())
 
 
-## Prints a rich text message to the console prepended with the entity name. Used for easier debugging. 
+## Prints a rich text debug message with entity context
+## [param text] The message to print
+## [param show_stack] Whether to include the stack trace
 func printe(text:String, show_stack:bool = true) -> void:
 	print_rich("[b]%s[/b]: %s\n%s" % [name, text, _format_stack_trace() if show_stack else ""])
 
 
+## Formats the current stack trace for debug output
+## Returns: Formatted string containing the stack trace
 func _format_stack_trace() -> String:
 	var trace:Array = get_stack()
 	var output := "[indent]"
